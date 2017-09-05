@@ -1,0 +1,10 @@
+*.ilk
+*.log
+*.sbr
+*.pdb
+*.tlog
+*.cache
+*.idb
+*.lastbuildstate
+*.bsc
+*vrpnViwer\build\*
