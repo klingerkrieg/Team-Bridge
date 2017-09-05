@@ -38,7 +38,7 @@ public:
 const unsigned MAX_DEVICES = 50;
 
 
-class t_user_callback {
+class tracker_user_callback {
 public:
     char t_name[vrpn_MAX_TEXT_LEN];
     vector<unsigned> t_counts;
@@ -53,7 +53,7 @@ public:
 void VRPN_CALLBACK
 handle_tracker_pos_quat(void *userdata, const vrpn_TRACKERCB t)
 {
-    t_user_callback *t_data = static_cast<t_user_callback *>(userdata);
+    tracker_user_callback *t_data = static_cast<tracker_user_callback *>(userdata);
 
     // Make sure we have a count value for this sensor
     while (t_data->t_counts.size() <= static_cast<unsigned>(t.sensor)) {
@@ -73,7 +73,7 @@ handle_tracker_pos_quat(void *userdata, const vrpn_TRACKERCB t)
 
 void VRPN_CALLBACK handle_tracker_vel(void *userdata, const vrpn_TRACKERVELCB t)
 {
-    t_user_callback *t_data = static_cast<t_user_callback *>(userdata);
+    tracker_user_callback *t_data = static_cast<tracker_user_callback *>(userdata);
 
     // Make sure we have a count value for this sensor
     while (t_data->t_counts.size() <= static_cast<unsigned>(t.sensor)) {
@@ -94,7 +94,7 @@ void VRPN_CALLBACK handle_tracker_vel(void *userdata, const vrpn_TRACKERVELCB t)
 
 void VRPN_CALLBACK handle_tracker_acc(void *userdata, const vrpn_TRACKERACCCB t)
 {
-    t_user_callback *t_data = static_cast<t_user_callback *>(userdata);
+    tracker_user_callback *t_data = static_cast<tracker_user_callback *>(userdata);
 
     // Make sure we have a count value for this sensor
     while (t_data->t_counts.size() <= static_cast<unsigned>(t.sensor)) {
@@ -250,9 +250,9 @@ int main(int argc, char *argv[])
             
             if (print_for_tracker) {
                 vrpn_Tracker_Remote *tkr = dev->tkr;
-                t_user_callback *tc1 = new t_user_callback;
-                t_user_callback *tc2 = new t_user_callback;
-                t_user_callback *tc3 = new t_user_callback;
+                tracker_user_callback *tc1 = new tracker_user_callback;
+                tracker_user_callback *tc2 = new tracker_user_callback;
+                tracker_user_callback *tc3 = new tracker_user_callback;
 
                 if ((tc1 == NULL) || (tc2 == NULL) || (tc3 == NULL)) {
                     fprintf(stderr, "Out of memory\n");

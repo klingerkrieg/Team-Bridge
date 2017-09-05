@@ -1,2 +1,2 @@
-leapmotion_server.exe p
+leapmotion_server.exe t a
 pause

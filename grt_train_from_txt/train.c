@@ -38,20 +38,21 @@ void train(int gesto, double trainLine[][4]) {
 	VectorDouble sample(sensoresLength*4);
 
 	int x = 0;
+	//correcao da posicao dos dedos para estarem relativos a mao
 	for (int i = 0; i < sensoresLength; i++) {
+
+		//conversao para manter as juntas relativas a palma 0 ou 23
+		int y = 0;
+		if ( i >= 23 ) {
+			y = 1;
+		}
 
 		if (i == 0 || i == 23) {
 			//trainLine inicia do 1 porque o 0 é o sensor
-			hand_pos[i][0] = trainLine[i][1];
-			hand_pos[i][1] = trainLine[i][2];
-			hand_pos[i][2] = trainLine[i][3];
+			hand_pos[y][0] = trainLine[i][1];
+			hand_pos[y][1] = trainLine[i][2];
+			hand_pos[y][2] = trainLine[i][3];
 		} else {
-			//conversao para manter as juntas relativas a palma 0 ou 23
-			int y = 0;
-			if (i >= 23) {
-				y = 1;
-			}
-
 			//printf("Convertido de %.2f ", trainLine[i][1]);
 			trainLine[i][1] = trainLine[i][1] - hand_pos[y][0];
 			//printf(" para %.2f\n", trainLine[i][1]);

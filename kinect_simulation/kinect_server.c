@@ -13,11 +13,11 @@ using namespace std;
 const char	*TRACKER_NAME = "Tracker0";
 int	CONNECTION_PORT = vrpn_DEFAULT_LISTEN_PORT_NO;	// Port for connection to listen on
 
-vrpn_Tracker_Server	*ntkr;
-vrpn_Tracker_Remote	*tkr;
+vrpn_Tracker_Server	*trackerServer;
+vrpn_Tracker_Remote	*trackerRem;
 vrpn_Connection		*connection;
 
-class t_user_callback {
+class tracker_user_callback {
 public:
     char t_name[vrpn_MAX_TEXT_LEN];
     vector<unsigned> t_counts;
@@ -34,7 +34,7 @@ public:
 void VRPN_CALLBACK
 handle_tracker_pos_quat(void *userdata, const vrpn_TRACKERCB t)
 {
-    t_user_callback *t_data = static_cast<t_user_callback *>(userdata);
+    tracker_user_callback *t_data = static_cast<tracker_user_callback *>(userdata);
 	
     // Make sure we have a count value for this sensor
     while (t_data->t_counts.size() <= static_cast<unsigned>(t.sensor)) {
@@ -75,14 +75,14 @@ int main (int argc, char * argv []) {
 
 
 	// Open the tracker server, using this connection, 2 sensors, update 60 times/sec
-	ntkr = new vrpn_Tracker_Server(TRACKER_NAME, connection, sensoresQtd);
+	trackerServer = new vrpn_Tracker_Server(TRACKER_NAME, connection, sensoresQtd);
 
 	
 	
 	// Open the tracker remote using this connection
 	
-	tkr = new vrpn_Tracker_Remote (TRACKER_NAME, connection);
-	t_user_callback *tc1 = new t_user_callback;
+	trackerRem = new vrpn_Tracker_Remote (TRACKER_NAME, connection);
+	tracker_user_callback *tc1 = new tracker_user_callback;
 	strncpy(tc1->t_name, TRACKER_NAME, sizeof(tc1->t_name));
 
 	fprintf(stderr, "Tracker's name is %s.\n", TRACKER_NAME);
@@ -92,7 +92,7 @@ int main (int argc, char * argv []) {
 	// Set up the tracker callback handlers
 	//printf("Tracker update: '.' = pos, '/' = vel, '~' = acc\n");
 	if ( print ){
-		tkr->register_change_handler(tc1, handle_tracker_pos_quat);
+		trackerRem->register_change_handler(tc1, handle_tracker_pos_quat);
 	}
 	
 	//Le o arquivo e faz o mainloop ao mesmo tempo
@@ -151,16 +151,16 @@ int main (int argc, char * argv []) {
 
 
 				// Let the tracker server, client and connection do their things
-				ntkr->mainloop();
+				trackerServer->mainloop();
 				
 				
 				vrpn_float64 position[3] = {pos1, pos2, pos3};
 				vrpn_float64 quaternion[4] = {quat1, quat2, quat3, quat4};
 				
-				ntkr->report_pose(sensor,t, position, quaternion,vrpn_CONNECTION_LOW_LATENCY);
+				trackerServer->report_pose(sensor,t, position, quaternion,vrpn_CONNECTION_LOW_LATENCY);
 
 				if ( print ){
-					tkr->mainloop();
+					trackerRem->mainloop();
 				}
 				connection->mainloop();
 
