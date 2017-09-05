@@ -9,3 +9,4 @@
 *.bsc
 *vrpnViwer\build\*
 *.exe
+.vs
