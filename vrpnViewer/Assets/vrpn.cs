@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 
 public class vrpn : MonoBehaviour {
 
-	bool kinect = false;//caso leapmotion setar false;
+	bool kinect = true;//caso leapmotion setar false;
 	
 	int channels;
 	int centerChannel;
@@ -30,7 +30,7 @@ public class vrpn : MonoBehaviour {
 			//kinect
 			centerChannel = 2;
 			channels = 20;
-			size = 0.2f;
+			size = 0.1f;
 			Camera.main.transform.position = new Vector3 (0f, 0f, -0.5f);
 		} else {
 			//leapmotion

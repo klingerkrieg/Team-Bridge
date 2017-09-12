@@ -1,2 +1,2 @@
-leapmotion_server.exe p > pinca.txt
+leapmotion_server.exe t > leapmotion_demo.txt
 pause

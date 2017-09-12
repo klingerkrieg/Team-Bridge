@@ -23,6 +23,8 @@ int	CONNECTION_PORT = vrpn_DEFAULT_LISTEN_PORT_NO;	// Port for connection to lis
 bool printTracker = false;
 bool printAnalog = false;
 
+bool relative_to_hand = false;
+
 
 vrpn_Analog_Server	*analogServer;
 vrpn_Analog_Remote	*analogRem;
@@ -57,34 +59,10 @@ handle_tracker_pos_quat(void *userdata, const vrpn_TRACKERCB t) {
 		t_data->t_counts.push_back(0);
 	}
 
-	double pos[3];
-
-	if (t.sensor == 0 || t.sensor == 23) {
-		int i = 0;
-		if (t.sensor == 23) {
-			i = 1;
-		}
-		hand_pos[i][0] = t.pos[0];
-		hand_pos[i][1] = t.pos[1];
-		hand_pos[i][2] = t.pos[2];
-
-		pos[0] = t.pos[0];
-		pos[1] = t.pos[1];
-		pos[2] = t.pos[2];
-	} else {
-
-		//conversao para manter as juntas relativas a palma 0 e 23
-		int i = 0;
-		if (t.sensor >= 23) {
-			i = 1;
-		}
-		pos[0] = t.pos[0] - hand_pos[i][0];
-		pos[1] = t.pos[1] - hand_pos[i][1];
-		pos[2] = t.pos[2] - hand_pos[i][2];
-	}
+	
 	
 	printf("sensor\t%d\tpos\t%.2f\t%.2f\t%.2f\tquat\t%.2f\t%.2f\t%.2f\t%.2f\n",
-		   t.sensor, pos[0], pos[1], pos[2],
+		   t.sensor, t.pos[0], t.pos[1], t.pos[2],
 		   t.quat[0], t.quat[1], t.quat[2], t.quat[3]);
 
 }
@@ -117,6 +95,30 @@ void reportPose(int sensor, timeval t, Vector position, Vector quaternion) {
 	double quat2 = (double)quaternion[1];
 	double quat3 = (double)quaternion[2];
 	double quat4 = (double)quaternion[3];
+
+
+	if ( relative_to_hand ) {
+		
+		if ( sensor == 0 || sensor == 23 ) {
+			int i = 0;
+			if ( sensor == 23 ) {
+				i = 1;
+			}
+			hand_pos[i][0] = pos1;
+			hand_pos[i][1] = pos2;
+			hand_pos[i][2] = pos3;
+		} else {
+
+			//conversao para manter as juntas relativas a palma 0 e 23
+			int i = 0;
+			if ( sensor >= 23 ) {
+				i = 1;
+			}
+			pos1 = pos1 - hand_pos[i][0];
+			pos2 = pos2 - hand_pos[i][1];
+			pos3 = pos3 - hand_pos[i][2];
+		}
+	}
 
 
 	vrpn_float64 positions2[3] = { pos1, pos2, pos3 };
@@ -292,7 +294,7 @@ int main(int argc, char * argv[]) {
 
 	printf("default port: %d \n", CONNECTION_PORT);
 	
-	fprintf(stderr, "Usage: %s \nt - Print tracking\na - print analog", argv[0]);
+	fprintf(stderr, "Usage: %s \nt - Print tracking\na - print analog\r - fingers relative to hand", argv[0]);
 		
 
 	for ( int i = 1; i < argc; i++ ) {
@@ -301,6 +303,9 @@ int main(int argc, char * argv[]) {
 		} else
 		if ( tolower(argv[i][0]) == 'a' ) {
 			printAnalog = true;
+		} else
+		if ( tolower(argv[i][0]) == 'r' ) {
+			relative_to_hand = true;
 		}
 	}
 
