@@ -35,15 +35,17 @@ public:
 
 
 void callKey(char key) {
-	HWND notepad = FindWindow(_T(aplicacao), NULL);
-	HWND edit = FindWindowEx(notepad, NULL, _T("Edit"), NULL);
-	PostMessage(edit, WM_KEYDOWN, VkKeyScanEx(key, GetKeyboardLayout(0)), 0);
+	//HWND notepad = FindWindow(_T(aplicacao), NULL);
+	//HWND edit = FindWindowEx(notepad, NULL, _T("Edit"), NULL);
+	//PostMessage(edit, WM_KEWYDOWN, VkKeyScanEx(key, GetKeyboardLayout(0)), 0);
+
+	keybd_event(key, 0, 0, 0);
+	keybd_event(key, 0, KEYEVENTF_KEYUP, 0);
 }
 
 
 
-void VRPN_CALLBACK
-handle_tracker_pos_quat(void *userdata, const vrpn_TRACKERCB t) {
+void VRPN_CALLBACK handle_tracker_pos_quat(void *userdata, const vrpn_TRACKERCB t) {
 	tracker_user_callback *t_data = static_cast<tracker_user_callback *>(userdata);
 
 	// Make sure we have a count value for this sensor
@@ -58,13 +60,15 @@ handle_tracker_pos_quat(void *userdata, const vrpn_TRACKERCB t) {
 
 		if ( ultimaAltura - t.pos[1] > altura ) {
 			ultimaAltura = t.pos[1];
-			callKey(VK_RETURN);
+			keybd_event(VK_SPACE, 0, KEYEVENTF_KEYUP, 0);
+			//callKey('W');
 			//keybd_event( 'S' , 0, 0, 0);
 			//keybd_event('S', 0, KEYEVENTF_KEYUP, 0);
 		} else 
 		if ( ultimaAltura - t.pos[1] < (altura * -1) ) {
 			ultimaAltura = t.pos[1];
-			callKey('W');
+			//callKey(VK_SPACE);
+			keybd_event(VK_SPACE, 0, 0, 0);
 			//keybd_event('W', 0, 0, 0);
 			//keybd_event('W', 0, KEYEVENTF_KEYUP, 0);
 			
