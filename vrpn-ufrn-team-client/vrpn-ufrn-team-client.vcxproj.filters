@@ -20,10 +20,16 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="configFileReader.h">
+    <ClInclude Include="KeyMap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="KeyMap.h">
+    <ClInclude Include="ConfigFileReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Hook.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DeviceInfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

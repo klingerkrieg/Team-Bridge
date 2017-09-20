@@ -18,9 +18,7 @@
 #include <vrpn_Dial.h>           // for vrpn_Dial_Remote, etc
 #include <vrpn_FileConnection.h> // For preload and accumulate settings
 #include <vrpn_Shared.h>         // for vrpn_SleepMsecs
-#include <vrpn_Text.h>           // for vrpn_Text_Receiver, etc
 #include <vrpn_Tracker.h>        // for vrpn_TRACKERACCCB, etc
-#include <vector>                // for vector
 
 #include "vrpn_BaseClass.h" // for vrpn_System_TextPrinter, etc
 #include "vrpn_Configure.h" // for VRPN_CALLBACK
@@ -31,8 +29,9 @@
 #include <vector>
 #include "ConfigFileReader.h"
 #include "KeyMap.h"
+#include "Hook.h"
+//#include "DeviceInfo.h"
 
-//#include "hook.h"
 
 using namespace std;
 
@@ -40,75 +39,10 @@ int done = 0;                // Signals that the program should exit
 
 
 
-class device_info {
-public:
-	char *name;
-	vrpn_Tracker_Remote *tkr;
-	vrpn_Button_Remote *btn;
-	vrpn_Analog_Remote *ana;
-};
+
 const unsigned MAX_DEVICES = 50;
 
 
-class tracker_user_callback {
-public:
-	char t_name[vrpn_MAX_TEXT_LEN];
-	vector<unsigned> t_counts;
-};
-
-
-void VRPN_CALLBACK
-handle_tracker_pos_quat(void *userdata, const vrpn_TRACKERCB t) {
-	tracker_user_callback *t_data = static_cast<tracker_user_callback *>(userdata);
-
-	// Make sure we have a count value for this sensor
-	while ( t_data->t_counts.size() <= static_cast<unsigned>(t.sensor) ) {
-		t_data->t_counts.push_back(0);
-	}
-
-	t_data->t_counts[t.sensor] = 0;
-	printf("Tracker %s, sensor %d:\n     pos (%5.2f, %5.2f, %5.2f); "
-			"quat (%5.2f, %5.2f, %5.2f, %5.2f)\n",
-			t_data->t_name, t.sensor, t.pos[0], t.pos[1], t.pos[2],
-			t.quat[0], t.quat[1], t.quat[2], t.quat[3]);
-	
-}
-
-
-
-void VRPN_CALLBACK handle_button(void *userdata, const vrpn_BUTTONCB b) {
-	const char *name = (const char *)userdata;
-
-	printf("##########################################\r\n"
-		   "Button %s, number %d was just %s\n !!!"
-		   "##########################################\r\n",
-		   name, b.button, b.state ? "pressed" : "released");
-}
-
-
-void VRPN_CALLBACK
-handle_button_states(void *userdata, const vrpn_BUTTONSTATESCB b) {
-	const char *name = (const char *)userdata;
-
-	printf("Button %s has %d buttons with states!!!:", name, b.num_buttons);
-	int i;
-	for ( i = 0; i < b.num_buttons; i++ ) {
-		printf(" %d", b.states[i]);
-	}
-	printf("\n");
-}
-
-
-void VRPN_CALLBACK handle_analog(void *userdata, const vrpn_ANALOGCB a) {
-	int i;
-	const char *name = (const char *)userdata;
-
-	printf("!!!Analog %s:\n         %5.2f", name, a.channel[0]);
-	for ( i = 1; i < a.num_channel; i++ ) {
-		printf(", %5.2f", a.channel[i]);
-	}
-	printf(" (%d chans)\n", a.num_channel);
-}
 
 void handle_cntl_c(int) {
 	done = 1;
@@ -153,7 +87,7 @@ public:
 
 		
 
-		device_info *dev;
+		DeviceInfo *dev;
 
 		// Make sure we have enough room for the new device
 		if ( devs.size() == MAX_DEVICES ) {
@@ -166,7 +100,7 @@ public:
 			
 
 			// Name the device and open it as everything
-			dev = &device_list[num_devices];
+			dev = &deviceList[num_devices];
 			dev->name = (char *)it->c_str();
 			dev->tkr = new vrpn_Tracker_Remote(dev->name);
 			dev->ana = new vrpn_Analog_Remote(dev->name);
@@ -182,18 +116,18 @@ public:
 
 			if ( printTracker ) {
 				vrpn_Tracker_Remote *tkr = dev->tkr;
-				tracker_user_callback *tc1 = new tracker_user_callback;
-				tracker_user_callback *tc2 = new tracker_user_callback;
-				tracker_user_callback *tc3 = new tracker_user_callback;
+				TrackerUserCallback *tc1 = new TrackerUserCallback;
+				TrackerUserCallback *tc2 = new TrackerUserCallback;
+				TrackerUserCallback *tc3 = new TrackerUserCallback;
 
 				if ( (tc1 == NULL) || (tc2 == NULL) || (tc3 == NULL) ) {
 					fprintf(stderr, "Out of memory\n");
 				}
 				printf(" Tracker");
 
-				strncpy(tc1->t_name, dev->name, sizeof(tc1->t_name));
-				strncpy(tc2->t_name, dev->name, sizeof(tc2->t_name));
-				strncpy(tc3->t_name, dev->name, sizeof(tc3->t_name));
+				strncpy(tc1->name, dev->name, sizeof(tc1->name));
+				strncpy(tc2->name, dev->name, sizeof(tc2->name));
+				strncpy(tc3->name, dev->name, sizeof(tc3->name));
 
 
 				dev->tkr->register_change_handler(tc1, handle_tracker_pos_quat);
@@ -228,6 +162,16 @@ public:
 			signal(SIGINT, handle_cntl_c);
 		#endif
 
+		//Setando hook
+		Hook::setMap(map);
+		
+		std::map<string, string>::iterator it = config.find("APP");
+
+		if ( it != config.end() ) {
+			Hook::setApp(it->second);
+		}
+
+
 		return true;
 
 	}
@@ -238,9 +182,9 @@ public:
 			unsigned i;
 
 			for ( i = 0; i < num_devices; i++ ) {
-				device_list[i].tkr->mainloop();
-				device_list[i].btn->mainloop();
-				device_list[i].ana->mainloop();
+				deviceList[i].tkr->mainloop();
+				deviceList[i].btn->mainloop();
+				deviceList[i].ana->mainloop();
 			}
 
 			vrpn_SleepMsecs(1);
@@ -248,9 +192,9 @@ public:
 
 		unsigned i;
 		for ( i = 0; i < num_devices; i++ ) {
-			delete device_list[i].tkr;
-			delete device_list[i].btn;
-			delete device_list[i].ana;
+			delete deviceList[i].tkr;
+			delete deviceList[i].btn;
+			delete deviceList[i].ana;
 		}
 	}
 
@@ -261,7 +205,7 @@ private:
 	bool printButton = true;
 	bool printAnalog = true;
 
-	device_info device_list[MAX_DEVICES];
+	DeviceInfo deviceList[MAX_DEVICES];
 	unsigned num_devices = 0;
 
 };

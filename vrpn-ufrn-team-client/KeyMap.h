@@ -49,7 +49,8 @@ KeyMap::KeyMap(char key, char toKey) {
 KeyMap::KeyMap(char key[SSIZE], char toKey[SSIZE]) {
 	
 	if ( strlen(key) == 1) {
-		this->key = key[0];
+		//o evento que vem do VRPN sempre sera um numero inteiro ele nao envia eventos do tipo do Windows
+		this->key = atoi(key);
 	} else {
 		this->key = KeyMap::constantMap[key];
 	}

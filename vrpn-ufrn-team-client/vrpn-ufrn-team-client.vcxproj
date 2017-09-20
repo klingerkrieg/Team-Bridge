@@ -158,7 +158,9 @@
     <ClCompile Include="client.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="configFileReader.h" />
+    <ClInclude Include="ConfigFileReader.h" />
+    <ClInclude Include="DeviceInfo.h" />
+    <ClInclude Include="Hook.h" />
     <ClInclude Include="KeyMap.h" />
   </ItemGroup>
   <ItemGroup>
