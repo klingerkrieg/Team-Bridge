@@ -13,4 +13,4 @@
 
 ## Outros
 
-O vrpnViwer não faz parte do projeto do VS, foi feito em Unity utilizando a biblioteca fornecida por: [UnityVRPN](https://github.com/Laremere/unityVRPN)
+O vrpnViewer não faz parte do projeto do VS, foi feito em Unity utilizando a biblioteca fornecida por: [UnityVRPN](https://github.com/Laremere/unityVRPN)

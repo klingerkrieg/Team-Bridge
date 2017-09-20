@@ -28,7 +28,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="vrpn-client-db.cfg" />
-    <None Include="vrpn-client-map.cfg" />
+    <None Include="vrpn-client.cfg" />
   </ItemGroup>
 </Project>

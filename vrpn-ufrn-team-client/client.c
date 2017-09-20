@@ -1,4 +1,12 @@
-#include "configFileReader.h"
+/** @file	client.C
+@brief	Cliente para VRPN do TEAM UFRN
+
+@date 2017
+@author Alan Klinger klingerkrieg@gmail.com
+@license Standard VRPN license.
+*/
+
+
 #include <stdio.h>  // for printf, fprintf, NULL, etc
 #include <stdlib.h> // for exit, atoi
 #ifndef _WIN32_WCE
@@ -21,6 +29,7 @@
 #include <iostream>
 #include <map>
 #include <vector>
+#include "ConfigFileReader.h"
 #include "KeyMap.h"
 
 //#include "hook.h"
@@ -28,9 +37,8 @@
 using namespace std;
 
 int done = 0;                // Signals that the program should exit
-unsigned tracker_stride = 1; // Every nth report will be printed
-char *db_file_name = "vrpn-client-db.cfg";
-char *map_file_name = "vrpn-client-map.cfg";
+
+
 
 class device_info {
 public:
@@ -48,11 +56,6 @@ public:
 	vector<unsigned> t_counts;
 };
 
-/*****************************************************************************
-*
-Callback handlers
-*
-*****************************************************************************/
 
 void VRPN_CALLBACK
 handle_tracker_pos_quat(void *userdata, const vrpn_TRACKERCB t) {
@@ -63,226 +66,121 @@ handle_tracker_pos_quat(void *userdata, const vrpn_TRACKERCB t) {
 		t_data->t_counts.push_back(0);
 	}
 
-	// See if we have gotten enough reports from this sensor that we should
-	// print this one.  If so, print and reset the count.
-	if ( ++t_data->t_counts[t.sensor] >= tracker_stride ) {
-		t_data->t_counts[t.sensor] = 0;
-		printf("Tracker %s, sensor %d:\n     pos (%5.2f, %5.2f, %5.2f); "
-			   "quat (%5.2f, %5.2f, %5.2f, %5.2f)\n",
-			   t_data->t_name, t.sensor, t.pos[0], t.pos[1], t.pos[2],
-			   t.quat[0], t.quat[1], t.quat[2], t.quat[3]);
-	}
-}
-
-void VRPN_CALLBACK handle_tracker_vel(void *userdata, const vrpn_TRACKERVELCB t) {
-	tracker_user_callback *t_data = static_cast<tracker_user_callback *>(userdata);
-
-	// Make sure we have a count value for this sensor
-	while ( t_data->t_counts.size() <= static_cast<unsigned>(t.sensor) ) {
-		t_data->t_counts.push_back(0);
-	}
-
-	// See if we have gotten enough reports from this sensor that we should
-	// print this one.  If so, print and reset the count.
-	if ( ++t_data->t_counts[t.sensor] >= tracker_stride ) {
-		t_data->t_counts[t.sensor] = 0;
-		printf("Tracker %s, sensor %d:\n     vel (%5.2f, %5.2f, %5.2f); "
-			   "quatvel (%5.2f, %5.2f, %5.2f, %5.2f), dt %5.2f\n",
-			   t_data->t_name, t.sensor, t.vel[0], t.vel[1], t.vel[2],
-			   t.vel_quat[0], t.vel_quat[1], t.vel_quat[2], t.vel_quat[3],
-			   t.vel_quat_dt);
-	}
-}
-
-void VRPN_CALLBACK handle_tracker_acc(void *userdata, const vrpn_TRACKERACCCB t) {
-	tracker_user_callback *t_data = static_cast<tracker_user_callback *>(userdata);
-
-	// Make sure we have a count value for this sensor
-	while ( t_data->t_counts.size() <= static_cast<unsigned>(t.sensor) ) {
-		t_data->t_counts.push_back(0);
-	}
-
-	// See if we have gotten enough reports from this sensor that we should
-	// print this one.  If so, print and reset the count.
-	if ( ++t_data->t_counts[t.sensor] >= tracker_stride ) {
-		t_data->t_counts[t.sensor] = 0;
-		printf("Tracker %s, sensor %d:\n     acc (%5.2f, %5.2f, %5.2f); "
-			   "quatacc (%5.2f, %5.2f, %5.2f, %5.2f), dt %5.2f\n",
-			   t_data->t_name, t.sensor, t.acc[0], t.acc[1], t.acc[2],
-			   t.acc_quat[0], t.acc_quat[1], t.acc_quat[2], t.acc_quat[3],
-			   t.acc_quat_dt);
-	}
-}
-
-
-
-
-
-void VRPN_CALLBACK handle_dial(void *userdata, const vrpn_DIALCB d) {
-	const char *name = (const char *)userdata;
-
-	printf("Dial %s, number %d was moved by %5.2f\n", name, d.dial, d.change);
-}
-
-void VRPN_CALLBACK handle_text(void *userdata, const vrpn_TEXTCB t) {
-	const char *name = (const char *)userdata;
-
-	// Warnings and errors are printed by the system text printer.
-	if ( t.type == vrpn_TEXT_NORMAL ) {
-		printf("%s: Text message: %s\n", name, t.message);
-	}
-}
-
-// WARNING: On Windows systems, this handler is called in a separate
-// thread from the main program (this differs from Unix).  To avoid all
-// sorts of chaos as the main program continues to handle packets, we
-// set a done flag here and let the main program shut down in its own
-// thread by calling shutdown() to do all of the stuff we used to do in
-// this handler.
-
-void handle_cntl_c(int) { done = 1; }
-
-void Usage(const char *arg0) {
-
-
-
-	fprintf(
-		stderr,
-		"Usage:  %s [-notracker] [-nobutton] [-noanalog] [-nodial]\n"
-		"           [-trackerstride n]\n"
-		"           [-notext] device1 [device2] [device3] [device4] [...]\n"
-		"  -trackerstride:  Print every nth report from each tracker sensor\n"
-		" -notracker:  Don't print tracker reports for following devices\n"
-		"  -nobutton:  Don't print button reports for following devices\n"
-		"  -noanalog:  Don't print analog reports for following devices\n"
-		"  -nodial:  Don't print dial reports for following devices\n"
-		"  -notext:  Don't print text messages (warnings, errors) for "
-		"following devices\n"
-		"  deviceX:  VRPN name of device to connect to (eg: Tracker0@ioglab)\n"
-		"  The default behavior is to print all message types for all devices "
-		"listed\n"
-		"  The order of the parameters can be changed to suit\n",
-		arg0);
-
-	exit(0);
-}
-
-int main(int argc, char *argv[]) {
-
-
-	int print_for_tracker = 1; // Print tracker reports?
-	int print_for_button = 1;  // Print button reports?
-	int print_for_analog = 1;  // Print analog reports?
-	int print_for_dial = 1;    // Print dial reports?
-	int print_for_text = 1;    // Print warning/error messages?
-
-							   // If we happen to open a file, neither preload nor accumulate the
-							   // messages in memory, to avoid crashing for huge files.
-	vrpn_FILE_CONNECTIONS_SHOULD_PRELOAD = false;
-	vrpn_FILE_CONNECTIONS_SHOULD_ACCUMULATE = false;
-
-	device_info device_list[MAX_DEVICES];
-	unsigned num_devices = 0;
-
-	int i;
-
-	i = 1;
-	while ( i < argc ) {
-		if ( !strcmp(argv[i], "-f") ) { // Specify config-file name
-			if ( ++i > argc ) {
-				Usage(argv[0]);
-			}
-			db_file_name = argv[i];
-		} else
-		if ( !strcmp(argv[i], "-m") ) { // Specify config-file name
-			if ( ++i > argc ) {
-				Usage(argv[0]);
-			}
-			map_file_name = argv[i];
-		}
-	}
-
-	std::vector<KeyMap> map = {};
+	t_data->t_counts[t.sensor] = 0;
+	printf("Tracker %s, sensor %d:\n     pos (%5.2f, %5.2f, %5.2f); "
+			"quat (%5.2f, %5.2f, %5.2f, %5.2f)\n",
+			t_data->t_name, t.sensor, t.pos[0], t.pos[1], t.pos[2],
+			t.quat[0], t.quat[1], t.quat[2], t.quat[3]);
 	
-	if ( !ConfigFileReader::readKeyMap(map_file_name, map) ) {
-		printf("Falha ao ler arquivo de configuracao.\n");
-		return -1;
+}
+
+
+
+void VRPN_CALLBACK handle_button(void *userdata, const vrpn_BUTTONCB b) {
+	const char *name = (const char *)userdata;
+
+	printf("##########################################\r\n"
+		   "Button %s, number %d was just %s\n !!!"
+		   "##########################################\r\n",
+		   name, b.button, b.state ? "pressed" : "released");
+}
+
+
+void VRPN_CALLBACK
+handle_button_states(void *userdata, const vrpn_BUTTONSTATESCB b) {
+	const char *name = (const char *)userdata;
+
+	printf("Button %s has %d buttons with states!!!:", name, b.num_buttons);
+	int i;
+	for ( i = 0; i < b.num_buttons; i++ ) {
+		printf(" %d", b.states[i]);
+	}
+	printf("\n");
+}
+
+
+void VRPN_CALLBACK handle_analog(void *userdata, const vrpn_ANALOGCB a) {
+	int i;
+	const char *name = (const char *)userdata;
+
+	printf("!!!Analog %s:\n         %5.2f", name, a.channel[0]);
+	for ( i = 1; i < a.num_channel; i++ ) {
+		printf(", %5.2f", a.channel[i]);
+	}
+	printf(" (%d chans)\n", a.num_channel);
+}
+
+void handle_cntl_c(int) {
+	done = 1;
+}
+
+class Client {
+public:
+
+	void setConfigFile(char * file_name) {
+		configFileName = file_name;
 	}
 
-	//test
-	for ( std::vector<KeyMap>::iterator it = map.begin(); it != map.end(); ++it ) {
-		printf("%d -> %d\n", it->key, it->toKey);
+	void setPrintTracker(bool print) {
+		printTracker = print;
 	}
 
-
-
-	std::map<string, string> config = {};
-
-	if ( !ConfigFileReader::readConfigFile(db_file_name, config) ) {
-		printf("Falha ao ler arquivo de configuracao.\n");
-		return -1;
+	void setPrintButton(bool print) {
+		printButton = print;
 	}
 
-	//test
-	for ( std::map<string, string>::iterator it = config.begin(); it != config.end(); ++it ) {
-		cout << it->first << " = " << it->second << "\n";
+	void setPrintAnalog(bool print) {
+		printAnalog = print;
 	}
+	
+	bool setup() {
+		
+		// If we happen to open a file, neither preload nor accumulate the
+		// messages in memory, to avoid crashing for huge files.
+		vrpn_FILE_CONNECTIONS_SHOULD_PRELOAD = false;
+		vrpn_FILE_CONNECTIONS_SHOULD_ACCUMULATE = false;
+
+		
+
+		std::vector<string> devs = {};
+		std::vector<KeyMap> map = {};
+		std::map<string, string> config = {};
+
+		if ( !ConfigFileReader::readConfigFile(configFileName, devs, map, config) ) {
+			printf("Falha ao ler arquivo de configuracao.\n");
+			return false;
+		}
+
+		
+
+		device_info *dev;
+
+		// Make sure we have enough room for the new device
+		if ( devs.size() == MAX_DEVICES ) {
+			fprintf(stderr, "Mais dispositivos do que o permitido!\n");
+			exit(-1);
+		}
 
 
-	// Parse arguments, creating objects as we go.  Arguments that
-	// change the way a device is treated affect all devices that
-	// follow on the command line.
-	/*for ( i = 1; i < argc; i++ ) {
-
-
-		if ( !strcmp(argv[i], "-f") ) { // Specify config-file name
-			if ( ++i > argc ) {
-				Usage(argv[0]);
-			}
-			config_file_name = argv[i];
-		} else
-		if ( !strcmp(argv[i], "-notracker") ) {
-			print_for_tracker = 0;
-		} else if ( !strcmp(argv[i], "-nobutton") ) {
-			print_for_button = 0;
-		} else if ( !strcmp(argv[i], "-noanalog") ) {
-			print_for_analog = 0;
-		} else if ( !strcmp(argv[i], "-trackerstride") ) {
-			if ( ++i >= argc ) {
-				Usage(argv[0]);
-			}
-			if ( atoi(argv[i]) <= 0 ) {
-				fprintf(stderr,
-						"-trackerstride argument must be 1 or greater\n");
-				return -1;
-			}
-			tracker_stride = atoi(argv[i]);
-		} else { // Create a device and connect to it.
-			device_info *dev;
-
-			// Make sure we have enough room for the new device
-			if ( num_devices == MAX_DEVICES ) {
-				fprintf(stderr, "Too many devices!\n");
-				exit(-1);
-			}
+		for ( std::vector<std::string>::iterator it = devs.begin(); it != devs.end(); ++it ) {
+			
 
 			// Name the device and open it as everything
 			dev = &device_list[num_devices];
-			dev->name = argv[i];
+			dev->name = (char *)it->c_str();
 			dev->tkr = new vrpn_Tracker_Remote(dev->name);
 			dev->ana = new vrpn_Analog_Remote(dev->name);
 			dev->btn = new vrpn_Button_Remote(dev->name);
 
-			if ( (dev->ana == NULL) || (dev->btn == NULL) ||
-				 (dev->tkr == NULL) ) {
+			if ( (dev->ana == NULL) || (dev->btn == NULL) || (dev->tkr == NULL) ) {
 				fprintf(stderr, "Error opening %s\n", dev->name);
-				return -1;
+				return false;
 			} else {
 				printf("Opened %s as:", dev->name);
 			}
 
 
-			if ( print_for_tracker ) {
+			if ( printTracker ) {
 				vrpn_Tracker_Remote *tkr = dev->tkr;
 				tracker_user_callback *tc1 = new tracker_user_callback;
 				tracker_user_callback *tc2 = new tracker_user_callback;
@@ -297,19 +195,17 @@ int main(int argc, char *argv[]) {
 				strncpy(tc2->t_name, dev->name, sizeof(tc2->t_name));
 				strncpy(tc3->t_name, dev->name, sizeof(tc3->t_name));
 
-				tkr->register_change_handler(tc1, handle_tracker_pos_quat);
-				tkr->register_change_handler(tc2, handle_tracker_vel);
-				tkr->register_change_handler(tc3, handle_tracker_acc);
+
+				dev->tkr->register_change_handler(tc1, handle_tracker_pos_quat);
 			}
 
-			if ( print_for_button ) {
+			if ( printButton ) {
 				printf(" Button");
 				dev->btn->register_change_handler(dev->name, handle_button);
-				dev->btn->register_states_handler(dev->name,
-												  handle_button_states);
+				dev->btn->register_states_handler(dev->name, handle_button_states);
 			}
 
-			if ( print_for_analog ) {
+			if ( printAnalog ) {
 				printf(" Analog");
 				dev->ana->register_change_handler(dev->name, handle_analog);
 			} else {
@@ -321,36 +217,35 @@ int main(int argc, char *argv[]) {
 			printf(".\n");
 			num_devices++;
 		}
-	}*/
+			
 
 
-
-
-
-
-	if ( num_devices == 0 ) {
-		Usage(argv[0]);
-	}
-
-#ifndef _WIN32_WCE
-	signal(SIGINT, handle_cntl_c);
-#endif
-
-
-	printf("Press ^C to exit.\n");
-	while ( !done ) {
-		unsigned i;
-
-		for ( i = 0; i < num_devices; i++ ) {
-			device_list[i].tkr->mainloop();
-			device_list[i].btn->mainloop();
-			device_list[i].ana->mainloop();
+		if ( num_devices == 0 ) {
+			printf("Nao foi encontrado nenhum dispositivo no arquivo de configuracao.");
 		}
 
-		vrpn_SleepMsecs(1);
+		#ifndef _WIN32_WCE
+			signal(SIGINT, handle_cntl_c);
+		#endif
+
+		return true;
+
 	}
 
-	{
+	void start() {
+		printf("Press ^C to exit.\n");
+		while ( !done ) {
+			unsigned i;
+
+			for ( i = 0; i < num_devices; i++ ) {
+				device_list[i].tkr->mainloop();
+				device_list[i].btn->mainloop();
+				device_list[i].ana->mainloop();
+			}
+
+			vrpn_SleepMsecs(1);
+		}
+
 		unsigned i;
 		for ( i = 0; i < num_devices; i++ ) {
 			delete device_list[i].tkr;
@@ -358,6 +253,79 @@ int main(int argc, char *argv[]) {
 			delete device_list[i].ana;
 		}
 	}
+
+private:
+
+	char *configFileName = "vrpn-client.cfg";
+	bool printTracker = true;
+	bool printButton = true;
+	bool printAnalog = true;
+
+	device_info device_list[MAX_DEVICES];
+	unsigned num_devices = 0;
+
+};
+
+/*****************************************************************************
+*
+Callback handlers
+*
+*****************************************************************************/
+
+
+
+
+
+// WARNING: On Windows systems, this handler is called in a separate
+// thread from the main program (this differs from Unix).  To avoid all
+// sorts of chaos as the main program continues to handle packets, we
+// set a done flag here and let the main program shut down in its own
+// thread by calling shutdown() to do all of the stuff we used to do in
+// this handler.
+void Usage(const char *arg0) {
+
+
+
+	fprintf(
+		stderr,
+		"Usage:  %s [-notracker] [-nobutton] [-noanalog] \n"
+		" -notracker:  Don't print tracker reports for following devices\n"
+		"  -nobutton:  Don't print button reports for following devices\n"
+		"  -noanalog:  Don't print analog reports for following devices\n",
+		arg0);
+
+	exit(0);
+}
+
+int main(int argc, char *argv[]) {
+
+	Client client = Client();
+	
+	// Parse arguments, creating objects as we go.  Arguments that
+	// change the way a device is treated affect all devices that
+	// follow on the command line.
+	for (int i = 1; i < argc; i++ ) {
+
+		if ( !strcmp(argv[i], "-f") ) { // Specify config-file name
+			if ( ++i > argc ) {
+				Usage(argv[0]);
+			}
+			client.setConfigFile(argv[i]);
+		} else
+		if ( !strcmp(argv[i], "-notracker") ) {
+			client.setPrintTracker(false);
+		} else if ( !strcmp(argv[i], "-nobutton") ) {
+			client.setPrintButton(false);
+		} else if ( !strcmp(argv[i], "-noanalog") ) {
+			client.setPrintAnalog(false);
+		}
+
+	}
+
+
+	client.setup();
+
+	client.start();
 
 	return 0;
 } /* main */

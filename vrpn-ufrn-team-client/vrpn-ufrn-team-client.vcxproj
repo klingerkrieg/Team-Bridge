@@ -162,8 +162,7 @@
     <ClInclude Include="KeyMap.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="vrpn-client-db.cfg" />
-    <None Include="vrpn-client-map.cfg" />
+    <None Include="vrpn-client.cfg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
