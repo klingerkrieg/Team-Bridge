@@ -2,6 +2,7 @@
 #include <vector>
 #include "KeyMap.h"
 #include "DeviceInfo.h"
+#include "GestureRecognizer.h"
 
 #include "vrpn_Configure.h" // for VRPN_CALLBACK
 #include "vrpn_Types.h"     // for vrpn_float64, vrpn_int32
@@ -26,7 +27,7 @@ public:
 
 	//static void Hook::release(char key);
 
-	static void Hook::checkTrack();
+	static void Hook::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKERCB t);
 
 	static void Hook::checkButton(const char * name, const vrpn_BUTTONCB b);
 
@@ -53,8 +54,8 @@ void Hook::press(char key, bool isConstant) {
 	if ( app != "" ) {
 
 		HWND window = FindWindow(_T(app.c_str()), NULL);
-		HWND edit = FindWindowEx(window, NULL, _T("Edit"), NULL);
-		if ( edit != NULL ) {
+		if ( window ) {
+			HWND edit = FindWindowEx(window, NULL, _T("Edit"), NULL);
 			printf(" em %s.\n", app.c_str());
 			if ( isConstant ) {
 				PostMessage(edit, WM_KEYDOWN, VK_LEFT, 0);
@@ -93,8 +94,30 @@ void Hook::release(char key) {
 }
 
 */
-void Hook::checkTrack() {
+void Hook::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKERCB t) {
+	
+	int top = 0;
+	bool topCalculated = false;
 
+	for ( std::vector<KeyMap>::iterator keyMap = map.begin(); keyMap != map.end(); ++keyMap ) {
+		
+		//Caso seja reconhecimento de mudanca na altura ele calcula somente uma vez nesse metodo
+		if ( topCalculated == false && (keyMap->getKey() == KINECT_TOP_ADD || keyMap->getKey() == KINECT_TOP_DEC) ) {
+			top = GestureRecognizer::detectTopChange(userdata, t, keyMap->getHeightSens());
+			topCalculated = true;
+		}
+
+
+		//se ja foi calculado durante esse reconhecimento nao calcula novamente para as demais configuracoes de teclas
+		if ( keyMap->getKey() == KINECT_TOP_ADD && topCalculated == true && top == 1 ) {
+			//Se houve uma mudanca para cima e isso e esperado
+			press(keyMap->getToKey(), keyMap->getToKeyIsConstant());
+		} else
+		if ( keyMap->getKey() == KINECT_TOP_DEC && topCalculated == true && top == -1 ) {
+			press(keyMap->getToKey(), keyMap->getToKeyIsConstant());
+		}
+
+	}
 }
 
 void Hook::checkButton(const char * name, const vrpn_BUTTONCB b) {
@@ -117,58 +140,3 @@ void Hook::checkButton(const char * name, const vrpn_BUTTONCB b) {
 void Hook::checkAnalog() {
 
 }
-
-/*
-			Callbacks
-*/
-
-
-void VRPN_CALLBACK handle_tracker_pos_quat(void *userdata, const vrpn_TRACKERCB t) {
-	TrackerUserCallback *t_data = static_cast<TrackerUserCallback *>(userdata);
-
-	// Make sure we have a count value for this sensor
-	while ( t_data->counts.size() <= static_cast<unsigned>(t.sensor) ) {
-		t_data->counts.push_back(0);
-	}
-
-	t_data->counts[t.sensor] = 0;
-	printf("Tracker %s, sensor %d:\n     pos (%5.2f, %5.2f, %5.2f); "
-		   "quat (%5.2f, %5.2f, %5.2f, %5.2f)\n",
-		   t_data->name, t.sensor, t.pos[0], t.pos[1], t.pos[2],
-		   t.quat[0], t.quat[1], t.quat[2], t.quat[3]);
-
-}
-
-
-
-void VRPN_CALLBACK handle_button(void *userdata, const vrpn_BUTTONCB b) {
-	const char *name = (const char *)userdata;
-	printf("Button\n");
-	Hook::checkButton(name, b);
-}
-
-
-void VRPN_CALLBACK handle_button_states(void *userdata, const vrpn_BUTTONSTATESCB b) {
-	const char *name = (const char *)userdata;
-
-	printf("Button %s has %d buttons with states!!!:", name, b.num_buttons);
-	/*int i;
-	for ( i = 0; i < b.num_buttons; i++ ) {
-		printf(" %d", b.states[i]);
-	}*/
-	printf("\n");
-
-}
-
-
-void VRPN_CALLBACK handle_analog(void *userdata, const vrpn_ANALOGCB a) {
-	//int i;
-	const char *name = (const char *)userdata;
-
-	/*printf("!!!Analog %s:\n         %5.2f", name, a.channel[0]);
-	for ( i = 1; i < a.num_channel; i++ ) {
-		printf(", %5.2f", a.channel[i]);
-	}
-	printf(" (%d chans)\n", a.num_channel);*/
-}
-

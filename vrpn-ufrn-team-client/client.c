@@ -29,6 +29,7 @@
 #include <vector>
 #include "ConfigFileReader.h"
 #include "KeyMap.h"
+#include "callbacks.h"
 #include "Hook.h"
 //#include "DeviceInfo.h"
 

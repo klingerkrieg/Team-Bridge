@@ -32,6 +32,12 @@
     <ClInclude Include="DeviceInfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="callbacks.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GestureRecognizer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="vrpn-client.cfg" />

@@ -86,7 +86,7 @@ bool ConfigFileReader::readConfigFile(char * fileName,
 	FILE *config_file;
 	char *pch;
 	char scrap[LINESIZE];
-	char s1[LINESIZE], s2[LINESIZE];
+	char s1[LINESIZE], s2[LINESIZE], s3[LINESIZE];
 	std::string lastDev;
 
 	if ( !open(fileName, config_file) ) {
@@ -128,11 +128,16 @@ bool ConfigFileReader::readConfigFile(char * fileName,
 		
 		//Identifica o tipo de configuracao que sera lido
 		if ( !strcmp(pch = strtok(scrap, " \t"), "KEY") ) {
+
+			
+
 			//Pula a primeira string
 			pch += strlen(pch) + 1;
-			if ( sscanf(pch, "%s\t%s", s1, s2) != 2 ) {
-				fprintf(stderr, "Falha ao ler %s linha: %s\n", fileName, line);
-				return false;
+			if ( sscanf(pch, "%s\t%s\t%s", s1, s2, s3) != 3 ) {
+				if ( sscanf(pch, "%s\t%s", s1, s2) != 2 ) {
+					fprintf(stderr, "Falha ao ler %s linha: %s\n", fileName, line);
+					return false;
+				}
 			}
 
 			//Se nenhum dispositivo foi definido ainda
@@ -141,8 +146,19 @@ bool ConfigFileReader::readConfigFile(char * fileName,
 				return false;
 			}
 
-			//Adiciona um mapeamento de input
-			KeyMap km = KeyMap(lastDev,s1, s2);
+
+			KeyMap km;
+			if ( !strcmp(s3, "") ) {
+				//Adiciona um mapeamento de input
+				km = KeyMap(lastDev, s1, s2);
+			} else {
+				//Caso haja s3 sera alguma configuracao adicional
+				km = KeyMap(lastDev, s1, s2, s3);
+			}
+
+			//zera a s3
+			strcpy(s3, "");
+
 			map.push_back(km);
 		} else
 		if ( !strcmp(pch = strtok(scrap, " \t"), "DEV") ) {

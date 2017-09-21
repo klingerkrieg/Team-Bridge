@@ -5,6 +5,9 @@
 
 static const int SSIZE = 512;
 
+const int KINECT_TOP_ADD = 5001;
+const int KINECT_TOP_DEC = 5002;
+
 
 class KeyMap {
 private:
@@ -12,6 +15,11 @@ private:
 	int key;
 	char toKey;
 	bool toKeyIsConstant = false;
+
+	//sensibilidade para mudanca de altura
+	double heightSens = 0.15;
+
+	void init(std::string dev, char key[SSIZE], char toKey[SSIZE]);
 
 public:
 	int getKey() {
@@ -30,8 +38,14 @@ public:
 		return toKeyIsConstant;
 	}
 
+	double getHeightSens() {
+		return heightSens;
+	}
+
+	KeyMap(){}
 	KeyMap(std::string dev, int key, char toKey);
 	KeyMap(std::string dev, char key[SSIZE], char toKey[SSIZE]);
+	KeyMap(std::string dev, char key[SSIZE], char toKey[SSIZE], char config[SSIZE]);
 	
 	static std::map<std::string, int> create_map() {
 		//Caso o mapa ja tenha sido criado, nao cria novamente
@@ -49,6 +63,8 @@ public:
 		m["VK_DOWN"]		= VK_DOWN;
 		m["VK_LEFT"]		= VK_LEFT;
 		m["VK_RIGHT"]		= VK_RIGHT;
+		m["KINECT_TOP_ADD"] = KINECT_TOP_ADD;
+		m["KINECT_TOP_DEC"] = KINECT_TOP_DEC;
 		
 		return m;
 	}
@@ -67,8 +83,25 @@ KeyMap::KeyMap(std::string dev, int key, char toKey) {
 	this->toKey = toKey;
 }
 
+KeyMap::KeyMap(std::string dev, char key[SSIZE], char toKey[SSIZE], char config[SSIZE]) {
+
+	printf("name:%s\n", dev.c_str());
+	//Cria normalmente
+	init(dev, key, toKey);
+	printf("name2:%s\n", this->getDev().c_str());
+	//Caso seja top no kinect a configuracao extra sera a sensibilidade
+	if ( this->key == KINECT_TOP_ADD || this->key == KINECT_TOP_DEC ) {
+		heightSens = atof(config);
+	}
+
+}
 
 KeyMap::KeyMap(std::string dev, char key[SSIZE], char toKey[SSIZE]) {
+	init(dev,key,toKey);
+}
+
+
+void KeyMap::init(std::string dev, char key[SSIZE], char toKey[SSIZE]) {
 	
 	this->dev = dev;
 

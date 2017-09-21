@@ -162,8 +162,10 @@
     <ClCompile Include="client.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="callbacks.h" />
     <ClInclude Include="ConfigFileReader.h" />
     <ClInclude Include="DeviceInfo.h" />
+    <ClInclude Include="GestureRecognizer.h" />
     <ClInclude Include="Hook.h" />
     <ClInclude Include="KeyMap.h" />
   </ItemGroup>
