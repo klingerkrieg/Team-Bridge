@@ -117,17 +117,13 @@ public:
 			if ( printTracker ) {
 				vrpn_Tracker_Remote *tkr = dev->tkr;
 				TrackerUserCallback *tc1 = new TrackerUserCallback;
-				TrackerUserCallback *tc2 = new TrackerUserCallback;
-				TrackerUserCallback *tc3 = new TrackerUserCallback;
 
-				if ( (tc1 == NULL) || (tc2 == NULL) || (tc3 == NULL) ) {
+				if ( (tc1 == NULL) ) {
 					fprintf(stderr, "Out of memory\n");
 				}
 				printf(" Tracker");
 
 				strncpy(tc1->name, dev->name, sizeof(tc1->name));
-				strncpy(tc2->name, dev->name, sizeof(tc2->name));
-				strncpy(tc3->name, dev->name, sizeof(tc3->name));
 
 
 				dev->tkr->register_change_handler(tc1, handle_tracker_pos_quat);
@@ -172,11 +168,8 @@ public:
 		}
 
 
-		return true;
-
-	}
-
-	void start() {
+		//Apos configurar o start tem que ser automatico e dentro desse metodo
+		//Caso ele saia do metodo as variaveis que guardam o nome dos dispositivos sao apagadas
 		printf("Press ^C to exit.\n");
 		while ( !done ) {
 			unsigned i;
@@ -196,10 +189,13 @@ public:
 			delete deviceList[i].btn;
 			delete deviceList[i].ana;
 		}
+
+		return true;
+
 	}
 
-private:
 
+private:
 	char *configFileName = "vrpn-client.cfg";
 	bool printTracker = true;
 	bool printButton = true;
@@ -268,8 +264,6 @@ int main(int argc, char *argv[]) {
 
 
 	client.setup();
-
-	client.start();
 
 	return 0;
 } /* main */

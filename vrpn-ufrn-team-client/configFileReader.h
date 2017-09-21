@@ -68,7 +68,7 @@ void ConfigFileReader::printConfig(std::vector<std::string> &devs,
 
 	printf("\nMapeamento:\n");
 	for ( std::vector<KeyMap>::iterator it = map.begin(); it != map.end(); ++it ) {
-		printf("%d -> %d\n", it->key, it->toKey);
+		printf("[%s] %d -> %c\n", it->getDev().c_str() ,it->getKey(), it->getToKey());
 	}
 
 	printf("\nBanco:\n");
@@ -87,6 +87,7 @@ bool ConfigFileReader::readConfigFile(char * fileName,
 	char *pch;
 	char scrap[LINESIZE];
 	char s1[LINESIZE], s2[LINESIZE];
+	std::string lastDev;
 
 	if ( !open(fileName, config_file) ) {
 		return false;
@@ -133,8 +134,15 @@ bool ConfigFileReader::readConfigFile(char * fileName,
 				fprintf(stderr, "Falha ao ler %s linha: %s\n", fileName, line);
 				return false;
 			}
+
+			//Se nenhum dispositivo foi definido ainda
+			if ( lastDev == "" ) {
+				fprintf(stderr, "Nenhum dispositivo foi definido em %s para: %s\n", fileName, line);
+				return false;
+			}
+
 			//Adiciona um mapeamento de input
-			KeyMap km = KeyMap(s1, s2);
+			KeyMap km = KeyMap(lastDev,s1, s2);
 			map.push_back(km);
 		} else
 		if ( !strcmp(pch = strtok(scrap, " \t"), "DEV") ) {
@@ -143,6 +151,8 @@ bool ConfigFileReader::readConfigFile(char * fileName,
 				fprintf(stderr, "Falha ao ler %s linha: %s\n", fileName, line);
 				return false;
 			}
+
+			lastDev = s2;
 			//Adiciona um dispositivo
 			devs.push_back(s2);
 		} else {

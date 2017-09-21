@@ -22,9 +22,9 @@ public:
 
 	static void setApp(std::string appP);
 
-	static void Hook::press(char key);
+	static void Hook::press(char key, bool isConstant);
 
-	static void Hook::release(char key);
+	//static void Hook::release(char key);
 
 	static void Hook::checkTrack();
 
@@ -48,7 +48,7 @@ void Hook::setApp(std::string appP) {
 	app = appP;
 }
 
-void Hook::press(char key) {
+void Hook::press(char key, bool isConstant) {
 	printf("Press: %d ", key);
 	if ( app != "" ) {
 
@@ -56,7 +56,11 @@ void Hook::press(char key) {
 		HWND edit = FindWindowEx(window, NULL, _T("Edit"), NULL);
 		if ( edit != NULL ) {
 			printf(" em %s.\n", app.c_str());
-			PostMessage(edit, WM_KEYDOWN, VkKeyScanEx(key, GetKeyboardLayout(0)), 0);
+			if ( isConstant ) {
+				PostMessage(edit, WM_KEYDOWN, VK_LEFT, 0);
+			} else {
+				PostMessage(edit, WM_KEYDOWN, VkKeyScanEx(key, GetKeyboardLayout(0)), 0);
+			}
 			return;
 		}
 
@@ -65,7 +69,7 @@ void Hook::press(char key) {
 	//Caso nenhum app tenha sido configurado ou encontrado lanca evento no windows
 	keybd_event(key, 0, 0, 0);
 }
-
+/*
 void Hook::release(char key) {
 	printf("Release: %d\n", key);
 
@@ -76,7 +80,8 @@ void Hook::release(char key) {
 
 		if ( edit != NULL ) {
 			printf(" em %s.\n", app.c_str());
-			PostMessage(edit, WM_KEYUP, VkKeyScanEx(key, GetKeyboardLayout(0)), 0);
+			//PostMessage(edit, WM_KEYUP, VkKeyScanEx(key, GetKeyboardLayout(0)), 0);
+			PostMessage(edit, WM_KEYUP,VK_LEFT, 0);
 			return;
 		}
 
@@ -87,7 +92,7 @@ void Hook::release(char key) {
 
 }
 
-
+*/
 void Hook::checkTrack() {
 
 }
@@ -95,11 +100,11 @@ void Hook::checkTrack() {
 void Hook::checkButton(const char * name, const vrpn_BUTTONCB b) {
 
 	for ( std::vector<KeyMap>::iterator keyMap = map.begin(); keyMap != map.end(); ++keyMap ) {
-		printf("%d == %d\n", keyMap->key, b.button);
+		//printf("%s == %s && %d == %d\n", name, keyMap->getDev().c_str(),  keyMap->getKey(), b.button);
 
-		if ( keyMap->key == b.button ) {
+		if ( !strcmp(name, keyMap->getDev().c_str()) && keyMap->getKey() == b.button ) {
 			if ( b.state == 1 ) {
-				press(keyMap->toKey);
+				press(keyMap->getToKey(), keyMap->getToKeyIsConstant());
 			} else {
 				//o release esta ocorrendo em duplicacao do evento
 				//release(keyMap->toKey);
@@ -118,8 +123,7 @@ void Hook::checkAnalog() {
 */
 
 
-void VRPN_CALLBACK
-handle_tracker_pos_quat(void *userdata, const vrpn_TRACKERCB t) {
+void VRPN_CALLBACK handle_tracker_pos_quat(void *userdata, const vrpn_TRACKERCB t) {
 	TrackerUserCallback *t_data = static_cast<TrackerUserCallback *>(userdata);
 
 	// Make sure we have a count value for this sensor
@@ -144,30 +148,27 @@ void VRPN_CALLBACK handle_button(void *userdata, const vrpn_BUTTONCB b) {
 }
 
 
-void VRPN_CALLBACK
-handle_button_states(void *userdata, const vrpn_BUTTONSTATESCB b) {
+void VRPN_CALLBACK handle_button_states(void *userdata, const vrpn_BUTTONSTATESCB b) {
 	const char *name = (const char *)userdata;
 
-	
-
 	printf("Button %s has %d buttons with states!!!:", name, b.num_buttons);
-	int i;
+	/*int i;
 	for ( i = 0; i < b.num_buttons; i++ ) {
 		printf(" %d", b.states[i]);
-	}
+	}*/
 	printf("\n");
-	
+
 }
 
 
 void VRPN_CALLBACK handle_analog(void *userdata, const vrpn_ANALOGCB a) {
-	int i;
+	//int i;
 	const char *name = (const char *)userdata;
 
-	printf("!!!Analog %s:\n         %5.2f", name, a.channel[0]);
+	/*printf("!!!Analog %s:\n         %5.2f", name, a.channel[0]);
 	for ( i = 1; i < a.num_channel; i++ ) {
 		printf(", %5.2f", a.channel[i]);
 	}
-	printf(" (%d chans)\n", a.num_channel);
+	printf(" (%d chans)\n", a.num_channel);*/
 }
 

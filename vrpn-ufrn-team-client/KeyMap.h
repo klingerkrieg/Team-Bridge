@@ -7,12 +7,32 @@ static const int SSIZE = 512;
 
 
 class KeyMap {
-public:
-	KeyMap(char key, char toKey);
-	KeyMap(char key[SSIZE], char toKey[SSIZE]);
-	char key;
+private:
+	std::string dev;
+	int key;
 	char toKey;
+	bool toKeyIsConstant = false;
 
+public:
+	int getKey() {
+		return key;
+	}
+
+	char getToKey() {
+		return toKey;
+	}
+
+	std::string getDev() {
+		return dev;
+	}
+
+	bool getToKeyIsConstant() {
+		return toKeyIsConstant;
+	}
+
+	KeyMap(std::string dev, int key, char toKey);
+	KeyMap(std::string dev, char key[SSIZE], char toKey[SSIZE]);
+	
 	static std::map<std::string, int> create_map() {
 		//Caso o mapa ja tenha sido criado, nao cria novamente
 		if ( constantMap.size() > 0 ) {
@@ -40,25 +60,39 @@ public:
 std::map<std::string, int> KeyMap::constantMap = KeyMap::create_map();
 
 
-KeyMap::KeyMap(char key, char toKey) {
+KeyMap::KeyMap(std::string dev, int key, char toKey) {
+
+	this->dev = dev;
 	this->key = key;
 	this->toKey = toKey;
 }
 
 
-KeyMap::KeyMap(char key[SSIZE], char toKey[SSIZE]) {
+KeyMap::KeyMap(std::string dev, char key[SSIZE], char toKey[SSIZE]) {
 	
-	if ( strlen(key) == 1) {
-		//o evento que vem do VRPN sempre sera um numero inteiro ele nao envia eventos do tipo do Windows
+	this->dev = dev;
+
+	//Tenta localizar a constante em key
+	std::map<std::string, int>::iterator it = KeyMap::constantMap.find(key);
+
+	if ( it == KeyMap::constantMap.end() ) {
+		//Quando sao enviados botoes via VRPN um inteiro sera esperado
 		this->key = atoi(key);
 	} else {
-		this->key = KeyMap::constantMap[key];
+		//Entretanto com o Kinect espera-se uma constante
+		this->key = it->second;
 	}
 
-	if ( strlen(toKey) == 1 ) {
+
+	//Tenta localizar a constante para toKey
+	it = KeyMap::constantMap.find(toKey);
+
+	if ( it == KeyMap::constantMap.end() ) {
+		//A saida sera um botao representado por um char quando uma constante nao for encontrada
 		this->toKey = toKey[0];
 	} else {
-		this->toKey = KeyMap::constantMap[toKey];
+		this->toKey = it->second;
+		this->toKeyIsConstant = true;
 	}
 
 }

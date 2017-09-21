@@ -95,8 +95,12 @@
       <OutputFile>.\../pc_win32/vrpn-ufrn-team-client/Debug/vrpn-ufrn-team-client.bsc</OutputFile>
     </Bscmake>
     <PostBuildEvent>
-      <Command>copy "*.cfg" "../pc_win32/vrpn-ufrn-team-client/Debug/"</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>copy "*.cfg" "../pc_win32/vrpn-ufrn-team-client/Debug/"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Midl>
