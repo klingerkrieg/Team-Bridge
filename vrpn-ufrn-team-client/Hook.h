@@ -13,12 +13,12 @@
 #include <Tchar.h>
 
 class Hook {
-public:
-	
+private:
 	static std::vector<KeyMap> map;
 	static std::string app;
-	static int app2;
 
+public:
+	
 	static void setMap(std::vector<KeyMap> mapP);
 
 	static void setApp(std::string appP);
@@ -39,7 +39,6 @@ public:
 
 std::vector<KeyMap> Hook::map;
 std::string Hook::app;
-int Hook::app2;
 
 void Hook::setMap(std::vector<KeyMap> mapP) {
 	map = mapP;
