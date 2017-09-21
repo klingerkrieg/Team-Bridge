@@ -32,7 +32,7 @@
 #include "callbacks.h"
 #include "Hook.h"
 //#include "DeviceInfo.h"
-
+#include "Storage.h"
 
 using namespace std;
 
@@ -163,10 +163,13 @@ public:
 		Hook::setMap(map);
 		
 		std::map<string, string>::iterator it = config.find("APP");
-
 		if ( it != config.end() ) {
 			Hook::setApp(it->second);
 		}
+
+		//Setando configs no store
+		Storage::setConfig(config);
+		
 
 
 		//Apos configurar o start tem que ser automatico e dentro desse metodo
@@ -191,6 +194,7 @@ public:
 			delete deviceList[i].ana;
 		}
 
+		Storage::closeFile();
 		return true;
 
 	}
@@ -239,6 +243,9 @@ void Usage(const char *arg0) {
 }
 
 int main(int argc, char *argv[]) {
+
+	TrackerUserCallback *userdata = new TrackerUserCallback;
+	vrpn_TRACKERCB t = vrpn_TRACKERCB();
 
 	Client client = Client();
 	

@@ -4,6 +4,7 @@
 #include <vrpn_Button.h>
 #include <vrpn_Analog.h>
 #include "Hook.h"
+#include "Storage.h"
 
 /*
 			Callbacks
@@ -13,6 +14,7 @@
 void VRPN_CALLBACK handle_tracker_pos_quat(void *userdata, const vrpn_TRACKERCB t) {
 	TrackerUserCallback *t_data = static_cast<TrackerUserCallback *>(userdata);
 
+	Storage::saveToFile(t_data, t);
 	Hook::checkTrack(t_data,t);
 	// Make sure we have a count value for this sensor
 	/*while ( t_data->counts.size() <= static_cast<unsigned>(t.sensor) ) {
