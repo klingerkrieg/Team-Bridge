@@ -15,24 +15,7 @@ public:
 							   std::vector<KeyMap> &map,
 							   std::map<std::string, std::string> &config);
 
-private:
-	static void printConfig(std::vector<std::string> &devs,
-							   std::vector<KeyMap> &map,
-							   std::map<std::string, std::string> &config);
-
-
-	static bool open(char * fileName, FILE *&config_file) {
-
-		if ( (config_file = fopen(fileName, "r")) == NULL ) {
-			perror("ConfigFileReader::open(): "
-				   "Cannot open config file");
-			fprintf(stderr, "  (filename %s)\n", fileName);
-			return false;
-		}
-		return true;
-	}
-
-	static bool ignore(char line[]) {
+	static bool ignoreLine(char line[]) {
 		// Ignore comments and empty lines.  Skip white space before comment
 		// mark (#).
 		if ( strlen(line) < 3 ) {
@@ -50,6 +33,25 @@ private:
 		}
 		return ignore;
 	}
+
+private:
+	static void printConfig(std::vector<std::string> &devs,
+							   std::vector<KeyMap> &map,
+							   std::map<std::string, std::string> &config);
+
+
+	static bool open(char * fileName, FILE *&config_file) {
+
+		if ( (config_file = fopen(fileName, "r")) == NULL ) {
+			perror("ConfigFileReader::open(): "
+				   "Cannot open config file");
+			fprintf(stderr, "  (filename %s)\n", fileName);
+			return false;
+		}
+		return true;
+	}
+
+	
 
 	/// File-static constant of max line size.
 	static const int LINESIZE = 512;
@@ -118,7 +120,7 @@ bool ConfigFileReader::readConfigFile(char * fileName,
 			return false;
 		}
 
-		if ( ignore(line) ) {
+		if ( ignoreLine(line) ) {
 			continue;
 		}
 

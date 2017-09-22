@@ -70,6 +70,7 @@ public:
 	
 	bool setup() {
 		
+
 		// If we happen to open a file, neither preload nor accumulate the
 		// messages in memory, to avoid crashing for huge files.
 		vrpn_FILE_CONNECTIONS_SHOULD_PRELOAD = false;
@@ -170,7 +171,9 @@ public:
 		//Setando configs no store
 		Storage::setConfig(config);
 		
+		Storage::checkSent();
 
+		return 0;
 
 		//Apos configurar o start tem que ser automatico e dentro desse metodo
 		//Caso ele saia do metodo as variaveis que guardam o nome dos dispositivos sao apagadas
