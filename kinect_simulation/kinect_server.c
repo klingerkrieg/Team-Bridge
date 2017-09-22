@@ -103,8 +103,7 @@ int main (int argc, char * argv []) {
 	
 
 	timeval t;
-	t.tv_sec = 1;
-	t.tv_usec = t.tv_sec;
+	
 
 	if (file) {
 
@@ -118,6 +117,8 @@ int main (int argc, char * argv []) {
 					continue;
 				}
 
+
+				vrpn_gettimeofday(&t, NULL);
 
 				//pula sensor
 				char * part = strtok (str,"\t");

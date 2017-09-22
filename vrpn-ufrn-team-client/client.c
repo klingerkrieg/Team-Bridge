@@ -171,9 +171,10 @@ public:
 		//Setando configs no store
 		Storage::setConfig(config);
 		
+		//Storage::test();
+		//return 0;
 		Storage::checkSent();
-
-		return 0;
+		//return 0;
 
 		//Apos configurar o start tem que ser automatico e dentro desse metodo
 		//Caso ele saia do metodo as variaveis que guardam o nome dos dispositivos sao apagadas
@@ -247,6 +248,7 @@ void Usage(const char *arg0) {
 
 int main(int argc, char *argv[]) {
 
+	
 	TrackerUserCallback *userdata = new TrackerUserCallback;
 	vrpn_TRACKERCB t = vrpn_TRACKERCB();
 
