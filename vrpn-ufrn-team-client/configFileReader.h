@@ -1,46 +1,36 @@
 #pragma once
 #include <stdlib.h>                 // for strtol, atoi, strtod
 #include <string.h>                 // for strcmp, strlen, strtok, etc
-#include <locale>                   // To enable setting parsing for .cfg file
+//#include <locale>                  // To enable setting parsing for .cfg file
+#include <fstream>
 #include <string>
 #include <vector>
 #include <map>
+#include "Config.h"
 #include "KeyMap.h"
+#include "FileParser.h"
 #include <iostream>
 
-class ConfigFileReader {
+class ConfigFileReader : public FileParser {
 public:
-	static bool readConfigFile(char * fileName,
+	bool readConfigFile(char * fileName,
 							   std::vector<std::string> &devs,
 							   std::vector<KeyMap> &map,
-							   std::map<std::string, std::string> &config);
+							   Config &config);
 
-	static bool ignoreLine(char line[]) {
-		// Ignore comments and empty lines.  Skip white space before comment
-		// mark (#).
-		if ( strlen(line) < 3 ) {
-			return true;
-		}
-		bool ignore = false;
-		for ( int j = 0; line[j] != '\0'; j++ ) {
-			if ( line[j] == ' ' || line[j] == '\t' ) {
-				return true;
-			}
-			if ( line[j] == '#' ) {
-				ignore = true;
-			}
-			break;
-		}
-		return ignore;
+	ConfigFileReader() {
+
 	}
 
+	
+
 private:
-	static void printConfig(std::vector<std::string> &devs,
+	void printConfig(std::vector<std::string> &devs,
 							   std::vector<KeyMap> &map,
-							   std::map<std::string, std::string> &config);
+							   Config &config);
 
 
-	static bool open(char * fileName, FILE *&config_file) {
+	/*static bool open(char * fileName, FILE *&config_file) {
 
 		if ( (config_file = fopen(fileName, "r")) == NULL ) {
 			perror("ConfigFileReader::open(): "
@@ -49,7 +39,7 @@ private:
 			return false;
 		}
 		return true;
-	}
+	}*/
 
 	
 
@@ -60,7 +50,7 @@ private:
 
 void ConfigFileReader::printConfig(std::vector<std::string> &devs,
 								   std::vector<KeyMap> &map,
-								   std::map<std::string, std::string> &config) {
+								   Config &config) {
 	
 	printf("\n*******************\n");
 	printf("\nDispositivos:\n");
@@ -73,10 +63,8 @@ void ConfigFileReader::printConfig(std::vector<std::string> &devs,
 		printf("[%s] %d -> %c\n", it->getDev().c_str() ,it->getKey(), it->getToKey());
 	}
 
-	printf("\nBanco:\n");
-	for ( std::map<std::string, std::string>::iterator it = config.begin(); it != config.end(); ++it ) {
-		std::cout << it->first << " = " << it->second << "\n";
-	}
+	printf("\nOutros:\n");
+	printf(config.toString().c_str());
 	printf("\n*******************\n");
 }
 
@@ -84,47 +72,29 @@ void ConfigFileReader::printConfig(std::vector<std::string> &devs,
 bool ConfigFileReader::readConfigFile(char * fileName,
 									  std::vector<std::string> &devs,
 									  std::vector<KeyMap> &map,
-									  std::map<std::string, std::string> &config) {
-	FILE *config_file;
+									  Config &config) {
+
 	char *pch;
 	char scrap[LINESIZE];
 	char s1[LINESIZE], s2[LINESIZE], s3[LINESIZE];
 	std::string lastDev;
+	std::map<std::string, std::string> configMap;
+	std::string line;
 
-	if ( !open(fileName, config_file) ) {
+	if ( !openIn(fileName) ) {
 		return false;
 	}
-
-	// Store the locale that was set before we came in here.
-	// The global locale is obtained by using the default
-	// constructor.
-	std::locale const orig_locale = std::locale();
-
-	char line[LINESIZE]; // Line read from the input file
+	
 
 	// Read lines from the file until we run out
-	while ( fgets(line, LINESIZE, config_file) != NULL ) {
+	while ( getline(fileInput, line) ) {
 
-		// Set the global locale to be "C", the classic one, so that
-		// when we parse the configuration file it will use dots for
-		// decimal points even if the local standard is commas.
-		// putting them into the global locale.  We tried putting this
-		// code above, outside the parsing loop, but it did not have
-		// the desired effect when placed there.  This is the earliest
-		// we were able to put it and have it work.
-		std::locale::global(std::locale("C"));
-
-		// Make sure the line wasn't too long
-		if ( strlen(line) >= LINESIZE - 1 ) {
-			printf("Linha com tamanho acima do permitido: %s\n%s", fileName, line);
-			return false;
-		}
 
 		if ( ignoreLine(line) ) {
 			continue;
 		}
 
-		strncpy(scrap, line, LINESIZE - 1);
+		strncpy(scrap, line.c_str(), LINESIZE - 1);
 		scrap[sizeof(scrap) - 1] = '\0';
 
 		
@@ -137,14 +107,14 @@ bool ConfigFileReader::readConfigFile(char * fileName,
 			pch += strlen(pch) + 1;
 			if ( sscanf(pch, "%s\t%s\t%s", s1, s2, s3) != 3 ) {
 				if ( sscanf(pch, "%s\t%s", s1, s2) != 2 ) {
-					fprintf(stderr, "Falha ao ler %s linha: %s\n", fileName, line);
+					fprintf(stderr, "Falha ao ler %s linha: %s\n", fileName, line.c_str());
 					return false;
 				}
 			}
 
 			//Se nenhum dispositivo foi definido ainda
 			if ( lastDev == "" ) {
-				fprintf(stderr, "Nenhum dispositivo foi definido em %s para: %s\n", fileName, line);
+				fprintf(stderr, "Nenhum dispositivo foi definido em %s para: %s\n", fileName, line.c_str());
 				return false;
 			}
 
@@ -165,8 +135,8 @@ bool ConfigFileReader::readConfigFile(char * fileName,
 		} else
 		if ( !strcmp(pch = strtok(scrap, " \t"), "DEV") ) {
 			
-			if ( sscanf(line, "%s\t%s", s1, s2) != 2 ) {
-				fprintf(stderr, "Falha ao ler %s linha: %s\n", fileName, line);
+			if ( sscanf(line.c_str(), "%s\t%s", s1, s2) != 2 ) {
+				fprintf(stderr, "Falha ao ler %s linha: %s\n", fileName, line.c_str());
 				return false;
 			}
 
@@ -174,16 +144,19 @@ bool ConfigFileReader::readConfigFile(char * fileName,
 			//Adiciona um dispositivo
 			devs.push_back(s2);
 		} else {
-			if ( sscanf(line, "%s\t%s", s1, s2) != 2 ) {
-				fprintf(stderr, "Falha ao ler %s linha: %s\n", fileName, line);
+			if ( sscanf(line.c_str(), "%s\t%s", s1, s2) != 2 ) {
+				fprintf(stderr, "Falha ao ler %s linha: %s\n", fileName, line.c_str());
 				return false;
 			}
 			//Adiciona configuracao
-			config[s1] = s2;
+
+			configMap[s1] = s2;
 
 		}
 
 	}
+
+	config.readConfigMap(configMap);
 
 	printConfig(devs, map, config);
 

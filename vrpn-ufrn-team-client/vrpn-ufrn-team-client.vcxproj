@@ -163,11 +163,13 @@
     <ClCompile Include="client.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="callbacks.h" />
+    <ClInclude Include="Config.h" />
     <ClInclude Include="ConfigFileReader.h" />
+    <ClInclude Include="Db.h" />
     <ClInclude Include="DeviceInfo.h" />
+    <ClInclude Include="FileParser.h" />
     <ClInclude Include="GestureRecognizer.h" />
-    <ClInclude Include="Hook.h" />
+    <ClInclude Include="InputConverter.h" />
     <ClInclude Include="KeyMap.h" />
     <ClInclude Include="Storage.h" />
   </ItemGroup>

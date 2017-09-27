@@ -26,19 +26,25 @@
     <ClInclude Include="ConfigFileReader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Hook.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="DeviceInfo.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="callbacks.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GestureRecognizer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Storage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Db.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Config.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FileParser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="InputConverter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

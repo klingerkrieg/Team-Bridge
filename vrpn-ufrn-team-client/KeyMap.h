@@ -84,11 +84,9 @@ KeyMap::KeyMap(std::string dev, int key, char toKey) {
 }
 
 KeyMap::KeyMap(std::string dev, char key[SSIZE], char toKey[SSIZE], char config[SSIZE]) {
-
-	printf("name:%s\n", dev.c_str());
+	
 	//Cria normalmente
 	init(dev, key, toKey);
-	printf("name2:%s\n", this->getDev().c_str());
 	//Caso seja top no kinect a configuracao extra sera a sensibilidade
 	if ( this->key == KINECT_TOP_ADD || this->key == KINECT_TOP_DEC ) {
 		heightSens = atof(config);

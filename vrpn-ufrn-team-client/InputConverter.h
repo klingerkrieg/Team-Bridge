@@ -12,43 +12,37 @@
 #include <vrpn_Button.h>         // for vrpn_Button_Remote, etc
 #include <Tchar.h>
 
-class Hook {
+class InputConverter {
 private:
-	static std::vector<KeyMap> map;
-	static std::string app;
+	 std::vector<KeyMap> map;
+	 std::string app;
 
 public:
+
+	InputConverter() {
+
+	}
+
+	InputConverter(std::vector<KeyMap> map, std::string app) {
+		this->map = map;
+		this->app = app;
+	}
 	
-	static void setMap(std::vector<KeyMap> mapP);
+	 void InputConverter::press(char key, bool isConstant);
 
-	static void setApp(std::string appP);
+	// void InputConverter::release(char key);
 
-	static void Hook::press(char key, bool isConstant);
+	 void InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKERCB t);
 
-	//static void Hook::release(char key);
+	 void InputConverter::checkButton(const char * name, const vrpn_BUTTONCB b);
 
-	static void Hook::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKERCB t);
-
-	static void Hook::checkButton(const char * name, const vrpn_BUTTONCB b);
-
-	static void Hook::checkAnalog();
+	 void InputConverter::checkAnalog();
 	
 };
 
 
 
-std::vector<KeyMap> Hook::map;
-std::string Hook::app;
-
-void Hook::setMap(std::vector<KeyMap> mapP) {
-	map = mapP;
-}
-
-void Hook::setApp(std::string appP) {
-	app = appP;
-}
-
-void Hook::press(char key, bool isConstant) {
+void InputConverter::press(char key, bool isConstant) {
 	printf("Press: %d ", key);
 	if ( app != "" ) {
 
@@ -70,7 +64,7 @@ void Hook::press(char key, bool isConstant) {
 	keybd_event(key, 0, 0, 0);
 }
 /*
-void Hook::release(char key) {
+void InputConverter::release(char key) {
 	printf("Release: %d\n", key);
 
 	if ( app != "" ) {
@@ -93,7 +87,7 @@ void Hook::release(char key) {
 }
 
 */
-void Hook::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKERCB t) {
+void InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKERCB t) {
 	
 	int top = 0;
 	bool topCalculated = false;
@@ -119,7 +113,7 @@ void Hook::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKERCB t) {
 	}
 }
 
-void Hook::checkButton(const char * name, const vrpn_BUTTONCB b) {
+void InputConverter::checkButton(const char * name, const vrpn_BUTTONCB b) {
 
 	for ( std::vector<KeyMap>::iterator keyMap = map.begin(); keyMap != map.end(); ++keyMap ) {
 		//printf("%s == %s && %d == %d\n", name, keyMap->getDev().c_str(),  keyMap->getKey(), b.button);
@@ -136,6 +130,6 @@ void Hook::checkButton(const char * name, const vrpn_BUTTONCB b) {
 
 }
 
-void Hook::checkAnalog() {
+void InputConverter::checkAnalog() {
 
 }
