@@ -161,6 +161,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="client.c" />
+    <ClCompile Include="Config.c" />
+    <ClCompile Include="ConfigFileReader.c" />
+    <ClCompile Include="Db.c" />
+    <ClCompile Include="KeyMap.c" />
+    <ClCompile Include="Storage.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Config.h" />
