@@ -43,21 +43,28 @@ bool Storage::saveToFile(TrackerUserCallback *userdata, const vrpn_TRACKERCB t) 
 }
 
 
-bool Storage::checkSent() {
+int Storage::checkSent() {
 	HANDLE hFind;
 	WIN32_FIND_DATA data;
+	int filesSent = 0;
 
 	hFind = FindFirstFile((saveDir + "/*.txt").c_str(), &data);
 	if ( hFind != INVALID_HANDLE_VALUE ) {
 		do {
-			if ( !sendFileToDb( (char *)(Storage::saveDir + "/" + data.cFileName).c_str() )) {
-				printf("Envio interrompido, %s.\n", data.cFileName);
+			try {
+				if ( !sendFileToDb((char *)(Storage::saveDir + "/" + data.cFileName).c_str()) ) {
+					printf("Envio interrompido, %s.\n", data.cFileName);
+				} else {
+					filesSent++;
+				}
+			} catch ( AlreadySent ex ) {
+				//nao sinaliza erro, apenas nao conta
 			}
 		} while ( FindNextFile(hFind, &data) );
 		FindClose(hFind);
 	}
 
-	return true;
+	return filesSent;
 }
 
 bool Storage::sendFileToDb(char * fileName) {
@@ -89,7 +96,7 @@ bool Storage::sendFileToDb(char * fileName) {
 
 	//Conecta
 	if ( !db.connect() ) {
-		throw std::invalid_argument("Nao pode conectar ao banco de dados.");
+		throw std::exception("Nao pode conectar ao banco de dados.");
 		return false;
 	}
 
@@ -121,12 +128,12 @@ bool Storage::sendFileToDb(char * fileName) {
 			if ( !strcmp(pch = strtok(scrap, " \t"), "SYNC") ) {
 				//Se ja tiver sido enviado ao banco
 				printf("Ja enviado.\n");
-				return true;
+				throw AlreadySent();
 			} else
 			if ( !strcmp(pch = strtok(scrap, " \t"), "DEV") ) {
 				if ( sscanf(line.c_str(), "%s\t%[^\t\n]", s1, s2) != 2 ) {
 					fprintf(stderr, "Falha ao ler %s linha: %s\n", fileName, line.c_str());
-					throw std::invalid_argument("Falha ao ler linha.");
+					throw std::exception("Falha ao ler linha.");
 					return false;
 				}
 				expDev = s2;
@@ -134,7 +141,7 @@ bool Storage::sendFileToDb(char * fileName) {
 			if ( !strcmp(pch = strtok(scrap, " \t"), "PATIENT") ) {
 				if (sscanf(line.c_str(), "%s\t%[^\t\n]", s1, s2) != 2){
 					fprintf(stderr, "Falha ao ler %s linha: %s\n", fileName, line.c_str());
-					throw std::invalid_argument("Falha ao ler linha.");
+					throw std::exception("Falha ao ler linha.");
 					return false;
 				}
 				expPatientName = s2;
@@ -142,7 +149,7 @@ bool Storage::sendFileToDb(char * fileName) {
 			if ( !strcmp(pch = strtok(scrap, " \t"), "DATE") ) {
 				if ( sscanf(line.c_str(), "%s\t%[^\t\n]", s1, s2) != 2 ) {
 					fprintf(stderr, "Falha ao ler %s linha: %s\n", fileName, line.c_str());
-					throw std::invalid_argument("Falha ao ler linha.");
+					throw std::exception("Falha ao ler linha.");
 					return false;
 				}
 				expDateTime = s2;
@@ -156,7 +163,7 @@ bool Storage::sendFileToDb(char * fileName) {
 					values["name"] = expPatientName;
 					idPatient = db.findOrCreate("patients", "idpatient", values);
 					if ( idPatient == -1 ) {
-						throw std::invalid_argument("Falha inserir paciente.");
+						throw std::exception("Falha inserir paciente.");
 						return false;
 					}
 
@@ -164,7 +171,7 @@ bool Storage::sendFileToDb(char * fileName) {
 					values["device_name"] = expDev;
 					idDevice = db.findOrCreate("devices", "iddevice", values);
 					if ( idDevice == -1 ) {
-						throw std::invalid_argument("Falha inserir dispositivo.");
+						throw std::exception("Falha inserir dispositivo.");
 						return false;
 					}
 
@@ -174,7 +181,7 @@ bool Storage::sendFileToDb(char * fileName) {
 					values["idpatient"] = std::to_string(idPatient);
 					idSession = db.findOrCreate("sessions", "idsession", values);
 					if ( idSession == -1 ) {
-						throw std::invalid_argument("Falha inserir sessao.");
+						throw std::exception("Falha inserir sessao.");
 						return false;
 					}
 				}
@@ -187,7 +194,7 @@ bool Storage::sendFileToDb(char * fileName) {
 							&pos[0], &pos[1], &pos[2],
 							&quat[0], &quat[1], &quat[2], &quat[3]) != 9 ) {
 					fprintf(stderr, "Falha ao ler %s linha: %s\n", fileName, line.c_str());
-					throw std::invalid_argument("Falha ao ler linha.");
+					throw std::exception("Falha ao ler linha.");
 					return false;
 				}
 
@@ -208,7 +215,7 @@ bool Storage::sendFileToDb(char * fileName) {
 				if ( db.insert("trackers", values, false) == 0 ) {
 					oneExported = true;
 				} else {
-					throw std::invalid_argument("Falha ao inserir no banco linha.");
+					throw std::exception("Falha ao inserir no banco linha.");
 					return false;
 				}
 			}
@@ -228,7 +235,7 @@ bool Storage::sendFileToDb(char * fileName) {
 		if ( fileOutput.is_open() ) {
 			fileOutput << expFullContent;
 		} else {
-			throw std::invalid_argument("Nao foi possivel escrever SYNC no arquivo.");
+			throw std::exception("Nao foi possivel escrever SYNC no arquivo.");
 			return false;
 		}
 		//Fecha todos os arquivos
@@ -237,12 +244,12 @@ bool Storage::sendFileToDb(char * fileName) {
 
 		//So retorna true se pelo menos um dado foi inserido
 		if ( oneExported == 0 ) {
-			throw std::invalid_argument("Nenhum registro inserido.");
+			throw std::exception("Nenhum registro inserido.");
 		}
 		return oneExported;
 	} else {
 
-		throw std::invalid_argument("Nao pode ler o arquivo a ser enviado.");
+		throw std::exception("Nao pode ler o arquivo a ser enviado.");
 		return false;
 	}
 	 

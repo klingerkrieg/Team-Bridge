@@ -25,6 +25,7 @@
     <RootNamespace>UnitTest1</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
     <ProjectSubType>NativeUnitTestProject</ProjectSubType>
+    <ProjectName>clientUnitTest</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -78,8 +79,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);E:\vrpn-master-2017-up;C:\Program Files (x86)\MySQL\MySQL Connector C++ 1.1.9\include;../vrpn-ufrn-team-client</IncludePath>
-    <OutDir>.\../pc_win32/UnitTest/Debug\</OutDir>
-    <IntDir>.\../pc_win32/UnitTest/Debug\</IntDir>
+    <OutDir>.\../pc_win32/ClientUnitTest/Debug\</OutDir>
+    <IntDir>.\../pc_win32/ClientUnitTest/Debug\</IntDir>
     <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;E:\vrpn-ufrn-team\pc_win32\vrpn-ufrn-team-client\Debug</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -105,12 +106,15 @@
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <AdditionalLibraryDirectories>$(VCInstallDir)UnitTest\lib;%(AdditionalLibraryDirectories);$(SYSTEMDRIVE)\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib;%(AdditionalLibraryDirectories);C:\Program Files (x86)\MySQL\MySQL Connector C++ 1.1.9\lib\opt;E:\vrpn-ufrn-team\pc_win32\vrpn-ufrn-team-client\Debug</AdditionalLibraryDirectories>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);mysqlcppconn.lib;Db.obj;Config.obj;ConfigFileReader.obj;KeyMap.obj;Storage.obj;</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(VCInstallDir)UnitTest\lib;%(AdditionalLibraryDirectories);$(SYSTEMDRIVE)\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib;%(AdditionalLibraryDirectories);C:\Program Files (x86)\MySQL\MySQL Connector C++ 1.1.9\lib\opt;../pc_win32/vrpn-ufrn-team-client/Debug;../pc_win32/Debug;../Debug;E:\vrpn-master-2017-up\quat\pc_win32\Debug</AdditionalLibraryDirectories>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);mysqlcppconn.lib;Db.obj;Config.obj;ConfigFileReader.obj;KeyMap.obj;Storage.obj;InputConverter.obj;client.obj;../pc_win32/Debug/vrpn.lib;quat.lib;</AdditionalDependencies>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <ImportLibrary />
+      <ImageHasSafeExceptionHandlers>true</ImageHasSafeExceptionHandlers>
     </Link>
     <PreBuildEvent>
-      <Command>copy "*.cfg" "../pc_win32/UnitTest/Debug/"</Command>
+      <Command>copy "*.cfg" "../pc_win32/ClientUnitTest/Debug/" &amp; copy "*.dll" "../pc_win32/ClientUnitTest/Debug/"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -168,8 +172,12 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ClientTest.cpp" />
     <ClCompile Include="ConfigFileReaderTest.cpp" />
     <ClCompile Include="DbTest.cpp" />
+    <ClCompile Include="GestureRecognizerTest.cpp" />
+    <ClCompile Include="InputConverterTest.cpp" />
+    <ClCompile Include="KeyMapTest.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

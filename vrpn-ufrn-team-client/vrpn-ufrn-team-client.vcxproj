@@ -67,7 +67,7 @@
       <PrecompiledHeaderOutputFile>.\../pc_win32/vrpn-ufrn-team-client/Debug/vrpn-ufrn-team-client.pch</PrecompiledHeaderOutputFile>
       <AssemblerListingLocation>.\../pc_win32/vrpn-ufrn-team-client/Debug/</AssemblerListingLocation>
       <ObjectFileName>.\../pc_win32/vrpn-ufrn-team-client/Debug/</ObjectFileName>
-      <ProgramDataBaseFileName>.\../pc_win32/vrpn-ufrn-team-client/Debug/</ProgramDataBaseFileName>
+      <ProgramDataBaseFileName>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
       <BrowseInformation>true</BrowseInformation>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -100,7 +100,7 @@
       </Command>
     </PostBuildEvent>
     <PreBuildEvent>
-      <Command>copy "*.cfg" "../pc_win32/vrpn-ufrn-team-client/Debug/"</Command>
+      <Command>copy "*.cfg" "../pc_win32/vrpn-ufrn-team-client/Debug/" &amp; copy "*.dll" "../pc_win32/vrpn-ufrn-team-client/Debug/"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -164,10 +164,12 @@
     <ClCompile Include="Config.c" />
     <ClCompile Include="ConfigFileReader.c" />
     <ClCompile Include="Db.c" />
+    <ClCompile Include="InputConverter.c" />
     <ClCompile Include="KeyMap.c" />
     <ClCompile Include="Storage.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Client.h" />
     <ClInclude Include="Config.h" />
     <ClInclude Include="ConfigFileReader.h" />
     <ClInclude Include="Db.h" />

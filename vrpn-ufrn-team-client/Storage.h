@@ -40,6 +40,10 @@ private:
 	
 public:
 
+	void setSaveDir(std::string saveDir) {
+		this->saveDir = saveDir;
+	}
+
 	std::string getExpDev() {
 		return expDev;
 	}
@@ -58,7 +62,7 @@ public:
 
 
 	 bool saveToFile(TrackerUserCallback *userdata, const vrpn_TRACKERCB t);
-	 bool checkSent();
+	 int checkSent();
 	 bool sendFileToDb(char * fileName);
 
 	 std::string getFileName() {
@@ -87,3 +91,14 @@ public:
 };
 
 
+class AlreadySent : public std::exception {
+public:
+	virtual const char* what() const throw() {
+		return "Arquivo ja enviado";
+	}
+
+	void noZero() {
+
+	}
+
+};

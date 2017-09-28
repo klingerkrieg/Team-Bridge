@@ -5,42 +5,11 @@
 @author Alan Klinger klingerkrieg@gmail.com
 @license Standard VRPN license.
 */
-
-
-#include <stdio.h>  // for printf, fprintf, NULL, etc
-#include <stdlib.h> // for exit, atoi
-#ifndef _WIN32_WCE
-#include <signal.h> // for signal, SIGINT
-#endif
-#include <string.h>              // for strcmp, strncpy
-#include <vrpn_Analog.h>         // for vrpn_ANALOGCB, etc
-#include <vrpn_Button.h>         // for vrpn_Button_Remote, etc
-#include <vrpn_Dial.h>           // for vrpn_Dial_Remote, etc
-#include <vrpn_FileConnection.h> // For preload and accumulate settings
-#include <vrpn_Shared.h>         // for vrpn_SleepMsecs
-#include <vrpn_Tracker.h>        // for vrpn_TRACKERACCCB, etc
-
-#include "vrpn_BaseClass.h" // for vrpn_System_TextPrinter, etc
-#include "vrpn_Configure.h" // for VRPN_CALLBACK
-#include "vrpn_Types.h"     // for vrpn_float64, vrpn_int32
-
-#include <iostream>
-#include <map>
-#include <vector>
-#include "Config.h"
-#include "ConfigFileReader.h"
-#include "KeyMap.h"
-#include "InputConverter.h"
-//#include "DeviceInfo.h"
-#include "Storage.h"
-#include "InputConverter.h"
+#include "Client.h"
 
 using namespace std;
 
 int done = 0;                // Signals that the program should exit
-const unsigned MAX_DEVICES = 50;
-
-
 
 void handle_cntl_c(int) {
 	done = 1;
@@ -52,43 +21,7 @@ void VRPN_CALLBACK handle_button_states(void *userdata, const vrpn_BUTTONSTATESC
 void VRPN_CALLBACK handle_analog(void *userdata, const vrpn_ANALOGCB a);
 
 
-class Client {
-private:
-	Storage storage;
-	InputConverter inputConverter;
-
-
-public:
-
-	Client() {
-
-	}
-
-	Storage& getStorage() {
-		return storage;
-	}
-
-	InputConverter getInputConverter() {
-		return inputConverter;
-	}
-
-	void setConfigFile(char * file_name) {
-		configFileName = file_name;
-	}
-
-	void setPrintTracker(bool print) {
-		printTracker = print;
-	}
-
-	void setPrintButton(bool print) {
-		printButton = print;
-	}
-
-	void setPrintAnalog(bool print) {
-		printAnalog = print;
-	}
-	
-	bool setup() {
+bool Client::setup(bool test = false) {
 		
 
 		// If we happen to open a file, neither preload nor accumulate the
@@ -165,7 +98,6 @@ public:
 			}
 
 			if ( printButton ) {
-				printf(" Button");
 				dev->btn->register_change_handler(dev->name, handle_button);
 				dev->btn->register_states_handler(dev->name, handle_button_states);
 			}
@@ -198,6 +130,9 @@ public:
 		//Apos configurar o start tem que ser automatico e dentro desse metodo
 		//Caso ele saia do metodo as variaveis que guardam o nome dos dispositivos sao apagadas
 		printf("Press ^C to exit.\n");
+		if ( test ) {
+			done = true;//para teste unitario
+		}
 		while ( !done ) {
 			unsigned i;
 
@@ -220,19 +155,8 @@ public:
 		storage.close();
 		return true;
 
-	}
+}
 
-
-private:
-	char *configFileName = "vrpn-client.cfg";
-	bool printTracker = true;
-	bool printButton = true;
-	bool printAnalog = true;
-
-	DeviceInfo deviceList[MAX_DEVICES];
-	unsigned num_devices = 0;
-
-};
 
 /*****************************************************************************
 *
@@ -264,7 +188,17 @@ void VRPN_CALLBACK handle_tracker_pos_quat(void *userdata, const vrpn_TRACKERCB 
 
 void VRPN_CALLBACK handle_button(void *userdata, const vrpn_BUTTONCB b) {
 	const char *name = (const char *)userdata;
-	printf("Button\n");
+	printf("Button: %d\n", b.button);
+
+
+	//Teste para identificar se o mapeamento esta correto
+	for ( std::map<string,int>::iterator it = KeyMap::configToScanCode.begin(); it != KeyMap::configToScanCode.end(); ++it ) {
+		if ( it->second == b.button ) {
+			printf("%s\n", it->first.c_str());
+		}
+	}
+
+
 	client.getInputConverter().checkButton(name, b);
 }
 
@@ -315,9 +249,10 @@ void Usage(const char *arg0) {
 	exit(0);
 }
 
+
+
 int main(int argc, char *argv[]) {
 
-	
 	TrackerUserCallback *userdata = new TrackerUserCallback;
 	vrpn_TRACKERCB t = vrpn_TRACKERCB();
 
@@ -342,7 +277,6 @@ int main(int argc, char *argv[]) {
 		}
 
 	}
-
 
 	client.setup();
 

@@ -96,6 +96,9 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <OutputFile>.\../pc_win32/vrpn-ufrn-team/Debug/vrpn-ufrn-team.bsc</OutputFile>
     </Bscmake>
+    <PreBuildEvent>
+      <Command>copy "*.cfg" "../pc_win32/vrpn-ufrn-team/Debug/" &amp; copy "*.dll" "../pc_win32/vrpn-ufrn-team/Debug/"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Midl>
