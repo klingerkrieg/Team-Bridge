@@ -29,6 +29,10 @@ KeyMap::KeyMap(std::string dev, char key[SSIZE], char toKey[SSIZE], char config[
 	if ( this->key == KINECT_TOP_ADD || this->key == KINECT_TOP_DEC ) {
 		heightSens = atof(config);
 	}
+	//Caso seja altura da mao no kinect
+	if ( this->key == KINECT_LEFT_HAND_TOP || this->key == KINECT_RIGHT_HAND_TOP ) {
+		handTopLevel = atoi(config);
+	}
 
 }
 

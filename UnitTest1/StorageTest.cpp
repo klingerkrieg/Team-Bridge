@@ -9,7 +9,7 @@
 #include <fstream>
 #include <Windows.h>
 #include <vrpn_Tracker.h>
-
+#include "util.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -36,18 +36,8 @@ public:
 		TrackerUserCallback *tc1 = new TrackerUserCallback;
 		strncpy(tc1->name, "Tracker0@localhost", sizeof(tc1->name));
 
-		vrpn_TRACKERCB t = vrpn_TRACKERCB();
-		timeval tv;
-		tv.tv_sec = 1;
-		tv.tv_usec = 1;
-		t.msg_time = tv;
-		float pos[3] = { 1.0, 1.0, 1.0 };
-		std::copy(pos, pos + 3, t.pos);
+		vrpn_TRACKERCB t = getTrackerCB();
 
-		float quat[4] = { 1.0, 1.0, 1.0, 1.0 };
-		std::copy(quat, quat + 4, t.quat);
-
-		t.sensor = 0;
 		//Salva info
 		Assert::IsTrue(st.saveToFile(tc1, t));
 		st.closeOut();

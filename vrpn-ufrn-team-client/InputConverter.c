@@ -1,7 +1,8 @@
 #include "InputConverter.h"
 
 void InputConverter::press(char key, bool isConstant) {
-	printf("Press: %d ", key);
+	printf("Press: %d [%c]", key, key);
+
 	if ( app != "" ) {
 
 		HWND window = FindWindow(_T(app.c_str()), NULL);
@@ -59,17 +60,24 @@ bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKE
 			topCalculated = true;
 		}
 
-
 		//se ja foi calculado durante esse reconhecimento nao calcula novamente para as demais configuracoes de teclas
 		if ( keyMap->getKey() == KINECT_TOP_ADD && topCalculated == true && top == 1 ) {
 			//Se houve uma mudanca para cima e isso e esperado
 			press(keyMap->getToKey(), keyMap->getToKeyIsConstant());
 			pressed = true;
 		} else
-			if ( keyMap->getKey() == KINECT_TOP_DEC && topCalculated == true && top == -1 ) {
-				press(keyMap->getToKey(), keyMap->getToKeyIsConstant());
-				pressed = true;
-			}
+		if ( keyMap->getKey() == KINECT_TOP_DEC && topCalculated == true && top == -1 ) {
+			press(keyMap->getToKey(), keyMap->getToKeyIsConstant());
+			pressed = true;
+		} else
+		if ( keyMap->getKey() == KINECT_RIGHT_HAND_TOP && gr.detectRightHandTop(userdata, t, keyMap->getHandTopLevel()) ) {
+			press(keyMap->getToKey(), keyMap->getToKeyIsConstant());
+			pressed = true;
+		} else
+		if ( keyMap->getKey() == KINECT_LEFT_HAND_TOP && gr.detectLeftHandTop(userdata, t, keyMap->getHandTopLevel()) ) {
+			press(keyMap->getToKey(), keyMap->getToKeyIsConstant());
+			pressed = true;
+		}
 
 	}
 

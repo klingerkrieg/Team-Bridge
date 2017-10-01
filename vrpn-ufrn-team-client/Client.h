@@ -28,6 +28,11 @@
 #include "InputConverter.h"
 
 
+void VRPN_CALLBACK handle_tracker_pos_quat(void *userdata, const vrpn_TRACKERCB t);
+void VRPN_CALLBACK handle_button(void *userdata, const vrpn_BUTTONCB b);
+void VRPN_CALLBACK handle_button_states(void *userdata, const vrpn_BUTTONSTATESCB b);
+void VRPN_CALLBACK handle_analog(void *userdata, const vrpn_ANALOGCB a);
+
 
 class Client {
 private:
@@ -38,6 +43,7 @@ private:
 	bool printTracker = true;
 	bool printButton = true;
 	bool printAnalog = true;
+	bool exportDb = false;
 
 	static const unsigned MAX_DEVICES = 50;
 	DeviceInfo deviceList[MAX_DEVICES];
@@ -73,6 +79,10 @@ public:
 
 	void setPrintAnalog(bool print) {
 		printAnalog = print;
+	}
+
+	void setExport(bool exp) {
+		exportDb = exp;
 	}
 
 	bool setup(bool test);

@@ -8,6 +8,8 @@ static const int SSIZE = 512;
 
 const int KINECT_TOP_ADD = 5001;
 const int KINECT_TOP_DEC = 5002;
+const int KINECT_LEFT_HAND_TOP = 5003;
+const int KINECT_RIGHT_HAND_TOP = 5004;
 
 
 class KeyMap {
@@ -19,6 +21,9 @@ private:
 
 	//sensibilidade para mudanca de altura
 	double heightSens = 0.15;
+
+	//handTopLevel
+	int handTopLevel;
 
 	void init(std::string dev, char key[SSIZE], char toKey[SSIZE]);
 
@@ -50,6 +55,10 @@ public:
 
 	double getHeightSens() {
 		return heightSens;
+	}
+
+	int getHandTopLevel() {
+		return handTopLevel;
 	}
 
 	KeyMap(){}
@@ -144,6 +153,8 @@ public:
 		//Kinect
 		m["KINECT_TOP_ADD"] = KINECT_TOP_ADD;
 		m["KINECT_TOP_DEC"] = KINECT_TOP_DEC;
+		m["KINECT_LEFT_HAND_TOP"] = KINECT_LEFT_HAND_TOP;
+		m["KINECT_RIGHT_HAND_TOP"] = KINECT_RIGHT_HAND_TOP;
 
 		//Mapeamento para ABNT2
 		m["VK_ESCAPE"] = 1;

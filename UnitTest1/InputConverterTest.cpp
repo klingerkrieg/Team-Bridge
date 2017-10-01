@@ -6,6 +6,7 @@
 #include <vrpn_Tracker.h>
 #include <vrpn_Button.h>
 #include <math.h>
+#include "util.h"
 
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
@@ -22,21 +23,11 @@ namespace InputConverterTest {
 		
 		strncpy(tc1->name, "Tracker0@localhost", sizeof(tc1->name));
 
-		t = vrpn_TRACKERCB();
-		timeval tv;
-		tv.tv_sec = 1;
-		tv.tv_usec = 1;
-		t.msg_time = tv;
-		float pos[3] = { 1.0, 1.0, 1.0 };
-		std::copy(pos, pos + 3, t.pos);
-		float quat[4] = { 1.0, 1.0, 1.0, 1.0 };
-		std::copy(quat, quat + 4, t.quat);
-
-		t.sensor = 0;
+		t = getTrackerCB();
 		double heightSens = 0.15;
 
 		b = vrpn_BUTTONCB();
-		b.msg_time = tv;
+		b.msg_time = getTimeVal();
 		b.state = 1;
 		b.button = 10;
 

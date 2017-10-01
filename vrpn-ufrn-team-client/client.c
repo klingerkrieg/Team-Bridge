@@ -15,10 +15,7 @@ void handle_cntl_c(int) {
 	done = 1;
 }
 
-void VRPN_CALLBACK handle_tracker_pos_quat(void *userdata, const vrpn_TRACKERCB t);
-void VRPN_CALLBACK handle_button(void *userdata, const vrpn_BUTTONCB b);
-void VRPN_CALLBACK handle_button_states(void *userdata, const vrpn_BUTTONSTATESCB b);
-void VRPN_CALLBACK handle_analog(void *userdata, const vrpn_ANALOGCB a);
+
 
 
 bool Client::setup(bool test = false) {
@@ -47,11 +44,11 @@ bool Client::setup(bool test = false) {
 		//Setando configs no store
 		storage = Storage(config);
 
-		//Storage::test();
-		//return 0;
-		storage.checkSent();
-		//return 0;
-
+		//So exporta para o banco se for solicitado
+		if ( exportDb ) {
+			storage.checkSent();
+		}
+		
 
 		
 
@@ -243,7 +240,8 @@ void Usage(const char *arg0) {
 		"Usage:  %s [-notracker] [-nobutton] [-noanalog] \n"
 		" -notracker:  Don't print tracker reports for following devices\n"
 		"  -nobutton:  Don't print button reports for following devices\n"
-		"  -noanalog:  Don't print analog reports for following devices\n",
+		"  -noanalog:  Don't print analog reports for following devices\n"
+		"  -export:  Exporta arquivos para o banco de dados\n",
 		arg0);
 
 	exit(0);
@@ -274,6 +272,8 @@ int main(int argc, char *argv[]) {
 			client.setPrintButton(false);
 		} else if ( !strcmp(argv[i], "-noanalog") ) {
 			client.setPrintAnalog(false);
+		} else if ( !strcmp(argv[i], "-export") ) {
+			client.setExport(true);
 		}
 
 	}

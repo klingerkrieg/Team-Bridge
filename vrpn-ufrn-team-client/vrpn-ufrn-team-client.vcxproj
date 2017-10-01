@@ -164,6 +164,7 @@
     <ClCompile Include="Config.c" />
     <ClCompile Include="ConfigFileReader.c" />
     <ClCompile Include="Db.c" />
+    <ClCompile Include="GestureRecognizer.c" />
     <ClCompile Include="InputConverter.c" />
     <ClCompile Include="KeyMap.c" />
     <ClCompile Include="Storage.c" />

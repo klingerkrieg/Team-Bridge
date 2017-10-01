@@ -4,39 +4,23 @@
 
 class GestureRecognizer {
 private:
-	double lastHeight = 0;
-	bool lastHeightDefined = false;
+	static double lastHeight;
+	static bool lastHeightDefined;
+
+	static double lastHeadHeight;
+	static bool lastHeadHeightDefined;
+	double handTopInterval = 0.15;
 
 public:
 
-	int detectTopChange(TrackerUserCallback *userdata, const vrpn_TRACKERCB t, double heightSens) {
-		if ( t.sensor == 0 ) {
-			printf("Altura: %.2f \n", t.pos[1]);
+	int detectLeftHandTop(TrackerUserCallback *userdata, const vrpn_TRACKERCB t, int topLevel);
 
+	int detectRightHandTop(TrackerUserCallback *userdata, const vrpn_TRACKERCB t, int topLevel);
 
-			if ( lastHeightDefined == false ) {
-				lastHeight = t.pos[1];
-				lastHeightDefined = true;
-				return 0;
-			}
+	int detectHandTop(TrackerUserCallback *userdata, const vrpn_TRACKERCB t, int topLevel);
 
-			//Desceu
-			//last - pos
-			//0.57 - 0.55 = 0.02 >= 0.02
-			if ( lastHeight - t.pos[1] >= (float)heightSens ) {
-				lastHeight = t.pos[1];
-				return -1;
-			} else
-			//Subiu
-			//pos  - last
-			//0.59 - 0.57 = 0.02 >= 0.02
-			if ( t.pos[1] -lastHeight >= (float)heightSens ) {
-				lastHeight = t.pos[1];
-				return 1;
-			}
-
-		}
-		return 0;
-	}
+	int detectTopChange(TrackerUserCallback *userdata, const vrpn_TRACKERCB t, double heightSens);
 
 };
+
+

@@ -5,6 +5,7 @@
 #include "GestureRecognizer.h"
 #include <vrpn_Tracker.h>
 #include <math.h>
+#include "util.h"
 
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
@@ -19,22 +20,11 @@ public:
 
 		TrackerUserCallback *tc1 = new TrackerUserCallback;
 		strncpy(tc1->name, "Tracker0@localhost", sizeof(tc1->name));
-
-		vrpn_TRACKERCB t = vrpn_TRACKERCB();
-		timeval tv;
-		tv.tv_sec = 1;
-		tv.tv_usec = 1;
-		t.msg_time = tv;
-		float pos[3] = { 1.0, 1.0, 1.0 };
-		std::copy(pos, pos + 3, t.pos);
-		float quat[4] = { 1.0, 1.0, 1.0, 1.0 };
-		std::copy(quat, quat + 4, t.quat);
-
-		t.sensor = 0;
-		double heightSens = 0.15;
+		vrpn_TRACKERCB t = getTrackerCB();
 		
 
 		GestureRecognizer gr = GestureRecognizer();
+		double heightSens = 0.15;
 
 		//primeira altura = 1.0
 		Assert::AreEqual(0, gr.detectTopChange(tc1, t, heightSens));
@@ -53,6 +43,43 @@ public:
 		//desceu
 		t.pos[1] = 1.0;
 		Assert::AreEqual(-1, gr.detectTopChange(tc1, t, heightSens));
+
+	}
+
+	TEST_METHOD(GestureRecognizer_detectHandTop) {
+		TrackerUserCallback *tc1 = new TrackerUserCallback;
+		strncpy(tc1->name, "Tracker0@localhost", sizeof(tc1->name));
+		vrpn_TRACKERCB t = getTrackerCB();
+		t.sensor = 4; //head 1.0
+
+		GestureRecognizer gr = GestureRecognizer();
+		gr.detectLeftHandTop(tc1, t, 5);
+
+		t.sensor = 8; //left hand
+		t.pos[1] = 1.301;
+		Assert::IsTrue(gr.detectHandTop(tc1, t, 5));
+		t.pos[1] = 1.151;
+		Assert::IsTrue(gr.detectHandTop(tc1, t, 4));
+		t.pos[1] = 1.05;
+		Assert::IsTrue(gr.detectHandTop(tc1, t, 3));
+		t.pos[1] = 0.90;
+		Assert::IsTrue(gr.detectHandTop(tc1, t, 2));
+		t.pos[1] = 0.84;
+		Assert::IsTrue(gr.detectHandTop(tc1, t, 1));
+
+
+		t.pos[1] = 1.29;
+		Assert::IsFalse(gr.detectHandTop(tc1, t, 5));
+		t.pos[1] = 1.14;
+		Assert::IsFalse(gr.detectHandTop(tc1, t, 4));
+		t.pos[1] = 0.151;
+		Assert::IsFalse(gr.detectHandTop(tc1, t, 3));
+		t.pos[1] = 0.99;
+		Assert::IsFalse(gr.detectHandTop(tc1, t, 3));
+		t.pos[1] = 0.84;
+		Assert::IsFalse(gr.detectHandTop(tc1, t, 2));
+		t.pos[1] = 0.851;
+		Assert::IsFalse(gr.detectHandTop(tc1, t, 1));
 
 	}
 
