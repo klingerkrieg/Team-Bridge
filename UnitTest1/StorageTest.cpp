@@ -25,7 +25,7 @@ std::map<std::string,std::string> configMap = { {"HOST","tcp://127.0.0.1:3306"},
 												{"SAVE_DIR", "SAVES"} };
 
 Config config = Config(configMap);
-Storage st = Storage(config);
+Storage st = Storage(config, true);
 
 	TEST_CLASS(StorageTest) {
 public:

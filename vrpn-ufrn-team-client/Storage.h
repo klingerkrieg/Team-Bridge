@@ -29,6 +29,7 @@ private:
 	 std::string fileName;
 	 std::string dateStr;
 	 Db db;
+	 bool exportDb;
 
 	 //Variaveis que sao exportadas de arquivo para banco
 	 std::string expDev;
@@ -77,14 +78,19 @@ public:
 
 	 }
 
-	 Storage (Config config){
-		 db = Db(config.getHost(), config.getDb(), config.getUser(), config.getPasswd());
+	 Storage (Config config, bool exportDb ){
+		 if (exportDb){
+			 db = Db(config.getHost(), config.getDb(), config.getUser(), config.getPasswd());
+			 this->exportDb = exportDb;
+		 }
 		 saveDir = config.getSaveDir();
 		 patient = config.getPatient();
 	 }
 
 	 void close() {
-		 db.close();
+		 if ( exportDb ) {
+			 db.close();
+		 }
 		 closeOut();
 		 closeIn();
 	 }

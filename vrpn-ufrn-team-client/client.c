@@ -42,7 +42,7 @@ bool Client::setup(bool test = false) {
 		inputConverter = InputConverter(map, config.getApp());
 
 		//Setando configs no store
-		storage = Storage(config);
+		storage = Storage(config, exportDb);
 
 		//So exporta para o banco se for solicitado
 		if ( exportDb ) {
