@@ -39,6 +39,9 @@
     <ClCompile Include="GestureRecognizer.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="View.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="KeyMap.h">
@@ -71,8 +74,12 @@
     <ClInclude Include="Client.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="View.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="vrpn-client.cfg" />
+    <None Include="view.py" />
   </ItemGroup>
 </Project>

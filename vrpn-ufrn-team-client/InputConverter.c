@@ -1,5 +1,8 @@
 #include "InputConverter.h"
 
+int InputConverter::lastTimeTrack = 0;
+
+
 void InputConverter::press(char key, bool isConstant) {
 	printf("Press: %d [%c]", key, key);
 
@@ -46,11 +49,22 @@ keybd_event(key, 0, KEYEVENTF_KEYUP, 0);
 }
 
 */
+
+
 bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKERCB t) {
+
+	//Quando uma pessoa for reconhecida pelo Kinect ele ira avisar
+	int actualTime = (int)time(0);
+	if ( lastTimeTrack == 0 || actualTime - lastTimeTrack > 1 ) {
+		printf("msg");
+		//view.showMsg("Kinect");
+	}
+	lastTimeTrack = actualTime;
 
 	int top = 0;
 	bool topCalculated = false;
 	bool pressed = false;
+
 
 	for ( std::vector<KeyMap>::iterator keyMap = map.begin(); keyMap != map.end(); ++keyMap ) {
 
@@ -110,3 +124,4 @@ bool InputConverter::checkButton(const char * name, const vrpn_BUTTONCB b) {
 bool InputConverter::checkAnalog() {
 	return true;
 }
+

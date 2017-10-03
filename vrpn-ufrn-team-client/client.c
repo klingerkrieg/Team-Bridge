@@ -6,6 +6,7 @@
 @license Standard VRPN license.
 */
 #include "Client.h"
+#include "View.h"
 
 using namespace std;
 
@@ -250,6 +251,21 @@ void Usage(const char *arg0) {
 
 
 int main(int argc, char *argv[]) {
+
+
+	View view = View();
+	view.showMsg("A");
+	view.showMsg("B");
+	view.showMsg("C");
+	//std::this_thread::sleep_for(std::chrono::seconds(4));
+	view.showMsg("D");
+	view.showMsg("E");
+	view.showMsg("F");
+	view.showMsg("G");
+
+
+	std::this_thread::sleep_for(std::chrono::seconds(50));
+	return 0;
 
 	TrackerUserCallback *userdata = new TrackerUserCallback;
 	vrpn_TRACKERCB t = vrpn_TRACKERCB();

@@ -11,27 +11,31 @@
 #include <vrpn_Analog.h>         // for vrpn_ANALOGCB, etc
 #include <vrpn_Button.h>         // for vrpn_Button_Remote, etc
 #include <Tchar.h>
+#include "View.h"
 
 class InputConverter {
 private:
 	 std::vector<KeyMap> map;
 	 std::string app;
 	 GestureRecognizer gr;
+	 View view;
+	 static int lastTimeTrack;
 
 public:
 
 	InputConverter() {
-		startGestureRecognizer();
+		init();
 	}
 
 	InputConverter(std::vector<KeyMap> map, std::string app) {
 		this->map = map;
 		this->app = app;
-		startGestureRecognizer();
+		init();
 	}
 
-	void startGestureRecognizer() {
+	void init() {
 		gr = GestureRecognizer();
+		view = View();
 	}
 	
 	 void InputConverter::press(char key, bool isConstant);
