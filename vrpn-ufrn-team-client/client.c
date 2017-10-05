@@ -250,11 +250,14 @@ void Usage(const char *arg0) {
 
 
 
+
 int main(int argc, char *argv[]) {
 
 
+
+
 	View *view = new View();
-	view->showMsg("Starting TEAM-VRPN :)");
+	view->showMsg("Starting TEAM-VRPN :)", 500);
 	delete view;
 
 

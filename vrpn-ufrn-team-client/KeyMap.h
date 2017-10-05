@@ -10,17 +10,24 @@ const int KINECT_TOP_ADD = 5001;
 const int KINECT_TOP_DEC = 5002;
 const int KINECT_LEFT_HAND_TOP = 5003;
 const int KINECT_RIGHT_HAND_TOP = 5004;
+const int KINECT_LEFT_HAND_FAST = 5005;
+const int KINECT_RIGHT_HAND_FAST = 5006;
 
+const int MESSAGE = 6000;
+const int ALERT = 6001;
 
 class KeyMap {
 private:
 	std::string dev;
 	int key;
 	char toKey;
+	int showMsg = 0;
 	bool toKeyIsConstant = false;
 
 	//sensibilidade para mudanca de altura
 	double heightSens = 0.15;
+
+	std::string msg;
 
 	//handTopLevel
 	int handTopLevel;
@@ -61,6 +68,14 @@ public:
 		return handTopLevel;
 	}
 
+	int getShowMsg() {
+		return showMsg;
+	}
+
+	std::string getMsg() {
+		return msg;
+	}
+
 	KeyMap(){}
 	KeyMap(std::string dev, int key, char toKey);
 	KeyMap(std::string dev, char key[SSIZE], char toKey[SSIZE]);
@@ -79,6 +94,7 @@ public:
 
 
 		std::map < std::string, int > m;
+
 		m["WM_LBUTTONDOWN"] = WM_LBUTTONDOWN;
 		m["WM_RBUTTONDOWN"] = WM_RBUTTONDOWN;
 		m["WM_MBUTTONDOWN"] = WM_MBUTTONDOWN;
@@ -155,6 +171,8 @@ public:
 		m["KINECT_TOP_DEC"] = KINECT_TOP_DEC;
 		m["KINECT_LEFT_HAND_TOP"] = KINECT_LEFT_HAND_TOP;
 		m["KINECT_RIGHT_HAND_TOP"] = KINECT_RIGHT_HAND_TOP;
+		m["KINECT_LEFT_HAND_FAST"] = KINECT_LEFT_HAND_FAST;
+		m["KINECT_RIGHT_HAND_FAST"] = KINECT_RIGHT_HAND_FAST;
 
 		//Mapeamento para ABNT2
 		m["VK_ESCAPE"] = 1;

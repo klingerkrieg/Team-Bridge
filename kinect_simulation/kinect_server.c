@@ -41,10 +41,10 @@ handle_tracker_pos_quat(void *userdata, const vrpn_TRACKERCB t)
         t_data->t_counts.push_back(0);
     }
 
-    printf("Tracker %s, sensor [%d]:\n     pos (%5.2f, %5.2f, %5.2f); "
+    /*printf("Tracker %s, sensor [%d]:\n     pos (%5.2f, %5.2f, %5.2f); "
             "quat (%5.2f, %5.2f, %5.2f, %5.2f)\n",
             t_data->t_name, t.sensor, t.pos[0], t.pos[1], t.pos[2],
-            t.quat[0], t.quat[1], t.quat[2], t.quat[3]);
+            t.quat[0], t.quat[1], t.quat[2], t.quat[3]);*/
     
 }
 

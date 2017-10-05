@@ -37,9 +37,20 @@ void View::showMsg(std::string text) {
 	call(pFuncMsg, text);
 }
 
+void View::showAlert(std::string text, int delay) {
+	call(pFuncAlert, text,delay);
+}
 
+void View::showMsg(std::string text, int delay) {
+	call(pFuncMsg, text,delay);
+}
 
 void View::call(PyObject *pFunc, std::string text) {
+	call(pFunc, text, msgDelay);
+}
+
+
+void View::call(PyObject *pFunc, std::string text, int delay) {
 	printf("call with %s\n",text.c_str());
 
 	PyObject *pArgs, *pValue;
@@ -60,7 +71,7 @@ void View::call(PyObject *pFunc, std::string text) {
 
 		PyTuple_SetItem(pArgs, 0, pValue);
 		//tempo
-		pValue = PyInt_FromLong(msgDelay);
+		pValue = PyInt_FromLong(delay);
 
 		if ( !pValue ) {
 			Py_DECREF(pArgs);

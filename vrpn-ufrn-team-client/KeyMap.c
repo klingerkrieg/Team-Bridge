@@ -34,6 +34,11 @@ KeyMap::KeyMap(std::string dev, char key[SSIZE], char toKey[SSIZE], char config[
 		handTopLevel = atoi(config);
 	}
 
+	//Caso seja para exibir uma mensagem na tela
+	if ( this->showMsg != 0 ) {
+		msg = config;
+	}
+
 }
 
 KeyMap::KeyMap(std::string dev, char key[SSIZE], char toKey[SSIZE]) {
@@ -64,16 +69,26 @@ void KeyMap::init(std::string dev, char key[SSIZE], char toKey[SSIZE]) {
 		this->key = it->second;
 	}
 	
-
-	//Tenta localizar a constante para toKey
-	it = KeyMap::configToAscii.find(toKey);
-
-	if ( it == KeyMap::configToAscii.end() ) {
-		//A saida sera um botao representado por um char quando uma constante nao for encontrada
-		this->toKey = toKey[0];
+	//Quando o toKey for algo diferente de uma tecla nao será possível te-lo em configToAScii
+	if ( !strcmp("ALERT", toKey) ) {
+		this->showMsg = ALERT;
+	} else
+	if ( !strcmp("MESSAGE", toKey) ) {
+		this->showMsg = MESSAGE;
 	} else {
-		this->toKey = it->second;
-		this->toKeyIsConstant = true;
+
+		//Tenta localizar a constante para toKey
+		it = KeyMap::configToAscii.find(toKey);
+
+		if ( it == KeyMap::configToAscii.end() ) {
+			//A saida sera um botao representado por um char quando uma constante nao for encontrada
+			this->toKey = toKey[0];
+		} else {
+			this->toKey = it->second;
+			this->toKeyIsConstant = true;
+		}
 	}
+
+	
 
 }

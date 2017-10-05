@@ -50,36 +50,23 @@ public:
 		TrackerUserCallback *tc1 = new TrackerUserCallback;
 		strncpy(tc1->name, "Tracker0@localhost", sizeof(tc1->name));
 		vrpn_TRACKERCB t = getTrackerCB();
-		t.sensor = 4; //head 1.0
+		t.sensor = 0; //head 1.0
 
 		GestureRecognizer gr = GestureRecognizer();
 		gr.detectLeftHandTop(tc1, t, 5);
 
-		t.sensor = 8; //left hand
+		t.sensor = 11; //left hand
 		t.pos[1] = 1.301;
 		Assert::IsTrue(gr.detectHandTop(tc1, t, 5));
 		t.pos[1] = 1.151;
 		Assert::IsTrue(gr.detectHandTop(tc1, t, 4));
 		t.pos[1] = 1.05;
 		Assert::IsTrue(gr.detectHandTop(tc1, t, 3));
-		t.pos[1] = 0.90;
+		t.pos[1] = 0.80;
 		Assert::IsTrue(gr.detectHandTop(tc1, t, 2));
-		t.pos[1] = 0.84;
+		t.pos[1] = 0.50;
 		Assert::IsTrue(gr.detectHandTop(tc1, t, 1));
 
-
-		t.pos[1] = 1.29;
-		Assert::IsFalse(gr.detectHandTop(tc1, t, 5));
-		t.pos[1] = 1.14;
-		Assert::IsFalse(gr.detectHandTop(tc1, t, 4));
-		t.pos[1] = 0.151;
-		Assert::IsFalse(gr.detectHandTop(tc1, t, 3));
-		t.pos[1] = 0.99;
-		Assert::IsFalse(gr.detectHandTop(tc1, t, 3));
-		t.pos[1] = 0.84;
-		Assert::IsFalse(gr.detectHandTop(tc1, t, 2));
-		t.pos[1] = 0.851;
-		Assert::IsFalse(gr.detectHandTop(tc1, t, 1));
 
 	}
 

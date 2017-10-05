@@ -15,6 +15,10 @@ public:
 	void showMsg(std::string text);
 	void call(PyObject *pFunc, std::string text);
 
+	void showAlert(std::string text, int delay);
+	void showMsg(std::string text, int delay);
+	void call(PyObject *pFunc, std::string text, int delay);
+
 };
 
 

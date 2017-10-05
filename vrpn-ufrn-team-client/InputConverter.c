@@ -56,7 +56,7 @@ bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKE
 	//Quando uma pessoa for reconhecida pelo Kinect ele ira avisar
 	int actualTime = (int)time(0);
 	if ( lastTimeTrack == 0 || actualTime - lastTimeTrack > 1 ) {
-		printf("msg");
+		printf("Kinect\n");
 		//view.showMsg("Kinect");
 	}
 	lastTimeTrack = actualTime;
@@ -90,6 +90,14 @@ bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKE
 		} else
 		if ( keyMap->getKey() == KINECT_LEFT_HAND_TOP && gr.detectLeftHandTop(userdata, t, keyMap->getHandTopLevel()) ) {
 			press(keyMap->getToKey(), keyMap->getToKeyIsConstant());
+			pressed = true;
+		} else
+		if ( keyMap->getKey() == KINECT_LEFT_HAND_FAST && gr.detectLeftHandFast(userdata, t) ) {
+			printf("FAAAAAAAS KINECT_LEFT_HAND_FAST hand");
+			pressed = true;
+		} else
+		if ( keyMap->getKey() == KINECT_RIGHT_HAND_FAST && gr.detectRightHandFast(userdata, t) ) {
+			printf("FAAAAAAAS KINECT_RIGHT_HAND_FAST hand");
 			pressed = true;
 		}
 

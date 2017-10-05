@@ -1,6 +1,8 @@
 #pragma once
 #include <vrpn_Tracker.h>        // for vrpn_TRACKERACCCB, etc
 #include "DeviceInfo.h"
+#include <map>
+#include <time.h>
 
 class GestureRecognizer {
 private:
@@ -13,15 +15,31 @@ private:
 	static bool lastHeadHeightDefined;
 	double handTopInterval = 0.10;
 
+	static std::map<int, std::vector<double>> lastMemberPos;
+	static std::map<int, int> lastMemberTime;
+
+	double fastMemberFator = 10;
+
 public:
 
-	int detectLeftHandTop(TrackerUserCallback *userdata, const vrpn_TRACKERCB t, int topLevel);
+	std::vector<double> getLastMemberPos(int sensor);
+	int getLastMemberTime(int sensor);
 
-	int detectRightHandTop(TrackerUserCallback *userdata, const vrpn_TRACKERCB t, int topLevel);
+	double euclidianDistance(std::vector<double> pos1, std::vector<double> pos2);
 
-	int detectHandTop(TrackerUserCallback *userdata, const vrpn_TRACKERCB t, int topLevel);
+	bool detectLeftHandTop(TrackerUserCallback *userdata, const vrpn_TRACKERCB t, int topLevel);
+
+	bool detectRightHandTop(TrackerUserCallback *userdata, const vrpn_TRACKERCB t, int topLevel);
+
+	bool detectHandTop(TrackerUserCallback *userdata, const vrpn_TRACKERCB t, int topLevel);
 
 	int detectTopChange(TrackerUserCallback *userdata, const vrpn_TRACKERCB t, double heightSens);
+
+	bool detectLeftHandFast(TrackerUserCallback *userdata, const vrpn_TRACKERCB t);
+
+	bool detectRightHandFast(TrackerUserCallback *userdata, const vrpn_TRACKERCB t);
+
+	bool detectMemberFast(TrackerUserCallback *userdata, const vrpn_TRACKERCB t);
 
 };
 

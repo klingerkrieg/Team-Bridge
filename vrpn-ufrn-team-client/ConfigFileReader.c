@@ -13,7 +13,11 @@ void ConfigFileReader::printConfig(std::vector<std::string> &devs,
 
 	printf("\nMapeamento:\n");
 	for ( std::vector<KeyMap>::iterator it = map.begin(); it != map.end(); ++it ) {
-		printf("[%s] %d -> %c\n", it->getDev().c_str(), it->getKey(), it->getToKey());
+		if ( it->getShowMsg() != 0 ) {
+			printf("[%s] %d -> [ALERT/MESSAGE] %s \n", it->getDev().c_str(), it->getKey(), it->getMsg().c_str());
+		} else {
+			printf("[%s] %d -> %c\n", it->getDev().c_str(), it->getKey(), it->getToKey());
+		}
 	}
 
 	printf("\nOutros:\n");
@@ -54,14 +58,23 @@ bool ConfigFileReader::readConfigFile(char * fileName,
 		//Identifica o tipo de configuracao que sera lido
 		if ( !strcmp(pch = strtok(scrap, " \t"), "KEY") ) {
 
-
-
 			//Pula a primeira string
 			pch += strlen(pch) + 1;
 			if ( sscanf(pch, "%s\t%s\t%s", s1, s2, s3) != 3 ) {
 				if ( sscanf(pch, "%s\t%s", s1, s2) != 2 ) {
 					fprintf(stderr, "Falha ao ler %s linha: %s\n", fileName, line.c_str());
 					return false;
+				}
+			}
+
+			//Caso seja alert ou message ira ler todo o resto como um unico argumento
+			if ( !strcmp(s2, "ALERT") || !strcmp(s2, "MESSAGE") ) {
+
+				//pch += strlen(pch) + 1;
+				//pch = strtok(pch, "\t");
+
+				if ( sscanf(line.c_str(), "%*s\t%*s\tALERT\t%[^\t\n]", s3) != 1 ) {
+					sscanf(line.c_str(), "%*s\t%*s\tMESSAGE\t%[^\t\n]", s3);
 				}
 			}
 
