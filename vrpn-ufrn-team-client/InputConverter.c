@@ -65,6 +65,8 @@ bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKE
 	bool topCalculated = false;
 	bool pressed = false;
 
+	if (t.sensor == 3)
+	printf("%.2f\n", t.pos[0]);//0.15 diferenca para movimentos com o corpo
 
 	for ( std::vector<KeyMap>::iterator keyMap = map.begin(); keyMap != map.end(); ++keyMap ) {
 
@@ -94,10 +96,20 @@ bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKE
 		} else
 		if ( keyMap->getKey() == KINECT_LEFT_HAND_FAST && gr.detectLeftHandFast(userdata, t) ) {
 			printf("FAAAAAAAS KINECT_LEFT_HAND_FAST hand");
+			if ( keyMap->getShowMsg() == ALERT ) {
+				view->showAlert(keyMap->getMsg());
+			} else {
+				view->showMsg(keyMap->getMsg());
+			}
 			pressed = true;
 		} else
 		if ( keyMap->getKey() == KINECT_RIGHT_HAND_FAST && gr.detectRightHandFast(userdata, t) ) {
 			printf("FAAAAAAAS KINECT_RIGHT_HAND_FAST hand");
+			if ( keyMap->getShowMsg() == ALERT ) {
+				view->showAlert(keyMap->getMsg());
+			} else {
+				view->showMsg(keyMap->getMsg());
+			}
 			pressed = true;
 		}
 

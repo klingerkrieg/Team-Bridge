@@ -7,7 +7,7 @@ double GestureRecognizer::lastHeadHeight = 0;
 bool GestureRecognizer::lastHeadHeightDefined = false;
 
 std::map<int, std::vector<double>> GestureRecognizer::lastMemberPos;
-std::map<int, int> GestureRecognizer::lastMemberTime;
+std::map<long, long> GestureRecognizer::lastMemberTime;
 
 
 bool GestureRecognizer::detectLeftHandFast(TrackerUserCallback *userdata, const vrpn_TRACKERCB t) {
@@ -40,27 +40,41 @@ double GestureRecognizer::euclidianDistance(std::vector<double> pos1, std::vecto
 	return sqrt((pos2[0] - pos1[0]) * (pos2[0] - pos1[0]) + (pos2[1] - pos1[1]) * (pos2[1] - pos1[1]) + (pos2[2] - pos1[2]) * (pos2[2] - pos1[2]));
 }
 
+struct timeval tp;
+
 bool GestureRecognizer::detectMemberFast(TrackerUserCallback *userdata, const vrpn_TRACKERCB t) {
 	
 	std::vector<double> pos = getLastMemberPos(t.sensor);
-	std::vector<double> zero = { 0,0,0 };
 	std::vector<double> actPos = { t.pos[0], t.pos[1], t.pos[2] };
 	
 
-	//printf("last %.2f %.2f %.2f\n", pos[0], pos[1], pos[2] );
+	gettimeofday(&tp, NULL);
+	long now = (tp.tv_sec * 1000 + tp.tv_usec / 1000);
 
-	if ( std::distance(pos.begin(), pos.end()) == std::distance(zero.begin(), zero.end()) && std::equal(pos.begin(), pos.end(), zero.begin()) ) {
+	//Primeira execucao
+	if ( lastMemberTime[t.sensor] == 0 ) {
 		lastMemberPos[t.sensor] = actPos;
-		lastMemberTime[t.sensor] = (int)time(0);
+		lastMemberTime[t.sensor] = now;
+		return false;
+	} else
+	//Delay para nao calcular a velocidade com espaço de tempo muito curto
+	if ( now - lastMemberTime[t.sensor] < fastMemberDelay ) {
+		return false;
+	} else
+	//Delay para nao calcular a velocidade com espaço de tempo muito curto
+	if ( now - lastMemberTime[t.sensor] > maxFastMemberDelay ) {
+		lastMemberPos[t.sensor] = actPos;
+		lastMemberTime[t.sensor] = now;
 		return false;
 	}
-
 	
-	int now = (int)time(0);
-	int last = lastMemberTime[t.sensor];
+	long last = lastMemberTime[t.sensor];
 	double dst = euclidianDistance(pos, actPos);
 
-	printf("vel: %.2f\n", dst / (now - last) );
+	lastMemberPos[t.sensor] = actPos;
+	lastMemberTime[t.sensor] = now;
+
+	//printf("%.2f / (%d - %d [%d]) =  %.8f\n", dst ,now , last, (now - last), dst / (now - last));
 	if ( dst / (now - last) > fastMemberFator ) {
 		return true;
 	} else {
@@ -138,7 +152,7 @@ int GestureRecognizer::detectTopChange(TrackerUserCallback *userdata, const vrpn
 			lastHeightDefined = true;
 			return 0;
 		}
-		printf("%.2f\n", lastHeadHeight);
+		//printf("%.2f\n", lastHeadHeight);
 		//Desceu
 		//last - pos
 		//0.57 - 0.55 = 0.02 >= 0.02

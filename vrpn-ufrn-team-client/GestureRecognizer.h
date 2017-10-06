@@ -16,9 +16,13 @@ private:
 	double handTopInterval = 0.10;
 
 	static std::map<int, std::vector<double>> lastMemberPos;
-	static std::map<int, int> lastMemberTime;
+	static std::map<long, long> lastMemberTime;
 
-	double fastMemberFator = 10;
+	//Maximo de distancia percorrida considerada normal para o intervalo abaixo
+	double fastMemberFator = 0.003f;
+	//Garanto que ele ira calcular a distancia em intervalo de tempo de 250 a 290ms
+	int fastMemberDelay = 250;
+	int maxFastMemberDelay = 290;
 
 public:
 

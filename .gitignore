@@ -11,3 +11,4 @@
 *.exe
 .vs
 *SAVES*
+*_log.txt

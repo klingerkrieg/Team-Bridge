@@ -1,2 +1,2 @@
-kinect_simulation.exe normal.txt 20 p
+kinect_simulation.exe movendo-braco-direito-fast.txt 20 p
 pause

@@ -87,7 +87,7 @@ void View::showMsg(std::string text, int delay) {
 
 void View::sendClose() {
 	std::this_thread::sleep_for(std::chrono::milliseconds(delay));
-	msgTop -= fontHeight + 10;
+	//msgTop -= fontHeight + 10;
 	PostMessage(hWnd, WM_CLOSE, 0, 0);
 }
 
@@ -111,6 +111,7 @@ void View::call(bool alert, std::string text, int delay) {
 int WINAPI View::show(HINSTANCE hInstance, WNDCLASSEX wcex) {
 
 
+	PostMessage(hWnd, WM_CLOSE, 0, 0);
 
 	hInst = hInstance; 
 
@@ -118,7 +119,7 @@ int WINAPI View::show(HINSTANCE hInstance, WNDCLASSEX wcex) {
 	DWORD Flags2 = WS_POPUP;
 
 	hWnd = CreateWindowEx(Flags1, szWindowClass, szTitle, Flags2, 10, msgTop, msgToShow.length()*fontWidth + (fontPadding*2), 60, 0, 0, hInstance, 0);
-	msgTop += fontHeight+10;
+	//msgTop += fontHeight+10;
 	if ( !hWnd ) {
 		printf("Call to CreateWindow failed!");
 		return 1;

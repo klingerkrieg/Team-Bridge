@@ -2,9 +2,9 @@ Initialize engine version: 5.5.0f3 (38b4efef76f0)
 GfxDevice: creating device client; threaded=1
 Direct3D:
     Version:  Direct3D 11.0 [level 11.0]
-    Renderer: NVIDIA GeForce 920M  (ID=0x1299)
+    Renderer: NVIDIA GeForce 920M (ID=0x1299)
     Vendor:   NVIDIA
-    VRAM:     1997 MB
+    VRAM:     2020 MB
     Driver:   10.18.15.4278
 Begin MonoManager ReloadAssembly
 Platform assembly: E:\vrpn-ufrn-team\vrpnViewer\build\kinect_viewer_Data\Managed\UnityEngine.dll (this message is harmless)
@@ -17,13 +17,13 @@ Platform assembly: E:\vrpn-ufrn-team\vrpnViewer\build\kinect_viewer_Data\Managed
 Loading E:\vrpn-ufrn-team\vrpnViewer\build\kinect_viewer_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
 Platform assembly: E:\vrpn-ufrn-team\vrpnViewer\build\kinect_viewer_Data\Managed\UnityEngine.PlaymodeTestsRunner.dll (this message is harmless)
 Loading E:\vrpn-ufrn-team\vrpnViewer\build\kinect_viewer_Data\Managed\UnityEngine.PlaymodeTestsRunner.dll into Unity Child Domain
-- Completed reload, in  0.036 seconds
+- Completed reload, in  0.153 seconds
 Platform assembly: E:\vrpn-ufrn-team\vrpnViewer\build\kinect_viewer_Data\Managed\System.Core.dll (this message is harmless)
 Platform assembly: E:\vrpn-ufrn-team\vrpnViewer\build\kinect_viewer_Data\Managed\System.dll (this message is harmless)
 desktop: 1366x768 60Hz; virtual: 1366x768 at 0,0
 <RI> Initializing input.
 <RI> Input initialized.
 <RI> Initialized touch support.
-UnloadTime: 2.506676 ms
+UnloadTime: 1.720568 ms
 Setting up 1 worker threads for Enlighten.
-  Thread -> id: 1dd0 -> priority: 1 
+  Thread -> id: b7c -> priority: 1 
