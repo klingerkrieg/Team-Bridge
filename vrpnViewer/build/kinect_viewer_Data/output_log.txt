@@ -17,13 +17,13 @@ Platform assembly: E:\vrpn-ufrn-team\vrpnViewer\build\kinect_viewer_Data\Managed
 Loading E:\vrpn-ufrn-team\vrpnViewer\build\kinect_viewer_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
 Platform assembly: E:\vrpn-ufrn-team\vrpnViewer\build\kinect_viewer_Data\Managed\UnityEngine.PlaymodeTestsRunner.dll (this message is harmless)
 Loading E:\vrpn-ufrn-team\vrpnViewer\build\kinect_viewer_Data\Managed\UnityEngine.PlaymodeTestsRunner.dll into Unity Child Domain
-- Completed reload, in  0.145 seconds
+- Completed reload, in  0.036 seconds
 Platform assembly: E:\vrpn-ufrn-team\vrpnViewer\build\kinect_viewer_Data\Managed\System.Core.dll (this message is harmless)
 Platform assembly: E:\vrpn-ufrn-team\vrpnViewer\build\kinect_viewer_Data\Managed\System.dll (this message is harmless)
 desktop: 1366x768 60Hz; virtual: 1366x768 at 0,0
 <RI> Initializing input.
 <RI> Input initialized.
 <RI> Initialized touch support.
-UnloadTime: 1.366472 ms
+UnloadTime: 2.506676 ms
 Setting up 1 worker threads for Enlighten.
-  Thread -> id: 23ec -> priority: 1 
+  Thread -> id: 1dd0 -> priority: 1 

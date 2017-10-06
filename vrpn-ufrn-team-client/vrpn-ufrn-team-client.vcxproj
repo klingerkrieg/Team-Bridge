@@ -49,7 +49,7 @@
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);E:\vrpn-master-2017-up;C:\Program Files (x86)\MySQL\MySQL Connector C++ 1.1.9\include;C:\Python27\include;</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);E:\vrpn-master-2017-up;C:\Program Files (x86)\MySQL\MySQL Connector C++ 1.1.9\include;</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Midl>
@@ -81,10 +81,10 @@
     <Link>
       <OutputFile>.\../pc_win32/vrpn-ufrn-team-client/Debug/vrpn-ufrn-team-client.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>$(SYSTEMDRIVE)\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib;%(AdditionalLibraryDirectories);C:\Program Files (x86)\MySQL\MySQL Connector C++ 1.1.9\lib\opt;C:\Python27\libs</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SYSTEMDRIVE)\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib;%(AdditionalLibraryDirectories);C:\Program Files (x86)\MySQL\MySQL Connector C++ 1.1.9\lib\opt;</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>.\../pc_win32/vrpn-ufrn-team-client/Debug/vrpn-ufrn-team-client.pdb</ProgramDatabaseFile>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
@@ -160,7 +160,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="client.c" />
+    <ClCompile Include="client.cpp" />
     <ClCompile Include="Config.c" />
     <ClCompile Include="ConfigFileReader.c" />
     <ClCompile Include="Db.c" />

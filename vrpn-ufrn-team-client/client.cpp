@@ -251,15 +251,19 @@ void Usage(const char *arg0) {
 
 
 
-int main(int argc, char *argv[]) {
+//int main(int argc, char *argv[]) {
 
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
 
+	AllocConsole();
+	freopen("conin$", "r", stdin);
+	freopen("conout$", "w", stdout);
+	freopen("conout$", "w", stderr);
+	
 
-
-	View *view = new View();
-	view->showMsg("Starting TEAM-VRPN :)", 500);
-	delete view;
-
+	View *view = new View(hInstance);
+	view->showMsg("Starting TEAM-VRPN :)");
+	
 
 	TrackerUserCallback *userdata = new TrackerUserCallback;
 	vrpn_TRACKERCB t = vrpn_TRACKERCB();
@@ -268,7 +272,7 @@ int main(int argc, char *argv[]) {
 	// Parse arguments, creating objects as we go.  Arguments that
 	// change the way a device is treated affect all devices that
 	// follow on the command line.
-	for (int i = 1; i < argc; i++ ) {
+	/*for (int i = 1; i < argc; i++ ) {
 
 		if ( !strcmp(argv[i], "-f") ) { // Specify config-file name
 			if ( ++i > argc ) {
@@ -286,7 +290,7 @@ int main(int argc, char *argv[]) {
 			client.setExport(true);
 		}
 
-	}
+	}*/
 
 	client.setup();
 

@@ -28,6 +28,13 @@
 #include "InputConverter.h"
 
 
+//GUI
+#include <windows.h> 
+#include <tchar.h>  
+#include <io.h>
+#include <fcntl.h>
+
+
 void VRPN_CALLBACK handle_tracker_pos_quat(void *userdata, const vrpn_TRACKERCB t);
 void VRPN_CALLBACK handle_button(void *userdata, const vrpn_BUTTONCB b);
 void VRPN_CALLBACK handle_button_states(void *userdata, const vrpn_BUTTONSTATESCB b);
