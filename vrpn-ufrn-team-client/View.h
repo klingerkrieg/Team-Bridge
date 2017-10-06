@@ -6,6 +6,20 @@
 #include <chrono>
 #include <thread>
 
+#define NOMINMAX
+#include <algorithm>
+namespace Gdiplus {
+using std::min;
+using std::max;
+};
+//GDI
+#include <objidl.h>
+#include <gdiplus.h>
+
+#pragma comment (lib,"Gdiplus.lib")
+
+
+
 class View {
 private:
 	int msgDelay = 3000;
@@ -31,7 +45,15 @@ private:
 
 	static LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
+	static Gdiplus::GdiplusStartupInput gdiplusStartupInput;
+	static ULONG_PTR           gdiplusToken;
+
 	void sendClose();
+	static void OnPaint(HDC hdc, int width);
+
+	static int fontWidth;
+	static int fontHeight;
+	static int fontPadding;
 
 public:
 

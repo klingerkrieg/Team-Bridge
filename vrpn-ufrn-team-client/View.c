@@ -15,6 +15,19 @@ WNDCLASSEX View::wcex;
 bool View::created = false;
 int View::msgTop = 10;
 
+//Font
+int View::fontWidth = 32;
+int View::fontHeight = 50;
+int View::fontPadding = 5;
+
+
+//GDI
+Gdiplus::GdiplusStartupInput View::gdiplusStartupInput;
+ULONG_PTR           View::gdiplusToken;
+
+
+
+
 View::View() {
 }
 
@@ -28,6 +41,8 @@ View::View(HINSTANCE hInstance) {
 	//hInstance = GetModuleHandle(0);
 	//HINSTANCE hPrevInstance = GetModuleHandle(0);
 	LPSTR lpCmdLine = _T("");
+
+	Gdiplus::GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
 
 	wcex.cbSize = sizeof(WNDCLASSEX);
 	wcex.style = CS_HREDRAW | CS_VREDRAW;
@@ -72,7 +87,7 @@ void View::showMsg(std::string text, int delay) {
 
 void View::sendClose() {
 	std::this_thread::sleep_for(std::chrono::milliseconds(delay));
-	msgTop -= 100;
+	msgTop -= fontHeight + 10;
 	PostMessage(hWnd, WM_CLOSE, 0, 0);
 }
 
@@ -102,25 +117,30 @@ int WINAPI View::show(HINSTANCE hInstance, WNDCLASSEX wcex) {
 	DWORD Flags1 = WS_EX_COMPOSITED | WS_EX_LAYERED | WS_EX_NOACTIVATE | WS_EX_TOPMOST | WS_EX_TRANSPARENT;
 	DWORD Flags2 = WS_POPUP;
 
-	hWnd = CreateWindowEx(Flags1, szWindowClass, szTitle, Flags2, 30, msgTop, 800, 100, 0, 0, hInstance, 0);
-	msgTop += 100;
+	hWnd = CreateWindowEx(Flags1, szWindowClass, szTitle, Flags2, 10, msgTop, msgToShow.length()*fontWidth + (fontPadding*2), 60, 0, 0, hInstance, 0);
+	msgTop += fontHeight+10;
 	if ( !hWnd ) {
 		printf("Call to CreateWindow failed!");
 		return 1;
 	}
 
+	//Alpha
+	int exStyle = GetWindowLong(hWnd, GWL_EXSTYLE);
+	exStyle |= WS_EX_LAYERED;
+	SetWindowLong(hWnd, GWL_EXSTYLE, exStyle);
+	SetLayeredWindowAttributes(hWnd, NULL, 240, LWA_ALPHA);
 
-	HRGN GGG = CreateRectRgn(0, 0, 1920, 1200);
+	/*HRGN GGG = CreateRectRgn(0, 0, 1920, 1200);
 	InvertRgn(GetDC(hWnd), GGG);
 	SetWindowRgn(hWnd, GGG, false);
 
 	COLORREF RRR = RGB(255, 0, 255);
 	SetLayeredWindowAttributes(hWnd, RRR, (BYTE)0, LWA_COLORKEY);
-
+	*/
 	ShowWindow(hWnd, 1);
 	UpdateWindow(hWnd);
 
-	DeleteObject(GGG);
+	//DeleteObject(GGG);
 
 	std::thread([=] { sendClose();  }).detach();
 
@@ -131,7 +151,16 @@ int WINAPI View::show(HINSTANCE hInstance, WNDCLASSEX wcex) {
 		DispatchMessage(&msg);
 	}
 
+	Gdiplus::GdiplusShutdown(gdiplusToken);
+
 	return (int)msg.wParam;
+}
+
+
+void View::OnPaint(HDC hdc, int width) {
+	Gdiplus::Graphics g(hdc);
+	Gdiplus::SolidBrush brush(Gdiplus::Color(127, 64, 64, 64));
+	g.FillRectangle(&brush, 0, 0, width, 100);
 }
 
 
@@ -149,13 +178,13 @@ LRESULT CALLBACK View::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
 
 
 	HFONT hTmp;
-	HFONT hFont = CreateFont(60, 0, 0, 0, FW_BOLD, 0, 0, 0, 0, 0, 0, 2, 0, "SYSTEM_FIXED_FONT");
-
+	HFONT hFont = CreateFont(fontHeight, fontWidth, NULL, NULL, FW_MEDIUM, false, false, false, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, ANTIALIASED_QUALITY, FF_ROMAN, "Consolas");
+	
 	switch ( message ) {
 		case WM_ERASEBKGND:
 
-			GetClientRect(hWnd, &rect);
-			FillRect((HDC)wParam, &rect, CreateSolidBrush(RGB(255, 0, 255)));
+			//GetClientRect(hWnd, &rect);
+			//FillRect((HDC)wParam, &rect, CreateSolidBrush(RGB(255, 0, 255)));
 
 			break;
 		case WM_PAINT:
@@ -164,13 +193,15 @@ LRESULT CALLBACK View::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
 			SetBkMode(hdc, TRANSPARENT);
 			
 
+			OnPaint(hdc, msgToShow.length() * fontWidth + (fontPadding*2));
+
 			if ( isAlert ) {
 				SetTextColor(hdc, RGB(174, 24, 24));
 			} else {
 				SetTextColor(hdc, RGB(173, 255, 47));
 			}
 		
-			TextOut(hdc, 0, 0, msg, _tcslen(msg));
+			TextOut(hdc, fontPadding, fontPadding, msg, _tcslen(msg));
 
 			/*FontFamily  fontFamily(L"Times New Roman");
 			Font        font(&fontFamily, 32, FontStyleRegular, UnitPixel);
