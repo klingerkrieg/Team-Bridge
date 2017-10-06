@@ -57,7 +57,7 @@ bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKE
 	int actualTime = (int)time(0);
 	if ( lastTimeTrack == 0 || actualTime - lastTimeTrack > 1 ) {
 		printf("Kinect\n");
-		view.showMsg("Kinect");
+		view->showMsg("Kinect");
 	}
 	lastTimeTrack = actualTime;
 

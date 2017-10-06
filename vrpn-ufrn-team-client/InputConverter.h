@@ -18,7 +18,7 @@ private:
 	 std::vector<KeyMap> map;
 	 std::string app;
 	 GestureRecognizer gr;
-	 View view;
+	 View *view;
 	 static int lastTimeTrack;
 
 public:
@@ -27,15 +27,15 @@ public:
 		init();
 	}
 
-	InputConverter(std::vector<KeyMap> map, std::string app) {
+	InputConverter(std::vector<KeyMap> map, std::string app, View &view) {
 		this->map = map;
 		this->app = app;
+		this->view = &view;
 		init();
 	}
 
 	void init() {
 		gr = GestureRecognizer();
-		view = View();
 	}
 	
 	 void InputConverter::press(char key, bool isConstant);

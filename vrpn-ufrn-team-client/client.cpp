@@ -40,7 +40,7 @@ bool Client::setup(bool test = false) {
 
 		
 		//Setando InputConverter
-		inputConverter = InputConverter(map, config.getApp());
+		inputConverter = InputConverter(map, config.getApp(), view);
 
 		//Setando configs no store
 		storage = Storage(config, exportDb);
@@ -254,16 +254,17 @@ void Usage(const char *arg0) {
 //int main(int argc, char *argv[]) {
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
-
+	//Devido a utilizacao do WinMain o cmd nao aparecerá
+	//os seguintes comandos são para criar uma nova janela do cmd
 	AllocConsole();
 	freopen("conin$", "r", stdin);
 	freopen("conout$", "w", stdout);
 	freopen("conout$", "w", stderr);
 	
 
-	View *view = new View(hInstance);
-	view->showMsg("Starting TEAM-VRPN :)");
-	
+	View view = View(hInstance);
+	view.showMsg("Starting TEAM-VRPN :)");
+	client.setView(view);
 
 	TrackerUserCallback *userdata = new TrackerUserCallback;
 	vrpn_TRACKERCB t = vrpn_TRACKERCB();
@@ -293,6 +294,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	}*/
 
 	client.setup();
+
 
 	return 0;
 } /* main */

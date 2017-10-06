@@ -45,6 +45,7 @@ class Client {
 private:
 	Storage storage;
 	InputConverter inputConverter;
+	View view;
 
 	char *configFileName = "vrpn-client.cfg";
 	bool printTracker = true;
@@ -63,6 +64,13 @@ public:
 
 	}
 
+	View& getView() {
+		return view;
+	}
+
+	void setView(View &view) {
+		this->view = view;
+	}
 
 	Storage& getStorage() {
 		return storage;

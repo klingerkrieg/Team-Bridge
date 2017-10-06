@@ -13,7 +13,7 @@ int View::delay;
 HINSTANCE View::hInstance;
 WNDCLASSEX View::wcex;
 bool View::created = false;
-
+int View::msgTop = 10;
 
 View::View() {
 }
@@ -72,6 +72,7 @@ void View::showMsg(std::string text, int delay) {
 
 void View::sendClose() {
 	std::this_thread::sleep_for(std::chrono::milliseconds(delay));
+	msgTop -= 100;
 	PostMessage(hWnd, WM_CLOSE, 0, 0);
 }
 
@@ -101,8 +102,8 @@ int WINAPI View::show(HINSTANCE hInstance, WNDCLASSEX wcex) {
 	DWORD Flags1 = WS_EX_COMPOSITED | WS_EX_LAYERED | WS_EX_NOACTIVATE | WS_EX_TOPMOST | WS_EX_TRANSPARENT;
 	DWORD Flags2 = WS_POPUP;
 
-	hWnd = CreateWindowEx(Flags1, szWindowClass, szTitle, Flags2, 30, 30, 800, 100, 0, 0, hInstance, 0);
-
+	hWnd = CreateWindowEx(Flags1, szWindowClass, szTitle, Flags2, 30, msgTop, 800, 100, 0, 0, hInstance, 0);
+	msgTop += 100;
 	if ( !hWnd ) {
 		printf("Call to CreateWindow failed!");
 		return 1;

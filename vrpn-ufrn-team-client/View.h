@@ -27,6 +27,7 @@ private:
 	static int delay;
 	static bool isAlert;
 	static std::string msgToShow;
+	static int msgTop;
 
 	static LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
