@@ -18,6 +18,8 @@ private:
 	 std::vector<KeyMap> map;
 	 std::string app;
 	 GestureRecognizer gr;
+
+	 bool viewOn = false;
 	 View *view;
 	 static int lastTimeTrack;
 
@@ -27,10 +29,17 @@ public:
 		init();
 	}
 
+	InputConverter(std::vector<KeyMap> map, std::string app) {
+		this->map = map;
+		this->app = app;
+		init();
+	}
+
 	InputConverter(std::vector<KeyMap> map, std::string app, View &view) {
 		this->map = map;
 		this->app = app;
 		this->view = &view;
+		viewOn = true;
 		init();
 	}
 
@@ -38,15 +47,17 @@ public:
 		gr = GestureRecognizer();
 	}
 	
-	 void InputConverter::press(char key, bool isConstant);
+	 void press(char key, bool isConstant);
 
-	// void InputConverter::release(char key);
+	 void interpretKeyMap(KeyMap keyMap, const vrpn_TRACKERCB t);
 
-	 bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKERCB t);
+	// void release(char key);
 
-	 bool InputConverter::checkButton(const char * name, const vrpn_BUTTONCB b);
+	 bool checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKERCB t);
 
-	 bool InputConverter::checkAnalog();
+	 bool checkButton(const char * name, const vrpn_BUTTONCB b);
+
+	 bool checkAnalog();
 	
 };
 

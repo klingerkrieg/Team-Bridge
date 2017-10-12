@@ -71,5 +71,34 @@ public:
 	}
 
 
+	TEST_METHOD(GestureRecognizer_detectBody) {
+		TrackerUserCallback *tc1 = new TrackerUserCallback;
+		strncpy(tc1->name, "Tracker0@localhost", sizeof(tc1->name));
+		vrpn_TRACKERCB t = getTrackerCB();
+		t.sensor = 3; // usa bacia
+
+		GestureRecognizer gr = GestureRecognizer();
+		gr.setCenterPos(t);
+
+
+		t.pos[2] = 1.14; //NAO esta suficientemente inclinado para frente
+		Assert::IsFalse(gr.detectBodyFront(tc1, t));
+
+		t.pos[2] = 1.16; //inclinado para frente
+		Assert::IsTrue(gr.detectBodyFront(tc1, t));
+		t.pos[2] = 0.84; //inclinado para trás
+		Assert::IsTrue(gr.detectBodyBack(tc1, t));
+
+		t.pos[0] = 1.16; //inclinado para direita
+		Assert::IsTrue(gr.detectBodyRight(tc1, t));
+		t.pos[0] = 0.84; //inclinado para esquerda
+		Assert::IsTrue(gr.detectBodyLeft(tc1, t));
+
+		t.pos[0] = 0.86; //NAO esta suficientemente inclinado para esquerda
+		Assert::IsFalse(gr.detectBodyLeft(tc1, t));
+
+	}
+
+
 	};
 }

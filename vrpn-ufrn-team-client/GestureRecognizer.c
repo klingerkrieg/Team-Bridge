@@ -10,6 +10,9 @@ std::map<int, std::vector<double>> GestureRecognizer::lastMemberPos;
 std::map<long, long> GestureRecognizer::lastMemberTime;
 
 
+double GestureRecognizer::centerPos[2] = { 0,0 };
+
+
 bool GestureRecognizer::detectLeftHandFast(TrackerUserCallback *userdata, const vrpn_TRACKERCB t) {
 	if ( t.sensor == 7) {
 		return detectMemberFast(userdata, t);
@@ -172,3 +175,40 @@ int GestureRecognizer::detectTopChange(TrackerUserCallback *userdata, const vrpn
 	return 0;
 }
 
+void GestureRecognizer::setCenterPos(const vrpn_TRACKERCB t) {
+	centerPos[0] = t.pos[0];
+	centerPos[1] = t.pos[2];
+}
+
+bool GestureRecognizer::detectBody(TrackerUserCallback *userdata, const vrpn_TRACKERCB t, int direction) {
+	if ( t.sensor != 3 ) {
+		return false;
+	}
+
+	if ( direction == GEST_FRONT ) {
+		return t.pos[2] > centerPos[1] + bodyCenterDistance;
+	} else
+	if ( direction == GEST_BACK ) {
+		return t.pos[2] < centerPos[1] - bodyCenterDistance;
+	} else
+	if ( direction == GEST_RIGHT ) {
+		return t.pos[0] > centerPos[0] + bodyCenterDistance;
+	} else
+	if ( direction == GEST_LEFT ) {
+		return t.pos[0] < centerPos[0] - bodyCenterDistance;
+	}
+	return false;
+}
+
+bool GestureRecognizer::detectBodyFront(TrackerUserCallback *userdata, const vrpn_TRACKERCB t) {
+	return detectBody(userdata, t, GEST_FRONT);
+}
+bool GestureRecognizer::detectBodyRight(TrackerUserCallback *userdata, const vrpn_TRACKERCB t) {
+	return detectBody(userdata, t, GEST_RIGHT);
+}
+bool GestureRecognizer::detectBodyLeft(TrackerUserCallback *userdata, const vrpn_TRACKERCB t) {
+	return detectBody(userdata, t, GEST_LEFT);
+}
+bool GestureRecognizer::detectBodyBack(TrackerUserCallback *userdata, const vrpn_TRACKERCB t) {
+	return detectBody(userdata, t, GEST_BACK);
+}

@@ -70,6 +70,10 @@ void KeyMap::init(std::string dev, char key[SSIZE], char toKey[SSIZE]) {
 	}
 	
 	//Quando o toKey for algo diferente de uma tecla nao será possível te-lo em configToAScii
+	
+	if ( !strcmp("KINECT_DETERMINE_CENTER_POS", toKey) ) {
+		this->determineCenterPos = true;
+	} else
 	if ( !strcmp("ALERT", toKey) ) {
 		this->showMsg = ALERT;
 	} else

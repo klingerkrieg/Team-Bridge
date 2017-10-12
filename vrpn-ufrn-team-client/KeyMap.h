@@ -13,6 +13,11 @@ const int KINECT_RIGHT_HAND_TOP = 5004;
 const int KINECT_LEFT_HAND_FAST = 5005;
 const int KINECT_RIGHT_HAND_FAST = 5006;
 
+const int KINECT_BODY_FRONT = 5007;
+const int KINECT_BODY_BACK = 5008;
+const int KINECT_BODY_RIGHT = 5009;
+const int KINECT_BODY_LEFT = 5010;
+
 const int MESSAGE = 6000;
 const int ALERT = 6001;
 
@@ -23,6 +28,7 @@ private:
 	char toKey;
 	int showMsg = 0;
 	bool toKeyIsConstant = false;
+	bool determineCenterPos = false;
 
 	//sensibilidade para mudanca de altura
 	double heightSens = 0.15;
@@ -74,6 +80,10 @@ public:
 
 	std::string getMsg() {
 		return msg;
+	}
+
+	bool getDetermineCenterPos() {
+		return determineCenterPos;
 	}
 
 	KeyMap(){}
@@ -173,6 +183,12 @@ public:
 		m["KINECT_RIGHT_HAND_TOP"] = KINECT_RIGHT_HAND_TOP;
 		m["KINECT_LEFT_HAND_FAST"] = KINECT_LEFT_HAND_FAST;
 		m["KINECT_RIGHT_HAND_FAST"] = KINECT_RIGHT_HAND_FAST;
+
+		m["KINECT_BODY_FRONT"] = KINECT_BODY_FRONT;
+		m["KINECT_BODY_BACK"] = KINECT_BODY_BACK;
+		m["KINECT_BODY_RIGHT"] = KINECT_BODY_RIGHT;
+		m["KINECT_BODY_LEFT"] = KINECT_BODY_LEFT;
+
 
 		//Mapeamento para ABNT2
 		m["VK_ESCAPE"] = 1;

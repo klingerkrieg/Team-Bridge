@@ -36,7 +36,7 @@ View::View(HINSTANCE hInstance) {
 	if ( created ) {
 		return;
 	}
-	printf("create");
+	
 	this->hInstance = hInstance;
 	//hInstance = GetModuleHandle(0);
 	//HINSTANCE hPrevInstance = GetModuleHandle(0);

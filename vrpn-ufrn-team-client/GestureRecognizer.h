@@ -4,6 +4,12 @@
 #include <map>
 #include <time.h>
 
+
+const int GEST_LEFT = 1;
+const int GEST_RIGHT = 2;
+const int GEST_FRONT = 3;
+const int GEST_BACK = 4;
+
 class GestureRecognizer {
 private:
 	//nao pode usar o mesmo headHeight para detectTopChange porque se nao ele so ira detectar mudancas bruscas
@@ -14,6 +20,10 @@ private:
 	static double lastHeadHeight;
 	static bool lastHeadHeightDefined;
 	double handTopInterval = 0.10;
+
+	//usado para detectBody
+	static double centerPos[2];
+	double bodyCenterDistance = 0.15;
 
 	static std::map<int, std::vector<double>> lastMemberPos;
 	static std::map<long, long> lastMemberTime;
@@ -44,6 +54,17 @@ public:
 	bool detectRightHandFast(TrackerUserCallback *userdata, const vrpn_TRACKERCB t);
 
 	bool detectMemberFast(TrackerUserCallback *userdata, const vrpn_TRACKERCB t);
+
+
+	bool detectBody(TrackerUserCallback *userdata, const vrpn_TRACKERCB t, int direction);
+
+	bool detectBodyFront(TrackerUserCallback *userdata, const vrpn_TRACKERCB t);
+	bool detectBodyRight(TrackerUserCallback *userdata, const vrpn_TRACKERCB t);
+	bool detectBodyLeft(TrackerUserCallback *userdata, const vrpn_TRACKERCB t);
+	bool detectBodyBack(TrackerUserCallback *userdata, const vrpn_TRACKERCB t);
+
+	void setCenterPos(const vrpn_TRACKERCB t);
+	
 
 };
 

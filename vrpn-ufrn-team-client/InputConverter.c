@@ -50,6 +50,22 @@ keybd_event(key, 0, KEYEVENTF_KEYUP, 0);
 
 */
 
+void InputConverter::interpretKeyMap(KeyMap keyMap, const vrpn_TRACKERCB t) {
+	if ( keyMap.getDetermineCenterPos() ) {
+		gr.setCenterPos(t);
+	} else
+	if ( keyMap.getShowMsg() == 0 ) {
+		press(keyMap.getToKey(), keyMap.getToKeyIsConstant());
+	} else
+	if ( keyMap.getShowMsg() == ALERT ) {
+		if ( viewOn )
+			view->showAlert(keyMap.getMsg());
+	} else {
+		if ( viewOn )
+			view->showMsg(keyMap.getMsg());
+	}
+}
+
 
 bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKERCB t) {
 
@@ -57,7 +73,8 @@ bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKE
 	int actualTime = (int)time(0);
 	if ( lastTimeTrack == 0 || actualTime - lastTimeTrack > 1 ) {
 		printf("Kinect\n");
-		view->showMsg("Kinect");
+		if ( viewOn )
+			view->showMsg("Kinect");
 	}
 	lastTimeTrack = actualTime;
 
@@ -79,37 +96,43 @@ bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKE
 		//se ja foi calculado durante esse reconhecimento nao calcula novamente para as demais configuracoes de teclas
 		if ( keyMap->getKey() == KINECT_TOP_ADD && topCalculated == true && top == 1 ) {
 			//Se houve uma mudanca para cima e isso e esperado
-			press(keyMap->getToKey(), keyMap->getToKeyIsConstant());
+			interpretKeyMap((*keyMap), t);
 			pressed = true;
 		} else
 		if ( keyMap->getKey() == KINECT_TOP_DEC && topCalculated == true && top == -1 ) {
-			press(keyMap->getToKey(), keyMap->getToKeyIsConstant());
+			interpretKeyMap((*keyMap), t);
 			pressed = true;
 		} else
 		if ( keyMap->getKey() == KINECT_RIGHT_HAND_TOP && gr.detectRightHandTop(userdata, t, keyMap->getHandTopLevel()) ) {
-			press(keyMap->getToKey(), keyMap->getToKeyIsConstant());
+			interpretKeyMap((*keyMap), t);
 			pressed = true;
 		} else
 		if ( keyMap->getKey() == KINECT_LEFT_HAND_TOP && gr.detectLeftHandTop(userdata, t, keyMap->getHandTopLevel()) ) {
-			press(keyMap->getToKey(), keyMap->getToKeyIsConstant());
+			interpretKeyMap((*keyMap), t);
 			pressed = true;
-		} else
+		} else //FAST HAND
 		if ( keyMap->getKey() == KINECT_LEFT_HAND_FAST && gr.detectLeftHandFast(userdata, t) ) {
-			printf("FAAAAAAAS KINECT_LEFT_HAND_FAST hand");
-			if ( keyMap->getShowMsg() == ALERT ) {
-				view->showAlert(keyMap->getMsg());
-			} else {
-				view->showMsg(keyMap->getMsg());
-			}
+			interpretKeyMap((*keyMap), t);
 			pressed = true;
 		} else
 		if ( keyMap->getKey() == KINECT_RIGHT_HAND_FAST && gr.detectRightHandFast(userdata, t) ) {
-			printf("FAAAAAAAS KINECT_RIGHT_HAND_FAST hand");
-			if ( keyMap->getShowMsg() == ALERT ) {
-				view->showAlert(keyMap->getMsg());
-			} else {
-				view->showMsg(keyMap->getMsg());
-			}
+			interpretKeyMap((*keyMap), t);
+			pressed = true;
+		} else //BODY
+		if ( keyMap->getKey() == KINECT_BODY_FRONT && gr.detectBodyFront(userdata, t) ) {
+			interpretKeyMap((*keyMap), t);
+			pressed = true;
+		} else
+		if ( keyMap->getKey() == KINECT_BODY_RIGHT && gr.detectBodyRight(userdata, t) ) {
+			interpretKeyMap((*keyMap), t);
+			pressed = true;
+		} else
+		if ( keyMap->getKey() == KINECT_BODY_LEFT && gr.detectBodyLeft(userdata, t) ) {
+			interpretKeyMap((*keyMap), t);
+			pressed = true;
+		} else
+		if ( keyMap->getKey() == KINECT_BODY_BACK && gr.detectBodyBack(userdata, t) ) {
+			interpretKeyMap((*keyMap), t);
 			pressed = true;
 		}
 
