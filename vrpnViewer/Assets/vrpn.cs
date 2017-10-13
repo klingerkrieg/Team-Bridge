@@ -7,7 +7,7 @@ using System;
 
 public class vrpn : MonoBehaviour {
 
-	bool kinect = false;//caso leapmotion setar false;
+	public bool kinect;//caso leapmotion setar false;
 	
 	int channels;
 	int centerChannel;

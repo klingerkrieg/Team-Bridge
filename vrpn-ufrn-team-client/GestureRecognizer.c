@@ -116,10 +116,11 @@ bool GestureRecognizer::detectHandTop(TrackerUserCallback *userdata, const vrpn_
 
 	//
 	//...  - 5
-	//1.30 - 4
-	//1.15 - 3
-	//1.0  - 3
-	//0.85 - 2
+	//1.20 - 4
+	//1.10 - 3
+	//1.0  - head
+	//0.80 - 3
+	//0.50 - 2
 	// ... - 1
 	//if (t.sensor == 11)
 	//printf("head:%.2f hand:%.2f\n", lastHeadHeight, t.pos[1]);

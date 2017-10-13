@@ -17,6 +17,8 @@ vrpn_Tracker_Server	*trackerServer;
 vrpn_Tracker_Remote	*trackerRem;
 vrpn_Connection		*connection;
 
+bool print = false;
+
 class tracker_user_callback {
 public:
     char t_name[vrpn_MAX_TEXT_LEN];
@@ -41,10 +43,10 @@ handle_tracker_pos_quat(void *userdata, const vrpn_TRACKERCB t)
         t_data->t_counts.push_back(0);
     }
 
-    /*printf("Tracker %s, sensor [%d]:\n     pos (%5.2f, %5.2f, %5.2f); "
-            "quat (%5.2f, %5.2f, %5.2f, %5.2f)\n",
-            t_data->t_name, t.sensor, t.pos[0], t.pos[1], t.pos[2],
-            t.quat[0], t.quat[1], t.quat[2], t.quat[3]);*/
+	printf("Tracker %s, sensor [%d]:\n     pos (%5.2f, %5.2f, %5.2f); "
+			"quat (%5.2f, %5.2f, %5.2f, %5.2f)\n",
+			t_data->t_name, t.sensor, t.pos[0], t.pos[1], t.pos[2],
+			t.quat[0], t.quat[1], t.quat[2], t.quat[3]);
     
 }
 
@@ -61,7 +63,7 @@ int main (int argc, char * argv []) {
 		return -1;
 	}
 
-	bool print = false;
+	
 	if ( argv[3][0] == 'p' ){
 		print = true;
 	}
@@ -104,7 +106,6 @@ int main (int argc, char * argv []) {
 
 	timeval t;
 	
-
 	if (file) {
 
 		while (1) { 
@@ -112,8 +113,9 @@ int main (int argc, char * argv []) {
 			file = fopen(argv[1], "r");
 
 			while ( fgets (str , 100 , file) != NULL ){
+
 				//Caso seja comentario
-				if (str[0] != 's'){
+				if (str[0] != 's' && str[0] != 'S'){
 					continue;
 				}
 
@@ -124,6 +126,10 @@ int main (int argc, char * argv []) {
 				char * part = strtok (str,"\t");
 				part = strtok (NULL, " \t");
 				int sensor = atoi(part);
+
+				//pula timestamp
+				part = strtok(NULL, " \t");
+				part = strtok(NULL, " \t");
 			
 				//pula pos
 				part = strtok (NULL, " \t");
@@ -169,6 +175,8 @@ int main (int argc, char * argv []) {
 				vrpn_SleepMsecs(1);
 			}
 			fclose(file);
+
+			printf("Endfile\n");
 		}
 		
 	}
