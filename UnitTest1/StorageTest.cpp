@@ -58,7 +58,7 @@ public:
 			"DEV	Tracker0@localhost\n"
 			"DATE	"+st.getDateStr()+"\n"
 			"PATIENT	PAULO\n"
-			"SENSOR	0	TIMESTAMP	1	POS	1	1	1	QUAT	1	1	1	1\n";
+			"SENSOR	0	TIMESTAMP	1	POS	1	1	1	QUAT	0	0	0	1\n";
 
 
 		Assert::AreEqual(templateText.c_str(),text.c_str());
