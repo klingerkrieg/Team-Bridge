@@ -27,22 +27,22 @@ public:
 		double heightSens = 0.15;
 
 		//primeira altura = 1.0
-		Assert::AreEqual(0, gr.detectTopChange(tc1, t, heightSens));
+		Assert::AreEqual(0, gr.detectTopChange(t, heightSens));
 
 		//mantem
 		t.pos[1] = 1.141;
-		Assert::AreEqual(0, gr.detectTopChange(tc1, t, heightSens));
+		Assert::AreEqual(0, gr.detectTopChange(t, heightSens));
 
 		//subiu (devido a problemas com o float do vrpn ele entende como 1.4999)
 		t.pos[1] = 1.151;
-		Assert::AreEqual(1, gr.detectTopChange(tc1, t, heightSens));
+		Assert::AreEqual(1, gr.detectTopChange(t, heightSens));
 
 		//mantem
-		Assert::AreEqual(0, gr.detectTopChange(tc1, t, heightSens));
+		Assert::AreEqual(0, gr.detectTopChange(t, heightSens));
 		
 		//desceu
 		t.pos[1] = 1.0;
-		Assert::AreEqual(-1, gr.detectTopChange(tc1, t, heightSens));
+		Assert::AreEqual(-1, gr.detectTopChange(t, heightSens));
 
 	}
 
@@ -53,22 +53,52 @@ public:
 		t.sensor = 0; //head 1.0
 
 		GestureRecognizer gr = GestureRecognizer();
-		gr.detectLeftHandTop(tc1, t, 5);
+		gr.detectLeftHandTop(t, 5);
 
 		t.sensor = 11; //left hand
 		t.pos[1] = 1.301;
-		Assert::IsTrue(gr.detectHandTop(tc1, t, 5));
+		Assert::IsTrue(gr.detectHandTop(t, 5));
 		t.pos[1] = 1.151;
-		Assert::IsTrue(gr.detectHandTop(tc1, t, 4));
+		Assert::IsTrue(gr.detectHandTop(t, 4));
 		t.pos[1] = 1.05;
-		Assert::IsTrue(gr.detectHandTop(tc1, t, 3));
+		Assert::IsTrue(gr.detectHandTop(t, 3));
 		t.pos[1] = 0.80;
-		Assert::IsTrue(gr.detectHandTop(tc1, t, 2));
+		Assert::IsTrue(gr.detectHandTop(t, 2));
 		t.pos[1] = 0.50;
-		Assert::IsTrue(gr.detectHandTop(tc1, t, 1));
+		Assert::IsTrue(gr.detectHandTop(t, 1));
 
 
 	}
+
+
+
+	TEST_METHOD(GestureRecognizer_detectWalk) {
+		TrackerUserCallback *tc1 = new TrackerUserCallback;
+		strncpy(tc1->name, "Tracker0@localhost", sizeof(tc1->name));
+		vrpn_TRACKERCB t = getTrackerCB();
+		
+
+		GestureRecognizer gr = GestureRecognizer();
+		
+		t.sensor = 13; // usa joelho direito
+		t.pos[1] = 1.0; //inicia
+		Assert::IsFalse(gr.detectWalk(t));
+		t.pos[1] = 1.14; //NAO esta suficientemente levantado
+		Assert::IsFalse(gr.detectWalk(t));
+		t.pos[1] = 1.151;
+		Assert::IsTrue(gr.detectWalk(t));
+		t.pos[1] = 1.0;
+		Assert::IsTrue(gr.detectWalk(t));
+
+		t.sensor = 17; // usa joelho esquerdo
+		t.pos[1] = 1.0; //inicia
+		Assert::IsFalse(gr.detectWalk(t));
+		t.pos[1] = 1.151;
+		Assert::IsTrue(gr.detectWalk(t));
+		t.pos[1] = 1.0;
+		Assert::IsTrue(gr.detectWalk(t));
+	}
+
 
 
 	TEST_METHOD(GestureRecognizer_detectBody) {
@@ -78,24 +108,47 @@ public:
 		t.sensor = 3; // usa bacia
 
 		GestureRecognizer gr = GestureRecognizer();
+		t.pos[0] = 1.0;
+		t.pos[2] = 1.0;
 		gr.setCenterPos(t);
 
 
-		t.pos[2] = 1.14; //NAO esta suficientemente inclinado para frente
-		Assert::IsFalse(gr.detectBodyFront(tc1, t));
+		t.pos[2] = 1.0; //NAO esta suficientemente inclinado para frente
+		Assert::IsFalse(gr.detectBodyFront(t));
 
 		t.pos[2] = 1.16; //inclinado para frente
-		Assert::IsTrue(gr.detectBodyFront(tc1, t));
+		Assert::IsTrue(gr.detectBodyFront(t));
 		t.pos[2] = 0.84; //inclinado para trás
-		Assert::IsTrue(gr.detectBodyBack(tc1, t));
+		Assert::IsTrue(gr.detectBodyBack(t));
 
 		t.pos[0] = 1.16; //inclinado para direita
-		Assert::IsTrue(gr.detectBodyRight(tc1, t));
+		Assert::IsTrue(gr.detectBodyRight(t));
 		t.pos[0] = 0.84; //inclinado para esquerda
-		Assert::IsTrue(gr.detectBodyLeft(tc1, t));
+		Assert::IsTrue(gr.detectBodyLeft(t));
 
 		t.pos[0] = 0.86; //NAO esta suficientemente inclinado para esquerda
-		Assert::IsFalse(gr.detectBodyLeft(tc1, t));
+		Assert::IsFalse(gr.detectBodyLeft(t));
+
+	}
+
+	TEST_METHOD(GestureRecognizer_detectTurn) {
+		TrackerUserCallback *tc1 = new TrackerUserCallback;
+		strncpy(tc1->name, "Tracker0@localhost", sizeof(tc1->name));
+		vrpn_TRACKERCB t = getTrackerCB();
+		t.sensor = 3; // usa bacia
+
+		GestureRecognizer gr = GestureRecognizer();
+		t.quat[2] = 0;
+		gr.setCenterPos(t);
+
+
+		t.quat[2] = 0.14; //NAO esta suficientemente virado
+		Assert::IsFalse(gr.detectTurnRight(t));
+
+		t.quat[2] = 0.151; //girou para direita
+		Assert::IsTrue(gr.detectTurnRight(t));
+		t.quat[2] = -0.151; //girou para esquerda
+		Assert::IsTrue(gr.detectTurnLeft(t));
 
 	}
 

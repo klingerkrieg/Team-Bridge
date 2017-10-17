@@ -89,7 +89,7 @@ bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKE
 
 		//Caso seja reconhecimento de mudanca na altura ele calcula somente uma vez nesse metodo
 		if ( topCalculated == false && (keyMap->getKey() == KINECT_TOP_ADD || keyMap->getKey() == KINECT_TOP_DEC) ) {
-			top = gr.detectTopChange(userdata, t, keyMap->getHeightSens());
+			top = gr.detectTopChange(t, keyMap->getHeightSens());
 			topCalculated = true;
 		}
 
@@ -103,38 +103,51 @@ bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKE
 			interpretKeyMap((*keyMap), t);
 			pressed = true;
 		} else
-		if ( keyMap->getKey() == KINECT_RIGHT_HAND_TOP && gr.detectRightHandTop(userdata, t, keyMap->getHandTopLevel()) ) {
+		if ( keyMap->getKey() == KINECT_RIGHT_HAND_TOP && gr.detectRightHandTop(t, keyMap->getHandTopLevel()) ) {
 			interpretKeyMap((*keyMap), t);
 			pressed = true;
 		} else
-		if ( keyMap->getKey() == KINECT_LEFT_HAND_TOP && gr.detectLeftHandTop(userdata, t, keyMap->getHandTopLevel()) ) {
+		if ( keyMap->getKey() == KINECT_LEFT_HAND_TOP && gr.detectLeftHandTop(t, keyMap->getHandTopLevel()) ) {
 			interpretKeyMap((*keyMap), t);
 			pressed = true;
 		} else //FAST HAND
-		if ( keyMap->getKey() == KINECT_LEFT_HAND_FAST && gr.detectLeftHandFast(userdata, t) ) {
+		if ( keyMap->getKey() == KINECT_LEFT_HAND_FAST && gr.detectLeftHandFast(t) ) {
 			interpretKeyMap((*keyMap), t);
 			pressed = true;
 		} else
-		if ( keyMap->getKey() == KINECT_RIGHT_HAND_FAST && gr.detectRightHandFast(userdata, t) ) {
+		if ( keyMap->getKey() == KINECT_RIGHT_HAND_FAST && gr.detectRightHandFast(t) ) {
 			interpretKeyMap((*keyMap), t);
 			pressed = true;
 		} else //BODY
-		if ( keyMap->getKey() == KINECT_BODY_FRONT && gr.detectBodyFront(userdata, t) ) {
+		if ( keyMap->getKey() == KINECT_BODY_FRONT && gr.detectBodyFront(t) ) {
 			interpretKeyMap((*keyMap), t);
 			pressed = true;
 		} else
-		if ( keyMap->getKey() == KINECT_BODY_RIGHT && gr.detectBodyRight(userdata, t) ) {
+		if ( keyMap->getKey() == KINECT_BODY_RIGHT && gr.detectBodyRight(t) ) {
 			interpretKeyMap((*keyMap), t);
 			pressed = true;
 		} else
-		if ( keyMap->getKey() == KINECT_BODY_LEFT && gr.detectBodyLeft(userdata, t) ) {
+		if ( keyMap->getKey() == KINECT_BODY_LEFT && gr.detectBodyLeft(t) ) {
 			interpretKeyMap((*keyMap), t);
 			pressed = true;
 		} else
-		if ( keyMap->getKey() == KINECT_BODY_BACK && gr.detectBodyBack(userdata, t) ) {
+		if ( keyMap->getKey() == KINECT_BODY_BACK && gr.detectBodyBack(t) ) {
+			interpretKeyMap((*keyMap), t);
+			pressed = true;
+		} else
+		if ( keyMap->getKey() == KINECT_WALK && gr.detectWalk(t) ) {
+			interpretKeyMap((*keyMap), t);
+			pressed = true;
+		} else
+		if ( keyMap->getKey() == KINECT_TURN_LEFT && gr.detectTurnLeft(t) ) {
+			interpretKeyMap((*keyMap), t);
+			pressed = true;
+		} else
+		if ( keyMap->getKey() == KINECT_TURN_RIGHT && gr.detectTurnRight(t) ) {
 			interpretKeyMap((*keyMap), t);
 			pressed = true;
 		}
+			
 
 	}
 

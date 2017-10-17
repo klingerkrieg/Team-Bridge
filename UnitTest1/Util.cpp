@@ -13,7 +13,7 @@ vrpn_TRACKERCB getTrackerCB() {
 	t.msg_time = tv;
 	float pos[3] = { 1.0, 1.0, 1.0 };
 	std::copy(pos, pos + 3, t.pos);
-	float quat[4] = { 1.0, 1.0, 1.0, 1.0 };
+	float quat[4] = { 0.0, 0.0, 0.0, 1.0 };
 	std::copy(quat, quat + 4, t.quat);
 
 	t.sensor = 0;

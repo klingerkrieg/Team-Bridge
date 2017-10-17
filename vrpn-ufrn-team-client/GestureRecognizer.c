@@ -12,17 +12,26 @@ std::map<long, long> GestureRecognizer::lastMemberTime;
 
 double GestureRecognizer::centerPos[2] = { 0,0 };
 
+//17
+double GestureRecognizer::leftKneeLastHeight = 0;
+//13
+double GestureRecognizer::rightKneeLastHeight = 0;
 
-bool GestureRecognizer::detectLeftHandFast(TrackerUserCallback *userdata, const vrpn_TRACKERCB t) {
+double GestureRecognizer::turnZeroQuat = 0;
+
+
+
+
+bool GestureRecognizer::detectLeftHandFast(const vrpn_TRACKERCB t) {
 	if ( t.sensor == 7) {
-		return detectMemberFast(userdata, t);
+		return detectMemberFast(t);
 	}
 	return false;
 }
 
-bool GestureRecognizer::detectRightHandFast(TrackerUserCallback *userdata, const vrpn_TRACKERCB t) {
+bool GestureRecognizer::detectRightHandFast(const vrpn_TRACKERCB t) {
 	if ( t.sensor == 11) {
-		return detectMemberFast(userdata, t);
+		return detectMemberFast(t);
 	}
 	return false;
 }
@@ -45,7 +54,7 @@ double GestureRecognizer::euclidianDistance(std::vector<double> pos1, std::vecto
 
 struct timeval tp;
 
-bool GestureRecognizer::detectMemberFast(TrackerUserCallback *userdata, const vrpn_TRACKERCB t) {
+bool GestureRecognizer::detectMemberFast(const vrpn_TRACKERCB t) {
 	
 	std::vector<double> pos = getLastMemberPos(t.sensor);
 	std::vector<double> actPos = { t.pos[0], t.pos[1], t.pos[2] };
@@ -87,21 +96,21 @@ bool GestureRecognizer::detectMemberFast(TrackerUserCallback *userdata, const vr
 }
 
 
-bool GestureRecognizer::detectLeftHandTop(TrackerUserCallback *userdata, const vrpn_TRACKERCB t, int topLevel) {
+bool GestureRecognizer::detectLeftHandTop(const vrpn_TRACKERCB t, int topLevel) {
 	if ( t.sensor == 7 || t.sensor == 0 ) {
-		return detectHandTop(userdata, t, topLevel);
+		return detectHandTop(t, topLevel);
 	}
 	return false;
 }
 
-bool GestureRecognizer::detectRightHandTop(TrackerUserCallback *userdata, const vrpn_TRACKERCB t, int topLevel) {
+bool GestureRecognizer::detectRightHandTop(const vrpn_TRACKERCB t, int topLevel) {
 	if ( t.sensor == 11 || t.sensor == 0 ) {
-		return detectHandTop(userdata, t, topLevel);
+		return detectHandTop(t, topLevel);
 	}
 	return false;
 }
 
-bool GestureRecognizer::detectHandTop(TrackerUserCallback *userdata, const vrpn_TRACKERCB t, int topLevel) {
+bool GestureRecognizer::detectHandTop(const vrpn_TRACKERCB t, int topLevel) {
 	//pega a posicao da cabeca
 	if ( t.sensor == 0 ) {
 		lastHeadHeight = t.pos[1];
@@ -147,7 +156,7 @@ bool GestureRecognizer::detectHandTop(TrackerUserCallback *userdata, const vrpn_
 	return false;
 }
 
-int GestureRecognizer::detectTopChange(TrackerUserCallback *userdata, const vrpn_TRACKERCB t, double heightSens) {
+int GestureRecognizer::detectTopChange(const vrpn_TRACKERCB t, double heightSens) {
 	if ( t.sensor == 0 ) {
 
 		
@@ -177,11 +186,14 @@ int GestureRecognizer::detectTopChange(TrackerUserCallback *userdata, const vrpn
 }
 
 void GestureRecognizer::setCenterPos(const vrpn_TRACKERCB t) {
-	centerPos[0] = t.pos[0];
-	centerPos[1] = t.pos[2];
+	if ( t.sensor == 3 ) {
+		centerPos[0] = t.pos[0];
+		centerPos[1] = t.pos[2];
+		turnZeroQuat = t.quat[2];
+	}
 }
 
-bool GestureRecognizer::detectBody(TrackerUserCallback *userdata, const vrpn_TRACKERCB t, int direction) {
+bool GestureRecognizer::detectBody(const vrpn_TRACKERCB t, int direction) {
 	if ( t.sensor != 3 ) {
 		return false;
 	}
@@ -201,15 +213,69 @@ bool GestureRecognizer::detectBody(TrackerUserCallback *userdata, const vrpn_TRA
 	return false;
 }
 
-bool GestureRecognizer::detectBodyFront(TrackerUserCallback *userdata, const vrpn_TRACKERCB t) {
-	return detectBody(userdata, t, GEST_FRONT);
+bool GestureRecognizer::detectBodyFront(const vrpn_TRACKERCB t) {
+	return detectBody(t, GEST_FRONT);
 }
-bool GestureRecognizer::detectBodyRight(TrackerUserCallback *userdata, const vrpn_TRACKERCB t) {
-	return detectBody(userdata, t, GEST_RIGHT);
+bool GestureRecognizer::detectBodyRight(const vrpn_TRACKERCB t) {
+	return detectBody(t, GEST_RIGHT);
 }
-bool GestureRecognizer::detectBodyLeft(TrackerUserCallback *userdata, const vrpn_TRACKERCB t) {
-	return detectBody(userdata, t, GEST_LEFT);
+bool GestureRecognizer::detectBodyLeft(const vrpn_TRACKERCB t) {
+	return detectBody(t, GEST_LEFT);
 }
-bool GestureRecognizer::detectBodyBack(TrackerUserCallback *userdata, const vrpn_TRACKERCB t) {
-	return detectBody(userdata, t, GEST_BACK);
+bool GestureRecognizer::detectBodyBack(const vrpn_TRACKERCB t) {
+	return detectBody(t, GEST_BACK);
+}
+
+
+
+
+bool GestureRecognizer::detectWalkHeight(double &kneeLastHeight, const vrpn_TRACKERCB t) {
+	if ( kneeLastHeight == 0 ) {
+		kneeLastHeight = t.pos[1];
+		return false;
+	}
+
+	if ( kneeLastHeight - kneeHeightFactor >= t.pos[1] ) {//abaixou o joelho
+		kneeLastHeight = t.pos[1];
+		return true;
+	} else
+	if ( kneeLastHeight + kneeHeightFactor <= t.pos[1] ) {//levantou o joelho
+		kneeLastHeight = t.pos[1];
+		return true;
+	}
+
+	return false;
+}
+
+
+bool GestureRecognizer::detectWalk(const vrpn_TRACKERCB t) {
+	//17 13
+	if ( t.sensor == 13 ) {
+		return detectWalkHeight(rightKneeLastHeight, t);
+	} else 
+	if ( t.sensor == 17 ) {
+		return detectWalkHeight(leftKneeLastHeight, t);
+	}
+	return false;
+}
+
+
+
+//Z Axis
+bool GestureRecognizer::detectTurnLeft(const vrpn_TRACKERCB t) {
+	if ( t.sensor == 3 ) {
+		if ( t.quat[2] < turnZeroQuat - turnFactor ) {
+			return true;
+		}
+	}
+	return false;
+}
+
+bool GestureRecognizer::detectTurnRight(const vrpn_TRACKERCB t) {
+	if ( t.sensor == 3 ) {
+		if ( t.quat[2] > turnZeroQuat + turnFactor ) {
+			return true;
+		}
+	}
+	return false;
 }
