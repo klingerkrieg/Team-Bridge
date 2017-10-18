@@ -53,19 +53,55 @@ public:
 		t.sensor = 0; //head 1.0
 
 		GestureRecognizer gr = GestureRecognizer();
-		gr.detectLeftHandTop(t, 5);
+		gr.detectRightHandTop(t, 5);
 
-		t.sensor = 11; //left hand
+		t.sensor = 11; //right hand
 		t.pos[1] = 1.301;
-		Assert::IsTrue(gr.detectHandTop(t, 5));
+		Assert::IsTrue(gr.detectRightHandTop(t, 5));
 		t.pos[1] = 1.151;
-		Assert::IsTrue(gr.detectHandTop(t, 4));
+		Assert::IsTrue(gr.detectRightHandTop(t, 4));
 		t.pos[1] = 1.05;
-		Assert::IsTrue(gr.detectHandTop(t, 3));
+		Assert::IsTrue(gr.detectRightHandTop(t, 3));
 		t.pos[1] = 0.80;
-		Assert::IsTrue(gr.detectHandTop(t, 2));
+		Assert::IsTrue(gr.detectRightHandTop(t, 2));
 		t.pos[1] = 0.50;
-		Assert::IsTrue(gr.detectHandTop(t, 1));
+		Assert::IsTrue(gr.detectRightHandTop(t, 1));
+
+
+	}
+
+
+	TEST_METHOD(GestureRecognizer_detectHandXPos) {
+		TrackerUserCallback *tc1 = new TrackerUserCallback;
+		strncpy(tc1->name, "Tracker0@localhost", sizeof(tc1->name));
+		vrpn_TRACKERCB t = getTrackerCB();
+		t.sensor = 0; //head 1.0, 1.0
+
+		GestureRecognizer gr = GestureRecognizer();
+		gr.detectRightHandXPos(t, 0);
+
+		t.sensor = 11; //right hand
+		t.pos[0] = 1.0;
+		Assert::IsTrue(gr.detectRightHandXPos(t, 0));
+		
+		t.pos[0] = 1.101;
+		Assert::IsTrue(gr.detectRightHandXPos(t, 1));
+
+		t.pos[0] = 1.201;
+		Assert::IsTrue(gr.detectRightHandXPos(t, 2));
+
+		t.pos[0] = 1.201;
+		Assert::IsFalse(gr.detectLeftHandXPos(t, 2));
+
+		t.sensor = 7; //left hand
+		t.pos[0] = 0.95;
+		Assert::IsTrue(gr.detectLeftHandXPos(t, 0));
+
+		t.pos[0] = 0.89;
+		Assert::IsTrue(gr.detectLeftHandXPos(t, -1));
+
+		t.pos[0] = 0.79;
+		Assert::IsTrue(gr.detectLeftHandXPos(t, -2));
 
 
 	}

@@ -16,7 +16,14 @@ void ConfigFileReader::printConfig(std::vector<std::string> &devs,
 		if ( it->getShowMsg() != 0 ) {
 			printf("[%s] %d -> [ALERT/MESSAGE] %s \n", it->getDev().c_str(), it->getKey(), it->getMsg().c_str());
 		} else {
-			printf("[%s] %d -> %c\n", it->getDev().c_str(), it->getKey(), it->getToKey());
+			if ( it->getHandXPos() != -100 ) {
+				printf("[%s] %d -> %c - XPOS %d YPOS %d\n", it->getDev().c_str(), it->getKey(), it->getToKey(), it->getHandXPos(), it->getHandTopLevel());
+			} else 
+			if ( it->getHandTopLevel() != -100 ) {
+				printf("[%s] %d -> %c - YPOS %d\n", it->getDev().c_str(), it->getKey(), it->getToKey(), it->getHandTopLevel());
+			} else {
+				printf("[%s] %d -> %c\n", it->getDev().c_str(), it->getKey(), it->getToKey());
+			}
 		}
 	}
 
@@ -33,7 +40,7 @@ bool ConfigFileReader::readConfigFile(char * fileName,
 
 	char *pch;
 	char scrap[LINESIZE];
-	char s1[LINESIZE], s2[LINESIZE], s3[LINESIZE];
+	char s1[LINESIZE], s2[LINESIZE], s3[LINESIZE], s4[LINESIZE];
 	std::string lastDev;
 	std::map<std::string, std::string> configMap;
 	std::string line;
@@ -60,10 +67,14 @@ bool ConfigFileReader::readConfigFile(char * fileName,
 
 			//Pula a primeira string
 			pch += strlen(pch) + 1;
-			if ( sscanf(pch, "%s\t%s\t%s", s1, s2, s3) != 3 ) {
-				if ( sscanf(pch, "%s\t%s", s1, s2) != 2 ) {
-					fprintf(stderr, "Falha ao ler %s linha: %s\n", fileName, line.c_str());
-					return false;
+
+			
+			if ( sscanf(pch, "%s\t%s\t%s\t%s", s1, s2, s3, s4) != 4 ) {
+				if ( sscanf(pch, "%s\t%s\t%s", s1, s2, s3) != 3 ) {
+					if ( sscanf(pch, "%s\t%s", s1, s2) != 2 ) {
+						fprintf(stderr, "Falha ao ler %s linha: %s\n", fileName, line.c_str());
+						return false;
+					}
 				}
 			}
 
@@ -86,6 +97,11 @@ bool ConfigFileReader::readConfigFile(char * fileName,
 
 
 			KeyMap km;
+			if ( strcmp(s4, "") && (!strcmp(s1,"KINECT_RIGHT_HAND_TOP") || !strcmp(s1,"KINECT_LEFT_HAND_TOP")) ) {
+				//Possui s4 e o comando é KINECT_RIGHT_HAND_TOP ou KINECT_LEFT_HAND_TOP
+				//a configuracao deve estar na seguinte ordem KEY KINECT_RIGHT_HAND_TOP		BTN		XPOS	YPOS
+				km = KeyMap(lastDev, s1, s2, s3, s4);
+			} else
 			if ( !strcmp(s3, "") ) {
 				//Adiciona um mapeamento de input
 				km = KeyMap(lastDev, s1, s2);
@@ -94,8 +110,9 @@ bool ConfigFileReader::readConfigFile(char * fileName,
 				km = KeyMap(lastDev, s1, s2, s3);
 			}
 
-			//zera a s3
+			//zera s3 e s4
 			strcpy(s3, "");
+			strcpy(s4, "");
 
 			map.push_back(km);
 		} else

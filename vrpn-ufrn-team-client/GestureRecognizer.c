@@ -3,6 +3,9 @@
 double GestureRecognizer::lastHeight = 0;
 bool GestureRecognizer::lastHeightDefined = false;
 
+double GestureRecognizer::lastHeadXPos = 0;
+bool GestureRecognizer::lastHeadXPosDefined = false;
+
 double GestureRecognizer::lastHeadHeight = 0;
 bool GestureRecognizer::lastHeadHeightDefined = false;
 
@@ -107,6 +110,56 @@ bool GestureRecognizer::detectRightHandTop(const vrpn_TRACKERCB t, int topLevel)
 	if ( t.sensor == 11 || t.sensor == 0 ) {
 		return detectHandTop(t, topLevel);
 	}
+	return false;
+}
+
+
+bool GestureRecognizer::detectLeftHandXPos(const vrpn_TRACKERCB t, int xPos) {
+	if ( t.sensor == 7 || t.sensor == 0 ) {
+		return detectHandXPos(t, xPos);
+	}
+	return false;
+}
+
+bool GestureRecognizer::detectRightHandXPos(const vrpn_TRACKERCB t, int xPos) {
+	if ( t.sensor == 11 || t.sensor == 0 ) {
+		return detectHandXPos(t, xPos);
+	}
+	return false;
+}
+
+bool GestureRecognizer::detectHandXPos(const vrpn_TRACKERCB t, int xPos) {
+	//pega a posicao da cabeca
+	if ( t.sensor == 0 ) {
+		lastHeadXPos = t.pos[0];
+		lastHeadXPosDefined = true;
+		return false;
+	}
+
+	if ( lastHeadXPosDefined == false ) {
+		return false;
+	}
+
+
+	if ( t.pos[0] > lastHeadXPos + (handXPosInterval * 2) && xPos == 2 ) {
+		return true;
+	} else
+	if ( t.pos[0] <= lastHeadXPos + (handXPosInterval * 2) &&
+		t.pos[0] > lastHeadXPos + handXPosInterval && xPos == 1 ) {
+		return true;
+	} else
+	if ( t.pos[0] <= lastHeadXPos + handXPosInterval &&
+		t.pos[0] > lastHeadXPos - handXPosInterval && xPos == 0 ) {
+		return true;
+	} else
+	if ( t.pos[0] <= lastHeadXPos - handXPosInterval &&
+		t.pos[0] > lastHeadXPos - (handXPosInterval *2) && xPos == -1 ) {
+		return true;
+	} else
+	if ( t.pos[0] <= lastHeadXPos - (handXPosInterval * 2) && xPos == -2 ) {
+		return true;
+	}
+
 	return false;
 }
 

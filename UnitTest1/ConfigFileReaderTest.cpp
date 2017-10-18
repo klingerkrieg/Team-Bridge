@@ -46,25 +46,35 @@ public:
 	}
 
 	TEST_METHOD(ConfigFileReader_MapsOk) {
+
+		int i = 0;
 		
 		KeyMap m1 = KeyMap("Tracker0@localhost", "KINECT_TOP_ADD", "A", "0.15");
-		Assert::AreEqual(m1.toString(), map.at(0).toString());
+		Assert::AreEqual(m1.toString(), map.at(i++).toString());
 		m1 = KeyMap("Tracker0@localhost", "KINECT_TOP_DEC", "D", "0.15");
-		Assert::AreEqual(m1.toString(), map.at(1).toString());
+		Assert::AreEqual(m1.toString(), map.at(i++).toString());
+
+		m1 = KeyMap("Tracker0@localhost", "KINECT_LEFT_HAND_TOP", "O", "5");
+		Assert::AreEqual(m1.toString(), map.at(i++).toString());
+
+		m1 = KeyMap("Tracker0@localhost", "KINECT_RIGHT_HAND_TOP", "9", "2", "3");
+		Assert::AreEqual(m1.toString(), map.at(i++).toString());
 
 		m1 = KeyMap("Mouse0@localhost", "VK_LBUTTON", "A");
-		Assert::AreEqual(m1.toString(), map.at(2).toString());
+		Assert::AreEqual(m1.toString(), map.at(i++).toString());
 		m1 = KeyMap("Mouse0@localhost", "VK_MBUTTON", "VK_LEFT");
-		Assert::AreEqual(m1.toString(), map.at(3).toString());
+		Assert::AreEqual(m1.toString(), map.at(i++).toString());
 		m1 = KeyMap("Mouse0@localhost", "VK_RBUTTON", "B");
-		Assert::AreEqual(m1.toString(), map.at(4).toString());
+		Assert::AreEqual(m1.toString(), map.at(i++).toString());
 
 		m1 = KeyMap("Keyboard0@localhost", "1", "1");
-		Assert::AreEqual(m1.toString(), map.at(5).toString());
+		Assert::AreEqual(m1.toString(), map.at(i++).toString());
 		m1 = KeyMap("Keyboard0@localhost", "A", "B");
-		Assert::AreEqual(m1.toString(), map.at(6).toString());
+		Assert::AreEqual(m1.toString(), map.at(i++).toString());
 		m1 = KeyMap("Keyboard0@localhost", "VK_LEFT", "VK_LEFT");
-		Assert::AreEqual(m1.toString(), map.at(7).toString());
+		Assert::AreEqual(m1.toString(), map.at(i++).toString());
+
+		
 	}
 
 	

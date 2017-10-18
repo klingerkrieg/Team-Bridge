@@ -104,12 +104,32 @@ bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKE
 			pressed = true;
 		} else
 		if ( keyMap->getKey() == KINECT_RIGHT_HAND_TOP && gr.detectRightHandTop(t, keyMap->getHandTopLevel()) ) {
-			interpretKeyMap((*keyMap), t);
-			pressed = true;
+			//Caso o xpos seja != -100 quer dizer que a posição X tabém é requerida para esse comando
+			bool canPress = true;
+			if ( keyMap->getHandXPos() != -100 ) {
+				canPress = false;
+				if ( gr.detectRightHandXPos(t, keyMap->getHandXPos())) {
+					canPress = true;
+				}
+			}
+			if ( canPress ) {
+				interpretKeyMap((*keyMap), t);
+				pressed = true;
+			}
+			
 		} else
 		if ( keyMap->getKey() == KINECT_LEFT_HAND_TOP && gr.detectLeftHandTop(t, keyMap->getHandTopLevel()) ) {
-			interpretKeyMap((*keyMap), t);
-			pressed = true;
+			bool canPress = true;
+			if ( keyMap->getHandXPos() != -100 ) {
+				canPress = false;
+				if ( gr.detectLeftHandXPos(t, keyMap->getHandXPos()) ) {
+					canPress = true;
+				}
+			}
+			if ( canPress ) {
+				interpretKeyMap((*keyMap), t);
+				pressed = true;
+			}
 		} else //FAST HAND
 		if ( keyMap->getKey() == KINECT_LEFT_HAND_FAST && gr.detectLeftHandFast(t) ) {
 			interpretKeyMap((*keyMap), t);

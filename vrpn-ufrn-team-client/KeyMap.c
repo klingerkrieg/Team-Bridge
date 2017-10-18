@@ -21,6 +21,15 @@ KeyMap::KeyMap(std::string dev, int key, char toKey) {
 	this->toKey = toKey;
 }
 
+
+KeyMap::KeyMap(std::string dev, char key[SSIZE], char toKey[SSIZE], char config[SSIZE], char config2[SSIZE]) : KeyMap(dev, key, toKey, config2) {
+	//Unico caso que isso acontecera é com o comando KINECT_LEFT_HAND_TOP ou KINECT_RIGHT_HAND_TOP
+	//a configuracao deve estar na seguinte ordem KEY KINECT_RIGHT_HAND_TOP		BTN		XPOS	YPOS
+
+	//Salva o XPOS
+	handXPos = atoi(config);
+}
+
 KeyMap::KeyMap(std::string dev, char key[SSIZE], char toKey[SSIZE], char config[SSIZE]) {
 
 	//Cria normalmente

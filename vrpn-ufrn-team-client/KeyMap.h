@@ -39,8 +39,8 @@ private:
 
 	std::string msg;
 
-	//handTopLevel
-	int handTopLevel;
+	int handTopLevel = -100;
+	int handXPos = -100;
 
 	void init(std::string dev, char key[SSIZE], char toKey[SSIZE]);
 
@@ -78,6 +78,10 @@ public:
 		return handTopLevel;
 	}
 
+	int getHandXPos() {
+		return handXPos;
+	}
+
 	int getShowMsg() {
 		return showMsg;
 	}
@@ -94,6 +98,7 @@ public:
 	KeyMap(std::string dev, int key, char toKey);
 	KeyMap(std::string dev, char key[SSIZE], char toKey[SSIZE]);
 	KeyMap(std::string dev, char key[SSIZE], char toKey[SSIZE], char config[SSIZE]);
+	KeyMap(std::string dev, char key[SSIZE], char toKey[SSIZE], char config[SSIZE], char config2[SSIZE]);
 
 
 

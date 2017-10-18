@@ -21,6 +21,12 @@ private:
 	static bool lastHeadHeightDefined;
 	double handTopInterval = 0.10;
 
+
+	static double lastHeadXPos;
+	static bool lastHeadXPosDefined;
+	double handXPosInterval = 0.10;
+	
+
 	//usado para detectBody
 	static double centerPos[2];
 	double bodyCenterDistance = 0.15;
@@ -40,10 +46,15 @@ private:
 	static double rightKneeLastHeight;
 	double kneeHeightFactor = 0.15;
 
-	bool detectWalkHeight(double &kneeLastHeight, const vrpn_TRACKERCB t);
-
+	
 	double turnFactor = 0.15;
 	static double turnZeroQuat;
+
+	bool detectWalkHeight(double &kneeLastHeight, const vrpn_TRACKERCB t);
+	bool detectBody(const vrpn_TRACKERCB t, int direction);
+	bool detectMemberFast(const vrpn_TRACKERCB t);
+
+	bool detectHandTop(const vrpn_TRACKERCB t, int topLevel);
 
 public:
 
@@ -56,7 +67,6 @@ public:
 
 	bool detectRightHandTop(const vrpn_TRACKERCB t, int topLevel);
 
-	bool detectHandTop(const vrpn_TRACKERCB t, int topLevel);
 
 	int detectTopChange(const vrpn_TRACKERCB t, double heightSens);
 
@@ -64,10 +74,8 @@ public:
 
 	bool detectRightHandFast(const vrpn_TRACKERCB t);
 
-	bool detectMemberFast(const vrpn_TRACKERCB t);
+	
 
-
-	bool detectBody(const vrpn_TRACKERCB t, int direction);
 
 	bool detectBodyFront(const vrpn_TRACKERCB t);
 	bool detectBodyRight(const vrpn_TRACKERCB t);
@@ -82,6 +90,12 @@ public:
 
 	bool detectTurnLeft(const vrpn_TRACKERCB t);
 	bool detectTurnRight(const vrpn_TRACKERCB t);
+
+
+
+	bool GestureRecognizer::detectLeftHandXPos(const vrpn_TRACKERCB t, int xPos);
+	bool GestureRecognizer::detectRightHandXPos(const vrpn_TRACKERCB t, int xPos);
+	bool GestureRecognizer::detectHandXPos(const vrpn_TRACKERCB t, int xPos);
 	
 
 };
