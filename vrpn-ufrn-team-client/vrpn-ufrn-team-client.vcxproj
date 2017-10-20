@@ -168,6 +168,7 @@
     <ClCompile Include="InputConverter.c" />
     <ClCompile Include="KeyMap.c" />
     <ClCompile Include="Storage.c" />
+    <ClCompile Include="util.c" />
     <ClCompile Include="View.c" />
   </ItemGroup>
   <ItemGroup>
@@ -178,6 +179,7 @@
     <ClInclude Include="DeviceInfo.h" />
     <ClInclude Include="FileParser.h" />
     <ClInclude Include="GestureRecognizer.h" />
+    <ClInclude Include="util.h" />
     <ClInclude Include="InputConverter.h" />
     <ClInclude Include="KeyMap.h" />
     <ClInclude Include="Storage.h" />

@@ -1,10 +1,20 @@
 #pragma once
 #include <map>
 #include <string>
+#include <vector>
 #include <Windows.h>
 #include <iostream>
 
+#include "util.h"
+
+
 static const int SSIZE = 512;
+
+const int VK_MOUSEMOVE = 4000;
+const int VK_LBUTTON_DOWN = 4001;
+const int VK_LBUTTON_UP = 4002;
+const int VK_RBUTTON_DOWN = 4003;
+const int VK_RBUTTON_UP = 4004;
 
 const int KINECT_TOP_ADD = 5001;
 const int KINECT_TOP_DEC = 5002;
@@ -28,11 +38,18 @@ const int ALERT = 6001;
 class KeyMap {
 private:
 	std::string dev;
+
+	std::string keyRepr;
+	std::string toKeyRepr;
+
 	int key;
-	char toKey;
+	int toKey;
 	int showMsg = 0;
 	bool toKeyIsConstant = false;
 	bool determineCenterPos = false;
+
+	int x = 0;
+	int y = 0;
 
 	//sensibilidade para mudanca de altura
 	double heightSens = 0.15;
@@ -49,8 +66,22 @@ public:
 	
 	int scan2ascii(DWORD scancode, USHORT* result);
 
-	std::string toString() {
-		return dev + " " + std::to_string(key) + " " + toKey + " " + std::to_string(toKeyIsConstant) + " " + std::to_string(heightSens);
+	std::string getKeyRepr() {
+		return keyRepr;
+	}
+
+	std::string getToKeyRepr() {
+		return toKeyRepr;
+	}
+
+	std::string toString();
+
+	int getX() {
+		return x;
+	}
+
+	int getY() {
+		return y;
 	}
 
 
@@ -58,7 +89,7 @@ public:
 		return key;
 	}
 
-	char getToKey() {
+	int getToKey() {
 		return toKey;
 	}
 
@@ -96,9 +127,7 @@ public:
 
 	KeyMap(){}
 	KeyMap(std::string dev, int key, char toKey);
-	KeyMap(std::string dev, char key[SSIZE], char toKey[SSIZE]);
-	KeyMap(std::string dev, char key[SSIZE], char toKey[SSIZE], char config[SSIZE]);
-	KeyMap(std::string dev, char key[SSIZE], char toKey[SSIZE], char config[SSIZE], char config2[SSIZE]);
+	KeyMap(std::string dev, std::string config);
 
 
 
@@ -114,9 +143,6 @@ public:
 
 		std::map < std::string, int > m;
 
-		m["WM_LBUTTONDOWN"] = WM_LBUTTONDOWN;
-		m["WM_RBUTTONDOWN"] = WM_RBUTTONDOWN;
-		m["WM_MBUTTONDOWN"] = WM_MBUTTONDOWN;
 		m["VK_ESCAPE"] = VK_ESCAPE;
 		m["VK_UP"] = VK_UP;
 		m["VK_DOWN"] = VK_DOWN;
@@ -163,11 +189,15 @@ public:
 		m["VK_RMENU"] = VK_RMENU;
 		m["VK_LAUNCH_MAIL"] = VK_LAUNCH_MAIL;
 
+
 		//nao e possivel gerar eventos de mouse ainda
-		//m["VK_LBUTTON"] = VK_LBUTTON;
-		//m["VK_MBUTTON"] = VK_MBUTTON;
-		//m["VK_RBUTTON"] = VK_RBUTTON;
-			
+		m["VK_LBUTTON"] = VK_LBUTTON;
+		m["VK_MBUTTON"] = VK_MBUTTON;
+		m["VK_RBUTTON"] = VK_RBUTTON;
+		m["VK_LBUTTON_DOWN"] = VK_LBUTTON_DOWN;
+		m["VK_LBUTTON_UP"] = VK_LBUTTON_UP;
+		m["VK_RBUTTON_DOWN"] = VK_RBUTTON_DOWN;
+		m["VK_RBUTTON_UP"] = VK_RBUTTON_UP;
 		
 		return m;
 	}

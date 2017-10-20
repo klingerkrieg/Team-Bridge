@@ -12,6 +12,7 @@
 #include <vrpn_Button.h>         // for vrpn_Button_Remote, etc
 #include <Tchar.h>
 #include "View.h"
+#include "util.h"
 
 class InputConverter {
 private:
@@ -47,7 +48,7 @@ public:
 		gr = GestureRecognizer();
 	}
 	
-	 void press(char key, bool isConstant);
+	 void press(KeyMap key);
 
 	 void interpretKeyMap(KeyMap keyMap, const vrpn_TRACKERCB t);
 
