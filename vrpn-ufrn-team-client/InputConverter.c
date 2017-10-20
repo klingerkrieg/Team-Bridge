@@ -1,80 +1,148 @@
 #include "InputConverter.h"
 
 int InputConverter::lastTimeTrack = 0;
+bool InputConverter::nextDefineCenterPos = false;
 
+bool InputConverter::mouseLeftPressed = false;
+bool InputConverter::mouseRightPressed = false;
+bool InputConverter::mouseMiddlePressed = false;
 
 void InputConverter::press(KeyMap key) {
 
 	printf("Press: %s ", key.getToKeyRepr().c_str());
 
-	if ( app != "" ) {
-
-		HWND window = FindWindow(_T(app.c_str()), NULL);
-		if ( window ) {
-			HWND edit = FindWindowEx(window, NULL, _T("Edit"), NULL);
-			printf(" em %s.\n", app.c_str());
-			if ( key.getToKeyIsConstant() ) {
-				PostMessage(edit, WM_KEYDOWN, key.getToKey(), 0);
-			} else {
-				PostMessage(edit, WM_KEYDOWN, VkKeyScanEx(key.getToKey(), GetKeyboardLayout(0)), 0);
-			}
-			return;
-		}
-
-	}
-	printf(" no Windows.\n");
+	
+	
 
 	if ( key.getToKey() == VK_RBUTTON || key.getToKey() == VK_LBUTTON || key.getToKey() == VK_MBUTTON
 		|| key.getToKey() == VK_MOUSEMOVE
 		|| key.getToKey() == VK_RBUTTON_DOWN || key.getToKey() == VK_LBUTTON_DOWN
-		|| key.getToKey() == VK_RBUTTON_UP || key.getToKey() == VK_LBUTTON_UP ) {
+		|| key.getToKey() == VK_RBUTTON_UP || key.getToKey() == VK_LBUTTON_UP
+		|| key.getToKey() == VK_MBUTTON_UP || key.getToKey() == VK_MBUTTON_UP ) {
+
+		printf(" no Windows.\n");
 
 		INPUT input, inputUp;
 		input.type = INPUT_MOUSE;//Ele automaticamente soma com a posicao atual do mouse
 		inputUp.type = INPUT_MOUSE;
+
+		input.mi.mouseData = 0;
+		input.mi.time = 0;
+		inputUp.mi.mouseData = 0;
+		inputUp.mi.time = 0;
 		
 		if ( key.getToKey() == VK_MOUSEMOVE ) {
 			input.mi.dwFlags = MOUSEEVENTF_MOVE;
 			input.mi.dx = key.getX();
 			input.mi.dy = key.getY();
-			std::cout << "move to x:" << input.mi.dx << "y:" << input.mi.dy << "\n";
+			//std::cout << "move to x:" << input.mi.dx << "y:" << input.mi.dy << "\n";
 		} else
 		if ( key.getToKey() == VK_RBUTTON || key.getToKey() == VK_RBUTTON_DOWN ) {
 			input.mi.dwFlags = MOUSEEVENTF_RIGHTDOWN;
 			inputUp.mi.dwFlags = MOUSEEVENTF_RIGHTUP;
+			//Se o botao ja esta pressionado nao pressiona de novo
+			if ( mouseRightPressed ) {
+				return;
+			}
+			mouseRightPressed = true;
 		} else 
 		if ( key.getToKey() == VK_LBUTTON || key.getToKey() == VK_LBUTTON_DOWN ) {
 			input.mi.dwFlags = MOUSEEVENTF_LEFTDOWN;
 			inputUp.mi.dwFlags = MOUSEEVENTF_LEFTUP;
+			//Se o botao ja esta pressionado nao pressiona de novo
+			if ( mouseLeftPressed ) {
+				return;
+			}
+			mouseLeftPressed = true;
 		} else 
-		if ( key.getToKey() == VK_MBUTTON ) {
+		if ( key.getToKey() == VK_MBUTTON || key.getToKey() == VK_MBUTTON_DOWN ) {
 			input.mi.dwFlags = MOUSEEVENTF_MIDDLEDOWN;
 			inputUp.mi.dwFlags = MOUSEEVENTF_MIDDLEUP;
+			if ( mouseMiddlePressed ) {
+				return;
+			}
+			mouseMiddlePressed = true;
 		} else 
 		if ( key.getToKey() == VK_RBUTTON_UP ) {
 			input.mi.dwFlags = MOUSEEVENTF_RIGHTUP;
+			//Se o botao nao esta pressionado, nao tem nada pra despressionar
+			if ( mouseRightPressed == false ) {
+				return;
+			}
+			mouseRightPressed = false;
 		} else 
 		if ( key.getToKey() == VK_LBUTTON_UP ) {
 			input.mi.dwFlags = MOUSEEVENTF_LEFTUP;
+			if ( mouseLeftPressed == false ) {
+				return;
+			}
+			mouseLeftPressed = false;
+		} else 
+		if ( key.getToKey() == VK_MBUTTON_UP ) {
+			input.mi.dwFlags = MOUSEEVENTF_MIDDLEUP;
+			if ( mouseMiddlePressed == false ) {
+				return;
+			}
+			mouseMiddlePressed = false;
 		}
 
 		/*input.mi.mouseData = 0;
 		input.mi.dwExtraInfo = NULL;
 		input.mi.time = 0;*/
-		printf("press\n");
 		SendInput(1, &input, sizeof(INPUT));
 		ZeroMemory(&input, sizeof(INPUT));
 		//So vai pressionar o soltar se for o evento normal
 		if ( key.getToKey() == VK_RBUTTON || key.getToKey() == VK_LBUTTON || key.getToKey() == VK_MBUTTON ) {
-			printf("autoup\n");
 			SendInput(1, &inputUp, sizeof(INPUT));
 			ZeroMemory(&inputUp, sizeof(INPUT));
+
+			//Caso tenha sido os dois eventos em um só
+			if ( key.getToKey() == VK_LBUTTON ) {
+				mouseLeftPressed = false;
+			} else
+			if ( key.getToKey() == VK_RBUTTON ) {
+				mouseRightPressed = false;
+			} else
+			if ( key.getToKey() == VK_MBUTTON ) {
+				mouseMiddlePressed = false;
+			}
 		}
 		
 	} else {
-		printf("press tecla");
+
+		if ( app != "" ) {
+			//Não irá funcionar em jogos com DirectInput, para funcionar não use APP
+			//HWND window = FindWindow(_T(app.c_str()), NULL);
+			HWND window = FindWindowA(NULL, app.c_str());
+			if ( window ) {
+				HWND edit = FindWindowEx(window, NULL, _T("Edit"), NULL);
+				printf(" em %s.\n", app.c_str());
+				if ( key.getToKeyIsConstant() ) {
+					PostMessage(edit, WM_KEYDOWN, key.getToKey(), 0);
+				} else {
+					PostMessage(edit, WM_KEYDOWN, VkKeyScanEx(key.getToKey(), GetKeyboardLayout(0)), 0);
+				}
+				return;
+			}
+
+		}
+
+		printf(" no Windows.\n");
 		//Caso nenhum app tenha sido configurado ou encontrado lanca evento no windows
-		keybd_event(key.getToKey(), 0, 0, 0);
+		//keybd_event(key.getToKey(), 0, 0, 0);
+		INPUT input;
+		WORD vkey = key.getToKey();
+		input.type = INPUT_KEYBOARD;
+		input.ki.wScan = MapVirtualKey(vkey, MAPVK_VK_TO_VSC);
+		input.ki.time = 0;
+		input.ki.dwExtraInfo = 0;
+		input.ki.wVk = vkey;
+		input.ki.dwFlags = 0;// there is no KEYEVENTF_KEYDOWN
+		SendInput(1, &input, sizeof(INPUT));
+		//Um delay para o game realizar a acao
+		Sleep(100);
+		input.ki.dwFlags = KEYEVENTF_KEYUP;
+		SendInput(1, &input, sizeof(INPUT));
 	}
 
 }
@@ -104,8 +172,11 @@ keybd_event(key, 0, KEYEVENTF_KEYUP, 0);
 */
 
 void InputConverter::interpretKeyMap(KeyMap keyMap, const vrpn_TRACKERCB t) {
+
+	
 	if ( keyMap.getDetermineCenterPos() ) {
-		gr.setCenterPos(t);
+		nextDefineCenterPos = true;
+		
 	} else
 	if ( keyMap.getShowMsg() == 0 ) {
 		press(keyMap);
@@ -135,10 +206,21 @@ bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKE
 	bool topCalculated = false;
 	bool pressed = false;
 
-	if (t.sensor == 3)
-	printf("%.2f\n", t.pos[0]);//0.15 diferenca para movimentos com o corpo
+	//if (t.sensor == 3)
+	//printf("%.2f\n", t.pos[0]);//0.15 diferenca para movimentos com o corpo
 
 	for ( std::vector<KeyMap>::iterator keyMap = map.begin(); keyMap != map.end(); ++keyMap ) {
+
+		//Caso seja para definir uma posicao central
+		if ( nextDefineCenterPos ) {
+			//o sensor esperado é definido dentro do metodo, aqui todos os sensores são enviados
+			if ( gr.setCenterPos(t) ) {
+				printf("Posicao definida.\n");
+				nextDefineCenterPos = false;
+				if ( viewOn )
+					view->showMsg("Posição definida.");
+			}
+		}
 
 		//Caso seja reconhecimento de mudanca na altura ele calcula somente uma vez nesse metodo
 		if ( topCalculated == false && (keyMap->getKey() == KINECT_TOP_ADD || keyMap->getKey() == KINECT_TOP_DEC) ) {

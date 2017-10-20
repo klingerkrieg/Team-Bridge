@@ -15,6 +15,8 @@ const int VK_LBUTTON_DOWN = 4001;
 const int VK_LBUTTON_UP = 4002;
 const int VK_RBUTTON_DOWN = 4003;
 const int VK_RBUTTON_UP = 4004;
+const int VK_MBUTTON_DOWN = 4005;
+const int VK_MBUTTON_UP = 4006;
 
 const int KINECT_TOP_ADD = 5001;
 const int KINECT_TOP_DEC = 5002;
@@ -198,6 +200,9 @@ public:
 		m["VK_LBUTTON_UP"] = VK_LBUTTON_UP;
 		m["VK_RBUTTON_DOWN"] = VK_RBUTTON_DOWN;
 		m["VK_RBUTTON_UP"] = VK_RBUTTON_UP;
+		m["VK_MBUTTON_DOWN"] = VK_MBUTTON_DOWN;
+		m["VK_MBUTTON_UP"] = VK_MBUTTON_UP;
+
 		
 		return m;
 	}

@@ -79,7 +79,7 @@ KeyMap::KeyMap(std::string dev, std::string config) {
 				}
 
 				if ( contains(options.at(1), ",") ) {
-					options = split((*it), ",");
+					options = split(options.at(1), ",");
 					//salva x e y
 					handXPos = atoi(options.at(0).c_str());
 					handTopLevel = atoi(options.at(1).c_str());

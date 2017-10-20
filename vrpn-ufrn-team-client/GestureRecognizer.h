@@ -24,10 +24,11 @@ private:
 
 	static double lastHeadXPos;
 	static bool lastHeadXPosDefined;
-	double handXPosInterval = 0.10;
+	double handXPosInterval = 0.25;
 	
 
 	//usado para detectBody
+	static bool centerPosDefined;
 	static double centerPos[2];
 	double bodyCenterDistance = 0.15;
 
@@ -47,7 +48,7 @@ private:
 	double kneeHeightFactor = 0.15;
 
 	
-	double turnFactor = 0.15;
+	double turnFactor = 0.07;
 	static double turnZeroQuat;
 
 	bool detectWalkHeight(double &kneeLastHeight, const vrpn_TRACKERCB t);
@@ -82,7 +83,7 @@ public:
 	bool detectBodyLeft(const vrpn_TRACKERCB t);
 	bool detectBodyBack(const vrpn_TRACKERCB t);
 
-	void setCenterPos(const vrpn_TRACKERCB t);
+	bool setCenterPos(const vrpn_TRACKERCB t);
 
 
 	bool detectWalk(const vrpn_TRACKERCB t);

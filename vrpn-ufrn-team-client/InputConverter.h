@@ -20,9 +20,15 @@ private:
 	 std::string app;
 	 GestureRecognizer gr;
 
+	 static bool nextDefineCenterPos;
+
 	 bool viewOn = false;
 	 View *view;
 	 static int lastTimeTrack;
+
+	 static bool mouseLeftPressed;
+	 static bool mouseRightPressed;
+	 static bool mouseMiddlePressed;
 
 public:
 

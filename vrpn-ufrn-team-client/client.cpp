@@ -249,17 +249,16 @@ void Usage(const char *arg0) {
 }
 
 
-
-
-//int main(int argc, char *argv[]) {
-
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
+
 	//Devido a utilizacao do WinMain o cmd nao aparecerá
 	//os seguintes comandos são para criar uma nova janela do cmd
 	AllocConsole();
 	freopen("conin$", "r", stdin);
 	freopen("conout$", "w", stdout);
 	freopen("conout$", "w", stderr);
+
+	
 	
 
 	View view = View(hInstance);

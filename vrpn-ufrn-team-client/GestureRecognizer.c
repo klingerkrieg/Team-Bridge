@@ -12,7 +12,7 @@ bool GestureRecognizer::lastHeadHeightDefined = false;
 std::map<int, std::vector<double>> GestureRecognizer::lastMemberPos;
 std::map<long, long> GestureRecognizer::lastMemberTime;
 
-
+bool GestureRecognizer::centerPosDefined = false;
 double GestureRecognizer::centerPos[2] = { 0,0 };
 
 //17
@@ -21,8 +21,6 @@ double GestureRecognizer::leftKneeLastHeight = 0;
 double GestureRecognizer::rightKneeLastHeight = 0;
 
 double GestureRecognizer::turnZeroQuat = 0;
-
-
 
 
 bool GestureRecognizer::detectLeftHandFast(const vrpn_TRACKERCB t) {
@@ -113,7 +111,9 @@ bool GestureRecognizer::detectRightHandTop(const vrpn_TRACKERCB t, int topLevel)
 	return false;
 }
 
-
+/**
+* Esse metodo depende do detectHandTop, ele deve ser chamado primeiro para captura da posicao central
+*/
 bool GestureRecognizer::detectLeftHandXPos(const vrpn_TRACKERCB t, int xPos) {
 	if ( t.sensor == 7 || t.sensor == 0 ) {
 		return detectHandXPos(t, xPos);
@@ -121,6 +121,9 @@ bool GestureRecognizer::detectLeftHandXPos(const vrpn_TRACKERCB t, int xPos) {
 	return false;
 }
 
+/**
+* Esse metodo depende do detectHandTop, ele deve ser chamado primeiro para captura da posicao central
+*/
 bool GestureRecognizer::detectRightHandXPos(const vrpn_TRACKERCB t, int xPos) {
 	if ( t.sensor == 11 || t.sensor == 0 ) {
 		return detectHandXPos(t, xPos);
@@ -128,18 +131,16 @@ bool GestureRecognizer::detectRightHandXPos(const vrpn_TRACKERCB t, int xPos) {
 	return false;
 }
 
+/**
+* Esse metodo depende do detectHandTop, ele deve ser chamado primeiro para captura da posicao central
+*/
 bool GestureRecognizer::detectHandXPos(const vrpn_TRACKERCB t, int xPos) {
-	//pega a posicao da cabeca
-	if ( t.sensor == 0 ) {
-		lastHeadXPos = t.pos[0];
-		lastHeadXPosDefined = true;
-		return false;
-	}
-
+	
 	if ( lastHeadXPosDefined == false ) {
 		return false;
 	}
 
+	//printf("%.2f > %.2f + %.2f | %d\n", t.pos[0], lastHeadXPos, (handXPosInterval * 2), xPos);
 
 	if ( t.pos[0] > lastHeadXPos + (handXPosInterval * 2) && xPos == 2 ) {
 		return true;
@@ -168,6 +169,10 @@ bool GestureRecognizer::detectHandTop(const vrpn_TRACKERCB t, int topLevel) {
 	if ( t.sensor == 0 ) {
 		lastHeadHeight = t.pos[1];
 		lastHeadHeightDefined = true;
+
+		//pega a posicao da cabeca para calcular xpos tambem, porque xpos depende de handtop
+		lastHeadXPos = t.pos[0];
+		lastHeadXPosDefined = true;
 		return false;
 	}
 
@@ -238,12 +243,16 @@ int GestureRecognizer::detectTopChange(const vrpn_TRACKERCB t, double heightSens
 	return 0;
 }
 
-void GestureRecognizer::setCenterPos(const vrpn_TRACKERCB t) {
+bool GestureRecognizer::setCenterPos(const vrpn_TRACKERCB t) {
 	if ( t.sensor == 3 ) {
 		centerPos[0] = t.pos[0];
-		centerPos[1] = t.pos[2];
+		centerPos[1] = t.pos[1];
+		centerPos[2] = t.pos[2];
 		turnZeroQuat = t.quat[2];
+		centerPosDefined = true;
+		return true;
 	}
+	return false;
 }
 
 bool GestureRecognizer::detectBody(const vrpn_TRACKERCB t, int direction) {
@@ -251,11 +260,15 @@ bool GestureRecognizer::detectBody(const vrpn_TRACKERCB t, int direction) {
 		return false;
 	}
 
+	if ( centerPosDefined == false ) {
+		return false;
+	}
+
 	if ( direction == GEST_FRONT ) {
-		return t.pos[2] > centerPos[1] + bodyCenterDistance;
+		return t.pos[2] < centerPos[2] - bodyCenterDistance;
 	} else
 	if ( direction == GEST_BACK ) {
-		return t.pos[2] < centerPos[1] - bodyCenterDistance;
+		return t.pos[2] > centerPos[2] + bodyCenterDistance;
 	} else
 	if ( direction == GEST_RIGHT ) {
 		return t.pos[0] > centerPos[0] + bodyCenterDistance;

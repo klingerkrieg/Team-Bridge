@@ -78,29 +78,30 @@ public:
 		t.sensor = 0; //head 1.0, 1.0
 
 		GestureRecognizer gr = GestureRecognizer();
-		gr.detectRightHandXPos(t, 0);
+		gr.detectRightHandTop(t, 1);//handXPos depende do HandTop
+		//HandTop deve ser chamado antes
 
 		t.sensor = 11; //right hand
 		t.pos[0] = 1.0;
 		Assert::IsTrue(gr.detectRightHandXPos(t, 0));
 		
-		t.pos[0] = 1.101;
+		t.pos[0] = 1.251;
 		Assert::IsTrue(gr.detectRightHandXPos(t, 1));
 
-		t.pos[0] = 1.201;
+		t.pos[0] = 1.501;
 		Assert::IsTrue(gr.detectRightHandXPos(t, 2));
 
-		t.pos[0] = 1.201;
+		t.pos[0] = 1.491;
 		Assert::IsFalse(gr.detectLeftHandXPos(t, 2));
 
 		t.sensor = 7; //left hand
-		t.pos[0] = 0.95;
+		t.pos[0] = 0.76;
 		Assert::IsTrue(gr.detectLeftHandXPos(t, 0));
 
-		t.pos[0] = 0.89;
+		t.pos[0] = 0.51;
 		Assert::IsTrue(gr.detectLeftHandXPos(t, -1));
 
-		t.pos[0] = 0.79;
+		t.pos[0] = 0.49;
 		Assert::IsTrue(gr.detectLeftHandXPos(t, -2));
 
 
@@ -152,9 +153,9 @@ public:
 		t.pos[2] = 1.0; //NAO esta suficientemente inclinado para frente
 		Assert::IsFalse(gr.detectBodyFront(t));
 
-		t.pos[2] = 1.16; //inclinado para frente
+		t.pos[2] = 0.84; //inclinado para frente
 		Assert::IsTrue(gr.detectBodyFront(t));
-		t.pos[2] = 0.84; //inclinado para trás
+		t.pos[2] = 1.16; //inclinado para trás
 		Assert::IsTrue(gr.detectBodyBack(t));
 
 		t.pos[0] = 1.16; //inclinado para direita
@@ -178,12 +179,12 @@ public:
 		gr.setCenterPos(t);
 
 
-		t.quat[2] = 0.14; //NAO esta suficientemente virado
+		t.quat[2] = 0.05; //NAO esta suficientemente virado
 		Assert::IsFalse(gr.detectTurnRight(t));
 
-		t.quat[2] = 0.151; //girou para direita
+		t.quat[2] = 0.071; //girou para direita
 		Assert::IsTrue(gr.detectTurnRight(t));
-		t.quat[2] = -0.151; //girou para esquerda
+		t.quat[2] = -0.071; //girou para esquerda
 		Assert::IsTrue(gr.detectTurnLeft(t));
 
 	}

@@ -49,29 +49,29 @@ public:
 
 		int i = 0;
 		
-		KeyMap m1 = KeyMap("Tracker0@localhost", "KINECT_TOP_ADD", "A", "0.15");
+		KeyMap m1 = KeyMap("Tracker0@localhost", "KINECT_TOP_ADD=0.15 A");
 		Assert::AreEqual(m1.toString(), map.at(i++).toString());
-		m1 = KeyMap("Tracker0@localhost", "KINECT_TOP_DEC", "D", "0.15");
-		Assert::AreEqual(m1.toString(), map.at(i++).toString());
-
-		m1 = KeyMap("Tracker0@localhost", "KINECT_LEFT_HAND_TOP", "O", "5");
+		m1 = KeyMap("Tracker0@localhost", "KINECT_TOP_DEC=0.15	D");
 		Assert::AreEqual(m1.toString(), map.at(i++).toString());
 
-		m1 = KeyMap("Tracker0@localhost", "KINECT_RIGHT_HAND_TOP", "9", "2", "3");
+		m1 = KeyMap("Tracker0@localhost", "KINECT_LEFT_HAND_TOP=5 O");
 		Assert::AreEqual(m1.toString(), map.at(i++).toString());
 
-		m1 = KeyMap("Mouse0@localhost", "VK_LBUTTON", "A");
-		Assert::AreEqual(m1.toString(), map.at(i++).toString());
-		m1 = KeyMap("Mouse0@localhost", "VK_MBUTTON", "VK_LEFT");
-		Assert::AreEqual(m1.toString(), map.at(i++).toString());
-		m1 = KeyMap("Mouse0@localhost", "VK_RBUTTON", "B");
+		m1 = KeyMap("Tracker0@localhost", "KINECT_RIGHT_HAND_TOP=2,3 9");
 		Assert::AreEqual(m1.toString(), map.at(i++).toString());
 
-		m1 = KeyMap("Keyboard0@localhost", "1", "1");
+		m1 = KeyMap("Mouse0@localhost", "VK_LBUTTON	A");
 		Assert::AreEqual(m1.toString(), map.at(i++).toString());
-		m1 = KeyMap("Keyboard0@localhost", "A", "B");
+		m1 = KeyMap("Mouse0@localhost", "VK_MBUTTON	VK_LEFT");
 		Assert::AreEqual(m1.toString(), map.at(i++).toString());
-		m1 = KeyMap("Keyboard0@localhost", "VK_LEFT", "VK_LEFT");
+		m1 = KeyMap("Mouse0@localhost", "VK_RBUTTON	B");
+		Assert::AreEqual(m1.toString(), map.at(i++).toString());
+
+		m1 = KeyMap("Keyboard0@localhost", "1	1");
+		Assert::AreEqual(m1.toString(), map.at(i++).toString());
+		m1 = KeyMap("Keyboard0@localhost", "A	B");
+		Assert::AreEqual(m1.toString(), map.at(i++).toString());
+		m1 = KeyMap("Keyboard0@localhost", "VK_LEFT	VK_LEFT");
 		Assert::AreEqual(m1.toString(), map.at(i++).toString());
 
 		

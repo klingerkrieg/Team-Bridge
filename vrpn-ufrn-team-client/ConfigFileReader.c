@@ -18,6 +18,14 @@ void ConfigFileReader::printConfig(std::vector<std::string> &devs,
 
 	printf("\nOutros:\n");
 	printf(config.toString().c_str());
+
+	//HWND window = FindWindow(_T(config.getApp().c_str()), NULL);
+	HWND window = FindWindowA(NULL, config.getApp().c_str());
+	if ( window ) {
+		printf("\nAPP: Encontrada.");
+	} else {
+		printf("\nAPP: Nao encontrada.");
+	}
 	printf("\n*******************\n");
 }
 

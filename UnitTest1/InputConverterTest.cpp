@@ -34,10 +34,10 @@ namespace InputConverterTest {
 
 		std::vector<KeyMap> map;
 
-		KeyMap m1 = KeyMap("Tracker0@localhost", "KINECT_TOP_ADD", "A", "0.15");
-		KeyMap m2 = KeyMap("Tracker0@localhost", "KINECT_TOP_DEC", "A", "0.15");
-		KeyMap m3 = KeyMap("Keyboard0@localhost", "A", "D");
-		KeyMap m4 = KeyMap("Keyboard0@localhost", "VK_LEFT", "VK_RIGHT");
+		KeyMap m1 = KeyMap("Tracker0@localhost", "KINECT_TOP_ADD=0.15	A");
+		KeyMap m2 = KeyMap("Tracker0@localhost", "KINECT_TOP_DEC=0.15	A");
+		KeyMap m3 = KeyMap("Keyboard0@localhost", "A	D");
+		KeyMap m4 = KeyMap("Keyboard0@localhost", "VK_LEFT	VK_RIGHT");
 
 		map.push_back(m1);
 		map.push_back(m2);
