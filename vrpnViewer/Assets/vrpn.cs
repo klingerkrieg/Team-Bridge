@@ -5,15 +5,21 @@ using System.Runtime.InteropServices;
 using System;
 
 
-public class vrpn : MonoBehaviour {
+public class VRPN : MonoBehaviour {
 
 	public bool kinect;//caso leapmotion setar false;
-	
+	public bool guideON;
+	public bool guide3D;
+
 	int channels;
 	int centerChannel;
 	float size;
 	float cyWidth;
-
+	float guideSize = 0.08f;
+	int guidePrecision = 1;
+	Dictionary<Vector3, GameObject> guides = new Dictionary<Vector3, GameObject> ();
+	public int guideLifeInSeconds = 2;
+	Material guideMat;
 
 	Vector3 sum = new Vector3 ();
 	Vector3 lastSum = new Vector3 (0,0,0);
@@ -202,6 +208,7 @@ public class vrpn : MonoBehaviour {
 		}
 
 		Material newMat = Resources.Load("esfera", typeof(Material)) as Material;
+		guideMat = Resources.Load("guide", typeof(Material)) as Material;
 
 		//Create bones
 		foreach (Bone bone in bones) {
@@ -222,6 +229,16 @@ public class vrpn : MonoBehaviour {
 
 
 	}
+
+
+	Vector3 ceilPosition(Vector3 vec){
+		return new Vector3( (float)Math.Round(vec.x, guidePrecision), (float)Math.Round (vec.y, guidePrecision), (float)Math.Round (vec.z, guidePrecision));
+	}
+
+	public void removeFromGuide(Vector3 vec){
+		guides.Remove (vec);
+	}
+
 
 	void OnGUI(){
 		GUI.color = Color.red;
@@ -271,6 +288,32 @@ public class vrpn : MonoBehaviour {
 				} else {
 					sphere.transform.position = pos;
 				}
+
+
+				if (guideON && (i == 7 || i == 11)) {
+					Vector3 guidePos;
+					if (guide3D) {
+						//Cria guia 3d
+						guidePos = ceilPosition (sphere.transform.position);
+					} else {
+						//Cria guia 2d
+						guidePos = ceilPosition (sphere.transform.position);
+						guidePos.z = 1;
+					}
+
+					if (!guides.ContainsKey (guidePos)) {
+						GameObject guide = GameObject.CreatePrimitive (PrimitiveType.Cube);
+						guide.transform.localScale = new Vector3 (guideSize, guideSize, guideSize);
+						guide.transform.position = guidePos;
+						MeshRenderer mesh = guide.GetComponent<MeshRenderer>();
+						mesh.material = guideMat;
+						Timeout to = guide.AddComponent<Timeout> ();
+						to.timeout = guideLifeInSeconds;
+						guides.Add (guidePos, guide);
+					}
+				}
+
+
 
 			} else {
 				if (sphere.GetComponent<Rigidbody>() == null)
