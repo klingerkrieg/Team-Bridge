@@ -9,7 +9,7 @@ bool InputConverter::mouseMiddlePressed = false;
 
 void InputConverter::press(KeyMap key) {
 
-	printf("Press: %s ", key.getToKeyRepr().c_str());
+	
 
 	
 	
@@ -20,7 +20,6 @@ void InputConverter::press(KeyMap key) {
 		|| key.getToKey() == VK_RBUTTON_UP || key.getToKey() == VK_LBUTTON_UP
 		|| key.getToKey() == VK_MBUTTON_UP || key.getToKey() == VK_MBUTTON_UP ) {
 
-		printf(" no Windows.\n");
 
 		INPUT input, inputUp;
 		input.type = INPUT_MOUSE;//Ele automaticamente soma com a posicao atual do mouse
@@ -89,6 +88,7 @@ void InputConverter::press(KeyMap key) {
 		/*input.mi.mouseData = 0;
 		input.mi.dwExtraInfo = NULL;
 		input.mi.time = 0;*/
+		printf("Press: %s no windows. ", key.getToKeyRepr().c_str());
 		SendInput(1, &input, sizeof(INPUT));
 		ZeroMemory(&input, sizeof(INPUT));
 		//So vai pressionar o soltar se for o evento normal
@@ -109,6 +109,8 @@ void InputConverter::press(KeyMap key) {
 		}
 		
 	} else {
+
+		printf("Press: %s ", key.getToKeyRepr().c_str());
 
 		if ( app != "" ) {
 			//Não irá funcionar em jogos com DirectInput, para funcionar não use APP

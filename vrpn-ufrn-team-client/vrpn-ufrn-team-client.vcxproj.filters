@@ -33,9 +33,6 @@
     <ClCompile Include="InputConverter.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GestureRecognizer.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="View.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -43,6 +40,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="util.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="KinectGestures.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -54,9 +54,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DeviceInfo.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GestureRecognizer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Storage.h">
@@ -83,9 +80,14 @@
     <ClInclude Include="util.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="KinectGestures.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GestureRecognizer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="vrpn-client.cfg" />
-    <None Include="view.py" />
   </ItemGroup>
 </Project>

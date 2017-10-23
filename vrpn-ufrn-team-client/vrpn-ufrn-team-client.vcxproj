@@ -100,7 +100,7 @@
       </Command>
     </PostBuildEvent>
     <PreBuildEvent>
-      <Command>copy "*.cfg" "../pc_win32/vrpn-ufrn-team-client/Debug/" &amp; copy "*.dll" "../pc_win32/vrpn-ufrn-team-client/Debug/"&amp; copy "*.py" "../pc_win32/vrpn-ufrn-team-client/Debug/"</Command>
+      <Command>copy "*.cfg" "../pc_win32/vrpn-ufrn-team-client/Debug/" &amp; copy "*.dll" "../pc_win32/vrpn-ufrn-team-client/Debug/"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -164,7 +164,7 @@
     <ClCompile Include="Config.c" />
     <ClCompile Include="ConfigFileReader.c" />
     <ClCompile Include="Db.c" />
-    <ClCompile Include="GestureRecognizer.c" />
+    <ClCompile Include="KinectGestures.c" />
     <ClCompile Include="InputConverter.c" />
     <ClCompile Include="KeyMap.c" />
     <ClCompile Include="Storage.c" />
@@ -179,6 +179,7 @@
     <ClInclude Include="DeviceInfo.h" />
     <ClInclude Include="FileParser.h" />
     <ClInclude Include="GestureRecognizer.h" />
+    <ClInclude Include="KinectGestures.h" />
     <ClInclude Include="util.h" />
     <ClInclude Include="InputConverter.h" />
     <ClInclude Include="KeyMap.h" />
@@ -186,7 +187,6 @@
     <ClInclude Include="View.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="view.py" />
     <None Include="vrpn-client.cfg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -1,43 +1,43 @@
-#include "GestureRecognizer.h"
+#include "KinectGestures.h"
 
-double GestureRecognizer::lastHeight = 0;
-bool GestureRecognizer::lastHeightDefined = false;
+double KinectGestures::lastHeight = 0;
+bool KinectGestures::lastHeightDefined = false;
 
-double GestureRecognizer::lastHeadXPos = 0;
-bool GestureRecognizer::lastHeadXPosDefined = false;
+double KinectGestures::lastHeadXPos = 0;
+bool KinectGestures::lastHeadXPosDefined = false;
 
-double GestureRecognizer::lastHeadHeight = 0;
-bool GestureRecognizer::lastHeadHeightDefined = false;
+double KinectGestures::lastHeadHeight = 0;
+bool KinectGestures::lastHeadHeightDefined = false;
 
-std::map<int, std::vector<double>> GestureRecognizer::lastMemberPos;
-std::map<long, long> GestureRecognizer::lastMemberTime;
+std::map<int, std::vector<double>> KinectGestures::lastMemberPos;
+std::map<long, long> KinectGestures::lastMemberTime;
 
-bool GestureRecognizer::centerPosDefined = false;
-double GestureRecognizer::centerPos[2] = { 0,0 };
+bool KinectGestures::centerPosDefined = false;
+double KinectGestures::centerPos[2] = { 0,0 };
 
 //17
-double GestureRecognizer::leftKneeLastHeight = 0;
+double KinectGestures::leftKneeLastHeight = 0;
 //13
-double GestureRecognizer::rightKneeLastHeight = 0;
+double KinectGestures::rightKneeLastHeight = 0;
 
-double GestureRecognizer::turnZeroQuat = 0;
+double KinectGestures::turnZeroQuat = 0;
 
 
-bool GestureRecognizer::detectLeftHandFast(const vrpn_TRACKERCB t) {
+bool KinectGestures::detectLeftHandFast(const vrpn_TRACKERCB t) {
 	if ( t.sensor == 7) {
 		return detectMemberFast(t);
 	}
 	return false;
 }
 
-bool GestureRecognizer::detectRightHandFast(const vrpn_TRACKERCB t) {
+bool KinectGestures::detectRightHandFast(const vrpn_TRACKERCB t) {
 	if ( t.sensor == 11) {
 		return detectMemberFast(t);
 	}
 	return false;
 }
 
-std::vector<double> GestureRecognizer::getLastMemberPos(int sensor) {
+std::vector<double> KinectGestures::getLastMemberPos(int sensor) {
 	if ( lastMemberPos[sensor].empty() ) {
 		return { 0,0,0 };
 	} else {
@@ -45,17 +45,17 @@ std::vector<double> GestureRecognizer::getLastMemberPos(int sensor) {
 	}
 }
 
-int GestureRecognizer::getLastMemberTime(int sensor) {
+int KinectGestures::getLastMemberTime(int sensor) {
 	return lastMemberTime[sensor];
 }
 
-double GestureRecognizer::euclidianDistance(std::vector<double> pos1, std::vector<double> pos2) {
+double KinectGestures::euclidianDistance(std::vector<double> pos1, std::vector<double> pos2) {
 	return sqrt((pos2[0] - pos1[0]) * (pos2[0] - pos1[0]) + (pos2[1] - pos1[1]) * (pos2[1] - pos1[1]) + (pos2[2] - pos1[2]) * (pos2[2] - pos1[2]));
 }
 
 struct timeval tp;
 
-bool GestureRecognizer::detectMemberFast(const vrpn_TRACKERCB t) {
+bool KinectGestures::detectMemberFast(const vrpn_TRACKERCB t) {
 	
 	std::vector<double> pos = getLastMemberPos(t.sensor);
 	std::vector<double> actPos = { t.pos[0], t.pos[1], t.pos[2] };
@@ -97,14 +97,14 @@ bool GestureRecognizer::detectMemberFast(const vrpn_TRACKERCB t) {
 }
 
 
-bool GestureRecognizer::detectLeftHandTop(const vrpn_TRACKERCB t, int topLevel) {
+bool KinectGestures::detectLeftHandTop(const vrpn_TRACKERCB t, int topLevel) {
 	if ( t.sensor == 7 || t.sensor == 0 ) {
 		return detectHandTop(t, topLevel);
 	}
 	return false;
 }
 
-bool GestureRecognizer::detectRightHandTop(const vrpn_TRACKERCB t, int topLevel) {
+bool KinectGestures::detectRightHandTop(const vrpn_TRACKERCB t, int topLevel) {
 	if ( t.sensor == 11 || t.sensor == 0 ) {
 		return detectHandTop(t, topLevel);
 	}
@@ -114,7 +114,7 @@ bool GestureRecognizer::detectRightHandTop(const vrpn_TRACKERCB t, int topLevel)
 /**
 * Esse metodo depende do detectHandTop, ele deve ser chamado primeiro para captura da posicao central
 */
-bool GestureRecognizer::detectLeftHandXPos(const vrpn_TRACKERCB t, int xPos) {
+bool KinectGestures::detectLeftHandXPos(const vrpn_TRACKERCB t, int xPos) {
 	if ( t.sensor == 7 || t.sensor == 0 ) {
 		return detectHandXPos(t, xPos);
 	}
@@ -124,7 +124,7 @@ bool GestureRecognizer::detectLeftHandXPos(const vrpn_TRACKERCB t, int xPos) {
 /**
 * Esse metodo depende do detectHandTop, ele deve ser chamado primeiro para captura da posicao central
 */
-bool GestureRecognizer::detectRightHandXPos(const vrpn_TRACKERCB t, int xPos) {
+bool KinectGestures::detectRightHandXPos(const vrpn_TRACKERCB t, int xPos) {
 	if ( t.sensor == 11 || t.sensor == 0 ) {
 		return detectHandXPos(t, xPos);
 	}
@@ -134,7 +134,7 @@ bool GestureRecognizer::detectRightHandXPos(const vrpn_TRACKERCB t, int xPos) {
 /**
 * Esse metodo depende do detectHandTop, ele deve ser chamado primeiro para captura da posicao central
 */
-bool GestureRecognizer::detectHandXPos(const vrpn_TRACKERCB t, int xPos) {
+bool KinectGestures::detectHandXPos(const vrpn_TRACKERCB t, int xPos) {
 	
 	if ( lastHeadXPosDefined == false ) {
 		return false;
@@ -164,7 +164,7 @@ bool GestureRecognizer::detectHandXPos(const vrpn_TRACKERCB t, int xPos) {
 	return false;
 }
 
-bool GestureRecognizer::detectHandTop(const vrpn_TRACKERCB t, int topLevel) {
+bool KinectGestures::detectHandTop(const vrpn_TRACKERCB t, int topLevel) {
 	//pega a posicao da cabeca
 	if ( t.sensor == 0 ) {
 		lastHeadHeight = t.pos[1];
@@ -214,7 +214,7 @@ bool GestureRecognizer::detectHandTop(const vrpn_TRACKERCB t, int topLevel) {
 	return false;
 }
 
-int GestureRecognizer::detectTopChange(const vrpn_TRACKERCB t, double heightSens) {
+int KinectGestures::detectTopChange(const vrpn_TRACKERCB t, double heightSens) {
 	if ( t.sensor == 0 ) {
 
 		
@@ -243,7 +243,7 @@ int GestureRecognizer::detectTopChange(const vrpn_TRACKERCB t, double heightSens
 	return 0;
 }
 
-bool GestureRecognizer::setCenterPos(const vrpn_TRACKERCB t) {
+bool KinectGestures::setCenterPos(const vrpn_TRACKERCB t) {
 	if ( t.sensor == 3 ) {
 		centerPos[0] = t.pos[0];
 		centerPos[1] = t.pos[1];
@@ -255,7 +255,7 @@ bool GestureRecognizer::setCenterPos(const vrpn_TRACKERCB t) {
 	return false;
 }
 
-bool GestureRecognizer::detectBody(const vrpn_TRACKERCB t, int direction) {
+bool KinectGestures::detectBody(const vrpn_TRACKERCB t, int direction) {
 	if ( t.sensor != 3 ) {
 		return false;
 	}
@@ -279,23 +279,23 @@ bool GestureRecognizer::detectBody(const vrpn_TRACKERCB t, int direction) {
 	return false;
 }
 
-bool GestureRecognizer::detectBodyFront(const vrpn_TRACKERCB t) {
+bool KinectGestures::detectBodyFront(const vrpn_TRACKERCB t) {
 	return detectBody(t, GEST_FRONT);
 }
-bool GestureRecognizer::detectBodyRight(const vrpn_TRACKERCB t) {
+bool KinectGestures::detectBodyRight(const vrpn_TRACKERCB t) {
 	return detectBody(t, GEST_RIGHT);
 }
-bool GestureRecognizer::detectBodyLeft(const vrpn_TRACKERCB t) {
+bool KinectGestures::detectBodyLeft(const vrpn_TRACKERCB t) {
 	return detectBody(t, GEST_LEFT);
 }
-bool GestureRecognizer::detectBodyBack(const vrpn_TRACKERCB t) {
+bool KinectGestures::detectBodyBack(const vrpn_TRACKERCB t) {
 	return detectBody(t, GEST_BACK);
 }
 
 
 
 
-bool GestureRecognizer::detectWalkHeight(double &kneeLastHeight, const vrpn_TRACKERCB t) {
+bool KinectGestures::detectWalkHeight(double &kneeLastHeight, const vrpn_TRACKERCB t) {
 	if ( kneeLastHeight == 0 ) {
 		kneeLastHeight = t.pos[1];
 		return false;
@@ -314,7 +314,7 @@ bool GestureRecognizer::detectWalkHeight(double &kneeLastHeight, const vrpn_TRAC
 }
 
 
-bool GestureRecognizer::detectWalk(const vrpn_TRACKERCB t) {
+bool KinectGestures::detectWalk(const vrpn_TRACKERCB t) {
 	//17 13
 	if ( t.sensor == 13 ) {
 		return detectWalkHeight(rightKneeLastHeight, t);
@@ -328,7 +328,7 @@ bool GestureRecognizer::detectWalk(const vrpn_TRACKERCB t) {
 
 
 //Z Axis
-bool GestureRecognizer::detectTurnLeft(const vrpn_TRACKERCB t) {
+bool KinectGestures::detectTurnLeft(const vrpn_TRACKERCB t) {
 	if ( t.sensor == 3 ) {
 		if ( t.quat[2] < turnZeroQuat - turnFactor ) {
 			return true;
@@ -337,7 +337,7 @@ bool GestureRecognizer::detectTurnLeft(const vrpn_TRACKERCB t) {
 	return false;
 }
 
-bool GestureRecognizer::detectTurnRight(const vrpn_TRACKERCB t) {
+bool KinectGestures::detectTurnRight(const vrpn_TRACKERCB t) {
 	if ( t.sensor == 3 ) {
 		if ( t.quat[2] > turnZeroQuat + turnFactor ) {
 			return true;
