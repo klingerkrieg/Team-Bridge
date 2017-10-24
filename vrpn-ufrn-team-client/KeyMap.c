@@ -24,21 +24,44 @@ KeyMap::KeyMap(std::string dev, int key, char toKey) {
 
 std::string KeyMap::toString() {
 
-	std::string ret = "[" + getDev() + "]\t" + getKeyRepr() + "\t->\t" + getToKeyRepr() + "\t";
+	std::string ret = "";
+	if ( getIsLeaving() ) {
+		ret = "-->\t" + getToKeyRepr() + "[";
+	} else {
+		ret = "[" + getDev() + "]\t" + getKeyRepr() + "\t->\t" + getToKeyRepr();
+	}
+
+
+	if ( getIsBtn() ) {
+		if ( getBtnDown() && getBtnUp() ) {
+			ret += "[AUTO]\t";
+		} else
+			if ( getBtnDown() ) {
+				ret += "[DOWN]\t";
+			} else {
+				ret += "[UP]\t";
+			}
+	}
 
 	//return dev + " " + std::to_string(key) + " " + std::to_string(toKey) + " " + std::to_string(toKeyIsConstant) + " " + std::to_string(heightSens);
 	if ( getShowMsg() != 0 ) {
-		ret += getMsg();
+		ret += "\t\""+getMsg()+"\"";
 	} else
 	if ( getToKey() == VK_MOUSEMOVE ) {
-		ret += "X:" + std::to_string( getX() ) + "\tY:" + std::to_string(getY());
+		ret += "\tX:" + std::to_string( getX() ) + "\tY:" + std::to_string(getY());
 	} else
 	if ( getHandXPos() != -100 ) {
-		ret += "XPOS:" + std::to_string(getHandXPos()) + "\tYPOS:" + std::to_string(getHandTopLevel());
+		ret += "\tXPOS:" + std::to_string(getHandXPos()) + "\tYPOS:" + std::to_string(getHandTopLevel());
 	} else
 	if ( getHandTopLevel() != -100 ) {
-		ret += "YPOS:" + std::to_string(getHandTopLevel());
+		ret += "\tYPOS:" + std::to_string(getHandTopLevel());
 	}
+
+	if ( getHasOnLeave() ) {
+		ret += "\n\t\t\t\t\t\t" + getOnLeave()->toString();
+	}
+
+
 	ret += "\n";
 	return ret;
 }
@@ -67,6 +90,12 @@ KeyMap::KeyMap(std::string dev, std::string config) {
 			//char *keyChar = "";
 			std::string keyChar;
 			
+			first = false;
+
+			if ( contains((*it), "LEAVING") ) {
+				isLeaving = true;
+				continue;
+			} else
 			if ( contains((*it), "HAND_TOP") ) {
 				options = split((*it), "=");
 				//Vai procurar na lista a constante exata
@@ -136,12 +165,21 @@ KeyMap::KeyMap(std::string dev, std::string config) {
 					this->keyRepr = find->first;
 				}
 			}
-			first = false;
+			
 		} else
 
 		/* comandos para acionar */
+			
+		if ( starts_with((*it), "ONLEAVE") ) {
+			options = split(config, "ONLEAVE");
+			if ( options.size() != 2 ) {
+				printf("Linha configurada incorretamente: %s\n", config.c_str());
+			}
 
-
+			hasOnLeave = true;
+			onLeave = new KeyMap(dev, "LEAVING\t"+options.at(1));
+			return;
+		} else
 		if ( starts_with((*it), "VK_MOUSEMOVE") ){
 				options = split((*it), "=");
 				//lancar erro caso nao tenha dois parametros
@@ -185,8 +223,29 @@ KeyMap::KeyMap(std::string dev, std::string config) {
 			this->toKeyRepr = "KINECT_DETERMINE_CENTER_POS";
 		} else {
 
-			std::map<std::string, int>::iterator find;
 			std::string toKeyFind = (*it);
+			//Sera um acionamento de botao
+			isBtn = true;
+
+			if ( starts_with((*it), "BTNDOWN") || starts_with((*it), "BTNUP") ) {
+				options = split((*it), "=");
+				if ( options.size() != 2 ) {
+					printf("Linha configurada incorretamente: %s\n", config.c_str());
+				}
+
+				if ( starts_with((*it), "BTNDOWN") ) {
+					btnDown = true;
+					btnUp = false;
+				} else {
+					btnDown = false;
+					btnUp = true;
+				}
+
+				toKeyFind = options.at(1);
+			}
+
+			std::map<std::string, int>::iterator find;
+			
 			//Tenta localizar a constante para toKey
 			find = KeyMap::configToAscii.find(toKeyFind);
 

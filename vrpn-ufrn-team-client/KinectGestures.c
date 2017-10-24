@@ -22,6 +22,7 @@ double KinectGestures::rightKneeLastHeight = 0;
 
 double KinectGestures::turnZeroQuat = 0;
 
+long int KinectGestures::lastWalk = 0;
 
 bool KinectGestures::detectLeftHandFast(const vrpn_TRACKERCB t) {
 	if ( t.sensor == 7) {
@@ -140,26 +141,26 @@ bool KinectGestures::detectHandXPos(const vrpn_TRACKERCB t, int xPos) {
 		return false;
 	}
 
+	handXPosInterval = 0.40;
+
 	//printf("%.2f > %.2f + %.2f | %d\n", t.pos[0], lastHeadXPos, (handXPosInterval * 2), xPos);
 
-	if ( t.pos[0] > lastHeadXPos + (handXPosInterval * 2) && xPos == 2 ) {
+	/*if ( t.pos[0] > lastHeadXPos + (handXPosInterval * 2) && xPos == 2 ) {
 		return true;
-	} else
-	if ( t.pos[0] <= lastHeadXPos + (handXPosInterval * 2) &&
-		t.pos[0] > lastHeadXPos + handXPosInterval && xPos == 1 ) {
+	} else*/
+	if ( t.pos[0] >= lastHeadXPos + handXPosInterval && xPos == 1 ) {
 		return true;
 	} else
 	if ( t.pos[0] <= lastHeadXPos + handXPosInterval &&
 		t.pos[0] > lastHeadXPos - handXPosInterval && xPos == 0 ) {
 		return true;
 	} else
-	if ( t.pos[0] <= lastHeadXPos - handXPosInterval &&
-		t.pos[0] > lastHeadXPos - (handXPosInterval *2) && xPos == -1 ) {
+	if ( t.pos[0] <= lastHeadXPos - handXPosInterval && xPos == -1 ) {
 		return true;
-	} else
+	}/* else
 	if ( t.pos[0] <= lastHeadXPos - (handXPosInterval * 2) && xPos == -2 ) {
 		return true;
-	}
+	}*/
 
 	return false;
 }
@@ -294,28 +295,42 @@ bool KinectGestures::detectBodyBack(const vrpn_TRACKERCB t) {
 
 
 
-
 bool KinectGestures::detectWalkHeight(double &kneeLastHeight, const vrpn_TRACKERCB t) {
 	if ( kneeLastHeight == 0 ) {
 		kneeLastHeight = t.pos[1];
 		return false;
 	}
 
+	/*gettimeofday(&tp, NULL);
+	long int actualTime = tp.tv_sec * 1000 + tp.tv_usec / 1000;*/
+	int actualTime = (int)time(0);
+	bool ret = false;
+
 	if ( kneeLastHeight - kneeHeightFactor >= t.pos[1] ) {//abaixou o joelho
 		kneeLastHeight = t.pos[1];
-		return true;
+		ret = true;
 	} else
 	if ( kneeLastHeight + kneeHeightFactor <= t.pos[1] ) {//levantou o joelho
 		kneeLastHeight = t.pos[1];
-		return true;
+		ret = true;
 	}
 
-	return false;
+
+	if ( ret ) {
+		lastWalk = actualTime;
+		return true;
+	} else
+	if ( actualTime - lastWalk < 1 ) {
+		return true;
+	} else {
+		return false;
+	}
 }
 
 
 bool KinectGestures::detectWalk(const vrpn_TRACKERCB t) {
 	//17 13
+	
 	if ( t.sensor == 13 ) {
 		return detectWalkHeight(rightKneeLastHeight, t);
 	} else 

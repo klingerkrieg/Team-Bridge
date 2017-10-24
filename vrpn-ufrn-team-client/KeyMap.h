@@ -49,6 +49,13 @@ private:
 	int showMsg = 0;
 	bool toKeyIsConstant = false;
 	bool determineCenterPos = false;
+	bool btnDown = true;
+	bool btnUp = true;
+	bool isBtn = false;
+
+	bool isLeaving = false;
+	bool hasOnLeave = false;
+	KeyMap *onLeave;
 
 	int x = 0;
 	int y = 0;
@@ -101,6 +108,30 @@ public:
 
 	bool getToKeyIsConstant() {
 		return toKeyIsConstant;
+	}
+
+	bool getIsBtn() {
+		return isBtn;
+	}
+
+	bool getBtnDown() {
+		return btnDown;
+	}
+
+	bool getBtnUp() {
+		return btnUp;
+	}
+
+	bool getHasOnLeave() {
+		return hasOnLeave;
+	}
+
+	bool getIsLeaving() {
+		return isLeaving;
+	}
+
+	KeyMap* getOnLeave() {
+		return onLeave;
 	}
 
 	double getHeightSens() {
@@ -347,4 +378,3 @@ public:
 	
 
 };
-

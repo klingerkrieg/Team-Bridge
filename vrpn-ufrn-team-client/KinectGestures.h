@@ -24,7 +24,7 @@ private:
 
 	static double lastHeadXPos;
 	static bool lastHeadXPosDefined;
-	double handXPosInterval = 0.25;
+	double handXPosInterval = 0.30;
 	
 
 	//usado para detectBody
@@ -43,6 +43,8 @@ private:
 
 
 	//deteccao marcha estacionaria
+	int walkDelay = 500; //ms;
+	static long int lastWalk;
 	static double leftKneeLastHeight;
 	static double rightKneeLastHeight;
 	double kneeHeightFactor = 0.15;

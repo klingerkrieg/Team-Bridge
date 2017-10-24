@@ -25,6 +25,8 @@ private:
 	 bool viewOn = false;
 	 View *view;
 	 static int lastTimeTrack;
+	 static int lastTimeCenterPos;
+	 int centerPosDelay = 1;
 
 	 static bool mouseLeftPressed;
 	 static bool mouseRightPressed;

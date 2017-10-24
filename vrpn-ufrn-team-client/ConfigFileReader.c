@@ -37,7 +37,7 @@ bool ConfigFileReader::readConfigFile(char * fileName,
 
 	char *pch;
 	char scrap[LINESIZE];
-	char s1[LINESIZE], s2[LINESIZE], s3[LINESIZE], s4[LINESIZE];
+	char s1[LINESIZE], s2[LINESIZE];
 	std::string lastDev;
 	std::map<std::string, std::string> configMap;
 	std::string line;
