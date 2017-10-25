@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <fstream>
+#include <iostream>
 
 class FileParser {
 
@@ -13,6 +14,23 @@ protected:
 
 public:
 
+	std::string removeComments(std::string source) {
+
+		while ( source.find("/*") != std::string::npos ) {
+			size_t Beg = source.find("/*");
+			source.erase(Beg, (source.find("*/", Beg) - Beg) + 2);
+		}
+		while ( source.find("//") != std::string::npos ) {
+			size_t Beg = source.find("//");
+			source.erase(Beg, source.find("\n", Beg) - Beg);
+		}
+		while ( source.find("#") != std::string::npos ) {
+			size_t Beg = source.find("#");
+			source.erase(Beg, source.find("\n", Beg) - Beg);
+		}
+		return source;
+	}
+	
 
 	bool ignoreLine(std::string line) {
 		// Ignore comments and empty lines.  Skip white space before comment
@@ -24,9 +42,6 @@ public:
 		for ( int j = 0; line[j] != '\0'; j++ ) {
 			if ( line[j] == ' ' || line[j] == '\t' ) {
 				return true;
-			}
-			if ( line[j] == '#' ) {
-				ignore = true;
 			}
 			break;
 		}

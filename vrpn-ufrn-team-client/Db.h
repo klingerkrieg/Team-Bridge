@@ -55,7 +55,7 @@ public:
 	}
 
 	Db(std::string host, std::string db, std::string user, std::string passwd) {
-		this->host = host;
+		this->host = "tcp://"+host;
 		this->user = user;
 		this->db = db;
 		this->passwd = passwd;

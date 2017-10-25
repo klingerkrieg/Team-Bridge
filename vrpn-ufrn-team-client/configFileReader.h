@@ -11,6 +11,7 @@
 #include "FileParser.h"
 #include <iostream>
 #include <Tchar.h>
+#include <sstream>
 
 class ConfigFileReader : public FileParser {
 public:

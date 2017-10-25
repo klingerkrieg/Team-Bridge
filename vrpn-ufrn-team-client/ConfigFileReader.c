@@ -41,15 +41,23 @@ bool ConfigFileReader::readConfigFile(char * fileName,
 	std::string lastDev;
 	std::map<std::string, std::string> configMap;
 	std::string line;
+	
 
 	if ( !openIn(fileName) ) {
 		return false;
 	}
 
-
-	// Read lines from the file until we run out
+	//Remove todos os comentarios
+	std::string withouBlockComment = "";
 	while ( getline(fileInput, line) ) {
+		withouBlockComment += line + "\n";
+	}
+	withouBlockComment = removeComments(withouBlockComment);
 
+
+
+	std::istringstream iss(withouBlockComment);
+	while ( std::getline(iss, line) ) {
 
 		if ( ignoreLine(line) ) {
 			continue;
@@ -65,33 +73,30 @@ bool ConfigFileReader::readConfigFile(char * fileName,
 			//Pula a primeira string
 			pch += strlen(pch) + 1;
 
-
-			std::vector<std::string> command = split(pch,"#");
-			
-			KeyMap km = KeyMap(lastDev, command.front());
+			KeyMap km = KeyMap(lastDev, pch);
 
 			map.push_back(km);
 		} else
-			if ( !strcmp(pch = strtok(scrap, " \t"), "DEV") ) {
+		if ( !strcmp(pch = strtok(scrap, " \t"), "DEV") ) {
 
-				if ( sscanf(line.c_str(), "%s\t%s", s1, s2) != 2 ) {
-					fprintf(stderr, "Falha ao ler %s linha: %s\n", fileName, line.c_str());
-					return false;
-				}
-
-				lastDev = s2;
-				//Adiciona um dispositivo
-				devs.push_back(s2);
-			} else {
-				if ( sscanf(line.c_str(), "%s\t%[^\t\n]", s1, s2) != 2 ) {
-					fprintf(stderr, "Falha ao ler %s linha: %s\n", fileName, line.c_str());
-					return false;
-				}
-				//Adiciona configuracao
-
-				configMap[s1] = s2;
-
+			if ( sscanf(line.c_str(), "%s\t%s", s1, s2) != 2 ) {
+				fprintf(stderr, "Falha ao ler %s linha: %s\n", fileName, line.c_str());
+				return false;
 			}
+
+			lastDev = s2;
+			//Adiciona um dispositivo
+			devs.push_back(s2);
+		} else {
+			if ( sscanf(line.c_str(), "%s\t%[^\t\n]", s1, s2) != 2 ) {
+				fprintf(stderr, "Falha ao ler %s linha: %s\n", fileName, line.c_str());
+				return false;
+			}
+			//Adiciona configuracao
+
+			configMap[s1] = s2;
+
+		}
 
 	}
 
