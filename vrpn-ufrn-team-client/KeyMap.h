@@ -53,6 +53,7 @@ private:
 	bool btnUp = true;
 	bool isBtn = false;
 
+	bool waitingLeave = false;
 	bool isLeaving = false;
 	bool hasOnLeave = false;
 	KeyMap *onLeave;
@@ -132,6 +133,14 @@ public:
 
 	KeyMap* getOnLeave() {
 		return onLeave;
+	}
+
+	bool getWaitingLeave() {
+		return waitingLeave;
+	}
+
+	void setWaitingLeave(bool wait) {
+		waitingLeave = wait;
 	}
 
 	double getHeightSens() {

@@ -26,7 +26,7 @@ std::string KeyMap::toString() {
 
 	std::string ret = "";
 	if ( getIsLeaving() ) {
-		ret = "-->\t" + getToKeyRepr() + "[";
+		ret = "-->\t" + getToKeyRepr() + "";
 	} else {
 		ret = "[" + getDev() + "]\t" + getKeyRepr() + "\t->\t" + getToKeyRepr();
 	}
@@ -58,7 +58,7 @@ std::string KeyMap::toString() {
 	}
 
 	if ( getHasOnLeave() ) {
-		ret += "\n\t\t\t\t\t\t" + getOnLeave()->toString();
+		ret += "\n\t\t\t\t" + getOnLeave()->toString();
 	}
 
 

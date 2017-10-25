@@ -16,7 +16,7 @@
 
 class InputConverter {
 private:
-	 std::vector<KeyMap> map;
+	 static std::vector<KeyMap> map;
 	 std::string app;
 	 GestureRecognizer gr;
 
@@ -58,9 +58,10 @@ public:
 	
 	 void press(KeyMap key);
 
-	 void interpretKeyMap(KeyMap keyMap, const vrpn_TRACKERCB t);
+	 void interpretKeyMap(KeyMap &keyMap);
 
 	// void release(char key);
+	 bool interpretOnLeave(bool active, KeyMap &keyMap);
 
 	 bool checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKERCB t);
 

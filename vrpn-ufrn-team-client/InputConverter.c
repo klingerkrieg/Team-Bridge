@@ -4,6 +4,8 @@ int InputConverter::lastTimeTrack = 0;
 bool InputConverter::nextDefineCenterPos = false;
 int InputConverter::lastTimeCenterPos = 0;
 
+std::vector<KeyMap> InputConverter::map;
+
 bool InputConverter::mouseLeftPressed = false;
 bool InputConverter::mouseRightPressed = false;
 bool InputConverter::mouseMiddlePressed = false;
@@ -87,8 +89,11 @@ void InputConverter::press(KeyMap key) {
 		/*input.mi.mouseData = 0;
 		input.mi.dwExtraInfo = NULL;
 		input.mi.time = 0;*/
-		if ( print )
-			printf("Press: %s no windows.\n", key.getToKeyRepr().c_str());
+		if ( print && mouseMiddlePressed )
+			printf("Press: %s on windows.\n", key.getToKeyRepr().c_str());
+		else if ( print && !mouseMiddlePressed )
+			printf("Unpress: %s on windows.\n", key.getToKeyRepr().c_str());
+
 		SendInput(1, &input, sizeof(INPUT));
 		ZeroMemory(&input, sizeof(INPUT));
 		//So vai pressionar o soltar se for o evento normal
@@ -109,8 +114,7 @@ void InputConverter::press(KeyMap key) {
 		}
 		
 	} else {
-		if ( print )
-			printf("Press: %s ", key.getToKeyRepr().c_str());
+		
 
 		if ( app != "" ) {
 			//Não irá funcionar em jogos com DirectInput, para funcionar não use APP
@@ -120,6 +124,7 @@ void InputConverter::press(KeyMap key) {
 				HWND edit = FindWindowEx(window, NULL, _T("Edit"), NULL);
 				if ( print )
 					printf(" em %s [%d].\n", app.c_str(), actualTime);
+				//btnKeyDown e btnKeyUp podem nao funcionar aqui
 				if ( key.getToKeyIsConstant() ) {
 					PostMessage(edit, WM_KEYDOWN, key.getToKey(), 0);
 				} else {
@@ -127,11 +132,8 @@ void InputConverter::press(KeyMap key) {
 				}
 				return;
 			}
-
 		}
 
-		if ( print )
-			printf(" no Windows [%d].\n", actualTime);
 		//Caso nenhum app tenha sido configurado ou encontrado lanca evento no windows
 		//keybd_event(key.getToKey(), 0, 0, 0);
 		INPUT input;
@@ -141,12 +143,24 @@ void InputConverter::press(KeyMap key) {
 		input.ki.time = 0;
 		input.ki.dwExtraInfo = 0;
 		input.ki.wVk = vkey;
-		input.ki.dwFlags = 0;// there is no KEYEVENTF_KEYDOWN
-		SendInput(1, &input, sizeof(INPUT));
-		//Um delay para o game realizar a acao
-		Sleep(10);
-		input.ki.dwFlags = KEYEVENTF_KEYUP;
-		SendInput(1, &input, sizeof(INPUT));
+
+		if ( key.getBtnDown() ) {
+			input.ki.dwFlags = 0;// there is no KEYEVENTF_KEYDOWN
+			SendInput(1, &input, sizeof(INPUT));
+
+			//Um delay para o game realizar a acao
+			//Sleep(10);
+			if ( print )
+				printf("Press: %s on Windows [%d].\n", key.getToKeyRepr().c_str(), actualTime);
+		}
+		if ( key.getBtnUp() ) {
+			input.ki.dwFlags = KEYEVENTF_KEYUP;
+			SendInput(1, &input, sizeof(INPUT));
+
+			if ( print )
+				printf("Unpress: %s on Windows [%d].\n", key.getToKeyRepr().c_str(), actualTime);
+		}
+		
 	}
 
 }
@@ -175,7 +189,7 @@ keybd_event(key, 0, KEYEVENTF_KEYUP, 0);
 
 */
 
-void InputConverter::interpretKeyMap(KeyMap keyMap, const vrpn_TRACKERCB t) {
+void InputConverter::interpretKeyMap(KeyMap &keyMap) {
 	
 	if ( keyMap.getDetermineCenterPos()){
 		int actualTime = (int)time(0);
@@ -198,6 +212,31 @@ void InputConverter::interpretKeyMap(KeyMap keyMap, const vrpn_TRACKERCB t) {
 }
 
 
+bool InputConverter::interpretOnLeave(bool active, KeyMap &keyMap) {
+
+	//Se esta esperando para soltar a tecla e a tecla foi solta
+	if ( keyMap.getWaitingLeave() && !active ) {
+		interpretKeyMap((*keyMap.getOnLeave()));
+		keyMap.setWaitingLeave(false);
+		return true;
+	} else
+	if ( active ) {
+		//Se foi ativada
+		if ( keyMap.getHasOnLeave() ) {
+			//Verifica se tem evento de saida
+			if ( !keyMap.getWaitingLeave() ) {
+				//Se tiver so aciona o comando novamente se ele nao estiver esperando evento de saida
+				interpretKeyMap(keyMap);
+			}
+			keyMap.setWaitingLeave(true);
+		} else {
+			//Se nao tiver evento de saida aciona normalmente
+			interpretKeyMap(keyMap);
+		}
+		return true;
+	}
+	return false;
+}
 
 
 bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKERCB t) {
@@ -214,13 +253,20 @@ bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKE
 	int top = 0;
 	bool topCalculated = false;
 	bool pressed = false;
+	int active;
+	int activeSecondary;
+
 
 	for ( std::vector<KeyMap>::iterator keyMap = map.begin(); keyMap != map.end(); ++keyMap ) {
+
+		active = -1;
+		activeSecondary = -1;
 
 		//Caso seja para definir uma posicao central
 		if ( nextDefineCenterPos) {
 			//o sensor esperado é definido dentro do metodo, aqui todos os sensores são enviados
-			if ( gr.setCenterPos(t) ) {
+			//caso nao seja o sensor correto, terá retornado -1
+			if ( gr.setCenterPos(t) == 1) {
 				lastTimeCenterPos = actualTime;
 				printf("Posicao definida.\n");
 				nextDefineCenterPos = false;
@@ -235,82 +281,81 @@ bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKE
 			topCalculated = true;
 		}
 
-		//se ja foi calculado durante esse reconhecimento nao calcula novamente para as demais configuracoes de teclas
-		if ( keyMap->getKey() == KINECT_TOP_ADD && topCalculated == true && top == 1 ) {
-			//Se houve uma mudanca para cima e isso e esperado
-			interpretKeyMap((*keyMap), t);
-			pressed = true;
-		} else
-		if ( keyMap->getKey() == KINECT_TOP_DEC && topCalculated == true && top == -1 ) {
-			interpretKeyMap((*keyMap), t);
-			pressed = true;
-		} else
-		if ( keyMap->getKey() == KINECT_RIGHT_HAND_TOP && gr.detectRightHandTop(t, keyMap->getHandTopLevel()) ) {
-			//Caso o xpos seja != -100 quer dizer que a posição X tabém é requerida para esse comando
-			bool canPress = true;
-			if ( keyMap->getHandXPos() != -100 ) {
-				canPress = false;
-				if ( gr.detectRightHandXPos(t, keyMap->getHandXPos())) {
-					canPress = true;
-				}
-			}
-			if ( canPress ) {
-				interpretKeyMap((*keyMap), t);
-				pressed = true;
-			}
-			
-		} else
-		if ( keyMap->getKey() == KINECT_LEFT_HAND_TOP && gr.detectLeftHandTop(t, keyMap->getHandTopLevel()) ) {
-			bool canPress = true;
-			if ( keyMap->getHandXPos() != -100 ) {
-				canPress = false;
-				if ( gr.detectLeftHandXPos(t, keyMap->getHandXPos()) ) {
-					canPress = true;
-				}
-			}
-			if ( canPress ) {
-				interpretKeyMap((*keyMap), t);
-				pressed = true;
-			}
-		} else //FAST HAND
-		if ( keyMap->getKey() == KINECT_LEFT_HAND_FAST && gr.detectLeftHandFast(t) ) {
-			interpretKeyMap((*keyMap), t);
-			pressed = true;
-		} else
-		if ( keyMap->getKey() == KINECT_RIGHT_HAND_FAST && gr.detectRightHandFast(t) ) {
-			interpretKeyMap((*keyMap), t);
-			pressed = true;
-		} else //BODY
-		if ( keyMap->getKey() == KINECT_BODY_FRONT && gr.detectBodyFront(t) ) {
-			interpretKeyMap((*keyMap), t);
-			pressed = true;
-		} else
-		if ( keyMap->getKey() == KINECT_BODY_RIGHT && gr.detectBodyRight(t) ) {
-			interpretKeyMap((*keyMap), t);
-			pressed = true;
-		} else
-		if ( keyMap->getKey() == KINECT_BODY_LEFT && gr.detectBodyLeft(t) ) {
-			interpretKeyMap((*keyMap), t);
-			pressed = true;
-		} else
-		if ( keyMap->getKey() == KINECT_BODY_BACK && gr.detectBodyBack(t) ) {
-			interpretKeyMap((*keyMap), t);
-			pressed = true;
-		} else
-		if ( keyMap->getKey() == KINECT_WALK && gr.detectWalk(t) ) {
-			interpretKeyMap((*keyMap), t);
-			pressed = true;
-		} else
-		if ( keyMap->getKey() == KINECT_TURN_LEFT && gr.detectTurnLeft(t) ) {
-			interpretKeyMap((*keyMap), t);
-			pressed = true;
-		} else
-		if ( keyMap->getKey() == KINECT_TURN_RIGHT && gr.detectTurnRight(t) ) {
-			interpretKeyMap((*keyMap), t);
-			pressed = true;
-		}
-			
 
+
+
+		//se ja foi calculado durante esse reconhecimento nao calcula novamente para as demais configuracoes de teclas
+		if ( keyMap->getKey() == KINECT_TOP_ADD && topCalculated == true ) {
+			//o active ira controlar se essa acao foi acionada ou nao
+			//caso nao esteja acionada o interpretOnLeave ira identificar se foi configurado para acionar alguma ação quando 
+			//essa key nao estiver mais ativa
+			//a ação ja sera chamada dentro de interpretOnLeave
+			active = top == 1;
+		} else
+		if ( keyMap->getKey() == KINECT_TOP_DEC && topCalculated == true ) {
+			active = top == -1;
+		} else
+		if ( keyMap->getKey() == KINECT_RIGHT_HAND_TOP || keyMap->getKey() == KINECT_LEFT_HAND_TOP ) {
+			
+			if ( keyMap->getKey() == KINECT_RIGHT_HAND_TOP )
+				active = gr.detectRightHandTop(t, keyMap->getHandTopLevel());
+			else
+				active = gr.detectLeftHandTop(t, keyMap->getHandTopLevel());
+
+			//Caso o xpos seja != -100 quer dizer que a posição X tabém é requerida para esse comando
+			if ( keyMap->getHandXPos() != -100 ) {
+
+				if ( keyMap->getKey() == KINECT_RIGHT_HAND_TOP )
+					activeSecondary = gr.detectRightHandXPos(t, keyMap->getHandXPos());
+				else
+					activeSecondary = gr.detectLeftHandXPos(t, keyMap->getHandXPos());
+
+			} else {
+				//Caso nao exista acao secundaria
+				activeSecondary = true;
+			}
+
+			//Caso o sensor atual nao seja o responsavel pela ação a funcao de reconhecimento retornara -1
+			if ( active == -1 || activeSecondary == -1 ) {
+				active = -1;
+			} else {
+				//Caso qualquer um dos dois seja desativado o evento de sair sera chamado
+				active = active && activeSecondary;
+			}
+		
+		} else //FAST HAND
+		if ( keyMap->getKey() == KINECT_LEFT_HAND_FAST ) {
+			active = gr.detectLeftHandFast(t);
+		} else
+		if ( keyMap->getKey() == KINECT_RIGHT_HAND_FAST ) {
+			active = gr.detectRightHandFast(t);
+		} else //BODY
+		if ( keyMap->getKey() == KINECT_BODY_FRONT) {
+			active = gr.detectBodyFront(t);
+		} else
+		if ( keyMap->getKey() == KINECT_BODY_RIGHT) {
+			active = gr.detectBodyRight(t);
+		} else
+		if ( keyMap->getKey() == KINECT_BODY_LEFT ) {
+			active = gr.detectBodyLeft(t);
+		} else
+		if ( keyMap->getKey() == KINECT_BODY_BACK ) {
+			active = gr.detectBodyBack(t);
+		} else
+		if ( keyMap->getKey() == KINECT_WALK ) {
+			active = gr.detectWalk(t);
+		} else
+		if ( keyMap->getKey() == KINECT_TURN_LEFT  ) {
+			active = gr.detectTurnLeft(t);
+		} else
+		if ( keyMap->getKey() == KINECT_TURN_RIGHT ) {
+			active = gr.detectTurnRight(t);
+		}
+		
+		//será -1 quando não for o sensor responsável pelo gesto
+		if ( active != -1 ) {
+			pressed = interpretOnLeave(active, (*keyMap));
+		}
 	}
 
 	return pressed;
@@ -318,20 +363,11 @@ bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKE
 
 bool InputConverter::checkButton(const char * name, const vrpn_BUTTONCB b) {
 	bool pressed = false;
-
 	
-
 	for ( std::vector<KeyMap>::iterator keyMap = map.begin(); keyMap != map.end(); ++keyMap ) {
-		//printf("%s == %s && %d == %d\n", name, keyMap->getDev().c_str(),  keyMap->getKey(), b.button);
 
 		if ( !strcmp(name, keyMap->getDev().c_str()) && keyMap->getKey() == b.button ) {
-			if ( b.state == 1 ) {
-				press((*keyMap));
-				pressed = true;
-			} else {
-				//o release esta ocorrendo em duplicacao do evento
-				//release(keyMap->toKey);
-			}
+			pressed = interpretOnLeave(b.state, (*keyMap));
 		}
 	}
 

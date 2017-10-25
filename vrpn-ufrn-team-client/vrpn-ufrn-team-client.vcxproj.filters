@@ -89,5 +89,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="vrpn-client.cfg" />
+    <None Include="vrpn-client-mb.cfg" />
   </ItemGroup>
 </Project>

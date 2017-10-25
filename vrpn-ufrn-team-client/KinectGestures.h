@@ -29,7 +29,7 @@ private:
 
 	//usado para detectBody
 	static bool centerPosDefined;
-	static double centerPos[2];
+	static double centerPos[3];
 	double bodyCenterDistance = 0.15;
 
 	static std::map<int, std::vector<double>> lastMemberPos;
@@ -54,10 +54,10 @@ private:
 	static double turnZeroQuat;
 
 	bool detectWalkHeight(double &kneeLastHeight, const vrpn_TRACKERCB t);
-	bool detectBody(const vrpn_TRACKERCB t, int direction);
+	int detectBody(const vrpn_TRACKERCB t, int direction);
 	bool detectMemberFast(const vrpn_TRACKERCB t);
 
-	bool detectHandTop(const vrpn_TRACKERCB t, int topLevel);
+	int detectHandTop(const vrpn_TRACKERCB t, int topLevel);
 
 public:
 
@@ -66,39 +66,39 @@ public:
 
 	double euclidianDistance(std::vector<double> pos1, std::vector<double> pos2);
 
-	bool detectLeftHandTop(const vrpn_TRACKERCB t, int topLevel);
+	int detectLeftHandTop(const vrpn_TRACKERCB t, int topLevel);
 
-	bool detectRightHandTop(const vrpn_TRACKERCB t, int topLevel);
+	int detectRightHandTop(const vrpn_TRACKERCB t, int topLevel);
 
 
 	int detectTopChange(const vrpn_TRACKERCB t, double heightSens);
 
-	bool detectLeftHandFast(const vrpn_TRACKERCB t);
+	int detectLeftHandFast(const vrpn_TRACKERCB t);
 
-	bool detectRightHandFast(const vrpn_TRACKERCB t);
+	int detectRightHandFast(const vrpn_TRACKERCB t);
 
 	
 
 
-	bool detectBodyFront(const vrpn_TRACKERCB t);
-	bool detectBodyRight(const vrpn_TRACKERCB t);
-	bool detectBodyLeft(const vrpn_TRACKERCB t);
-	bool detectBodyBack(const vrpn_TRACKERCB t);
+	int detectBodyFront(const vrpn_TRACKERCB t);
+	int detectBodyRight(const vrpn_TRACKERCB t);
+	int detectBodyLeft(const vrpn_TRACKERCB t);
+	int detectBodyBack(const vrpn_TRACKERCB t);
 
-	bool setCenterPos(const vrpn_TRACKERCB t);
-
-
-	bool detectWalk(const vrpn_TRACKERCB t);
+	int setCenterPos(const vrpn_TRACKERCB t);
 
 
-	bool detectTurnLeft(const vrpn_TRACKERCB t);
-	bool detectTurnRight(const vrpn_TRACKERCB t);
+	int detectWalk(const vrpn_TRACKERCB t);
+
+
+	int detectTurnLeft(const vrpn_TRACKERCB t);
+	int detectTurnRight(const vrpn_TRACKERCB t);
 
 
 
-	bool detectLeftHandXPos(const vrpn_TRACKERCB t, int xPos);
-	bool detectRightHandXPos(const vrpn_TRACKERCB t, int xPos);
-	bool detectHandXPos(const vrpn_TRACKERCB t, int xPos);
+	int detectLeftHandXPos(const vrpn_TRACKERCB t, int xPos);
+	int detectRightHandXPos(const vrpn_TRACKERCB t, int xPos);
+	int detectHandXPos(const vrpn_TRACKERCB t, int xPos);
 	
 
 };
