@@ -51,10 +51,17 @@ std::string KeyMap::toString() {
 		ret += "\tX:" + std::to_string( getX() ) + "\tY:" + std::to_string(getY());
 	} else
 	if ( getHandXPos() != -100 ) {
-		ret += "\tXPOS:" + std::to_string(getHandXPos()) + "\tYPOS:" + std::to_string(getHandTopLevel());
-	} else
+		ret += "\tXPOS:" + std::to_string(getHandXPos());
+	}
 	if ( getHandTopLevel() != -100 ) {
-		ret += "\tYPOS:" + std::to_string(getHandTopLevel());
+		if ( getHandTopMod() == 1 ) {
+			ret += "\tYPOS:>" + std::to_string(getHandTopLevel());
+		} else
+		if ( getHandTopMod() == -1 ) {
+			ret += "\tYPOS:<" + std::to_string(getHandTopLevel());
+		} else  {
+			ret += "\tYPOS:" + std::to_string(getHandTopLevel());
+		}
 	}
 
 	if ( getHasOnLeave() ) {
@@ -111,7 +118,22 @@ KeyMap::KeyMap(std::string dev, std::string config) {
 					options = split(options.at(1), ",");
 					//salva x e y
 					handXPos = atoi(options.at(0).c_str());
-					handTopLevel = atoi(options.at(1).c_str());
+
+					char* yChr;
+
+					if ( starts_with(options.at(1), ">") ) {
+						handTopMod = 1;
+						yChr = &options.at(1)[1];
+					} else
+					if ( starts_with(options.at(1), "<") ) {
+						handTopMod = -1;
+						yChr = &options.at(1)[1];
+					} else {
+						handTopMod = 0;
+						yChr = &options.at(1)[0];
+					}
+
+					handTopLevel = atoi(yChr);
 				} else {
 					//salva somente y
 					handTopLevel = atoi(options.at(1).c_str());

@@ -298,9 +298,9 @@ bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKE
 		if ( keyMap->getKey() == KINECT_RIGHT_HAND_TOP || keyMap->getKey() == KINECT_LEFT_HAND_TOP ) {
 			
 			if ( keyMap->getKey() == KINECT_RIGHT_HAND_TOP )
-				active = gr.detectRightHandTop(t, keyMap->getHandTopLevel());
+				active = gr.detectRightHandTop(t, keyMap->getHandTopLevel(), keyMap->getHandTopMod());
 			else
-				active = gr.detectLeftHandTop(t, keyMap->getHandTopLevel());
+				active = gr.detectLeftHandTop(t, keyMap->getHandTopLevel(), keyMap->getHandTopMod());
 
 			//Caso o xpos seja != -100 quer dizer que a posição X tabém é requerida para esse comando
 			if ( keyMap->getHandXPos() != -100 ) {

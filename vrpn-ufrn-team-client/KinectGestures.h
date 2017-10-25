@@ -57,7 +57,7 @@ private:
 	int detectBody(const vrpn_TRACKERCB t, int direction);
 	bool detectMemberFast(const vrpn_TRACKERCB t);
 
-	int detectHandTop(const vrpn_TRACKERCB t, int topLevel);
+	int detectHandTop(const vrpn_TRACKERCB t, int topLevel, int handTopMod);
 
 public:
 
@@ -66,9 +66,9 @@ public:
 
 	double euclidianDistance(std::vector<double> pos1, std::vector<double> pos2);
 
-	int detectLeftHandTop(const vrpn_TRACKERCB t, int topLevel);
+	int detectLeftHandTop(const vrpn_TRACKERCB t, int topLevel, int handTopMod);
 
-	int detectRightHandTop(const vrpn_TRACKERCB t, int topLevel);
+	int detectRightHandTop(const vrpn_TRACKERCB t, int topLevel, int handTopMod);
 
 
 	int detectTopChange(const vrpn_TRACKERCB t, double heightSens);

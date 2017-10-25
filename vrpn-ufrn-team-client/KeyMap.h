@@ -66,6 +66,7 @@ private:
 
 	std::string msg;
 
+	int handTopMod = 0;// 0 =, 1 >, -1 <
 	int handTopLevel = -100;
 	int handXPos = -100;
 
@@ -145,6 +146,10 @@ public:
 
 	double getHeightSens() {
 		return heightSens;
+	}
+
+	int getHandTopMod() {
+		return handTopMod;
 	}
 
 	int getHandTopLevel() {

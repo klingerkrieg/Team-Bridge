@@ -98,16 +98,79 @@ bool KinectGestures::detectMemberFast(const vrpn_TRACKERCB t) {
 }
 
 
-int KinectGestures::detectLeftHandTop(const vrpn_TRACKERCB t, int topLevel) {
+
+
+int KinectGestures::detectHandTop(const vrpn_TRACKERCB t, int topLevel, int handTopMod) {
+	//pega a posicao da cabeca
+	if ( t.sensor == 0 ) {
+		lastHeadHeight = t.pos[1];
+		lastHeadHeightDefined = true;
+
+		//pega a posicao da cabeca para calcular xpos tambem, porque xpos depende de handtop
+		lastHeadXPos = t.pos[0];
+		lastHeadXPosDefined = true;
+		return -1;
+	}
+
+	if ( lastHeadHeightDefined == false ) {
+		return -1;
+	}
+
+
+	//
+	//...  - 5
+	//1.20 - 4
+	//1.10 - 3
+	//1.0  - head
+	//0.80 - 3
+	//0.50 - 2
+	// ... - 1
+	//if (t.sensor == 11)
+	//printf("head:%.2f hand:%.2f\n", lastHeadHeight, t.pos[1]);
+
+	if ( topLevel == 5 &&
+		(t.pos[1] > lastHeadHeight + (handTopInterval * 2))
+		|| handTopMod == -1) {
+		return true;
+	} else
+	if ( topLevel == 4 &&
+		(t.pos[1] <= lastHeadHeight + (handTopInterval * 2) && t.pos[1] > lastHeadHeight + handTopInterval && handTopMod == 0)
+		|| (t.pos[1] > lastHeadHeight + handTopInterval && handTopMod == 1)
+		|| (t.pos[1] <= lastHeadHeight + (handTopInterval * 2) && handTopMod == -1) ) {
+		return true;
+	} else
+	if ( topLevel == 3 && 
+		(t.pos[1] <= lastHeadHeight + handTopInterval && t.pos[1] > lastHeadHeight - (handTopInterval * 2))
+		|| (t.pos[1] > lastHeadHeight - (handTopInterval * 2) && handTopMod == 1)
+		|| (t.pos[1] <= lastHeadHeight + handTopInterval && handTopMod == -1)	) {
+		return true;
+	} else
+	if ( topLevel == 2 &&
+		(t.pos[1] <= lastHeadHeight - (handTopInterval * 2) && t.pos[1] > lastHeadHeight - (handTopInterval * 5))
+		|| (t.pos[1] > lastHeadHeight - (handTopInterval * 5)  && handTopMod == 1)
+		|| (t.pos[1] <= lastHeadHeight - (handTopInterval * 2) && handTopMod == -1) ) {
+		return true;
+	} else
+	if ( topLevel == 1 &&
+		(t.pos[1] <= lastHeadHeight - (handTopInterval * 5))
+		|| handTopMod == 1) {
+		return true;
+	}
+
+	return false;
+}
+
+
+int KinectGestures::detectLeftHandTop(const vrpn_TRACKERCB t, int topLevel, int handTopMod) {
 	if ( t.sensor == 7 || t.sensor == 0 ) {
-		return detectHandTop(t, topLevel);
+		return detectHandTop(t, topLevel, handTopMod);
 	}
 	return -1;
 }
 
-int KinectGestures::detectRightHandTop(const vrpn_TRACKERCB t, int topLevel) {
+int KinectGestures::detectRightHandTop(const vrpn_TRACKERCB t, int topLevel, int handTopMod) {
 	if ( t.sensor == 11 || t.sensor == 0 ) {
-		return detectHandTop(t, topLevel);
+		return detectHandTop(t, topLevel, handTopMod);
 	}
 	return -1;
 }
@@ -159,55 +222,6 @@ int KinectGestures::detectHandXPos(const vrpn_TRACKERCB t, int xPos) {
 	return false;
 }
 
-int KinectGestures::detectHandTop(const vrpn_TRACKERCB t, int topLevel) {
-	//pega a posicao da cabeca
-	if ( t.sensor == 0 ) {
-		lastHeadHeight = t.pos[1];
-		lastHeadHeightDefined = true;
-
-		//pega a posicao da cabeca para calcular xpos tambem, porque xpos depende de handtop
-		lastHeadXPos = t.pos[0];
-		lastHeadXPosDefined = true;
-		return -1;
-	}
-
-	if ( lastHeadHeightDefined == false ) {
-		return -1;
-	}
-
-
-	//
-	//...  - 5
-	//1.20 - 4
-	//1.10 - 3
-	//1.0  - head
-	//0.80 - 3
-	//0.50 - 2
-	// ... - 1
-	//if (t.sensor == 11)
-	//printf("head:%.2f hand:%.2f\n", lastHeadHeight, t.pos[1]);
-
-	if ( t.pos[1] > lastHeadHeight + (handTopInterval * 2) && topLevel == 5 ) {
-		return true;
-	} else
-	if ( t.pos[1] <= lastHeadHeight + (handTopInterval * 2) &&
-		t.pos[1] > lastHeadHeight + handTopInterval && topLevel == 4 ) {
-		return true;
-	} else
-	if ( t.pos[1] <= lastHeadHeight + handTopInterval &&
-		t.pos[1] > lastHeadHeight - (handTopInterval * 2) && topLevel == 3 ) {
-		return true;
-	} else
-	if ( t.pos[1] <= lastHeadHeight - (handTopInterval * 2) &&
-		t.pos[1] > lastHeadHeight - (handTopInterval*5) && topLevel == 2 ) {
-		return true;
-	} else
-	if ( t.pos[1] <= lastHeadHeight - (handTopInterval * 5) && topLevel == 1 ) {
-		return true;
-	}
-
-	return false;
-}
 
 int KinectGestures::detectTopChange(const vrpn_TRACKERCB t, double heightSens) {
 	if ( t.sensor == 0 ) {

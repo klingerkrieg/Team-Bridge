@@ -188,6 +188,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="vrpn-client-mb.cfg" />
+    <None Include="vrpn-client.bk.cfg" />
     <None Include="vrpn-client.cfg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
