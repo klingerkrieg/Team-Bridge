@@ -27,6 +27,7 @@
 //#include "DeviceInfo.h"
 #include "Storage.h"
 #include "InputConverter.h"
+#include "GestureRecorder.h"
 
 
 
@@ -49,6 +50,7 @@ class Client {
 private:
 	Storage storage;
 	InputConverter inputConverter;
+	GestureRecorder gestureRecorder;
 	View view;
 
 	char *configFileName = "vrpn-client.cfg";
@@ -56,6 +58,9 @@ private:
 	bool printButton = true;
 	bool printAnalog = true;
 	bool exportDb = false;
+
+	bool recordGesture = false;
+	std::string recordName;
 
 	static const unsigned MAX_DEVICES = 50;
 	DeviceInfo deviceList[MAX_DEVICES];
@@ -82,6 +87,18 @@ public:
 
 	InputConverter getInputConverter() {
 		return inputConverter;
+	}
+
+	GestureRecorder getGestureRecorder() {
+		return gestureRecorder;
+	}
+
+	void setRecordGesture(bool active, std::string name) {
+		recordGesture = active;
+		recordName = name;
+	}
+	bool getRecordGesture() {
+		return recordGesture;
 	}
 
 	void setConfigFile(char * file_name) {

@@ -38,9 +38,14 @@ bool Client::setup(bool test = false) {
 			return false;
 		}
 
+
+		if ( getRecordGesture() ) {
+			gestureRecorder = GestureRecorder(view);
+		} else {
+			//Setando InputConverter
+			inputConverter = InputConverter(map, config.getApp(), view);
+		}
 		
-		//Setando InputConverter
-		inputConverter = InputConverter(map, config.getApp(), view);
 
 		//Setando configs no store
 		storage = Storage(config, exportDb);
@@ -167,8 +172,13 @@ Client client;
 void VRPN_CALLBACK handle_tracker_pos_quat(void *userdata, const vrpn_TRACKERCB t) {
 	TrackerUserCallback *t_data = static_cast<TrackerUserCallback *>(userdata);
 	
-	client.getStorage().saveToFile(t_data, t);
-	client.getInputConverter().checkTrack(t_data, t);
+	if ( client.getRecordGesture() ) {
+		client.getGestureRecorder().record(t_data, t);
+	} else {
+		client.getStorage().saveToFile(t_data, t);
+		client.getInputConverter().checkTrack(t_data, t);
+	}
+
 	// Make sure we have a count value for this sensor
 	/*while ( t_data->counts.size() <= static_cast<unsigned>(t.sensor) ) {
 	t_data->counts.push_back(0);
@@ -235,8 +245,7 @@ void VRPN_CALLBACK handle_analog(void *userdata, const vrpn_ANALOGCB a) {
 // this handler.
 void Usage() {
 
-	printf(
-		"Usage:  %s [-notracker] [-nobutton] [-noanalog] \n"
+	printf("Usage: \n"
 		" -notracker:  Don't print tracker reports for following devices\n"
 		"  -nobutton:  Don't print button reports for following devices\n"
 		"  -noanalog:  Don't print analog reports for following devices\n"
@@ -298,13 +307,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		} else if ( !wcscmp(argv[i], L"-record") ) {
 			printf("Defina o nome do gesto a ser gravado:");
 			scanf("%s", buffer);
+			client.setRecordGesture(true, buffer);
 		}
 	}
 
 	// Free memory allocated for CommandLineToArgvW arguments.
 	LocalFree(argv);
 
-
+	client.setRecordGesture(true, "bla");
 	client.setup();
 
 

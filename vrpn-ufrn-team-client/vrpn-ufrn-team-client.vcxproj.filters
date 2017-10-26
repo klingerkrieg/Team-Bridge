@@ -48,6 +48,9 @@
     <ClCompile Include="LeapMotionGestures.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GestureRecorder.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="KeyMap.h">
@@ -90,6 +93,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="LeapMotionGestures.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GestureRecorder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
