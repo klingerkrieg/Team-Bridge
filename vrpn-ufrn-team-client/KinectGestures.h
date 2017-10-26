@@ -24,7 +24,7 @@ private:
 
 	static double lastHeadXPos;
 	static bool lastHeadXPosDefined;
-	double handXPosInterval = 0.30;
+	double handXPosInterval = 0.40;
 	
 
 	//usado para detectBody

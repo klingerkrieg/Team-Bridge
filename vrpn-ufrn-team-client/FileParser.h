@@ -2,6 +2,7 @@
 #include <string>
 #include <fstream>
 #include <iostream>
+#include "util.h"
 
 class FileParser {
 
@@ -33,19 +34,18 @@ public:
 	
 
 	bool ignoreLine(std::string line) {
-		// Ignore comments and empty lines.  Skip white space before comment
-		// mark (#).
-		if ( line.length() < 3 ) {
+		
+		while ( contains(line, " ") ) {
+			replace_all(line, " ", "");
+		}
+		while ( contains(line, "\t") ) {
+			replace_all(line, "\t", "");
+		}
+
+		if (line.size() == 0) {
 			return true;
 		}
-		bool ignore = false;
-		for ( int j = 0; line[j] != '\0'; j++ ) {
-			if ( line[j] == ' ' || line[j] == '\t' ) {
-				return true;
-			}
-			break;
-		}
-		return ignore;
+		return false;
 	}
 
 	bool openOut(std::string fileName) {

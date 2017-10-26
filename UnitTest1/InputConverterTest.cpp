@@ -6,7 +6,7 @@
 #include <vrpn_Tracker.h>
 #include <vrpn_Button.h>
 #include <math.h>
-#include "util.h"
+#include "utilTest.h"
 
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
@@ -55,7 +55,7 @@ public:
 
 	TEST_METHOD(InputConverter_checkTrack) {
 		
-		
+			t.sensor = 0;
 			//Inicia
 			Assert::IsFalse(iC.checkTrack(tc1, t));
 			

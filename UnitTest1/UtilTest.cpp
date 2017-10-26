@@ -1,4 +1,4 @@
-#include "util.h"
+#include "utilTest.h"
 
 timeval getTimeVal() {
 	timeval tv;
@@ -18,4 +18,14 @@ vrpn_TRACKERCB getTrackerCB() {
 
 	t.sensor = 0;
 	return t;
+}
+
+vrpn_ANALOGCB getAnalogCB() {
+	vrpn_ANALOGCB a = vrpn_ANALOGCB();
+	a.channel[0] = 0;
+	a.channel[1] = 0;
+	a.channel[2] = 0;
+	a.channel[3] = 0;
+	a.num_channel = 4;
+	return a;
 }

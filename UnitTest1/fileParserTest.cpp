@@ -40,11 +40,19 @@ public:
 	TEST_CLASS(FileParserTest) {
 public:
 
+	TEST_METHOD(FileParser_removeComments) {
+		FileParserT f = FileParserT();
+		std::string text = "12/*3\n4*/3//5\n45/*6 /* teste 6*/6";
+		text = f.removeComments(text);
+		std::string text2 = "123\n456";
+		Assert::AreEqual(text2, text);
+	}
+
 	TEST_METHOD(FileParser_ignoreLine) {
 		FileParserT f = FileParserT();
 		Assert::IsFalse(f.ignoreLine("DEV 1"));
-		Assert::IsTrue(f.ignoreLine("#DEV 1"));
-		Assert::IsTrue(f.ignoreLine(" # DEV 1"));
+		Assert::IsTrue(f.ignoreLine("   "));
+		Assert::IsTrue(f.ignoreLine("\t\t\t"));
 	}
 
 	TEST_METHOD(FileParser_openWriteAndRead) {

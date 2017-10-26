@@ -119,14 +119,30 @@ void vrpn_LeapMotion::onFrame(const Leap::Controller& controller) {
 	if ( hands.count() == 0 ) {
 		return;
 	}
-
-	//Analog Code
-	//primeira mao
-	channel[0] = hands[0].grabAngle();
-	channel[1] = hands[0].pinchDistance();
+	
+	channel[0] = 0;
+	channel[1] = 0;
 	//segunda mao
-	channel[2] = hands[1].grabAngle();
-	channel[3] = hands[1].pinchDistance();
+	channel[2] = 0;
+	channel[3] = 0;
+	bool left = false;
+	bool right = false;
+
+	for ( int i = 0; i < hands.count(); i++ ) {
+
+		if ( hands[i].isLeft() && left == false ) {
+			//mao esquerda
+			channel[0] = hands[0].grabAngle();
+			channel[1] = hands[0].pinchDistance();
+			left = true;
+		}
+		if ( hands[i].isRight() && right == false ) {
+			//segunda mao
+			channel[2] = hands[1].grabAngle();
+			channel[3] = hands[1].pinchDistance();
+			right = true;
+		}
+	}
 
 
 	vrpn_Analog::report_changes();

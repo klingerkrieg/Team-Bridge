@@ -241,8 +241,13 @@ bool InputConverter::interpretOnLeave(bool active, KeyMap &keyMap) {
 
 bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKERCB t) {
 
-	//Quando uma pessoa for reconhecida pelo Kinect ele ira avisar
+
 	int actualTime = (int)time(0);
+
+	
+
+	//Quando uma pessoa for reconhecida pelo Kinect ele ira avisar
+	
 	if ( lastTimeTrack == 0 || actualTime - lastTimeTrack > 1 ) {
 		printf("Kinect\n");
 		if ( viewOn )
@@ -252,109 +257,131 @@ bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKE
 
 	int top = 0;
 	bool topCalculated = false;
-	bool pressed = false;
 	int active;
 	int activeSecondary;
+	bool pressed = false;
 
 
 	for ( std::vector<KeyMap>::iterator keyMap = map.begin(); keyMap != map.end(); ++keyMap ) {
 
-		active = -1;
-		activeSecondary = -1;
 
-		//Caso seja para definir uma posicao central
-		if ( nextDefineCenterPos) {
-			//o sensor esperado é definido dentro do metodo, aqui todos os sensores são enviados
-			//caso nao seja o sensor correto, terá retornado -1
-			if ( gr.setCenterPos(t) == 1) {
-				lastTimeCenterPos = actualTime;
-				printf("Posicao definida.\n");
-				nextDefineCenterPos = false;
-				if ( viewOn )
-					view->showMsg("Posição definida.");
+
+		if ( !strcmp(userdata->name, keyMap->getDev().c_str()) ) {
+
+			active = -1;
+			activeSecondary = -1;
+
+			//Caso seja para definir uma posicao central
+			if ( nextDefineCenterPos) {
+				//o sensor esperado é definido dentro do metodo, aqui todos os sensores são enviados
+				//caso nao seja o sensor correto, terá retornado -1
+				if ( gr.setCenterPos(t) == 1) {
+					lastTimeCenterPos = actualTime;
+					printf("Posicao definida.\n");
+					nextDefineCenterPos = false;
+					if ( viewOn )
+						view->showMsg("Posição definida.");
+				}
 			}
-		}
 
-		//Caso seja reconhecimento de mudanca na altura ele calcula somente uma vez nesse metodo
-		if ( topCalculated == false && (keyMap->getKey() == KINECT_TOP_ADD || keyMap->getKey() == KINECT_TOP_DEC) ) {
-			top = gr.detectTopChange(t, keyMap->getHeightSens());
-			topCalculated = true;
-		}
-
+			//Caso seja reconhecimento de mudanca na altura ele calcula somente uma vez nesse metodo
+			if ( topCalculated == false && (keyMap->getKey() == KINECT_TOP_ADD || keyMap->getKey() == KINECT_TOP_DEC) ) {
+				top = gr.detectTopChange(t, keyMap->getHeightSens());
+				topCalculated = true;
+			}
 
 
 
-		//se ja foi calculado durante esse reconhecimento nao calcula novamente para as demais configuracoes de teclas
-		if ( keyMap->getKey() == KINECT_TOP_ADD && topCalculated == true ) {
-			//o active ira controlar se essa acao foi acionada ou nao
-			//caso nao esteja acionada o interpretOnLeave ira identificar se foi configurado para acionar alguma ação quando 
-			//essa key nao estiver mais ativa
-			//a ação ja sera chamada dentro de interpretOnLeave
-			active = top == 1;
-		} else
-		if ( keyMap->getKey() == KINECT_TOP_DEC && topCalculated == true ) {
-			active = top == -1;
-		} else
-		if ( keyMap->getKey() == KINECT_RIGHT_HAND_TOP || keyMap->getKey() == KINECT_LEFT_HAND_TOP ) {
+
+			//se ja foi calculado durante esse reconhecimento nao calcula novamente para as demais configuracoes de teclas
+			if ( keyMap->getKey() == KINECT_TOP_ADD && topCalculated == true ) {
+				//o active ira controlar se essa acao foi acionada ou nao
+				//caso nao esteja acionada o interpretOnLeave ira identificar se foi configurado para acionar alguma ação quando 
+				//essa key nao estiver mais ativa
+				//a ação ja sera chamada dentro de interpretOnLeave
+				active = top == 1;
+			} else
+			if ( keyMap->getKey() == KINECT_TOP_DEC && topCalculated == true ) {
+				active = top == -1;
+			} else
+			if ( keyMap->getKey() == KINECT_RIGHT_HAND_TOP || keyMap->getKey() == KINECT_LEFT_HAND_TOP ) {
 			
-			if ( keyMap->getKey() == KINECT_RIGHT_HAND_TOP )
-				active = gr.detectRightHandTop(t, keyMap->getHandTopLevel(), keyMap->getHandTopMod());
-			else
-				active = gr.detectLeftHandTop(t, keyMap->getHandTopLevel(), keyMap->getHandTopMod());
-
-			//Caso o xpos seja != -100 quer dizer que a posição X tabém é requerida para esse comando
-			if ( keyMap->getHandXPos() != -100 ) {
-
 				if ( keyMap->getKey() == KINECT_RIGHT_HAND_TOP )
-					activeSecondary = gr.detectRightHandXPos(t, keyMap->getHandXPos());
+					active = gr.detectRightHandTop(t, keyMap->getHandTopLevel(), keyMap->getHandTopMod());
 				else
-					activeSecondary = gr.detectLeftHandXPos(t, keyMap->getHandXPos());
+					active = gr.detectLeftHandTop(t, keyMap->getHandTopLevel(), keyMap->getHandTopMod());
 
-			} else {
-				//Caso nao exista acao secundaria
-				activeSecondary = true;
-			}
+				//Caso o xpos seja != -100 quer dizer que a posição X tabém é requerida para esse comando
+				if ( keyMap->getHandXPos() != -100 ) {
 
-			//Caso o sensor atual nao seja o responsavel pela ação a funcao de reconhecimento retornara -1
-			if ( active == -1 || activeSecondary == -1 ) {
-				active = -1;
-			} else {
-				//Caso qualquer um dos dois seja desativado o evento de sair sera chamado
-				active = active && activeSecondary;
-			}
+					if ( keyMap->getKey() == KINECT_RIGHT_HAND_TOP )
+						activeSecondary = gr.detectRightHandXPos(t, keyMap->getHandXPos());
+					else
+						activeSecondary = gr.detectLeftHandXPos(t, keyMap->getHandXPos());
+
+				} else {
+					//Caso nao exista acao secundaria
+					activeSecondary = true;
+				}
+
+				//Caso o sensor atual nao seja o responsavel pela ação a funcao de reconhecimento retornara -1
+				if ( active == -1 || activeSecondary == -1 ) {
+					active = -1;
+				} else {
+					//Caso qualquer um dos dois seja desativado o evento de sair sera chamado
+					active = active && activeSecondary;
+				}
 		
-		} else //FAST HAND
-		if ( keyMap->getKey() == KINECT_LEFT_HAND_FAST ) {
-			active = gr.detectLeftHandFast(t);
-		} else
-		if ( keyMap->getKey() == KINECT_RIGHT_HAND_FAST ) {
-			active = gr.detectRightHandFast(t);
-		} else //BODY
-		if ( keyMap->getKey() == KINECT_BODY_FRONT) {
-			active = gr.detectBodyFront(t);
-		} else
-		if ( keyMap->getKey() == KINECT_BODY_RIGHT) {
-			active = gr.detectBodyRight(t);
-		} else
-		if ( keyMap->getKey() == KINECT_BODY_LEFT ) {
-			active = gr.detectBodyLeft(t);
-		} else
-		if ( keyMap->getKey() == KINECT_BODY_BACK ) {
-			active = gr.detectBodyBack(t);
-		} else
-		if ( keyMap->getKey() == KINECT_WALK ) {
-			active = gr.detectWalk(t);
-		} else
-		if ( keyMap->getKey() == KINECT_TURN_LEFT  ) {
-			active = gr.detectTurnLeft(t);
-		} else
-		if ( keyMap->getKey() == KINECT_TURN_RIGHT ) {
-			active = gr.detectTurnRight(t);
+			} else //FAST HAND
+			if ( keyMap->getKey() == KINECT_LEFT_HAND_FAST ) {
+				active = gr.detectLeftHandFast(t);
+			} else
+			if ( keyMap->getKey() == KINECT_RIGHT_HAND_FAST ) {
+				active = gr.detectRightHandFast(t);
+			} else //BODY
+			if ( keyMap->getKey() == KINECT_BODY_FRONT) {
+				active = gr.detectBodyFront(t);
+			} else
+			if ( keyMap->getKey() == KINECT_BODY_RIGHT) {
+				active = gr.detectBodyRight(t);
+			} else
+			if ( keyMap->getKey() == KINECT_BODY_LEFT ) {
+				active = gr.detectBodyLeft(t);
+			} else
+			if ( keyMap->getKey() == KINECT_BODY_BACK ) {
+				active = gr.detectBodyBack(t);
+			} else
+			if ( keyMap->getKey() == KINECT_WALK ) {
+				active = gr.detectWalk(t);
+			} else
+			if ( keyMap->getKey() == KINECT_TURN_LEFT  ) {
+				active = gr.detectTurnLeft(t);
+			} else
+			if ( keyMap->getKey() == KINECT_TURN_RIGHT ) {
+				active = gr.detectTurnRight(t);
+			} else
+			if ( keyMap->getKey() == LEAP_LEFT_FIST_UP  ) {
+				active = gr.leftFistFlexedUp(t);
+			} else
+			if ( keyMap->getKey() == LEAP_LEFT_FIST_DOWN ) {
+				active = gr.leftFistFlexedDown(t);
+			} else
+			if ( keyMap->getKey() == LEAP_RIGHT_FIST_UP  ) {
+				active = gr.rightFistFlexedUp(t);
+			} else
+			if ( keyMap->getKey() == LEAP_RIGHT_FIST_DOWN ) {
+				active = gr.rightFistFlexedDown(t);
+			}
+
 		}
 		
 		//será -1 quando não for o sensor responsável pelo gesto
 		if ( active != -1 ) {
-			pressed = interpretOnLeave(active, (*keyMap));
+			//Se pelo menos uma foi pressionada
+			//nao pode retornar aqui porque podem ter outros comandos
+			if ( interpretOnLeave(active, (*keyMap)) ) {
+				pressed = true;
+			}
 		}
 	}
 
@@ -375,7 +402,36 @@ bool InputConverter::checkButton(const char * name, const vrpn_BUTTONCB b) {
 
 }
 
-bool InputConverter::checkAnalog() {
+
+bool InputConverter::checkAnalog(const char *name, const vrpn_ANALOGCB a) {
+
+	bool pressed = false;
+	int active;
+
+	for ( std::vector<KeyMap>::iterator keyMap = map.begin(); keyMap != map.end(); ++keyMap ) {
+
+		if ( !strcmp(name, keyMap->getDev().c_str()) ) {
+
+			switch ( keyMap->getKey() ) {
+				case LEAP_LEFT_CLOSED:
+					active = gr.leftClosed(a);
+					break;
+				case LEAP_LEFT_PINCH:
+					active = gr.leftPinch(a);
+					break;
+				case LEAP_RIGHT_CLOSED:
+					active = gr.rightClosed(a);
+					break;
+				case LEAP_RIGHT_PINCH:
+					active = gr.rightPinch(a);
+					break;
+			}
+		}
+
+
+		pressed = interpretOnLeave(active, (*keyMap));
+	}
+
 	return true;
 }
 

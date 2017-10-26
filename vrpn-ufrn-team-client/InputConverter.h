@@ -67,7 +67,7 @@ public:
 
 	 bool checkButton(const char * name, const vrpn_BUTTONCB b);
 
-	 bool checkAnalog();
+	 bool checkAnalog(const char *name, const vrpn_ANALOGCB a);
 	
 };
 

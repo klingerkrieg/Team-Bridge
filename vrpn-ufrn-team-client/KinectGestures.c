@@ -204,7 +204,6 @@ int KinectGestures::detectHandXPos(const vrpn_TRACKERCB t, int xPos) {
 		return -1;
 	}
 
-	handXPosInterval = 0.40;
 
 	//printf("%.2f > %.2f + %.2f | %d\n", t.pos[0], lastHeadXPos, (handXPosInterval * 2), xPos);
 

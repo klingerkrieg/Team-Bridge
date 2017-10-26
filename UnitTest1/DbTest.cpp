@@ -7,7 +7,7 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-std::string host = "tcp://127.0.0.1:3306";
+std::string host = "127.0.0.1:3306";
 std::string dbName = "test";
 std::string user = "root";
 std::string passwd = "";

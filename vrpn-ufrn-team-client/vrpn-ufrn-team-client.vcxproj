@@ -167,6 +167,7 @@
     <ClCompile Include="KinectGestures.c" />
     <ClCompile Include="InputConverter.c" />
     <ClCompile Include="KeyMap.c" />
+    <ClCompile Include="LeapMotionGestures.c" />
     <ClCompile Include="Storage.c" />
     <ClCompile Include="util.c" />
     <ClCompile Include="View.c" />
@@ -180,6 +181,7 @@
     <ClInclude Include="FileParser.h" />
     <ClInclude Include="GestureRecognizer.h" />
     <ClInclude Include="KinectGestures.h" />
+    <ClInclude Include="LeapMotionGestures.h" />
     <ClInclude Include="util.h" />
     <ClInclude Include="InputConverter.h" />
     <ClInclude Include="KeyMap.h" />

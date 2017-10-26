@@ -5,7 +5,7 @@
 #include "GestureRecognizer.h"
 #include <vrpn_Tracker.h>
 #include <math.h>
-#include "util.h"
+#include "utilTest.h"
 
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
@@ -53,19 +53,26 @@ public:
 		t.sensor = 0; //head 1.0
 
 		GestureRecognizer gr = GestureRecognizer();
-		gr.detectRightHandTop(t, 5);
+		gr.detectRightHandTop(t, 5, 0);
 
 		t.sensor = 11; //right hand
 		t.pos[1] = 1.301;
-		Assert::IsTrue(gr.detectRightHandTop(t, 5));
+		Assert::IsTrue(gr.detectRightHandTop(t, 5, 0));
 		t.pos[1] = 1.151;
-		Assert::IsTrue(gr.detectRightHandTop(t, 4));
+		Assert::IsTrue(gr.detectRightHandTop(t, 4, 0));
 		t.pos[1] = 1.05;
-		Assert::IsTrue(gr.detectRightHandTop(t, 3));
+		Assert::IsTrue(gr.detectRightHandTop(t, 3, 0));
 		t.pos[1] = 0.80;
-		Assert::IsTrue(gr.detectRightHandTop(t, 2));
+		Assert::IsTrue(gr.detectRightHandTop(t, 2, 0));
 		t.pos[1] = 0.50;
-		Assert::IsTrue(gr.detectRightHandTop(t, 1));
+		Assert::IsTrue(gr.detectRightHandTop(t, 1, 0));
+
+		//Acima de
+		t.pos[1] = 1.301;
+		Assert::IsTrue(gr.detectRightHandTop(t, 3, 1));
+		//Abaixo de
+		t.pos[1] = 0.50;
+		Assert::IsTrue(gr.detectRightHandTop(t, 3, -1));
 
 
 	}
@@ -78,31 +85,23 @@ public:
 		t.sensor = 0; //head 1.0, 1.0
 
 		GestureRecognizer gr = GestureRecognizer();
-		gr.detectRightHandTop(t, 1);//handXPos depende do HandTop
+		gr.detectRightHandTop(t, 1, 0);//handXPos depende do HandTop
 		//HandTop deve ser chamado antes
 
 		t.sensor = 11; //right hand
 		t.pos[0] = 1.0;
 		Assert::IsTrue(gr.detectRightHandXPos(t, 0));
 		
-		t.pos[0] = 1.251;
+		t.pos[0] = 1.401;
 		Assert::IsTrue(gr.detectRightHandXPos(t, 1));
 
-		t.pos[0] = 1.501;
-		Assert::IsTrue(gr.detectRightHandXPos(t, 2));
-
-		t.pos[0] = 1.491;
-		Assert::IsFalse(gr.detectLeftHandXPos(t, 2));
-
 		t.sensor = 7; //left hand
-		t.pos[0] = 0.76;
+		t.pos[0] = 0.61;
 		Assert::IsTrue(gr.detectLeftHandXPos(t, 0));
 
-		t.pos[0] = 0.51;
+		t.pos[0] = 0.59;
 		Assert::IsTrue(gr.detectLeftHandXPos(t, -1));
 
-		t.pos[0] = 0.49;
-		Assert::IsTrue(gr.detectLeftHandXPos(t, -2));
 
 
 	}
@@ -188,6 +187,7 @@ public:
 		Assert::IsTrue(gr.detectTurnLeft(t));
 
 	}
+
 
 
 	};

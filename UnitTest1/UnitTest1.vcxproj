@@ -170,7 +170,7 @@
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="util.h" />
+    <ClInclude Include="utilTest.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ClientTest.cpp" />
@@ -179,6 +179,7 @@
     <ClCompile Include="GestureRecognizerTest.cpp" />
     <ClCompile Include="InputConverterTest.cpp" />
     <ClCompile Include="KeyMapTest.cpp" />
+    <ClCompile Include="LeapMotionGestures.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -187,7 +188,7 @@
     </ClCompile>
     <ClCompile Include="fileParserTest.cpp" />
     <ClCompile Include="StorageTest.cpp" />
-    <ClCompile Include="Util.cpp" />
+    <ClCompile Include="UtilTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="vrpn-client.cfg" />

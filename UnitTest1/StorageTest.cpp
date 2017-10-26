@@ -9,7 +9,7 @@
 #include <fstream>
 #include <Windows.h>
 #include <vrpn_Tracker.h>
-#include "util.h"
+#include "utilTest.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -17,7 +17,7 @@ namespace StorageTest {
 
 
 
-std::map<std::string,std::string> configMap = { {"HOST","tcp://127.0.0.1:3306"},
+std::map<std::string,std::string> configMap = { {"HOST","127.0.0.1:3306"},
 												{"DB","vrpn"},
 												{"USER","root" },
 												{"PASSWD","" },

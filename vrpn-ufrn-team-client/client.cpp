@@ -218,6 +218,7 @@ void VRPN_CALLBACK handle_analog(void *userdata, const vrpn_ANALOGCB a) {
 	//int i;
 	const char *name = (const char *)userdata;
 
+	client.getInputConverter().checkAnalog(name, a);
 	/*printf("!!!Analog %s:\n         %5.2f", name, a.channel[0]);
 	for ( i = 1; i < a.num_channel; i++ ) {
 	printf(", %5.2f", a.channel[i]);
