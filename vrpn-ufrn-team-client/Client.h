@@ -1,6 +1,7 @@
 #pragma once
 #include <stdio.h>  // for printf, fprintf, NULL, etc
 #include <stdlib.h> // for exit, atoi
+
 #ifndef _WIN32_WCE
 #include <signal.h> // for signal, SIGINT
 #endif
@@ -28,7 +29,10 @@
 #include "InputConverter.h"
 
 
+
 //GUI
+
+#include <shellapi.h>
 #include <windows.h> 
 #include <tchar.h>  
 #include <io.h>

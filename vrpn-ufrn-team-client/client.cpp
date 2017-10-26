@@ -233,18 +233,14 @@ void VRPN_CALLBACK handle_analog(void *userdata, const vrpn_ANALOGCB a) {
 // set a done flag here and let the main program shut down in its own
 // thread by calling shutdown() to do all of the stuff we used to do in
 // this handler.
-void Usage(const char *arg0) {
+void Usage() {
 
-
-
-	fprintf(
-		stderr,
+	printf(
 		"Usage:  %s [-notracker] [-nobutton] [-noanalog] \n"
 		" -notracker:  Don't print tracker reports for following devices\n"
 		"  -nobutton:  Don't print button reports for following devices\n"
 		"  -noanalog:  Don't print analog reports for following devices\n"
-		"  -export:  Exporta arquivos para o banco de dados\n",
-		arg0);
+		"  -export:  Exporta arquivos para o banco de dados\n");
 
 	exit(0);
 }
@@ -269,29 +265,45 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	TrackerUserCallback *userdata = new TrackerUserCallback;
 	vrpn_TRACKERCB t = vrpn_TRACKERCB();
 
-	
-	// Parse arguments, creating objects as we go.  Arguments that
-	// change the way a device is treated affect all devices that
-	// follow on the command line.
-	/*for (int i = 1; i < argc; i++ ) {
 
-		if ( !strcmp(argv[i], "-f") ) { // Specify config-file name
+	//Captura de argumentos
+
+	LPWSTR *argv;
+	int argc;
+	int i;
+	char buffer[500];
+
+	argv = CommandLineToArgvW(GetCommandLineW(), &argc);
+	if ( NULL == argv ) {
+		wprintf(L"CommandLineToArgvW failed\n");
+		return 0;
+	} else for ( i = 0; i < argc; i++ ) {
+		printf("%d: %ws\n", i, argv[i]);
+
+		if ( !wcscmp(argv[i], L"-f") ) { // Specify config-file name
+			wcstombs(buffer, argv[i], 500);
 			if ( ++i > argc ) {
-				Usage(argv[0]);
+				Usage();
 			}
-			client.setConfigFile(argv[i]);
+			client.setConfigFile(buffer);
 		} else
-		if ( !strcmp(argv[i], "-notracker") ) {
+		if ( !wcscmp(argv[i], L"-notracker") ) {
 			client.setPrintTracker(false);
-		} else if ( !strcmp(argv[i], "-nobutton") ) {
+		} else if ( !wcscmp(argv[i], L"-nobutton") ) {
 			client.setPrintButton(false);
-		} else if ( !strcmp(argv[i], "-noanalog") ) {
+		} else if ( !wcscmp(argv[i], L"-noanalog") ) {
 			client.setPrintAnalog(false);
-		} else if ( !strcmp(argv[i], "-export") ) {
+		} else if ( !wcscmp(argv[i], L"-export") ) {
 			client.setExport(true);
+		} else if ( !wcscmp(argv[i], L"-record") ) {
+			printf("Defina o nome do gesto a ser gravado:");
+			scanf("%s", buffer);
 		}
+	}
 
-	}*/
+	// Free memory allocated for CommandLineToArgvW arguments.
+	LocalFree(argv);
+
 
 	client.setup();
 
