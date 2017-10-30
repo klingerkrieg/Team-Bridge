@@ -29,9 +29,10 @@ public class VRPN : MonoBehaviour {
 	bool unfreezingRoutine = false;
 
 	List<Bone> bones = new List<Bone> ();
-
-
 	List<GameObject> spheres = new List<GameObject>();
+
+	Vector3 headPos;
+	public bool kinectLimit = true;
 
 	[DllImport ("unityVrpn")]
 	private static extern double vrpnTrackerExtern(string address, int channel, int component, int frameCount);
@@ -85,7 +86,7 @@ public class VRPN : MonoBehaviour {
 
 
 	public IEnumerator moveObjectOverTime(GameObject objectToMove, Vector3 end, float seconds){
-
+		
 		float elapsedTime = 0;
 		Vector3 startingPos = objectToMove.transform.position;
 
@@ -97,19 +98,47 @@ public class VRPN : MonoBehaviour {
 
 		objectToMove.transform.position = end;
 		unfreezingRoutine = false;
+	}
 
+	void Start(){
+		createView ();
+		createLines ();
 	}
 
 
-	// Use this for initialization
-	void Start () {
+	void destroyView(){
+		//Create bones
+		foreach (Bone bone in bones) {
+			Destroy (bone.cylinder);
+		}
 
+		bones.Clear ();
+
+		foreach (GameObject sphere in spheres) {
+			Destroy(sphere);
+		}
+
+		spheres.Clear();
+
+		//Reseta variaveis
+		sum = new Vector3 ();
+		lastSum = new Vector3 (0,0,0);
+		freezed = false; 
+		lastFreezeUpdate = -1;
+		unfreezing =  true;
+		unfreezingRoutine = false;
+	}
+
+	// Use this for initialization
+	public void createView () {
+
+		destroyView ();
 
 		if (kinect) {
 			//kinect
 			centerChannel = 2;
 			channels = 20;
-			size = 0.15f;
+			size = 0.10f;
 			cyWidth = 0.06f;
 			Camera.main.transform.position = new Vector3 (0f, 0f, -0.5f);
 
@@ -272,12 +301,16 @@ public class VRPN : MonoBehaviour {
 		//Contator para verificar se parou de receber dados
 		sum = new Vector3 (0, 0, 0);
 
-		int i = 0;
+		int i = -1;
 		GameObject central = null;
 		foreach (GameObject sphere in spheres){
-			
-			Vector3 pos = vrpnTrackerPos ("Tracker0@localhost", i++);
+			i++;
+			Vector3 pos = vrpnTrackerPos ("Tracker0@localhost", i);
 			sum += pos;
+
+			if (i == 0) {
+				headPos = pos;
+			}
 
 			if (freezed == false) {
 				Destroy(sphere.GetComponent<Rigidbody>());
@@ -327,6 +360,7 @@ public class VRPN : MonoBehaviour {
 
 			if (i == centerChannel)
 				central = sphere;
+
 		}
 
 		//se estava descongelando
@@ -363,8 +397,124 @@ public class VRPN : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
-		
+	/*void OnDrawGizmos () {
+		Debug.Log ("HERE");
+		Vector3 leftLimit = headPos;
+		leftLimit.y = 40;
+		//leftLimit.x += 0.10f;
+		Vector3 leftDown = leftLimit;
+		leftDown.y = -40;
 
+		Gizmos.color = Color.blue;
+		Gizmos.DrawLine(leftLimit, leftDown);
+	}*/
+
+	private LineRenderer line;
+
+
+	void createLines(){
+		line = GetComponent<LineRenderer> ();
+	}
+
+	void Update() {
+		if (kinect && kinectLimit) {
+			float handTopInterval = 0.10f;
+
+			float top5 = headPos.y + (handTopInterval * 3);
+			float top4 = headPos.y + (handTopInterval * 2);
+			float top3 = headPos.y + handTopInterval;
+			float top2 = headPos.y - (handTopInterval * 2);
+			float top1 = headPos.y - (handTopInterval * 5);
+			float top0 = -0.95f;
+
+			Vector3[] positions = new Vector3[21];
+			//Left Up
+			positions [0] = headPos;
+			positions [0].x += 0.4f;
+			positions [0].y = top5;
+
+			//Left down
+			positions [1] = positions [0];
+			positions [1].y = top0;
+
+
+			//Right down
+			positions [2] = headPos;
+			positions [2].x -= 0.4f;
+			positions [2].y = top0;
+
+			//Right up
+			positions [3] = positions [2];
+			positions [3].y = top5;
+
+
+			//Top 5
+			positions [4] = headPos;
+			positions [4].y = top5;
+			positions [4].x = -1;
+
+			positions [5] = positions [4];
+			positions [5].x = 1;
+
+
+			//Top 4
+			positions [6] = headPos;
+			positions [6].y = top4;
+			positions [6].x = 1;
+
+			positions [7] = positions [6];
+			positions [7].x = -1;
+
+			positions [8] = positions [7];
+			positions [8].y = top5;
+
+			//Top 3
+			positions [9] = headPos;
+			positions [9].y = top3;
+			positions [9].x = -1;
+
+			positions [10] = positions [9];
+			positions [10].x = 1;
+
+			positions [11] = positions [10];
+			positions [11].y = top4;
+
+			//Top 2
+			positions [12] = headPos;
+			positions [12].y = top2;
+			positions [12].x = 1;
+
+			positions [13] = positions [12];
+			positions [13].x = -1;
+
+			positions [14] = positions [13];
+			positions [14].y = top3;
+
+			//Top 1
+			positions [15] = headPos;
+			positions [15].y = top1;
+			positions [15].x = -1;
+
+			positions [16] = positions [15];
+			positions [16].x = 1;
+
+			positions [17] = positions [16];
+			positions [17].y = top2;
+
+			//Top 0
+			positions [18] = positions [17];
+			positions [18].y = top0;
+
+			positions [19] = positions [18];
+			positions [19].x = -1;
+
+			positions [20] = positions [16];
+			positions [20] = positions [15];
+
+			line.SetPositions (positions);
+			line.enabled = true;
+		} else {
+			line.enabled = false;
+		}
 	}
 }

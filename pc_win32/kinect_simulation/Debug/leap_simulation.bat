@@ -1,2 +1,2 @@
-kinect_simulation.exe leapmotion_demo.txt 46 p
+kinect_simulation.exe leapmotionflex.txt 23 p
 pause

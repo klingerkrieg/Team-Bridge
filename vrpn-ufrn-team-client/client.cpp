@@ -314,7 +314,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	// Free memory allocated for CommandLineToArgvW arguments.
 	LocalFree(argv);
 
-	client.setRecordGesture(true, "bla");
 	client.setup();
 
 

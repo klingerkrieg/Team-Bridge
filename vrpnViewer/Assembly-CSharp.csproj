@@ -49,6 +49,8 @@
      <Compile Include="Assets\Bone.cs" />
      <Compile Include="Assets\Timeout.cs" />
      <Compile Include="Assets\VRPN.cs" />
+     <Compile Include="Assets\toggleMode.cs" />
+     <Compile Include="Assets\toogleKinectLimit.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
