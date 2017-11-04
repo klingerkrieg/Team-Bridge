@@ -419,8 +419,11 @@ public class VRPN : MonoBehaviour {
 	void Update() {
 		if (kinect && kinectLimit) {
 			float handTopInterval = 0.10f;
+			float leftLimit = headPos.x - 1;
+			float rightLimit = headPos.x + 1;
+			float topLimit = headPos.y + 1;
 
-			float top5 = headPos.y + (handTopInterval * 3);
+			float top5 = headPos.y + (handTopInterval * 5);
 			float top4 = headPos.y + (handTopInterval * 2);
 			float top3 = headPos.y + handTopInterval;
 			float top2 = headPos.y - (handTopInterval * 2);
@@ -451,19 +454,19 @@ public class VRPN : MonoBehaviour {
 			//Top 5
 			positions [4] = headPos;
 			positions [4].y = top5;
-			positions [4].x = -1;
+			positions [4].x = leftLimit;
 
 			positions [5] = positions [4];
-			positions [5].x = 1;
+			positions [5].x = rightLimit;
 
 
 			//Top 4
 			positions [6] = headPos;
 			positions [6].y = top4;
-			positions [6].x = 1;
+			positions [6].x = rightLimit;
 
 			positions [7] = positions [6];
-			positions [7].x = -1;
+			positions [7].x = leftLimit;
 
 			positions [8] = positions [7];
 			positions [8].y = top5;
@@ -471,10 +474,10 @@ public class VRPN : MonoBehaviour {
 			//Top 3
 			positions [9] = headPos;
 			positions [9].y = top3;
-			positions [9].x = -1;
+			positions [9].x = leftLimit;
 
 			positions [10] = positions [9];
-			positions [10].x = 1;
+			positions [10].x = rightLimit;
 
 			positions [11] = positions [10];
 			positions [11].y = top4;
@@ -482,10 +485,10 @@ public class VRPN : MonoBehaviour {
 			//Top 2
 			positions [12] = headPos;
 			positions [12].y = top2;
-			positions [12].x = 1;
+			positions [12].x = rightLimit;
 
 			positions [13] = positions [12];
-			positions [13].x = -1;
+			positions [13].x = leftLimit;
 
 			positions [14] = positions [13];
 			positions [14].y = top3;
@@ -493,10 +496,10 @@ public class VRPN : MonoBehaviour {
 			//Top 1
 			positions [15] = headPos;
 			positions [15].y = top1;
-			positions [15].x = -1;
+			positions [15].x = leftLimit;
 
 			positions [16] = positions [15];
-			positions [16].x = 1;
+			positions [16].x = rightLimit;
 
 			positions [17] = positions [16];
 			positions [17].y = top2;
@@ -506,7 +509,7 @@ public class VRPN : MonoBehaviour {
 			positions [18].y = top0;
 
 			positions [19] = positions [18];
-			positions [19].x = -1;
+			positions [19].x = leftLimit;
 
 			positions [20] = positions [16];
 			positions [20] = positions [15];

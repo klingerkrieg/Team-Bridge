@@ -1,11 +1,11 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\toogleKinectLimit.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\VRPN.cs">
     <Files>
       <File FileName="Assets\Timeout.cs" Line="1" Column="1" />
-      <File FileName="Assets\VRPN.cs" Line="35" Column="32" />
-      <File FileName="Assets\toggleMode.cs" Line="19" Column="60" />
-      <File FileName="Assets\toogleKinectLimit.cs" Line="16" Column="17" />
+      <File FileName="Assets\VRPN.cs" Line="426" Column="51" />
+      <File FileName="Assets\toggleMode.cs" Line="1" Column="1" />
+      <File FileName="Assets\toogleKinectLimit.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
