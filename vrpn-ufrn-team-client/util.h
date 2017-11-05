@@ -21,3 +21,9 @@ bool ends_with(std::string str, std::string with);
 bool starts_with(std::string str, std::string with);
 
 void replace_all(std::string &in_place, std::string from, std::string to);
+
+double dot(std::vector<double> a, std::vector<double> b);
+
+double mag(std::vector<double> a);
+
+double det(std::vector<double> a, std::vector<double> b);

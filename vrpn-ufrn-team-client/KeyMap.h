@@ -72,6 +72,8 @@ private:
 	int x = 0;
 	int y = 0;
 
+	double angle = -1;
+
 	//sensibilidade para mudanca de altura
 	double heightSens = 0.15;
 
@@ -177,6 +179,10 @@ public:
 
 	std::string getMsg() {
 		return msg;
+	}
+
+	double getAngle() {
+		return angle;
 	}
 
 	bool getDetermineCenterPos() {

@@ -19,6 +19,8 @@ vrpn_Connection		*connection;
 
 bool print = false;
 
+int delay = 0;
+
 class tracker_user_callback {
 public:
     char t_name[vrpn_MAX_TEXT_LEN];
@@ -51,6 +53,9 @@ handle_tracker_pos_quat(void *userdata, const vrpn_TRACKERCB t)
 }
 
 
+void usage() {
+	printf("Usage:\n\n Passe como primeiro parametro o nome do arquivo.txt e numero de sensores em seguida as demais opcoes\np - Print tracking\nany - no print\nd - Delay");
+}
 
 
 
@@ -58,15 +63,22 @@ handle_tracker_pos_quat(void *userdata, const vrpn_TRACKERCB t)
 int main (int argc, char * argv []) {
 
 	printf("default port: %d \n", CONNECTION_PORT);
-	if (argc != 4) {
-		fprintf(stderr, "Usage: %s\n\n Passe como primeiro parametro o nome do arquivo.txt em seguida o numero de sensores com\np - Print tracking\nany - no print", argv[0]);
+	if (argc < 3) {
+		usage();
 		return -1;
 	}
 
-	
-	if ( argv[3][0] == 'p' ){
-		print = true;
+	for ( int i = 0; i < argc; i++ ) {
+		if ( argv[i][0] == 'p' ) {
+			print = true;
+		}
+
+		if ( argv[i][0] == 'd' ) {
+			delay = atoi(argv[i + 1]);
+		}
 	}
+	
+	
 	
 	// explicitly open the connection
 	connection = vrpn_create_server_connection(CONNECTION_PORT);
@@ -173,6 +185,10 @@ int main (int argc, char * argv []) {
 
 				// Sleep for 1ms so we don't eat the CPU
 				vrpn_SleepMsecs(1);
+
+				if ( delay != 0 ) {
+					Sleep(delay);
+				}
 			}
 			fclose(file);
 

@@ -28,9 +28,15 @@ std::string KeyMap::toString() {
 	if ( getIsLeaving() ) {
 		ret = "-->\t" + getToKeyRepr() + "";
 	} else {
-		ret = "[" + getDev() + "]\t" + getKeyRepr() + "\t->\t" + getToKeyRepr();
+		ret = "[" + getDev() + "]\t" + getKeyRepr();
+		
+		if ( getAngle() != -1 ) {
+			ret += "[" + std::to_string(getAngle()) + "]";
+		}
+			
+		ret += "\t->\t" + getToKeyRepr();
 	}
-
+	
 
 	if ( getIsBtn() ) {
 		if ( getBtnDown() && getBtnUp() ) {
@@ -63,6 +69,7 @@ std::string KeyMap::toString() {
 			ret += "\tYPOS:" + std::to_string(getHandTopLevel());
 		}
 	}
+	
 
 	if ( getHasOnLeave() ) {
 		ret += "\n\t\t\t\t" + getOnLeave()->toString();
@@ -102,6 +109,17 @@ KeyMap::KeyMap(std::string dev, std::string config) {
 			if ( contains((*it), "LEAVING") ) {
 				isLeaving = true;
 				continue;
+			} else
+			if ( contains((*it), "LEAP_RIGHT_FIST") || contains((*it), "LEAP_LEFT_FIST") ) {
+
+				options = split((*it), "=");
+				keyChar = options.front();
+				if ( options.size() == 1 ) {
+					printf("Linha configurada incorretamente: %s\n", config.c_str());
+				}
+				angle = atoi(options.at(1).c_str());
+
+
 			} else
 			if ( contains((*it), "HAND_TOP") ) {
 				options = split((*it), "=");
