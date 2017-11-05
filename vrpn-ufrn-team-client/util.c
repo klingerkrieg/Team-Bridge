@@ -55,6 +55,6 @@ double det(std::vector<double> a, std::vector<double> b) {
 }
 
 double mag(std::vector<double> a) {
-	return std::sqrt(a[0] * a[0] + a[1] * a[1] + a[2] * a[2]);
+	return a[0] * a[0] + a[1] * a[1] + a[2] * a[2];
 }
 

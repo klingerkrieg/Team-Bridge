@@ -164,6 +164,7 @@
     <ClCompile Include="Config.c" />
     <ClCompile Include="ConfigFileReader.c" />
     <ClCompile Include="Db.c" />
+    <ClCompile Include="FlexedMember.c" />
     <ClCompile Include="GestureRecorder.c" />
     <ClCompile Include="KinectGestures.c" />
     <ClCompile Include="InputConverter.c" />
@@ -180,6 +181,7 @@
     <ClInclude Include="Db.h" />
     <ClInclude Include="DeviceInfo.h" />
     <ClInclude Include="FileParser.h" />
+    <ClInclude Include="FlexedMember.h" />
     <ClInclude Include="GestureRecognizer.h" />
     <ClInclude Include="GestureRecorder.h" />
     <ClInclude Include="KinectGestures.h" />

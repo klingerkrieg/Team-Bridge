@@ -3,14 +3,14 @@
 #include "DeviceInfo.h"
 #include <map>
 #include <time.h>
-
+#include "FlexedMember.h"
 
 const int GEST_LEFT = 1;
 const int GEST_RIGHT = 2;
 const int GEST_FRONT = 3;
 const int GEST_BACK = 4;
 
-class KinectGestures {
+class KinectGestures : public FlexedMember {
 private:
 	//nao pode usar o mesmo headHeight para detectTopChange porque se nao ele so ira detectar mudancas bruscas
 	//porque dentro do detectHandTop o headHeight é atualizado a todo momento
@@ -59,7 +59,16 @@ private:
 
 	int detectHandTop(const vrpn_TRACKERCB t, int topLevel, int handTopMod);
 
+	//Flexao
+	static std::map<int, std::vector<double>> lastPositions[10];
+
 public:
+
+	//flexao
+	int leftFistFlexedUp(const vrpn_TRACKERCB t, int angle);
+	int leftFistFlexedDown(const vrpn_TRACKERCB t, int angle);
+	int rightFistFlexedUp(const vrpn_TRACKERCB t, int angle);
+	int rightFistFlexedDown(const vrpn_TRACKERCB t, int angle);
 
 	std::vector<double> getLastMemberPos(int sensor);
 	int getLastMemberTime(int sensor);

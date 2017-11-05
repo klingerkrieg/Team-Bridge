@@ -3,60 +3,87 @@
 
 std::map<int, std::vector<double>> LeapMotionGestures::lastPositions[10];
 
-int LeapMotionGestures::fistFlexed(const vrpn_TRACKERCB t, int side, int direction, int paramAngle) {
-	std::vector<double> actPos = { t.pos[0], t.pos[1], t.pos[2] };
-	std::vector<double> fist;
-	std::vector<double> hand;
 
-	if ( t.sensor == 0 || t.sensor == 2 || t.sensor == 23 || t.sensor == 25 ) {
-		lastPositions->insert_or_assign(t.sensor, actPos);
-	} else {
-		return -1;
-	}
-
-	std::map<std::string, int>::iterator handFound;
-	std::map<std::string, int>::iterator fistFound;
-
-	if ( side == LEFT_HAND && (t.sensor == 23 || t.sensor == 25) ) {
-		if ( lastPositions->find(23) == lastPositions->end() || lastPositions->find(25) == lastPositions->end() ) {
-			return -1;
-		}
-		fist = lastPositions->at(25);
-		hand = lastPositions->at(23);
-	} else
-	if ( side == RIGHT_HAND && (t.sensor == 0 || t.sensor == 2)) {
-		if ( lastPositions->find(2) == lastPositions->end() || lastPositions->find(0) == lastPositions->end() ) {
-			return -1;
-		}
-		fist = lastPositions->at(2);
-		hand = lastPositions->at(0);
-	}
-
-	fist.resize(2);
-	hand.resize(2);
-
-
-	double angle = atan2(det(fist,hand), dot(fist,hand)) * 1000; //2d
-	//double angle = std::acos(dot(fist, hand) / (mag(fist)*mag(hand)));//3d
-	
-	if ( paramAngle > angle ) {
-		return 1;
-	} else {
-		return 0;
-	}	
-}
 
 int LeapMotionGestures::leftFistFlexedUp(const vrpn_TRACKERCB t, int angle) {
-	return fistFlexed(t, LEFT_HAND, UP, angle);
+	
+	std::map<int, std::vector<double>> points = getPoints(t, 24, 25, 23, *lastPositions);
+	if ( points.size() == 0 ) {
+		return -1;
+	}
+	if ( flexed3d(points, angle) ) {
+
+		std::vector<double> hand = lastPositions->at(0);
+		std::vector<double> fist = lastPositions->at(2);
+
+		if ( hand[1] > fist[1] ) {
+			return 1;
+		} else {
+			return 0;
+		}
+	} else {
+		return 0;
+	}
 }
 int LeapMotionGestures::leftFistFlexedDown(const vrpn_TRACKERCB t, int angle) {
-	return fistFlexed(t, LEFT_HAND, DOWN, angle);
+
+	std::map<int, std::vector<double>> points = getPoints(t, 24, 25, 23, *lastPositions);
+	if ( points.size() == 0 ) {
+		return -1;
+	}
+	if ( flexed3d(points, angle) ) {
+
+		std::vector<double> hand = lastPositions->at(0);
+		std::vector<double> fist = lastPositions->at(2);
+
+		if ( hand[1] < fist[1] ) {
+			return 1;
+		} else {
+			return 0;
+		}
+	} else {
+		return 0;
+	}
 }
 int LeapMotionGestures::rightFistFlexedUp(const vrpn_TRACKERCB t, int angle) {
-	return fistFlexed(t, RIGHT_HAND, UP, angle);
+
+	std::map<int, std::vector<double>> points = getPoints(t, 1, 2, 0, *lastPositions);
+	if ( points.size() == 0 ) {
+		return -1;
+	}
+	if ( flexed3d(points, angle) ) {
+
+		std::vector<double> hand = lastPositions->at(0);
+		std::vector<double> fist = lastPositions->at(2);
+
+		if ( hand[1] > fist[1] ) {
+			return 1;
+		} else {
+			return 0;
+		}
+	} else {
+		return 0;
+	}
 }
 int LeapMotionGestures::rightFistFlexedDown(const vrpn_TRACKERCB t, int angle) {
-	return fistFlexed(t, RIGHT_HAND, DOWN, angle);
+
+	std::map<int, std::vector<double>> points = getPoints(t, 1, 2, 0, *lastPositions);
+	if ( points.size() == 0 ) {
+		return -1;
+	}
+	if ( flexed3d(points, angle) ) {
+
+		std::vector<double> hand = lastPositions->at(0);
+		std::vector<double> fist = lastPositions->at(2);
+
+		if ( hand[1] < fist[1] ) {
+			return 1;
+		} else {
+			return 0;
+		}
+	} else {
+		return 0;
+	}
 }
 
 

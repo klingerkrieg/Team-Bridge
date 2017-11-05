@@ -361,16 +361,16 @@ bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKE
 				active = gr.detectTurnRight(t);
 			} else
 			if ( keyMap->getKey() == LEAP_LEFT_FIST_UP  ) {
-				active = gr.leftFistFlexedUp(t, keyMap->getAngle());
+				active = gr.LeapMotionGestures::leftFistFlexedUp(t, keyMap->getAngle());
 			} else
 			if ( keyMap->getKey() == LEAP_LEFT_FIST_DOWN ) {
-				active = gr.leftFistFlexedDown(t, keyMap->getAngle());
+				active = gr.LeapMotionGestures::leftFistFlexedDown(t, keyMap->getAngle());
 			} else
 			if ( keyMap->getKey() == LEAP_RIGHT_FIST_UP  ) {
-				active = gr.rightFistFlexedUp(t, keyMap->getAngle());
+				active = gr.LeapMotionGestures::rightFistFlexedUp(t, keyMap->getAngle());
 			} else
 			if ( keyMap->getKey() == LEAP_RIGHT_FIST_DOWN ) {
-				active = gr.rightFistFlexedDown(t, keyMap->getAngle());
+				active = gr.LeapMotionGestures::rightFistFlexedDown(t, keyMap->getAngle());
 			}
 
 		}
