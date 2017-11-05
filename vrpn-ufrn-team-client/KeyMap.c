@@ -110,8 +110,11 @@ KeyMap::KeyMap(std::string dev, std::string config) {
 				isLeaving = true;
 				continue;
 			} else
-			if ( contains((*it), "LEAP_RIGHT_FIST") || contains((*it), "LEAP_LEFT_FIST") ) {
-
+			if ( contains((*it), "LEAP_RIGHT_FIST")
+				|| contains((*it), "LEAP_LEFT_FIST")
+				|| contains((*it), "KINECT_RIGHT_FIST")
+				|| contains((*it), "KINECT_LEFT_FIST") ) {
+				
 				options = split((*it), "=");
 				keyChar = options.front();
 				if ( options.size() == 1 ) {

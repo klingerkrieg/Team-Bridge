@@ -360,6 +360,18 @@ bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKE
 			if ( keyMap->getKey() == KINECT_TURN_RIGHT ) {
 				active = gr.detectTurnRight(t);
 			} else
+			if ( keyMap->getKey() == KINECT_LEFT_FIST_UP  ) {
+				active = gr.KinectGestures::leftFistFlexedUp(t, keyMap->getAngle());
+			} else
+			if ( keyMap->getKey() == KINECT_LEFT_FIST_DOWN ) {
+				active = gr.KinectGestures::leftFistFlexedDown(t, keyMap->getAngle());
+			} else
+			if ( keyMap->getKey() == KINECT_RIGHT_FIST_UP  ) {
+				active = gr.KinectGestures::rightFistFlexedUp(t, keyMap->getAngle());
+			} else
+			if ( keyMap->getKey() == KINECT_RIGHT_FIST_DOWN ) {
+				active = gr.KinectGestures::rightFistFlexedDown(t, keyMap->getAngle());
+			} else
 			if ( keyMap->getKey() == LEAP_LEFT_FIST_UP  ) {
 				active = gr.LeapMotionGestures::leftFistFlexedUp(t, keyMap->getAngle());
 			} else

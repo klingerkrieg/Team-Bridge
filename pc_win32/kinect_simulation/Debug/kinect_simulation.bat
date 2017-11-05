@@ -1,2 +1,2 @@
-kinect_simulation.exe KinectCirculos.txt 20 n
+kinect_simulation.exe KinectFlex.txt 20 d 1
 pause
