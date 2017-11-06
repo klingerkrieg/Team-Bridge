@@ -13,7 +13,7 @@ int FlexedMember::flexed2d(std::map<int, std::vector<double>> points, int paramA
 	}
 }
 
-int FlexedMember::flexed3d(std::map<int, std::vector<double>> points, int paramAngle) {
+int FlexedMember::flexed3d(std::map<int, std::vector<double>> points, int paramAngle, int angleMod) {
 
 
 	/*float d = dot(points.at(0), points.at(1));
@@ -53,7 +53,18 @@ int FlexedMember::flexed3d(std::map<int, std::vector<double>> points, int paramA
 	double angle = acos(res) * 180.0 / 3.14159265;
 
 	printf("%.2f\n", angle);
-	if ( paramAngle > angle ) {
+	bool comp;
+	if ( angleMod == -1 ) {
+		comp = paramAngle > angle;
+	} else
+	if ( angleMod == 1 ) {
+		comp = paramAngle < angle;
+	} else
+	if ( angleMod == 0 ) {
+		comp = paramAngle == angle;
+	}
+
+	if ( comp ) {
 		return 1;
 	} else {
 		return 0;

@@ -65,10 +65,10 @@ private:
 public:
 
 	//flexao
-	int leftFistFlexedUp(const vrpn_TRACKERCB t, int angle);
-	int leftFistFlexedDown(const vrpn_TRACKERCB t, int angle);
-	int rightFistFlexedUp(const vrpn_TRACKERCB t, int angle);
-	int rightFistFlexedDown(const vrpn_TRACKERCB t, int angle);
+	int leftFistFlexedUp(const vrpn_TRACKERCB t, int angle, int angleMod);
+	int leftFistFlexedDown(const vrpn_TRACKERCB t, int angle, int angleMod);
+	int rightFistFlexedUp(const vrpn_TRACKERCB t, int angle, int angleMod);
+	int rightFistFlexedDown(const vrpn_TRACKERCB t, int angle, int angleMod);
 
 	std::vector<double> getLastMemberPos(int sensor);
 	int getLastMemberTime(int sensor);

@@ -381,35 +381,35 @@ int KinectGestures::detectTurnRight(const vrpn_TRACKERCB t) {
 std::map<int, std::vector<double>> KinectGestures::lastPositions[10];
 
 
-int KinectGestures::leftFistFlexedUp(const vrpn_TRACKERCB t, int angle) {
+int KinectGestures::leftFistFlexedUp(const vrpn_TRACKERCB t, int angle, int angleMod) {
 
 	std::map<int, std::vector<double>> points = getPoints(t, 9, 10, 11, *lastPositions);
 	if ( points.size() == 0 ) {
 		return -1;
 	}
-	return flexed3d(points, angle);
+	return flexed3d(points, angle, angleMod);
 }
-int KinectGestures::leftFistFlexedDown(const vrpn_TRACKERCB t, int angle) {
+int KinectGestures::leftFistFlexedDown(const vrpn_TRACKERCB t, int angle, int angleMod) {
 
 	std::map<int, std::vector<double>> points = getPoints(t, 9, 10, 11, *lastPositions);
 	if ( points.size() == 0 ) {
 		return -1;
 	}
-	return flexed3d(points, angle);
+	return flexed3d(points, angle, angleMod);
 }
-int KinectGestures::rightFistFlexedUp(const vrpn_TRACKERCB t, int angle) {
+int KinectGestures::rightFistFlexedUp(const vrpn_TRACKERCB t, int angle, int angleMod) {
 
 	std::map<int, std::vector<double>> points = getPoints(t, 5, 6, 7, *lastPositions);
 	if ( points.size() == 0 ) {
 		return -1;
 	}
-	return flexed3d(points, angle);
+	return flexed3d(points, angle, angleMod);
 }
-int KinectGestures::rightFistFlexedDown(const vrpn_TRACKERCB t, int angle) {
+int KinectGestures::rightFistFlexedDown(const vrpn_TRACKERCB t, int angle, int angleMod) {
 
 	std::map<int, std::vector<double>> points = getPoints(t, 5, 6, 7, *lastPositions);
 	if ( points.size() == 0 ) {
 		return -1;
 	}
-	return flexed3d(points, angle);
+	return flexed3d(points, angle, angleMod);
 }

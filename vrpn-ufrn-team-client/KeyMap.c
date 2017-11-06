@@ -31,7 +31,17 @@ std::string KeyMap::toString() {
 		ret = "[" + getDev() + "]\t" + getKeyRepr();
 		
 		if ( getAngle() != -1 ) {
-			ret += "[" + std::to_string(getAngle()) + "]";
+			ret += "[";
+			if ( getAngleMod() == 1 ) {
+				ret += ">";
+			} else
+			if ( getAngleMod() == -1 ) {
+				ret += "<";
+			} else
+			if ( getAngleMod() == 0 ) {
+				ret += "=";
+			}
+			ret += std::to_string(getAngle()) + "]";
 		}
 			
 		ret += "\t->\t" + getToKeyRepr();
@@ -120,8 +130,22 @@ KeyMap::KeyMap(std::string dev, std::string config) {
 				if ( options.size() == 1 ) {
 					printf("Linha configurada incorretamente: %s\n", config.c_str());
 				}
-				angle = atoi(options.at(1).c_str());
 
+
+				if ( starts_with(options.at(1), ">") ) {
+					angleMod = 1;
+					options.at(1)[0] = ' ';
+					angle = atoi(options.at(1).c_str());
+				} else
+				if ( starts_with(options.at(1), "<") ) {
+					angleMod = -1;
+					options.at(1)[0] = ' ';
+					angle = atoi(options.at(1).c_str());
+				} else {
+					angleMod = 0;
+					angle = atoi(options.at(1).c_str());
+				}
+				
 
 			} else
 			if ( contains((*it), "HAND_TOP") ) {

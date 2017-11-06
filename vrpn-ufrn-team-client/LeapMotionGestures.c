@@ -5,13 +5,13 @@ std::map<int, std::vector<double>> LeapMotionGestures::lastPositions[10];
 
 
 
-int LeapMotionGestures::leftFistFlexedUp(const vrpn_TRACKERCB t, int angle) {
+int LeapMotionGestures::leftFistFlexedUp(const vrpn_TRACKERCB t, int angle, int angleMod) {
 	
 	std::map<int, std::vector<double>> points = getPoints(t, 24, 25, 23, *lastPositions);
 	if ( points.size() == 0 ) {
 		return -1;
 	}
-	if ( flexed3d(points, angle) ) {
+	if ( flexed3d(points, angle, angleMod) ) {
 
 		std::vector<double> hand = lastPositions->at(0);
 		std::vector<double> fist = lastPositions->at(2);
@@ -25,13 +25,13 @@ int LeapMotionGestures::leftFistFlexedUp(const vrpn_TRACKERCB t, int angle) {
 		return 0;
 	}
 }
-int LeapMotionGestures::leftFistFlexedDown(const vrpn_TRACKERCB t, int angle) {
+int LeapMotionGestures::leftFistFlexedDown(const vrpn_TRACKERCB t, int angle, int angleMod) {
 
 	std::map<int, std::vector<double>> points = getPoints(t, 24, 25, 23, *lastPositions);
 	if ( points.size() == 0 ) {
 		return -1;
 	}
-	if ( flexed3d(points, angle) ) {
+	if ( flexed3d(points, angle, angleMod) ) {
 
 		std::vector<double> hand = lastPositions->at(0);
 		std::vector<double> fist = lastPositions->at(2);
@@ -45,13 +45,13 @@ int LeapMotionGestures::leftFistFlexedDown(const vrpn_TRACKERCB t, int angle) {
 		return 0;
 	}
 }
-int LeapMotionGestures::rightFistFlexedUp(const vrpn_TRACKERCB t, int angle) {
+int LeapMotionGestures::rightFistFlexedUp(const vrpn_TRACKERCB t, int angle, int angleMod) {
 
 	std::map<int, std::vector<double>> points = getPoints(t, 1, 2, 0, *lastPositions);
 	if ( points.size() == 0 ) {
 		return -1;
 	}
-	if ( flexed3d(points, angle) ) {
+	if ( flexed3d(points, angle, angleMod) ) {
 
 		std::vector<double> hand = lastPositions->at(0);
 		std::vector<double> fist = lastPositions->at(2);
@@ -65,13 +65,13 @@ int LeapMotionGestures::rightFistFlexedUp(const vrpn_TRACKERCB t, int angle) {
 		return 0;
 	}
 }
-int LeapMotionGestures::rightFistFlexedDown(const vrpn_TRACKERCB t, int angle) {
+int LeapMotionGestures::rightFistFlexedDown(const vrpn_TRACKERCB t, int angle, int angleMod) {
 
 	std::map<int, std::vector<double>> points = getPoints(t, 1, 2, 0, *lastPositions);
 	if ( points.size() == 0 ) {
 		return -1;
 	}
-	if ( flexed3d(points, angle) ) {
+	if ( flexed3d(points, angle, angleMod) ) {
 
 		std::vector<double> hand = lastPositions->at(0);
 		std::vector<double> fist = lastPositions->at(2);

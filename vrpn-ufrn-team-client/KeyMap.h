@@ -78,7 +78,8 @@ private:
 	int x = 0;
 	int y = 0;
 
-	double angle = -1;
+	int angle = -1;
+	int angleMod = 0;// 0 =, 1 >, -1 <
 
 	//sensibilidade para mudanca de altura
 	double heightSens = 0.15;
@@ -187,7 +188,11 @@ public:
 		return msg;
 	}
 
-	double getAngle() {
+	int getAngleMod() {
+		return angleMod;
+	}
+
+	int getAngle() {
 		return angle;
 	}
 

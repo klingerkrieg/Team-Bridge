@@ -20,13 +20,13 @@ private:
 
 public:
 	
-	int leftFistFlexedUp(const vrpn_TRACKERCB t, int angle);
-	int leftFistFlexedDown(const vrpn_TRACKERCB t, int angle);
+	int leftFistFlexedUp(const vrpn_TRACKERCB t, int angle, int angleMod);
+	int leftFistFlexedDown(const vrpn_TRACKERCB t, int angle, int angleMod);
 	bool leftClosed(const vrpn_ANALOGCB a);
 	bool leftPinch(const vrpn_ANALOGCB a);
 
-	int rightFistFlexedUp(const vrpn_TRACKERCB t, int angle);
-	int rightFistFlexedDown(const vrpn_TRACKERCB t, int angle);
+	int rightFistFlexedUp(const vrpn_TRACKERCB t, int angle, int angleMod);
+	int rightFistFlexedDown(const vrpn_TRACKERCB t, int angle, int angleMod);
 	bool rightClosed(const vrpn_ANALOGCB a);
 	bool rightPinch(const vrpn_ANALOGCB a);
 
