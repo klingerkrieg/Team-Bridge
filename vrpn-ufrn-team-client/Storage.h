@@ -28,6 +28,7 @@ private:
 	 std::string saveDir;
 	 std::string fileName;
 	 std::string dateStr;
+	 bool infoData = true; 
 	 Db db;
 	 bool exportDb;
 
@@ -40,6 +41,14 @@ private:
 	 //bool getValue(std::string &var, char * scrap, char * fileName, std::string line);
 	
 public:
+
+	void setFileName(std::string fileName) {
+		this->fileName = fileName;
+	}
+
+	void setInfoData(bool save) {
+		this->infoData = save;
+	}
 
 	void setSaveDir(std::string saveDir) {
 		this->saveDir = saveDir;

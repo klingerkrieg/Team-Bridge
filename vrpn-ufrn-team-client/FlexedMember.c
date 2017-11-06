@@ -71,10 +71,10 @@ int FlexedMember::flexed3d(std::map<int, std::vector<double>> points, int paramA
 		std::vector<double> p2 = points.at(2);
 
 		if ( direction == UP ) {
-			return p1[1] > p2[1];
+			return p1[1] < p2[1];
 		} else 
 		if ( direction == DOWN ) {
-			return p1[1] < p2[1];
+			return p1[1] > p2[1];
 		}
 
 		return -1;

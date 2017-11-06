@@ -16,16 +16,22 @@ const std::string currentDateTime(std::string format) {
 
 bool Storage::saveToFile(TrackerUserCallback *userdata, const vrpn_TRACKERCB t) {
 	if ( isOpenOut == false ) {
-		dateStr = currentDateTime("%Y-%m-%d %H:%M:%S");
-		fileName = Storage::saveDir + "/" + currentDateTime("%Y-%m-%d_%H-%M-%S") + ".txt";
+		if ( fileName == "" ) {
+			dateStr = currentDateTime("%Y-%m-%d %H:%M:%S");
+			fileName = Storage::saveDir + "/" + currentDateTime("%Y-%m-%d_%H-%M-%S") + ".txt";
+		} else {
+			fileName = Storage::saveDir + "/" + fileName + ".txt";
+		}
 
 		if ( !openOut(fileName) ) {
 			std::cout << "Nao foi possivel abrir arquivo: " << fileName << "\n";
 			return false;
 		} else {
-			fileOutput << "DEV\t" << userdata->name << "\n";
-			fileOutput << "DATE\t" << dateStr << "\n";
-			fileOutput << "PATIENT\t" << patient << "\n";
+			if ( infoData ) {
+				fileOutput << "DEV\t" << userdata->name << "\n";
+				fileOutput << "DATE\t" << dateStr << "\n";
+				fileOutput << "PATIENT\t" << patient << "\n";
+			}
 			std::cout << fileName << " Criado.\n";
 
 		}

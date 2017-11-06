@@ -173,10 +173,10 @@ void VRPN_CALLBACK handle_tracker_pos_quat(void *userdata, const vrpn_TRACKERCB 
 	TrackerUserCallback *t_data = static_cast<TrackerUserCallback *>(userdata);
 	
 	if ( client.getRecordGesture() ) {
-		client.getGestureRecorder().record(t_data, t);
+		client.getGestureRecorder()->record(t_data, t);
 	} else {
 		client.getStorage().saveToFile(t_data, t);
-		client.getInputConverter().checkTrack(t_data, t);
+		client.getInputConverter()->checkTrack(t_data, t);
 	}
 
 	// Make sure we have a count value for this sensor
@@ -207,7 +207,7 @@ void VRPN_CALLBACK handle_button(void *userdata, const vrpn_BUTTONCB b) {
 	}
 
 
-	client.getInputConverter().checkButton(name, b);
+	client.getInputConverter()->checkButton(name, b);
 }
 
 
@@ -228,7 +228,7 @@ void VRPN_CALLBACK handle_analog(void *userdata, const vrpn_ANALOGCB a) {
 	//int i;
 	const char *name = (const char *)userdata;
 
-	client.getInputConverter().checkAnalog(name, a);
+	client.getInputConverter()->checkAnalog(name, a);
 	/*printf("!!!Analog %s:\n         %5.2f", name, a.channel[0]);
 	for ( i = 1; i < a.num_channel; i++ ) {
 	printf(", %5.2f", a.channel[i]);
@@ -308,9 +308,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			printf("Defina o nome do gesto a ser gravado:");
 			scanf("%s", buffer);
 			client.setRecordGesture(true, buffer);
+			client.getGestureRecorder()->printOptions();
 		}
 	}
 
+	client.setRecordGesture(true, "bla");
+	client.getGestureRecorder()->printOptions();
 	// Free memory allocated for CommandLineToArgvW arguments.
 	LocalFree(argv);
 

@@ -60,7 +60,6 @@ private:
 	bool exportDb = false;
 
 	bool recordGesture = false;
-	std::string recordName;
 
 	static const unsigned MAX_DEVICES = 50;
 	DeviceInfo deviceList[MAX_DEVICES];
@@ -85,17 +84,17 @@ public:
 		return storage;
 	}
 
-	InputConverter getInputConverter() {
-		return inputConverter;
+	InputConverter* getInputConverter() {
+		return &inputConverter;
 	}
 
-	GestureRecorder getGestureRecorder() {
-		return gestureRecorder;
+	GestureRecorder* getGestureRecorder() {
+		return &gestureRecorder;
 	}
 
 	void setRecordGesture(bool active, std::string name) {
 		recordGesture = active;
-		recordName = name;
+		gestureRecorder.setName(name);
 	}
 	bool getRecordGesture() {
 		return recordGesture;
