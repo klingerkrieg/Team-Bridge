@@ -13,7 +13,7 @@ int FlexedMember::flexed2d(std::map<int, std::vector<double>> points, int paramA
 	}
 }
 
-int FlexedMember::flexed3d(std::map<int, std::vector<double>> points, int paramAngle, int angleMod) {
+int FlexedMember::flexed3d(std::map<int, std::vector<double>> points, int paramAngle, int angleMod, int direction) {
 
 
 	/*float d = dot(points.at(0), points.at(1));
@@ -65,7 +65,19 @@ int FlexedMember::flexed3d(std::map<int, std::vector<double>> points, int paramA
 	}
 
 	if ( comp ) {
-		return 1;
+
+		
+		std::vector<double> p1 = points.at(1);
+		std::vector<double> p2 = points.at(2);
+
+		if ( direction == UP ) {
+			return p1[1] > p2[1];
+		} else 
+		if ( direction == DOWN ) {
+			return p1[1] < p2[1];
+		}
+
+		return -1;
 	} else {
 		return 0;
 	}

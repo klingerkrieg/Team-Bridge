@@ -11,19 +11,7 @@ int LeapMotionGestures::leftFistFlexedUp(const vrpn_TRACKERCB t, int angle, int 
 	if ( points.size() == 0 ) {
 		return -1;
 	}
-	if ( flexed3d(points, angle, angleMod) ) {
-
-		std::vector<double> hand = lastPositions->at(0);
-		std::vector<double> fist = lastPositions->at(2);
-
-		if ( hand[1] > fist[1] ) {
-			return 1;
-		} else {
-			return 0;
-		}
-	} else {
-		return 0;
-	}
+	return flexed3d(points, angle, angleMod, UP);
 }
 int LeapMotionGestures::leftFistFlexedDown(const vrpn_TRACKERCB t, int angle, int angleMod) {
 
@@ -31,19 +19,7 @@ int LeapMotionGestures::leftFistFlexedDown(const vrpn_TRACKERCB t, int angle, in
 	if ( points.size() == 0 ) {
 		return -1;
 	}
-	if ( flexed3d(points, angle, angleMod) ) {
-
-		std::vector<double> hand = lastPositions->at(0);
-		std::vector<double> fist = lastPositions->at(2);
-
-		if ( hand[1] < fist[1] ) {
-			return 1;
-		} else {
-			return 0;
-		}
-	} else {
-		return 0;
-	}
+	return flexed3d(points, angle, angleMod, DOWN);
 }
 int LeapMotionGestures::rightFistFlexedUp(const vrpn_TRACKERCB t, int angle, int angleMod) {
 
@@ -51,19 +27,7 @@ int LeapMotionGestures::rightFistFlexedUp(const vrpn_TRACKERCB t, int angle, int
 	if ( points.size() == 0 ) {
 		return -1;
 	}
-	if ( flexed3d(points, angle, angleMod) ) {
-
-		std::vector<double> hand = lastPositions->at(0);
-		std::vector<double> fist = lastPositions->at(2);
-
-		if ( hand[1] > fist[1] ) {
-			return 1;
-		} else {
-			return 0;
-		}
-	} else {
-		return 0;
-	}
+	return flexed3d(points, angle, angleMod, UP);
 }
 int LeapMotionGestures::rightFistFlexedDown(const vrpn_TRACKERCB t, int angle, int angleMod) {
 
@@ -71,19 +35,7 @@ int LeapMotionGestures::rightFistFlexedDown(const vrpn_TRACKERCB t, int angle, i
 	if ( points.size() == 0 ) {
 		return -1;
 	}
-	if ( flexed3d(points, angle, angleMod) ) {
-
-		std::vector<double> hand = lastPositions->at(0);
-		std::vector<double> fist = lastPositions->at(2);
-
-		if ( hand[1] < fist[1] ) {
-			return 1;
-		} else {
-			return 0;
-		}
-	} else {
-		return 0;
-	}
+	return flexed3d(points, angle, angleMod, DOWN);
 }
 
 

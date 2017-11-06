@@ -6,11 +6,14 @@
 
 #define PI 3.14159265;
 
+const int UP = 1;
+const int DOWN = 2;
+
 class FlexedMember {
 	public:
 	int flexed2d(std::map<int, std::vector<double>> points, int angle);
 
-	int flexed3d(std::map<int, std::vector<double>> points, int angle, int angleMod);
+	int flexed3d(std::map<int, std::vector<double>> points, int angle, int angleMod, int direction);
 
 	std::map<int, std::vector<double>> getPoints(const vrpn_TRACKERCB t, int sensor1, int sensor2, int sensor3, std::map<int, std::vector<double>> &positions);
 };
