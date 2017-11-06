@@ -416,7 +416,7 @@ bool InputConverter::checkButton(const char * name, const vrpn_BUTTONCB b) {
 
 bool InputConverter::checkAnalog(const char *name, const vrpn_ANALOGCB a) {
 	bool pressed = false;
-	int active;
+	int active = -1;
 	
 	for ( std::vector<KeyMap>::iterator keyMap = map.begin(); keyMap != map.end(); ++keyMap ) {
 

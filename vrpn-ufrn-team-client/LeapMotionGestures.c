@@ -104,7 +104,6 @@ int LeapMotionGestures::leftClosed(const vrpn_ANALOGCB a) {
 	return handClosed(a.channel[0]);
 }
 int LeapMotionGestures::rightClosed(const vrpn_ANALOGCB a) {
-	printf("%.2f\n", a.channel[2]);
 	return handClosed(a.channel[2]);
 }
 
