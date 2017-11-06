@@ -11,6 +11,7 @@ public class VRPN : MonoBehaviour {
 	public bool guideON;
 	public bool guide3D;
 
+	String trackerName;
 	int channels;
 	int centerChannel;
 	float size;
@@ -239,10 +240,19 @@ public class VRPN : MonoBehaviour {
 		Material newMat = Resources.Load("esfera", typeof(Material)) as Material;
 		guideMat = Resources.Load("guide", typeof(Material)) as Material;
 
+
+		if (!kinect) {
+			trackerName = "LeapMotion0@localhost";
+		} else {
+			trackerName = "Tracker0@localhost";
+		}
+
 		//Create bones
 		foreach (Bone bone in bones) {
-			Vector3 start = vrpnTrackerPos ("Tracker0@localhost", bone.sensStart);
-			Vector3 end = vrpnTrackerPos ("Tracker0@localhost", bone.sensEnd);
+			
+			Vector3 start = vrpnTrackerPos (trackerName, bone.sensStart);
+			Vector3 end = vrpnTrackerPos (trackerName, bone.sensEnd);
+			
 			bone.cylinder = CreateCylinderBetweenPoints (start,end,cyWidth);
 		}
 
@@ -280,8 +290,8 @@ public class VRPN : MonoBehaviour {
 
 		foreach (Bone bone in bones) {
 			if (freezed == false) {
-				Vector3 start = vrpnTrackerPos ("Tracker0@localhost", bone.sensStart);
-				Vector3 end = vrpnTrackerPos ("Tracker0@localhost", bone.sensEnd);
+				Vector3 start = vrpnTrackerPos (trackerName, bone.sensStart);
+				Vector3 end = vrpnTrackerPos (trackerName, bone.sensEnd);
 
 				if (unfreezing) {
 					//se estiver montando fara isso em tempo nao de uma unica vez
@@ -305,7 +315,7 @@ public class VRPN : MonoBehaviour {
 		GameObject central = null;
 		foreach (GameObject sphere in spheres){
 			i++;
-			Vector3 pos = vrpnTrackerPos ("Tracker0@localhost", i);
+			Vector3 pos = vrpnTrackerPos (trackerName, i);
 			sum += pos;
 
 			if (i == 0) {

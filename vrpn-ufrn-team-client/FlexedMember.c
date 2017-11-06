@@ -52,7 +52,7 @@ int FlexedMember::flexed3d(std::map<int, std::vector<double>> points, int paramA
 
 	double angle = acos(res) * 180.0 / 3.14159265;
 
-	printf("%.2f\n", angle);
+	//printf("%.2f\n", angle);
 	bool comp;
 	if ( angleMod == -1 ) {
 		comp = paramAngle > angle;

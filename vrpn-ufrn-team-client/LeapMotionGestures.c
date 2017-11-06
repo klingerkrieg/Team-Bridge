@@ -90,29 +90,38 @@ int LeapMotionGestures::rightFistFlexedDown(const vrpn_TRACKERCB t, int angle, i
 
 
 // Mao fechada
-bool LeapMotionGestures::handClosed(float angle) {
-	if ( angle < closeAngle ) {
-		return true;
+int LeapMotionGestures::handClosed(float angle) {
+	if ( angle == -1 ) {
+		return -1;
 	}
-	return false;
+	
+	if ( angle > closeAngle ) {
+		return 1;
+	}
+	return 0;
 }
-bool LeapMotionGestures::leftClosed(const vrpn_ANALOGCB a) {
+int LeapMotionGestures::leftClosed(const vrpn_ANALOGCB a) {
 	return handClosed(a.channel[0]);
 }
-bool LeapMotionGestures::rightClosed(const vrpn_ANALOGCB a) {
+int LeapMotionGestures::rightClosed(const vrpn_ANALOGCB a) {
+	printf("%.2f\n", a.channel[2]);
 	return handClosed(a.channel[2]);
 }
 
 //Pinça
-bool LeapMotionGestures::pinch(float angle) {
-	if ( angle < pinchAngle ) {
-		return true;
+int LeapMotionGestures::pinch(float angle) {
+	if ( angle == -1 ) {
+		return -1;
 	}
-	return false;
+	
+	if ( angle < pinchAngle ) {
+		return 1;
+	}
+	return 0;
 }
-bool LeapMotionGestures::leftPinch(const vrpn_ANALOGCB a) {
+int LeapMotionGestures::leftPinch(const vrpn_ANALOGCB a) {
 	return pinch(a.channel[1]);
 }
-bool LeapMotionGestures::rightPinch(const vrpn_ANALOGCB a) {
+int LeapMotionGestures::rightPinch(const vrpn_ANALOGCB a) {
 	return pinch(a.channel[3]);
 }

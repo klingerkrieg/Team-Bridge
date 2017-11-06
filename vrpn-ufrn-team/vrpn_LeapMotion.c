@@ -29,7 +29,7 @@ vrpn_LeapMotion::vrpn_LeapMotion(const char *name, vrpn_Connection *c)
 	  vrpn_Tracker(name, c) {
 
 	controller.addListener(*this);
-
+	
 	vrpn_Analog::num_channel = 4;
 	vrpn_Tracker::num_sensors = 46;
 
@@ -116,36 +116,41 @@ void vrpn_LeapMotion::onFrame(const Leap::Controller& controller) {
 
 	Leap::HandList hands = frame.hands();
 
-	if ( hands.count() == 0 ) {
+	int handCount = hands.count();
+	if ( handCount == 0 ) {
 		return;
 	}
+	//limita para pegar somente 2 maos
+	if ( handCount > 2 ) {
+		handCount = 2;
+	}
 	
-	channel[0] = 0;
-	channel[1] = 0;
-	//segunda mao
-	channel[2] = 0;
-	channel[3] = 0;
+	channel[0] = -1;
+	channel[1] = -1;
+	//mao direita
+	channel[2] = -1;
+	channel[3] = -1;
 	bool left = false;
 	bool right = false;
 
-	for ( int i = 0; i < hands.count(); i++ ) {
+	for ( int i = 0; i < handCount; i++ ) {
 
 		if ( hands[i].isLeft() && left == false ) {
 			//mao esquerda
-			channel[0] = hands[0].grabAngle();
-			channel[1] = hands[0].pinchDistance();
+			channel[0] = hands[i].grabAngle();
+			channel[1] = hands[i].pinchDistance();
 			left = true;
 		}
 		if ( hands[i].isRight() && right == false ) {
-			//segunda mao
-			channel[2] = hands[1].grabAngle();
-			channel[3] = hands[1].pinchDistance();
+			//mao direita
+			channel[2] = hands[i].grabAngle();
+			channel[3] = hands[i].pinchDistance();
 			right = true;
 		}
 	}
 
-
-	vrpn_Analog::report_changes();
+	vrpn_Analog::report();
+	//vrpn_Analog::report_changes();
 
 
 	//Tracker Code
@@ -157,14 +162,18 @@ void vrpn_LeapMotion::onFrame(const Leap::Controller& controller) {
 	int sensor = 0;
 
 
-	//limita para pegar somente 2 maos
-	int handCount = hands.count();
-	if ( handCount > 2 ) {
-		handCount = 1;
-	}
+	
 
 	for ( int i = 0; i < handCount; i++ ) {
 
+		//Se estiver somente com a mao esquerda a direita nao sera enviada
+		if ( hands[i].isLeft() ) {
+			sensor = 23;
+		}
+		//So permitira duas maos diferentes, uma esquerda e uma direita
+		if ( hands[i].isRight() ) {
+			sensor = 0;
+		}
 
 		//0 e 23 sao as palmas
 		position = hands[i].palmPosition();

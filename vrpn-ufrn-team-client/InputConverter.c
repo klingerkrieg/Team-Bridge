@@ -244,7 +244,6 @@ bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKE
 
 	int actualTime = (int)time(0);
 
-	
 
 	//Quando uma pessoa for reconhecida pelo Kinect ele ira avisar
 	
@@ -416,10 +415,9 @@ bool InputConverter::checkButton(const char * name, const vrpn_BUTTONCB b) {
 
 
 bool InputConverter::checkAnalog(const char *name, const vrpn_ANALOGCB a) {
-
 	bool pressed = false;
 	int active;
-
+	
 	for ( std::vector<KeyMap>::iterator keyMap = map.begin(); keyMap != map.end(); ++keyMap ) {
 
 		if ( !strcmp(name, keyMap->getDev().c_str()) ) {
@@ -439,9 +437,10 @@ bool InputConverter::checkAnalog(const char *name, const vrpn_ANALOGCB a) {
 					break;
 			}
 		}
-
-
-		pressed = interpretOnLeave(active, (*keyMap));
+		
+		if ( active != -1 ) {
+			pressed = interpretOnLeave(active, (*keyMap));
+		}
 	}
 
 	return true;
