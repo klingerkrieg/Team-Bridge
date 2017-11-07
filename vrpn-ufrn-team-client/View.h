@@ -31,8 +31,7 @@ private:
 	// The string that appears in the application's title bar.  
 	static TCHAR szTitle[];
 
-	HINSTANCE hInst;
-	HWND hWnd;
+	static HWND hWnd;
 
 	static HINSTANCE hInstance;
 	static WNDCLASSEX wcex;

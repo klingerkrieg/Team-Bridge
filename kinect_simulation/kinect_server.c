@@ -10,7 +10,7 @@
 
 using namespace std;
 
-const char	*TRACKER_NAME = "Tracker0";
+std::string TRACKER_NAME = "Tracker0";
 int	CONNECTION_PORT = vrpn_DEFAULT_LISTEN_PORT_NO;	// Port for connection to listen on
 
 vrpn_Tracker_Server	*trackerServer;
@@ -76,6 +76,10 @@ int main (int argc, char * argv []) {
 		if ( argv[i][0] == 'd' ) {
 			delay = atoi(argv[i + 1]);
 		}
+
+		if ( argv[i][0] == 'n' ) {
+			TRACKER_NAME = argv[i + 1];
+		}
 	}
 	
 	
@@ -89,17 +93,17 @@ int main (int argc, char * argv []) {
 
 
 	// Open the tracker server, using this connection, 2 sensors, update 60 times/sec
-	trackerServer = new vrpn_Tracker_Server(TRACKER_NAME, connection, sensoresQtd);
+	trackerServer = new vrpn_Tracker_Server(TRACKER_NAME.c_str(), connection, sensoresQtd);
 
 	
 	
 	// Open the tracker remote using this connection
 	
-	trackerRem = new vrpn_Tracker_Remote (TRACKER_NAME, connection);
+	trackerRem = new vrpn_Tracker_Remote (TRACKER_NAME.c_str(), connection);
 	tracker_user_callback *tc1 = new tracker_user_callback;
-	strncpy(tc1->t_name, TRACKER_NAME, sizeof(tc1->t_name));
+	strncpy(tc1->t_name, TRACKER_NAME.c_str(), sizeof(tc1->t_name));
 
-	fprintf(stderr, "Tracker's name is %s.\n", TRACKER_NAME);
+	fprintf(stderr, "Tracker's name is %s.\n", TRACKER_NAME.c_str());
 
 	
 

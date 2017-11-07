@@ -10,6 +10,8 @@ std::string View::msgToShow;
 bool View::isAlert;
 int View::delay;
 
+
+HWND View::hWnd;
 HINSTANCE View::hInstance;
 WNDCLASSEX View::wcex;
 bool View::created = false;
@@ -100,7 +102,8 @@ void View::call(bool alert, std::string text, int delay) {
 
 	int nCmdShow = 1;
 	
-
+	PostMessage(hWnd, WM_CLOSE, 0, 0);
+	Sleep(100);//Espera fechar a janela
 	std::thread([=] { show(hInstance, wcex); }).detach();
 	
 }
@@ -109,11 +112,6 @@ void View::call(bool alert, std::string text, int delay) {
 
 
 int WINAPI View::show(HINSTANCE hInstance, WNDCLASSEX wcex) {
-
-
-	PostMessage(hWnd, WM_CLOSE, 0, 0);
-
-	hInst = hInstance; 
 
 	DWORD Flags1 = WS_EX_COMPOSITED | WS_EX_LAYERED | WS_EX_NOACTIVATE | WS_EX_TOPMOST | WS_EX_TRANSPARENT;
 	DWORD Flags2 = WS_POPUP;

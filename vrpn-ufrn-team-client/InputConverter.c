@@ -246,7 +246,9 @@ bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKE
 
 
 	//Quando uma pessoa for reconhecida pelo Kinect ele ira avisar
-	
+	if ( viewOn )
+		view->showMsg(std::to_string(t.sensor));
+
 	if ( lastTimeTrack == 0 || actualTime - lastTimeTrack > 1 ) {
 		printf("Kinect\n");
 		if ( viewOn )

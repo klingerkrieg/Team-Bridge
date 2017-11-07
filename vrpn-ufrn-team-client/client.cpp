@@ -268,8 +268,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	
 
 	View view = View(hInstance);
-	//view.showMsg("Starting TEAM-VRPN :)");
-	//client.setView(view);
+	view.showMsg("Starting TEAM-VRPN :)");
+	client.setView(view);
 
 	TrackerUserCallback *userdata = new TrackerUserCallback;
 	vrpn_TRACKERCB t = vrpn_TRACKERCB();
@@ -312,8 +312,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		}
 	}
 
-	client.setRecordGesture(true, "bla");
-	client.getGestureRecorder()->printOptions();
+	//client.setRecordGesture(true, "bla");
+	//client.getGestureRecorder()->printOptions();
 	// Free memory allocated for CommandLineToArgvW arguments.
 	LocalFree(argv);
 
