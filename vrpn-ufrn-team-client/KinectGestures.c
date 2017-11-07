@@ -129,31 +129,29 @@ int KinectGestures::detectHandTop(const vrpn_TRACKERCB t, int topLevel, int hand
 	//printf("head:%.2f hand:%.2f\n", lastHeadHeight, t.pos[1]);
 
 	if ( topLevel == 5 &&
-		(t.pos[1] > lastHeadHeight + (handTopInterval * 2))
-		|| handTopMod == -1) {
+		(t.pos[1] > lastHeadHeight + (handTopInterval * 2) || handTopMod == -1) ) {
 		return true;
 	} else
-	if ( topLevel == 4 &&
+	if ( topLevel == 4 && (
 		(t.pos[1] <= lastHeadHeight + (handTopInterval * 2) && t.pos[1] > lastHeadHeight + handTopInterval && handTopMod == 0)
 		|| (t.pos[1] > lastHeadHeight + handTopInterval && handTopMod == 1)
-		|| (t.pos[1] <= lastHeadHeight + (handTopInterval * 2) && handTopMod == -1) ) {
+		|| (t.pos[1] <= lastHeadHeight + (handTopInterval * 2) && handTopMod == -1) )) {
 		return true;
 	} else
-	if ( topLevel == 3 && 
+	if ( topLevel == 3 && (
 		(t.pos[1] <= lastHeadHeight + handTopInterval && t.pos[1] > lastHeadHeight - (handTopInterval * 2))
 		|| (t.pos[1] > lastHeadHeight - (handTopInterval * 2) && handTopMod == 1)
-		|| (t.pos[1] <= lastHeadHeight + handTopInterval && handTopMod == -1)	) {
+		|| (t.pos[1] <= lastHeadHeight + handTopInterval && handTopMod == -1) )) {
 		return true;
 	} else
-	if ( topLevel == 2 &&
+	if ( topLevel == 2 && (
 		(t.pos[1] <= lastHeadHeight - (handTopInterval * 2) && t.pos[1] > lastHeadHeight - (handTopInterval * 5))
 		|| (t.pos[1] > lastHeadHeight - (handTopInterval * 5)  && handTopMod == 1)
-		|| (t.pos[1] <= lastHeadHeight - (handTopInterval * 2) && handTopMod == -1) ) {
+		|| (t.pos[1] <= lastHeadHeight - (handTopInterval * 2) && handTopMod == -1) )) {
 		return true;
 	} else
 	if ( topLevel == 1 &&
-		(t.pos[1] <= lastHeadHeight - (handTopInterval * 5))
-		|| handTopMod == 1) {
+		(t.pos[1] <= lastHeadHeight - (handTopInterval * 5) || handTopMod == 1) ) {
 		return true;
 	}
 

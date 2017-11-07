@@ -245,14 +245,11 @@ bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKE
 	int actualTime = (int)time(0);
 
 
-	//Quando uma pessoa for reconhecida pelo Kinect ele ira avisar
-	if ( viewOn )
-		view->showMsg(std::to_string(t.sensor));
-
+	//Quando uma pessoa for reconhecida pelo Kinect ou LeapMotion ele ira avisar
 	if ( lastTimeTrack == 0 || actualTime - lastTimeTrack > 1 ) {
-		printf("Kinect\n");
+		printf("Capturando\n");
 		if ( viewOn )
-			view->showMsg("Kinect");
+			view->showMsg("Capturando");
 	}
 	lastTimeTrack = actualTime;
 
@@ -312,8 +309,14 @@ bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKE
 				else
 					active = gr.detectLeftHandTop(t, keyMap->getHandTopLevel(), keyMap->getHandTopMod());
 
+				
+
 				//Caso o xpos seja != -100 quer dizer que a posição X tabém é requerida para esse comando
-				if ( keyMap->getHandXPos() != -100 ) {
+				if ( active == 1 && keyMap->getHandXPos() != -100 ) {
+					
+					if ( keyMap->getToKeyRepr().compare("E") == 0 ) {
+						active = gr.detectRightHandTop(t, keyMap->getHandTopLevel(), keyMap->getHandTopMod());
+					}
 
 					if ( keyMap->getKey() == KINECT_RIGHT_HAND_TOP )
 						activeSecondary = gr.detectRightHandXPos(t, keyMap->getHandXPos());

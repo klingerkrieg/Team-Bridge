@@ -99,6 +99,7 @@ void View::call(bool alert, std::string text, int delay) {
 	isAlert = alert;
 	this->delay = delay;
 	msgToShow = text;
+	replace_all(msgToShow, "\t", " ");//\t nao e exibido
 
 	int nCmdShow = 1;
 	
@@ -171,6 +172,7 @@ LRESULT CALLBACK View::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
 	RECT rect;
 
 	
+
 	TCHAR *msg = new TCHAR[msgToShow.size() + 1];
 	msg[msgToShow.size()] = 0;
 	std::copy(msgToShow.begin(), msgToShow.end(), msg);

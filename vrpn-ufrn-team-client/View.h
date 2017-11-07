@@ -6,6 +6,9 @@
 #include <chrono>
 #include <thread>
 
+#include <iostream>
+
+#include "util.h"
 #define NOMINMAX
 #include <algorithm>
 namespace Gdiplus {
