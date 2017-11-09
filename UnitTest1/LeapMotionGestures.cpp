@@ -23,15 +23,14 @@ TEST_CLASS(LeapMotionGesturesTest) {
 		LeapMotionGestures gr = LeapMotionGestures();
 		
 		a.channel[0] = 0.4;
+		Assert::IsFalse(gr.leftClosed(a));
+		a.channel[0] = 2.6;
 		Assert::IsTrue(gr.leftClosed(a));
-		a.channel[1] = 0.6;
+		a.channel[1] = 65;
 		Assert::IsFalse(gr.leftPinch(a));
-
-
-		a.channel[1] = 0.4;
+		a.channel[1] = 55;
 		Assert::IsTrue(gr.leftPinch(a));
-		a.channel[1] = 0.6;
-		Assert::IsFalse(gr.leftPinch(a));
+		
 	}
 
 

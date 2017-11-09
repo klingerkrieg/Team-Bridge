@@ -176,6 +176,7 @@
     <ClCompile Include="ClientTest.cpp" />
     <ClCompile Include="ConfigFileReaderTest.cpp" />
     <ClCompile Include="DbTest.cpp" />
+    <ClCompile Include="FlexedMemberTest.cpp" />
     <ClCompile Include="GestureRecognizerTest.cpp" />
     <ClCompile Include="InputConverterTest.cpp" />
     <ClCompile Include="KeyMapTest.cpp" />

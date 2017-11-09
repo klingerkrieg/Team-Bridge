@@ -60,7 +60,7 @@ private:
 	int detectHandTop(const vrpn_TRACKERCB t, int topLevel, int handTopMod);
 
 	//Flexao
-	static std::map<int, std::vector<double>> lastPositions[10];
+	static std::map<int, std::vector<double>> lastPositions[20];
 
 public:
 
@@ -110,6 +110,8 @@ public:
 	int detectHandXPos(const vrpn_TRACKERCB t, int xPos);
 	
 
+	int bodyBalance(const vrpn_TRACKERCB t, int angleMod, int angle);
+		
 };
 
 

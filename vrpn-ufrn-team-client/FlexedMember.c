@@ -13,30 +13,10 @@ int FlexedMember::flexed2d(std::map<int, std::vector<double>> points, int paramA
 	}
 }
 
-int FlexedMember::flexed3d(std::map<int, std::vector<double>> points, int paramAngle, int angleMod, int direction) {
 
-
-	/*float d = dot(points.at(0), points.at(1));
-	float m = sqrt(mag(points.at(0))) *  sqrt(mag(points.at(1)));
-	float x = d / m;
-	double angle = acos( x ) * 180.0f / PI;
-	//angle = acos(-0.523) * 180.0 / 3.14159265;
-	printf("%.2f\n",angle);
-	if ( paramAngle > angle ) {
-		return 1;
-	} else {
-		return 0;
-	}*/
-	/*
-	std::vector<double> p1 = { 0,0,0 };
-	std::vector<double> p2 = { 10,0,0 };
-	std::vector<double> p3 = { 12,5,0 };
-
-	points.insert_or_assign(0, p1);
-	points.insert_or_assign(1, p2);
-	points.insert_or_assign(2, p3);
-	*/
-
+int FlexedMember::flexed3d(std::map<int, std::vector<double>> points, int paramAngle, int angleMod) {
+	
+	
 
 	std::vector<double> v1 = { points.at(0)[0] - points.at(1)[0], points.at(0)[1] - points.at(1)[1], points.at(0)[2] - points.at(1)[2] };
 	std::vector<double> v2 = { points.at(2)[0] - points.at(1)[0], points.at(2)[1] - points.at(1)[1], points.at(2)[2] - points.at(1)[2] };
@@ -63,10 +43,14 @@ int FlexedMember::flexed3d(std::map<int, std::vector<double>> points, int paramA
 	if ( angleMod == 0 ) {
 		comp = paramAngle == angle;
 	}
+	return comp;
+}
 
+int FlexedMember::flexed3d(std::map<int, std::vector<double>> points, int paramAngle, int angleMod, int direction) {
+
+	bool comp = flexed3d(points, paramAngle, angleMod);
 	if ( comp ) {
 
-		
 		std::vector<double> p1 = points.at(1);
 		std::vector<double> p2 = points.at(2);
 
@@ -82,6 +66,9 @@ int FlexedMember::flexed3d(std::map<int, std::vector<double>> points, int paramA
 		return 0;
 	}
 }
+
+
+
 
 
 

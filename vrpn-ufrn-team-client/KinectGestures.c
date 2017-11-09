@@ -139,15 +139,16 @@ int KinectGestures::detectHandTop(const vrpn_TRACKERCB t, int topLevel, int hand
 		return true;
 	} else
 	if ( topLevel == 3 && (
-		(t.pos[1] <= lastHeadHeight + handTopInterval && t.pos[1] > lastHeadHeight - (handTopInterval * 2))
+		(t.pos[1] <= lastHeadHeight + handTopInterval && t.pos[1] > lastHeadHeight - (handTopInterval * 2) && handTopMod == 0)
 		|| (t.pos[1] > lastHeadHeight - (handTopInterval * 2) && handTopMod == 1)
 		|| (t.pos[1] <= lastHeadHeight + handTopInterval && handTopMod == -1) )) {
 		return true;
 	} else
 	if ( topLevel == 2 && (
-		(t.pos[1] <= lastHeadHeight - (handTopInterval * 2) && t.pos[1] > lastHeadHeight - (handTopInterval * 5))
+		(t.pos[1] <= lastHeadHeight - (handTopInterval * 2) && t.pos[1] > lastHeadHeight - (handTopInterval * 5) && handTopMod == 0)
 		|| (t.pos[1] > lastHeadHeight - (handTopInterval * 5)  && handTopMod == 1)
 		|| (t.pos[1] <= lastHeadHeight - (handTopInterval * 2) && handTopMod == -1) )) {
+
 		return true;
 	} else
 	if ( topLevel == 1 &&
@@ -325,7 +326,7 @@ bool KinectGestures::detectWalkHeight(double &kneeLastHeight, const vrpn_TRACKER
 		lastWalk = actualTime;
 		return true;
 	} else
-	if ( actualTime - lastWalk < 1500 ) {
+	if ( lastWalk != 0 && actualTime - lastWalk < 1500 ) {
 		return true;
 	} else {
 		return false;
@@ -376,7 +377,7 @@ int KinectGestures::detectTurnRight(const vrpn_TRACKERCB t) {
 
 //Flexao punho
 
-std::map<int, std::vector<double>> KinectGestures::lastPositions[10];
+std::map<int, std::vector<double>> KinectGestures::lastPositions[20];
 
 
 int KinectGestures::leftFistFlexedUp(const vrpn_TRACKERCB t, int angle, int angleMod) {
@@ -410,4 +411,20 @@ int KinectGestures::rightFistFlexedDown(const vrpn_TRACKERCB t, int angle, int a
 		return -1;
 	}
 	return flexed3d(points, angle, angleMod,DOWN);
+}
+
+
+int  KinectGestures::bodyBalance(const vrpn_TRACKERCB t, int angleMod, int angle) {
+	
+	std::map<int, std::vector<double>> points = getPoints(t, 2, 3, 1, *lastPositions);
+	if ( points.size() == 0 ) {
+		return -1;
+	}
+
+	//o ponto 2 nao sera real, sera o angulo 3 no y de 2, fazendo uma linha reta para cima
+	bool y = points.at(2)[1];
+	points.insert_or_assign(2, points.at(3));
+	points.at(2)[1] = y;
+
+	return flexed3d(points, angle, angleMod, 1);
 }

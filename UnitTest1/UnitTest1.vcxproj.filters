@@ -59,6 +59,9 @@
     <ClCompile Include="UtilTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="FlexedMemberTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="vrpn-client.cfg" />

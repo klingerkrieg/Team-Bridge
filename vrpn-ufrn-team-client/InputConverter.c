@@ -314,10 +314,6 @@ bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKE
 				//Caso o xpos seja != -100 quer dizer que a posição X tabém é requerida para esse comando
 				if ( active == 1 && keyMap->getHandXPos() != -100 ) {
 					
-					if ( keyMap->getToKeyRepr().compare("E") == 0 ) {
-						active = gr.detectRightHandTop(t, keyMap->getHandTopLevel(), keyMap->getHandTopMod());
-					}
-
 					if ( keyMap->getKey() == KINECT_RIGHT_HAND_TOP )
 						activeSecondary = gr.detectRightHandXPos(t, keyMap->getHandXPos());
 					else
@@ -363,6 +359,9 @@ bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKE
 			} else
 			if ( keyMap->getKey() == KINECT_TURN_RIGHT ) {
 				active = gr.detectTurnRight(t);
+			} else
+			if ( keyMap->getKey() == KINECT_BALANCE ) {
+				active = gr.bodyBalance(t, keyMap->getAngle(), keyMap->getAngleMod());
 			} else
 			if ( keyMap->getKey() == KINECT_LEFT_FIST_UP  ) {
 				active = gr.KinectGestures::leftFistFlexedUp(t, keyMap->getAngle(), keyMap->getAngleMod());
