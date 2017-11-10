@@ -110,7 +110,7 @@ public:
 	int detectHandXPos(const vrpn_TRACKERCB t, int xPos);
 	
 
-	int bodyBalance(const vrpn_TRACKERCB t, int angleMod, int angle);
+	int bodyBalance(const vrpn_TRACKERCB t, int angle, int angleMod);
 		
 };
 

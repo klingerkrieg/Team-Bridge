@@ -414,17 +414,17 @@ int KinectGestures::rightFistFlexedDown(const vrpn_TRACKERCB t, int angle, int a
 }
 
 
-int  KinectGestures::bodyBalance(const vrpn_TRACKERCB t, int angleMod, int angle) {
+int  KinectGestures::bodyBalance(const vrpn_TRACKERCB t, int angle, int angleMod) {
 	
 	std::map<int, std::vector<double>> points = getPoints(t, 2, 3, 1, *lastPositions);
 	if ( points.size() == 0 ) {
 		return -1;
 	}
 
-	//o ponto 2 nao sera real, sera o angulo 3 no y de 2, fazendo uma linha reta para cima
-	bool y = points.at(2)[1];
-	points.insert_or_assign(2, points.at(3));
-	points.at(2)[1] = y;
+	//o ponto 0 nao sera real, sera o angulo 1 no y de 0, fazendo uma linha reta para cima
+	bool y = points.at(1)[1];
+	points.insert_or_assign(0, points.at(1));
+	points.at(0)[1] = y;
 
 	return flexed3d(points, angle, angleMod, 1);
 }

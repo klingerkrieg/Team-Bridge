@@ -52,6 +52,10 @@
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);..\..\vrpn-master-2017-up;..\..\vrpn-master-2017-up\quat;C:\Program Files (x86)\Leap Motion\LeapSDK\include;</IncludePath>
     <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;C:\Program Files (x86)\Leap Motion\LeapSDK\lib\x86;</LibraryPath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);..\..\vrpn-master-2017-up;..\..\vrpn-master-2017-up\quat;C:\Program Files (x86)\Leap Motion\LeapSDK\include;</IncludePath>
+    <LibraryPath>E:\ufrn\vrpn-master-2017-up\pc_win32\Release\;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;C:\Program Files (x86)\Leap Motion\LeapSDK\lib\x86;</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Midl>
       <TypeLibraryName>.\../pc_win32/vrpn-ufrn-team/Debug/vrpn-ufrn-team.tlb</TypeLibraryName>
@@ -82,7 +86,7 @@
     <Link>
       <OutputFile>.\../pc_win32/vrpn-ufrn-team/Debug/vrpn-ufrn-team.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>$(SYSTEMDRIVE)\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib;%(AdditionalLibraryDirectories);C:\Program Files (x86)\Leap Motion\LeapSDK\lib\x86</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../gpsnmealib/Debug;..\..\vrpn-master-2017-up\pc_win32\Debug\;..\..\vrpn-master-2017-up\quat\pc_win32\Debug;$(SYSTEMDRIVE)\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib;%(AdditionalLibraryDirectories);C:\Program Files (x86)\Leap Motion\LeapSDK\lib\x86</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>.\../pc_win32/vrpn-ufrn-team/Debug/vrpn-ufrn-team.pdb</ProgramDatabaseFile>
       <SubSystem>Console</SubSystem>
@@ -90,7 +94,7 @@
       <DataExecutionPrevention>
       </DataExecutionPrevention>
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);Leap.lib;</AdditionalDependencies>
+      <AdditionalDependencies>gpsnmealib.lib;quat.lib;vrpn.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);Leap.lib;</AdditionalDependencies>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -107,13 +111,15 @@
       </HeaderFileName>
     </Midl>
     <ClCompile>
-      <Optimization>MaxSpeed</Optimization>
-      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <Optimization>Disabled</Optimization>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
       <AdditionalIncludeDirectories>$(SYSTEMDRIVE)\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Include;..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <StringPooling>true</StringPooling>
+      <StringPooling>
+      </StringPooling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <FunctionLevelLinking>
+      </FunctionLevelLinking>
       <PrecompiledHeaderOutputFile>.\../pc_win32/vrpn-ufrn-team/Release/vrpn-ufrn-team.pch</PrecompiledHeaderOutputFile>
       <AssemblerListingLocation>.\../pc_win32/vrpn-ufrn-team/Release/</AssemblerListingLocation>
       <ObjectFileName>.\../pc_win32/vrpn-ufrn-team/Release/</ObjectFileName>
@@ -121,6 +127,9 @@
       <BrowseInformation>true</BrowseInformation>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <MinimalRebuild>true</MinimalRebuild>
+      <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -129,33 +138,24 @@
     <Link>
       <OutputFile>.\../pc_win32/vrpn-ufrn-team/Release/vrpn-ufrn-team.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>$(SYSTEMDRIVE)\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../gpsnmealib/Release/;..\..\vrpn-master-2017-up\pc_win32\Release\;..\..\vrpn-master-2017-up\quat\pc_win32\Release;$(SYSTEMDRIVE)\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib;%(AdditionalLibraryDirectories);C:\Program Files (x86)\Leap Motion\LeapSDK\lib\x86</AdditionalLibraryDirectories>
       <ProgramDatabaseFile>.\../pc_win32/vrpn-ufrn-team/Release/vrpn-ufrn-team.pdb</ProgramDatabaseFile>
       <SubSystem>Console</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
       <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalDependencies>gpsnmealib.lib;quat.lib;vrpn.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Leap.lib;%(AdditionalDependencies);</AdditionalDependencies>
+      <GenerateDebugInformation>DebugFull</GenerateDebugInformation>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <OutputFile>.\../pc_win32/vrpn-ufrn-team/Release/vrpn-ufrn-team.bsc</OutputFile>
     </Bscmake>
+    <PreBuildEvent>
+      <Command>copy "*.cfg" "../pc_win32/vrpn-ufrn-team/Release/" &amp; copy "*.dll" "../pc_win32/vrpn-ufrn-team/Release/"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\vrpn-master-2017-up\make_vrpn_libs_build.vcxproj">
-      <Project>{7e69f3ab-e629-4ad4-a1fa-be6bf678cdff}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="..\..\vrpn-master-2017-up\quat\quatlib.vcxproj">
-      <Project>{0c16e98c-a372-4e58-990d-ee276b32644e}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="..\..\vrpn-master-2017-up\vrpn.vcxproj">
-      <Project>{7ee1db03-16a5-4465-9164-061be0c88b8c}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-  </ItemGroup>
   <ItemGroup>
     <ClCompile Include="server.c" />
     <ClCompile Include="vrpn_Generic_server_object.c" />
