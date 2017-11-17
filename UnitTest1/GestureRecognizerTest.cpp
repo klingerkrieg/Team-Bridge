@@ -27,22 +27,22 @@ public:
 		double heightSens = 0.15;
 
 		//primeira altura = 1.0
-		Assert::AreEqual(0, gr.detectTopChange(t, heightSens));
+		Assert::AreEqual(-1, gr.detectTopChange(t, heightSens, GEST_UP));
 
 		//mantem
 		t.pos[1] = 1.141;
-		Assert::AreEqual(0, gr.detectTopChange(t, heightSens));
+		Assert::AreEqual(-1, gr.detectTopChange(t, heightSens, GEST_UP));
 
 		//subiu (devido a problemas com o float do vrpn ele entende como 1.4999)
 		t.pos[1] = 1.151;
-		Assert::AreEqual(1, gr.detectTopChange(t, heightSens));
+		Assert::AreEqual(1, gr.detectTopChange(t, heightSens, GEST_UP));
 
 		//mantem
-		Assert::AreEqual(0, gr.detectTopChange(t, heightSens));
+		Assert::AreEqual(-1, gr.detectTopChange(t, heightSens, GEST_DOWN));
 		
 		//desceu
 		t.pos[1] = 1.0;
-		Assert::AreEqual(-1, gr.detectTopChange(t, heightSens));
+		Assert::AreEqual(1, gr.detectTopChange(t, heightSens, GEST_DOWN));
 
 	}
 

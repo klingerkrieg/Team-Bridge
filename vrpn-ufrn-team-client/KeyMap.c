@@ -66,17 +66,17 @@ std::string KeyMap::toString() {
 	if ( getToKey() == VK_MOUSEMOVE ) {
 		ret += "\tX:" + std::to_string( getX() ) + "\tY:" + std::to_string(getY());
 	} else
-	if ( getHandXPos() != -100 ) {
-		ret += "\tXPOS:" + std::to_string(getHandXPos());
+	if ( getX() != -100 ) {
+		ret += "\tXPOS:" + std::to_string(getX());
 	}
-	if ( getHandTopLevel() != -100 ) {
-		if ( getHandTopMod() == 1 ) {
-			ret += "\tYPOS:>" + std::to_string(getHandTopLevel());
+	if ( getY() != -100 ) {
+		if ( getCoordinateMod() == 1 ) {
+			ret += "\tYPOS:>" + std::to_string(getY());
 		} else
-		if ( getHandTopMod() == -1 ) {
-			ret += "\tYPOS:<" + std::to_string(getHandTopLevel());
+		if ( getCoordinateMod() == -1 ) {
+			ret += "\tYPOS:<" + std::to_string(getY());
 		} else  {
-			ret += "\tYPOS:" + std::to_string(getHandTopLevel());
+			ret += "\tYPOS:" + std::to_string(getY());
 		}
 	}
 	
@@ -163,26 +163,26 @@ KeyMap::KeyMap(std::string dev, std::string config) {
 				if ( contains(options.at(1), ",") ) {
 					options = split(options.at(1), ",");
 					//salva x e y
-					handXPos = atoi(options.at(0).c_str());
+					x = atoi(options.at(0).c_str());
 
 					char* yChr;
 
 					if ( starts_with(options.at(1), ">") ) {
-						handTopMod = 1;
+						coordinateMod = 1;
 						yChr = &options.at(1)[1];
 					} else
 					if ( starts_with(options.at(1), "<") ) {
-						handTopMod = -1;
+						coordinateMod = -1;
 						yChr = &options.at(1)[1];
 					} else {
-						handTopMod = 0;
+						coordinateMod = 0;
 						yChr = &options.at(1)[0];
 					}
 
-					handTopLevel = atoi(yChr);
+					y = atoi(yChr);
 				} else {
 					//salva somente y
-					handTopLevel = atoi(options.at(1).c_str());
+					y = atoi(options.at(1).c_str());
 				}
 
 			} else {
@@ -201,7 +201,7 @@ KeyMap::KeyMap(std::string dev, std::string config) {
 				}
 
 
-				heightSens = atof(options.at(1).c_str());
+				sensivity = atof(options.at(1).c_str());
 				if ( starts_with((*it), "KINECT_TOP_ADD")  ) {
 					key = KINECT_TOP_ADD;
 				} else {

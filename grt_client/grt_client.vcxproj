@@ -139,20 +139,6 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\vrpn-master-2017-up\make_vrpn_libs_build.vcxproj">
-      <Project>{7e69f3ab-e629-4ad4-a1fa-be6bf678cdff}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="..\..\vrpn-master-2017-up\quat\quatlib.vcxproj">
-      <Project>{0c16e98c-a372-4e58-990d-ee276b32644e}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="..\..\vrpn-master-2017-up\vrpn.vcxproj">
-      <Project>{7ee1db03-16a5-4465-9164-061be0c88b8c}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="grt_client.c" />
   </ItemGroup>
   <ItemGroup>

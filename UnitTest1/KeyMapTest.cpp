@@ -20,7 +20,7 @@ public:
 		Assert::AreEqual("Tracker0@localhost", m1.getDev().c_str());
 		Assert::AreEqual(KINECT_TOP_ADD, m1.getKey());
 		Assert::AreEqual((int)'A', m1.getToKey());
-		Assert::AreEqual(0.15, m1.getHeightSens());
+		Assert::AreEqual(0.15, m1.getSensivity());
 		Assert::AreEqual(false, m1.getToKeyIsConstant());
 
 		m1 = KeyMap("Mouse0@localhost", "VK_LBUTTON	VK_RIGHT");

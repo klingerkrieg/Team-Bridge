@@ -305,27 +305,27 @@ bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKE
 					//caso nao esteja acionada o interpretOnLeave ira identificar se foi configurado para acionar alguma ação quando 
 					//essa key nao estiver mais ativa
 					//a ação ja sera chamada dentro de interpretOnLeave
-					active = gr.detectTopChange(t, keyMap->getHeightSens(), GEST_UP);
+					active = gr.detectTopChange(t, keyMap->getSensivity(), GEST_UP);
 				} else
 				if ( keyMap->getKey() == KINECT_TOP_DEC ) {
-					active = gr.detectTopChange(t, keyMap->getHeightSens(), GEST_DOWN);
+					active = gr.detectTopChange(t, keyMap->getSensivity(), GEST_DOWN);
 				} else
 				if ( keyMap->getKey() == KINECT_RIGHT_HAND_TOP || keyMap->getKey() == KINECT_LEFT_HAND_TOP ) {
 			
 					if ( keyMap->getKey() == KINECT_RIGHT_HAND_TOP )
-						active = gr.detectRightHandTop(t, keyMap->getHandTopLevel(), keyMap->getHandTopMod());
+						active = gr.detectRightHandTop(t, keyMap->getY(), keyMap->getCoordinateMod());
 					else
-						active = gr.detectLeftHandTop(t, keyMap->getHandTopLevel(), keyMap->getHandTopMod());
+						active = gr.detectLeftHandTop(t, keyMap->getY(), keyMap->getCoordinateMod());
 
 				
 
 					//Caso o xpos seja != -100 quer dizer que a posição X tabém é requerida para esse comando
-					if ( active == 1 && keyMap->getHandXPos() != -100 ) {
+					if ( active == 1 && keyMap->getX() != -100 ) {
 					
 						if ( keyMap->getKey() == KINECT_RIGHT_HAND_TOP )
-							activeSecondary = gr.detectRightHandXPos(t, keyMap->getHandXPos());
+							activeSecondary = gr.detectRightHandXPos(t, keyMap->getX());
 						else
-							activeSecondary = gr.detectLeftHandXPos(t, keyMap->getHandXPos());
+							activeSecondary = gr.detectLeftHandXPos(t, keyMap->getX());
 
 					} else {
 						//Caso nao exista acao secundaria

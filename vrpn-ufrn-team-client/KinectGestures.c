@@ -235,30 +235,32 @@ int KinectGestures::detectTopChange(const vrpn_TRACKERCB t, double heightSens, i
 			return -1;
 		}
 		//printf("%.2f\n", lastHeadHeight);
-		//Desceu
-		//last - pos
-		//0.57 - 0.55 = 0.02 >= 0.02
-		//printf("%.2f >= %.2f\n", lastHeight - t.pos[1], heightSens);
-		if ( lastHeight - t.pos[1] >= (float)heightSens ) {
-			lastHeight = t.pos[1];
-			if ( direction == GEST_DOWN ) {
-				return true;
-			} else {
-				return false;
-			}
-		} else
+		
 		//Subiu
 		//pos  - last
 		//0.59 - 0.57 = 0.02 >= 0.02
-		if ( t.pos[1] - lastHeight >= (float)heightSens ) {
-			lastHeight = t.pos[1];
-			if ( direction == GEST_UP ) {
+		if ( direction == GEST_UP ) {
+			if ( t.pos[1] - lastHeight >= (float)heightSens ) {
+				lastHeight = t.pos[1];
 				return true;
 			} else {
-				return false;
+				//-1 nesse caso é para sinalizar que não houve mudança, então a ultima alteração ainda está valendo
+				//Se ele subiu ele ainda está em cima
+				return -1;
+			}
+		} else
+		if ( direction == GEST_DOWN ) {
+			//Desceu
+			//last - pos
+			//0.57 - 0.55 = 0.02 >= 0.02
+			//printf("%.2f >= %.2f\n", lastHeight - t.pos[1], heightSens);
+			if ( lastHeight - t.pos[1] >= (float)heightSens ) {
+				lastHeight = t.pos[1];
+				return true;
+			} else {
+				return -1;
 			}
 		}
-
 	}
 	return -1;
 }

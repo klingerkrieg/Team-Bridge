@@ -58,41 +58,67 @@ const int ALERT = 6001;
 
 class KeyMap {
 private:
+	//Dispositivo que será lido
 	std::string dev;
-
+	//Representação visual
 	std::string keyRepr;
 	std::string toKeyRepr;
-
+	//comando que será convertido
 	int key;
+	//comando que será chamado
 	int toKey;
+
+	//Caso seja para exbição de mensagem
 	int showMsg = 0;
+	//Mensagem que será exibida
+	std::string msg;
+
+	//Caso o comando que será chamado seja uma constante
 	bool toKeyIsConstant = false;
+
+	//Caso seja um comando para calibração
 	bool determineCenterPos = false;
+
+	//Automaticamente os botões serão acionados e desacionados imediatamente
 	bool btnDown = true;
 	bool btnUp = true;
 	bool isBtn = false;
 
+	//O InputConverter tenta verificar primeiro os comandos que estao acionados
+	//essa propriedade serve para não verificar duas vezes na mesma chamada
 	bool verified = false;
 
+	//Sera verdadeiro caso a tecla esteja acionada e esperando o desacionamento
 	bool waitingLeave = false;
-	bool isLeaving = false;
+
+	
+	//Caso possua um evento para desacionar uma tecla
 	bool hasOnLeave = false;
+	//Sinaliza que esse é o evento de desacionar
+	bool isLeaving = false;
+	//Guarda o evento para desacionar
 	KeyMap *onLeave;
 
-	int x = 0;
-	int y = 0;
+	//Possiveis propriedades
+	int x = -100;
+	int y = -100;
+	//Como o x e y serão comparados
+	int coordinateMod = 0;// 0 =, 1 >, -1 <
 
+
+
+	//Angulo da propriedade
 	int angle = -1;
+	//Como o angulo será comparado
 	int angleMod = 0;// 0 =, 1 >, -1 <
 
-	//sensibilidade para mudanca de altura
-	double heightSens = 0.15;
+	//sensibilidade do comando (para mudanca de altura)
+	double sensivity = 0.15;
 
-	std::string msg;
 
-	int handTopMod = 0;// 0 =, 1 >, -1 <
-	int handTopLevel = -100;
-	int handXPos = -100;
+	//int handTopMod = 0;// 0 =, 1 >, -1 <
+	//int handTopLevel = -100;
+	//int handXPos = -100;
 
 	void init(std::string dev, char key[SSIZE], char toKey[SSIZE]);
 
@@ -176,11 +202,15 @@ public:
 		waitingLeave = wait;
 	}
 
-	double getHeightSens() {
-		return heightSens;
+	int getCoordinateMod() {
+		return coordinateMod;
 	}
 
-	int getHandTopMod() {
+	double getSensivity() {
+		return sensivity;
+	}
+
+	/*int getHandTopMod() {
 		return handTopMod;
 	}
 
@@ -190,7 +220,7 @@ public:
 
 	int getHandXPos() {
 		return handXPos;
-	}
+	}*/
 
 	int getShowMsg() {
 		return showMsg;

@@ -11,10 +11,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "leapmotion_server", "leapmo
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "kinect_simulation", "kinect_simulation\kinect_simulation.vcxproj", "{6388D266-2021-4286-BB56-D0274AC2775A}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "grt_train_from_txt", "grt_train_from_txt\grt_train_from_txt.vcxproj", "{B55ED655-E5BF-4D48-AC67-CCB2E3FDA724}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "grt_client", "grt_client\grt_client.vcxproj", "{7D6A51FB-090C-4A72-B804-1A7934C783E0}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "kinect_client", "kinect_client\kinect_client.vcxproj", "{51761BFA-3B63-4A7E-A1AC-F7D2075F263E}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "vrpn-ufrn-team-client", "vrpn-ufrn-team-client\vrpn-ufrn-team-client.vcxproj", "{D93B529A-61B0-4C81-AFCA-C8E481A40DA6}"
@@ -23,8 +19,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "clientUnitTest", "UnitTest1
 	ProjectSection(ProjectDependencies) = postProject
 		{D93B529A-61B0-4C81-AFCA-C8E481A40DA6} = {D93B529A-61B0-4C81-AFCA-C8E481A40DA6}
 	EndProjectSection
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "grtTest", "grtTest\grtTest.vcxproj", "{9489AF42-F45A-40A6-8E4B-56AF1694E2C5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -58,20 +52,6 @@ Global
 		{6388D266-2021-4286-BB56-D0274AC2775A}.Release|x64.ActiveCfg = Release|Win32
 		{6388D266-2021-4286-BB56-D0274AC2775A}.Release|x86.ActiveCfg = Release|Win32
 		{6388D266-2021-4286-BB56-D0274AC2775A}.Release|x86.Build.0 = Release|Win32
-		{B55ED655-E5BF-4D48-AC67-CCB2E3FDA724}.Debug|x64.ActiveCfg = Debug|x64
-		{B55ED655-E5BF-4D48-AC67-CCB2E3FDA724}.Debug|x64.Build.0 = Debug|x64
-		{B55ED655-E5BF-4D48-AC67-CCB2E3FDA724}.Debug|x86.ActiveCfg = Debug|Win32
-		{B55ED655-E5BF-4D48-AC67-CCB2E3FDA724}.Debug|x86.Build.0 = Debug|Win32
-		{B55ED655-E5BF-4D48-AC67-CCB2E3FDA724}.Release|x64.ActiveCfg = Release|x64
-		{B55ED655-E5BF-4D48-AC67-CCB2E3FDA724}.Release|x64.Build.0 = Release|x64
-		{B55ED655-E5BF-4D48-AC67-CCB2E3FDA724}.Release|x86.ActiveCfg = Release|Win32
-		{B55ED655-E5BF-4D48-AC67-CCB2E3FDA724}.Release|x86.Build.0 = Release|Win32
-		{7D6A51FB-090C-4A72-B804-1A7934C783E0}.Debug|x64.ActiveCfg = Debug|Win32
-		{7D6A51FB-090C-4A72-B804-1A7934C783E0}.Debug|x86.ActiveCfg = Debug|Win32
-		{7D6A51FB-090C-4A72-B804-1A7934C783E0}.Debug|x86.Build.0 = Debug|Win32
-		{7D6A51FB-090C-4A72-B804-1A7934C783E0}.Release|x64.ActiveCfg = Release|Win32
-		{7D6A51FB-090C-4A72-B804-1A7934C783E0}.Release|x86.ActiveCfg = Release|Win32
-		{7D6A51FB-090C-4A72-B804-1A7934C783E0}.Release|x86.Build.0 = Release|Win32
 		{51761BFA-3B63-4A7E-A1AC-F7D2075F263E}.Debug|x64.ActiveCfg = Debug|Win32
 		{51761BFA-3B63-4A7E-A1AC-F7D2075F263E}.Debug|x86.ActiveCfg = Debug|Win32
 		{51761BFA-3B63-4A7E-A1AC-F7D2075F263E}.Debug|x86.Build.0 = Debug|Win32
@@ -92,14 +72,6 @@ Global
 		{5814AC82-982C-44DF-8002-195BFC998738}.Release|x64.Build.0 = Release|x64
 		{5814AC82-982C-44DF-8002-195BFC998738}.Release|x86.ActiveCfg = Release|Win32
 		{5814AC82-982C-44DF-8002-195BFC998738}.Release|x86.Build.0 = Release|Win32
-		{9489AF42-F45A-40A6-8E4B-56AF1694E2C5}.Debug|x64.ActiveCfg = Debug|x64
-		{9489AF42-F45A-40A6-8E4B-56AF1694E2C5}.Debug|x64.Build.0 = Debug|x64
-		{9489AF42-F45A-40A6-8E4B-56AF1694E2C5}.Debug|x86.ActiveCfg = Debug|Win32
-		{9489AF42-F45A-40A6-8E4B-56AF1694E2C5}.Debug|x86.Build.0 = Debug|Win32
-		{9489AF42-F45A-40A6-8E4B-56AF1694E2C5}.Release|x64.ActiveCfg = Release|x64
-		{9489AF42-F45A-40A6-8E4B-56AF1694E2C5}.Release|x64.Build.0 = Release|x64
-		{9489AF42-F45A-40A6-8E4B-56AF1694E2C5}.Release|x86.ActiveCfg = Release|Win32
-		{9489AF42-F45A-40A6-8E4B-56AF1694E2C5}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
