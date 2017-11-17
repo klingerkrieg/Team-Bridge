@@ -50,7 +50,8 @@
 #include "vrpn_Joywin32.h"
 #include "vrpn_Keyboard.h"                // for vrpn_Keyboard
 #include "vrpn_Laputa.h"                  // for vrpn_Laputa
-#include "vrpn_LeapMotion.h"                  // for vrpn_Laputa
+#include "vrpn_LeapMotion.h"                 
+#include "vrpn_KinectV1.h"                 
 #include "vrpn_LUDL.h"                    // for vrpn_LUDL_USBMAC6000
 #include "vrpn_Logitech_Controller_Raw.h" // for vrpn_Logitech_Extreme_3D_Pro, etc.
 #include "vrpn_Magellan.h"                // for vrpn_Magellan
@@ -4965,6 +4966,30 @@ int vrpn_Generic_Server_Object::setup_LeapMotion(char *&pch, char *line, FILE *)
 	return 0; // successful completion
 }
 
+
+
+int vrpn_Generic_Server_Object::setup_KinectV1(char *&pch, char *line, FILE *) {
+	char name[LINESIZE];
+
+	VRPN_CONFIG_NEXT();
+	int ret = sscanf(pch, "%511s", name);
+	if ( ret != 1 ) {
+		fprintf(stderr, "Bad KinectV1 line: %s\n", line);
+		return -1;
+	}
+
+	// Open the Laputa
+	if ( verbose ) {
+		printf("Opening vrpn_KinectV1\n");
+	}
+
+	// Open the tracker
+	_devices->add(new vrpn_KinectV1(name, connection));
+
+	return 0; // successful completion
+}
+
+
 #undef VRPN_CONFIG_NEXT
 
 vrpn_Generic_Server_Object::vrpn_Generic_Server_Object(
@@ -5409,6 +5434,8 @@ vrpn_Generic_Server_Object::vrpn_Generic_Server_Object(
 					VRPN_CHECK(setup_Laputa);
 				} else if ( VRPN_ISIT("vrpn_LeapMotion") ) {
 					VRPN_CHECK(setup_LeapMotion);
+				} else if ( VRPN_ISIT("vrpn_KinectV1") ) {
+					VRPN_CHECK(setup_KinectV1);
 				} else {                         // Never heard of it
 					sscanf(line, "%511s", s1); // Find out the class name
 					fprintf(stderr, "vrpn_server: Unknown Device: %s\n", s1);

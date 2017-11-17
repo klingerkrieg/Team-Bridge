@@ -171,6 +171,7 @@ protected:
 	int setup_Adafruit_10DOF(char *&pch, char *line, FILE *config_file);
 	int setup_OzzMaker_BerryIMU(char *&pch, char *line, FILE *config_file);
 	int setup_Laputa(char *&pch, char *line, FILE *config_file);
+	int setup_KinectV1(char *&pch, char *line, FILE *config_file);
 	int setup_LeapMotion(char *&pch, char *line, FILE *config_file);
 
 	template <typename T>
