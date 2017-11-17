@@ -72,6 +72,8 @@ private:
 	bool btnUp = true;
 	bool isBtn = false;
 
+	bool verified = false;
+
 	bool waitingLeave = false;
 	bool isLeaving = false;
 	bool hasOnLeave = false;
@@ -144,6 +146,14 @@ public:
 
 	bool getBtnUp() {
 		return btnUp;
+	}
+
+	bool getVerified() {
+		return verified;
+	}
+
+	void setVerified(bool verif) {
+		verified = verif;
 	}
 
 	bool getHasOnLeave() {

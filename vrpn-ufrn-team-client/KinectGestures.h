@@ -5,6 +5,8 @@
 #include <time.h>
 #include "FlexedMember.h"
 
+const int GEST_UP = 1;
+const int GEST_DOWN = 2;
 const int GEST_LEFT = 1;
 const int GEST_RIGHT = 2;
 const int GEST_FRONT = 3;
@@ -16,6 +18,7 @@ private:
 	//porque dentro do detectHandTop o headHeight é atualizado a todo momento
 	static double lastHeight;
 	static bool lastHeightDefined;
+	static std::vector<double> KinectGestures::headTopPositions;
 
 	static double lastHeadHeight;
 	static bool lastHeadHeightDefined;
@@ -80,7 +83,7 @@ public:
 	int detectRightHandTop(const vrpn_TRACKERCB t, int topLevel, int handTopMod);
 
 
-	int detectTopChange(const vrpn_TRACKERCB t, double heightSens);
+	int detectTopChange(const vrpn_TRACKERCB t, double heightSens, int direction);
 
 	int detectLeftHandFast(const vrpn_TRACKERCB t);
 
