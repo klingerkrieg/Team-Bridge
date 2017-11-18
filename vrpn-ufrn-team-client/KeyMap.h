@@ -105,7 +105,9 @@ private:
 	//Como o x e y serão comparados
 	int coordinateMod = 0;// 0 =, 1 >, -1 <
 
-
+	//Medida em Metros por segundo para identificar um movimento brusco
+	//Valor padrao, pode ser alterado nas configurações
+	double maxVelociyMs = 4;
 
 	//Angulo da propriedade
 	int angle = -1;
@@ -208,6 +210,10 @@ public:
 
 	double getSensivity() {
 		return sensivity;
+	}
+
+	double getMaxVelocityMs() {
+		return maxVelociyMs;
 	}
 
 	/*int getHandTopMod() {

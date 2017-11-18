@@ -342,10 +342,10 @@ bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKE
 		
 				} else //FAST HAND
 				if ( keyMap->getKey() == KINECT_LEFT_HAND_FAST ) {
-					active = gr.detectLeftHandFast(t);
+					active = gr.detectLeftHandFast(t, keyMap->getMaxVelocityMs());
 				} else
 				if ( keyMap->getKey() == KINECT_RIGHT_HAND_FAST ) {
-					active = gr.detectRightHandFast(t);
+					active = gr.detectRightHandFast(t, keyMap->getMaxVelocityMs());
 				} else //BODY
 				if ( keyMap->getKey() == KINECT_BODY_FRONT) {
 					active = gr.detectBodyFront(t);

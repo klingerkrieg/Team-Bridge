@@ -38,11 +38,9 @@ private:
 	static std::map<int, std::vector<double>> lastMemberPos;
 	static std::map<long, long> lastMemberTime;
 
-	//Maximo de distancia percorrida considerada normal para o intervalo abaixo
-	double fastMemberFator = 0.003f;
-	//Garanto que ele ira calcular a distancia em intervalo de tempo de 250 a 290ms
-	int fastMemberDelay = 250;
-	int maxFastMemberDelay = 290;
+	
+	//Garanto que ele ira calcular a distancia em intervalo de tempo de 250 a 300ms
+	double fastMemberDelay = 250;
 
 
 	//deteccao marcha estacionaria
@@ -58,7 +56,7 @@ private:
 
 	bool detectWalkHeight(double &kneeLastHeight, const vrpn_TRACKERCB t);
 	int detectBody(const vrpn_TRACKERCB t, int direction);
-	bool detectMemberFast(const vrpn_TRACKERCB t);
+	bool detectMemberFast(const vrpn_TRACKERCB t, double maxVelMs);
 
 	int detectHandTop(const vrpn_TRACKERCB t, int topLevel, int handTopMod);
 
@@ -85,9 +83,8 @@ public:
 
 	int detectTopChange(const vrpn_TRACKERCB t, double heightSens, int direction);
 
-	int detectLeftHandFast(const vrpn_TRACKERCB t);
-
-	int detectRightHandFast(const vrpn_TRACKERCB t);
+	int detectLeftHandFast(const vrpn_TRACKERCB t, double maxVelMs);
+	int detectRightHandFast(const vrpn_TRACKERCB t, double maxVelMs);
 
 	
 

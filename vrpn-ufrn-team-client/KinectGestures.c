@@ -24,16 +24,16 @@ double KinectGestures::turnZeroQuat = 0;
 
 long int KinectGestures::lastWalk = 0;
 
-int KinectGestures::detectLeftHandFast(const vrpn_TRACKERCB t) {
+int KinectGestures::detectLeftHandFast(const vrpn_TRACKERCB t, double maxVelMs) {
 	if ( t.sensor == 7) {
-		return detectMemberFast(t);
+		return detectMemberFast(t, maxVelMs);
 	}
 	return -1;
 }
 
-int KinectGestures::detectRightHandFast(const vrpn_TRACKERCB t) {
+int KinectGestures::detectRightHandFast(const vrpn_TRACKERCB t, double maxVelMs) {
 	if ( t.sensor == 11) {
-		return detectMemberFast(t);
+		return detectMemberFast(t, maxVelMs);
 	}
 	return -1;
 }
@@ -56,7 +56,7 @@ double KinectGestures::euclidianDistance(std::vector<double> pos1, std::vector<d
 
 struct timeval tp;
 
-bool KinectGestures::detectMemberFast(const vrpn_TRACKERCB t) {
+bool KinectGestures::detectMemberFast(const vrpn_TRACKERCB t, double maxVelMs) {
 	
 	std::vector<double> pos = getLastMemberPos(t.sensor);
 	std::vector<double> actPos = { t.pos[0], t.pos[1], t.pos[2] };
@@ -64,6 +64,7 @@ bool KinectGestures::detectMemberFast(const vrpn_TRACKERCB t) {
 
 	gettimeofday(&tp, NULL);
 	long now = (tp.tv_sec * 1000 + tp.tv_usec / 1000);
+
 
 	//Primeira execucao
 	if ( lastMemberTime[t.sensor] == 0 ) {
@@ -75,8 +76,9 @@ bool KinectGestures::detectMemberFast(const vrpn_TRACKERCB t) {
 	if ( now - lastMemberTime[t.sensor] < fastMemberDelay ) {
 		return false;
 	} else
-	//Delay para nao calcular a velocidade com espaço de tempo muito curto
-	if ( now - lastMemberTime[t.sensor] > maxFastMemberDelay ) {
+	//Delay para nao calcular a velocidade com espaço de tempo muito superior ao esperado
+	if ( now - lastMemberTime[t.sensor] > fastMemberDelay + 50 ) {
+		//reseta a contagem
 		lastMemberPos[t.sensor] = actPos;
 		lastMemberTime[t.sensor] = now;
 		return false;
@@ -84,12 +86,13 @@ bool KinectGestures::detectMemberFast(const vrpn_TRACKERCB t) {
 	
 	long last = lastMemberTime[t.sensor];
 	double dst = euclidianDistance(pos, actPos);
-
 	lastMemberPos[t.sensor] = actPos;
 	lastMemberTime[t.sensor] = now;
 
-	//printf("%.2f / (%d - %d [%d]) =  %.8f\n", dst ,now , last, (now - last), dst / (now - last));
-	if ( dst / (now - last) > fastMemberFator ) {
+	double time = ( (double)(now - last) / 1000.0);
+	double velocityMs = (dst / time);
+
+	if ( velocityMs > maxVelMs ) {
 		return true;
 	} else {
 		return false;

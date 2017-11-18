@@ -185,6 +185,20 @@ KeyMap::KeyMap(std::string dev, std::string config) {
 					y = atoi(options.at(1).c_str());
 				}
 
+			} else
+			if ( contains((*it), "KINECT_RIGHT_HAND_FAST") || contains((*it), "KINECT_LEFT_HAND_FAST") ) {
+				options = split((*it), "=");
+
+				keyChar = options.front();
+
+				if ( options.size() > 2 ) {
+					printf("Linha configurada incorretamente: %s\n", config.c_str());
+				}
+				if ( options.size() == 2 ) {
+					//Velocidade em m/s
+					maxVelociyMs = atof(options.at(1).c_str());
+				} //ja existe um valor predefinido
+
 			} else {
 				//strcpy(keyChar, (*it).c_str());
 				keyChar = (*it);
