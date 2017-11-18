@@ -18,8 +18,9 @@ const int VK_RBUTTON_UP = 4004;
 const int VK_MBUTTON_DOWN = 4005;
 const int VK_MBUTTON_UP = 4006;
 
-const int KINECT_TOP_ADD = 5001;
-const int KINECT_TOP_DEC = 5002;
+const int KINECT_STEP_UP = 5001;
+const int KINECT_STEP_DOWN = 5002;
+const int KINECT_STEP_NORMAL = 5019;
 const int KINECT_LEFT_HAND_TOP = 5003;
 const int KINECT_RIGHT_HAND_TOP = 5004;
 const int KINECT_LEFT_HAND_FAST = 5005;
@@ -115,7 +116,11 @@ private:
 	int angleMod = 0;// 0 =, 1 >, -1 <
 
 	//sensibilidade do comando (para mudanca de altura)
+	//step e marcha estacionaria
 	double sensivity = 0.15;
+
+	//delay atualmente usado somente para marcha estacionaria
+	int delay = 400; //ms;
 
 
 	//int handTopMod = 0;// 0 =, 1 >, -1 <
@@ -210,6 +215,10 @@ public:
 
 	double getSensivity() {
 		return sensivity;
+	}
+
+	int getDelay() {
+		return delay;
 	}
 
 	double getMaxVelocityMs() {
@@ -342,8 +351,9 @@ public:
 		m["VK_RBUTTON"] = 2;
 
 		//Kinect
-		m["KINECT_TOP_ADD"] = KINECT_TOP_ADD;
-		m["KINECT_TOP_DEC"] = KINECT_TOP_DEC;
+		m["KINECT_STEP_UP"] = KINECT_STEP_UP;
+		m["KINECT_STEP_DOWN"] = KINECT_STEP_DOWN;
+		m["KINECT_STEP_NORMAL"] = KINECT_STEP_NORMAL;
 		m["KINECT_LEFT_HAND_TOP"] = KINECT_LEFT_HAND_TOP;
 		m["KINECT_RIGHT_HAND_TOP"] = KINECT_RIGHT_HAND_TOP;
 		m["KINECT_LEFT_HAND_FAST"] = KINECT_LEFT_HAND_FAST;

@@ -199,6 +199,28 @@ KeyMap::KeyMap(std::string dev, std::string config) {
 					maxVelociyMs = atof(options.at(1).c_str());
 				} //ja existe um valor predefinido
 
+			} else
+			if ( contains((*it), "KINECT_WALK") ) {
+				options = split((*it), "=");
+
+				keyChar = options.front();
+
+				if ( options.size() > 2 ) {
+					printf("Linha configurada incorretamente: %s\n", config.c_str());
+				}
+				if ( options.size() == 2 ) {
+					//Se contem ,
+					if ( contains(options.at(1), ",") ) {
+						options = split(options.at(1), ",");
+						//salva delay e altura
+						delay = atoi(options.at(0).c_str());
+						sensivity = atof(options.at(1).c_str());
+					} else {
+						//salva somente delay
+						delay = atoi(options.at(1).c_str());
+					}
+				} //ja existem um valores predefinidos
+
 			} else {
 				//strcpy(keyChar, (*it).c_str());
 				keyChar = (*it);
@@ -207,7 +229,7 @@ KeyMap::KeyMap(std::string dev, std::string config) {
 
 			
 			
-			if ( starts_with((*it), "KINECT_TOP_ADD") || starts_with((*it), "KINECT_TOP_DEC") ) {
+			if ( starts_with((*it), "KINECT_STEP_UP") || starts_with((*it), "KINECT_STEP_DOWN") || starts_with((*it), "KINECT_STEP_NORMAL") ) {
 				options = split((*it), "=");
 				//lancar erro caso nao tenha msg
 				if ( options.size() == 1 ) {
@@ -216,10 +238,13 @@ KeyMap::KeyMap(std::string dev, std::string config) {
 
 
 				sensivity = atof(options.at(1).c_str());
-				if ( starts_with((*it), "KINECT_TOP_ADD")  ) {
-					key = KINECT_TOP_ADD;
+				if ( starts_with((*it), "KINECT_STEP_UP") ) {
+					key = KINECT_STEP_UP;
+				} else
+				if ( starts_with((*it), "KINECT_STEP_DOWN")  ) {
+					key = KINECT_STEP_DOWN;
 				} else {
-					key = KINECT_TOP_DEC;
+					key = KINECT_STEP_NORMAL;
 				}
 				keyRepr = (*it);
 

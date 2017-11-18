@@ -1,7 +1,6 @@
 #include "KinectGestures.h"
 
-double KinectGestures::lastHeight = 0;
-bool KinectGestures::lastHeightDefined = false;
+
 
 double KinectGestures::lastHeadXPos = 0;
 bool KinectGestures::lastHeadXPosDefined = false;
@@ -226,42 +225,43 @@ int KinectGestures::detectHandXPos(const vrpn_TRACKERCB t, int xPos) {
 
 
 std::vector<double> KinectGestures::headTopPositions;
+double KinectGestures::normalStepHeight = -100;
 
 int KinectGestures::detectTopChange(const vrpn_TRACKERCB t, double heightSens, int direction) {
 	if ( t.sensor == 0 ) {
 
 		
-		if ( lastHeight == 0 ) {
-			//headTopPositions.push_back(t.pos[1]);
-			lastHeight = t.pos[1];
-			lastHeightDefined = true;
+		if ( normalStepHeight == -100 ) {
+			normalStepHeight = t.pos[1];
 			return -1;
 		}
-		//printf("%.2f\n", lastHeadHeight);
-		
+
 		//Subiu
 		//pos  - last
 		//0.59 - 0.57 = 0.02 >= 0.02
-		if ( direction == GEST_UP ) {
-			if ( t.pos[1] - lastHeight >= (float)heightSens ) {
-				lastHeight = t.pos[1];
+		if ( direction == KINECT_UP ) {
+			if ( t.pos[1] - normalStepHeight >= (float)heightSens ) {
 				return true;
 			} else {
-				//-1 nesse caso é para sinalizar que não houve mudança, então a ultima alteração ainda está valendo
-				//Se ele subiu ele ainda está em cima
-				return -1;
+				return 0;
 			}
 		} else
-		if ( direction == GEST_DOWN ) {
+		if ( direction == KINECT_DOWN ) {
 			//Desceu
 			//last - pos
 			//0.57 - 0.55 = 0.02 >= 0.02
 			//printf("%.2f >= %.2f\n", lastHeight - t.pos[1], heightSens);
-			if ( lastHeight - t.pos[1] >= (float)heightSens ) {
-				lastHeight = t.pos[1];
+			if ( normalStepHeight - t.pos[1] >= (float)heightSens ) {
 				return true;
 			} else {
-				return -1;
+				return 0;
+			}
+		} else 
+		if ( direction == KINECT_NORMAL ) {
+			if ( normalStepHeight - t.pos[1] < (float)heightSens && t.pos[1] - normalStepHeight < (float)heightSens ) {
+				return true;
+			} else {
+				return 0;
 			}
 		}
 	}
@@ -289,37 +289,37 @@ int KinectGestures::detectBody(const vrpn_TRACKERCB t, int direction) {
 		return -1;
 	}
 
-	if ( direction == GEST_FRONT ) {
+	if ( direction == KINECT_FRONT ) {
 		return t.pos[2] < centerPos[2] - bodyCenterDistance;
 	} else
-	if ( direction == GEST_BACK ) {
+	if ( direction == KINECT_BACK ) {
 		return t.pos[2] > centerPos[2] + bodyCenterDistance;
 	} else
-	if ( direction == GEST_RIGHT ) {
+	if ( direction == KINECT_RIGHT ) {
 		return t.pos[0] > centerPos[0] + bodyCenterDistance;
 	} else
-	if ( direction == GEST_LEFT ) {
+	if ( direction == KINECT_LEFT ) {
 		return t.pos[0] < centerPos[0] - bodyCenterDistance;
 	}
 	return false;
 }
 
 int KinectGestures::detectBodyFront(const vrpn_TRACKERCB t) {
-	return detectBody(t, GEST_FRONT);
+	return detectBody(t, KINECT_FRONT);
 }
 int KinectGestures::detectBodyRight(const vrpn_TRACKERCB t) {
-	return detectBody(t, GEST_RIGHT);
+	return detectBody(t, KINECT_RIGHT);
 }
 int KinectGestures::detectBodyLeft(const vrpn_TRACKERCB t) {
-	return detectBody(t, GEST_LEFT);
+	return detectBody(t, KINECT_LEFT);
 }
 int KinectGestures::detectBodyBack(const vrpn_TRACKERCB t) {
-	return detectBody(t, GEST_BACK);
+	return detectBody(t, KINECT_BACK);
 }
 
 
 
-bool KinectGestures::detectWalkHeight(double &kneeLastHeight, const vrpn_TRACKERCB t) {
+bool KinectGestures::detectWalkHeight(double &kneeLastHeight, const vrpn_TRACKERCB t, int delay, double sensitivity) {
 	if ( kneeLastHeight == 0 ) {
 		kneeLastHeight = t.pos[1];
 		return false;
@@ -330,11 +330,11 @@ bool KinectGestures::detectWalkHeight(double &kneeLastHeight, const vrpn_TRACKER
 	//int actualTime = (int)time(0);
 	bool ret = false;
 
-	if ( kneeLastHeight - kneeHeightFactor >= t.pos[1] ) {//abaixou o joelho
+	if ( kneeLastHeight - sensitivity >= t.pos[1] ) {//abaixou o joelho
 		kneeLastHeight = t.pos[1];
 		ret = true;
 	} else
-	if ( kneeLastHeight + kneeHeightFactor <= t.pos[1] ) {//levantou o joelho
+	if ( kneeLastHeight + sensitivity <= t.pos[1] ) {//levantou o joelho
 		kneeLastHeight = t.pos[1];
 		ret = true;
 	}
@@ -344,7 +344,7 @@ bool KinectGestures::detectWalkHeight(double &kneeLastHeight, const vrpn_TRACKER
 		lastWalk = actualTime;
 		return true;
 	} else
-	if ( lastWalk != 0 && actualTime - lastWalk < 1500 ) {
+	if ( lastWalk != 0 && actualTime - lastWalk < delay ) {
 		return true;
 	} else {
 		return false;
@@ -352,14 +352,14 @@ bool KinectGestures::detectWalkHeight(double &kneeLastHeight, const vrpn_TRACKER
 }
 
 
-int KinectGestures::detectWalk(const vrpn_TRACKERCB t) {
+int KinectGestures::detectWalk(const vrpn_TRACKERCB t, int delay, double sensitivity) {
 	//17 13
 	
 	if ( t.sensor == 13 ) {
-		return detectWalkHeight(rightKneeLastHeight, t);
+		return detectWalkHeight(rightKneeLastHeight, t, delay, sensitivity);
 	} else 
 	if ( t.sensor == 17 ) {
-		return detectWalkHeight(leftKneeLastHeight, t);
+		return detectWalkHeight(leftKneeLastHeight, t, delay, sensitivity);
 	}
 	return -1;
 }

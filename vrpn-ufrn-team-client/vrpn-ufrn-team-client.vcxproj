@@ -180,7 +180,6 @@
     <ClInclude Include="FileParser.h" />
     <ClInclude Include="FlexedMember.h" />
     <ClInclude Include="GestureRecognizer.h" />
-    <ClInclude Include="GestureRecorder.h" />
     <ClInclude Include="KinectGestures.h" />
     <ClInclude Include="LeapMotionGestures.h" />
     <ClInclude Include="util.h" />
@@ -190,6 +189,7 @@
     <ClInclude Include="View.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="vrpn-client-drunkbug.cfg" />
     <None Include="vrpn-client-mb.cfg" />
     <None Include="vrpn-client-runner.cfg" />
     <None Include="vrpn-client.bk.cfg" />

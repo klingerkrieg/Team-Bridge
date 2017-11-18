@@ -49,9 +49,9 @@ public:
 
 		int i = 0;
 		
-		KeyMap m1 = KeyMap("Tracker0@localhost", "KINECT_TOP_ADD=0.15 A");
+		KeyMap m1 = KeyMap("Tracker0@localhost", "KINECT_STEP_UP=0.15 A");
 		Assert::AreEqual(m1.toString(), map.at(i++).toString());
-		m1 = KeyMap("Tracker0@localhost", "KINECT_TOP_DEC=0.15	D");
+		m1 = KeyMap("Tracker0@localhost", "KINECT_STEP_DOWN=0.15	D");
 		Assert::AreEqual(m1.toString(), map.at(i++).toString());
 
 		m1 = KeyMap("Tracker0@localhost", "KINECT_LEFT_HAND_TOP=5 O");

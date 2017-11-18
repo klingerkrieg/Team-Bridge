@@ -34,15 +34,17 @@ namespace InputConverterTest {
 
 		std::vector<KeyMap> map;
 
-		KeyMap m1 = KeyMap("Tracker0@localhost", "KINECT_TOP_ADD=0.15	A");
-		KeyMap m2 = KeyMap("Tracker0@localhost", "KINECT_TOP_DEC=0.15	A");
-		KeyMap m3 = KeyMap("Keyboard0@localhost", "A	D");
-		KeyMap m4 = KeyMap("Keyboard0@localhost", "VK_LEFT	VK_RIGHT");
+		KeyMap m1 = KeyMap("Tracker0@localhost", "KINECT_STEP_UP=0.15	A");
+		KeyMap m2 = KeyMap("Tracker0@localhost", "KINECT_STEP_NORMAL=0.15	A");
+		KeyMap m3 = KeyMap("Tracker0@localhost", "KINECT_STEP_DOWN=0.15	A");
+		KeyMap m4 = KeyMap("Keyboard0@localhost", "A	D");
+		KeyMap m5 = KeyMap("Keyboard0@localhost", "VK_LEFT	VK_RIGHT");
 
 		map.push_back(m1);
 		map.push_back(m2);
 		map.push_back(m3);
 		map.push_back(m4);
+		map.push_back(m5);
 
 		std::string app = "";
 
@@ -56,19 +58,24 @@ public:
 	TEST_METHOD(InputConverter_checkTrack) {
 		
 			t.sensor = 0;
+			t.pos[1] = 1.0;
 			//Inicia
-			Assert::IsFalse(iC.checkTrack(tc1, t));
+			Assert::IsTrue(iC.checkTrack(tc1, t));
 			
 			//Sobe
 			t.pos[1] = 1.151;
 			Assert::IsTrue(iC.checkTrack(tc1, t));
 			//Mantem
-			Assert::IsFalse(iC.checkTrack(tc1, t));
+			Assert::IsTrue(iC.checkTrack(tc1, t));
 
-			//Desce
+			//normal
 			t.pos[1] = 1.0;
 			Assert::IsTrue(iC.checkTrack(tc1, t));
-		
+
+			//Desce
+			t.pos[1] = 0.75;
+			Assert::IsTrue(iC.checkTrack(tc1, t));
+
 
 	}
 

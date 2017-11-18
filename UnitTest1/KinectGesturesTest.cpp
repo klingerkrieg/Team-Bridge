@@ -2,7 +2,7 @@
 #include "CppUnitTest.h"
 
 #include <string>
-#include "GestureRecognizer.h"
+#include "KinectGestures.h"
 #include <vrpn_Tracker.h>
 #include <math.h>
 #include "utilTest.h"
@@ -13,7 +13,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 namespace GestureRecognizerTest {
 
 
-	TEST_CLASS(GestureRecognizerTest) {
+	TEST_CLASS(KinectGesturesTest) {
 public:
 
 	TEST_METHOD(GestureRecognizer_detectTopChange) {
@@ -23,27 +23,40 @@ public:
 		vrpn_TRACKERCB t = getTrackerCB();
 		
 
-		GestureRecognizer gr = GestureRecognizer();
+		KinectGestures gr = KinectGestures();
 		double heightSens = 0.15;
 
-		//primeira altura = 1.0
-		Assert::AreEqual(-1, gr.detectTopChange(t, heightSens, GEST_UP));
+		//primeira altura = 1.0 ira definir o STEP_NORMAL
+		Assert::AreEqual(-1, gr.detectTopChange(t, heightSens, KINECT_UP));
 
 		//mantem
 		t.pos[1] = 1.141;
-		Assert::AreEqual(-1, gr.detectTopChange(t, heightSens, GEST_UP));
+		Assert::AreEqual(0, gr.detectTopChange(t, heightSens, KINECT_UP));
+		Assert::AreEqual(1, gr.detectTopChange(t, heightSens, KINECT_NORMAL));
+		Assert::AreEqual(0, gr.detectTopChange(t, heightSens, KINECT_DOWN));
 
 		//subiu (devido a problemas com o float do vrpn ele entende como 1.4999)
 		t.pos[1] = 1.151;
-		Assert::AreEqual(1, gr.detectTopChange(t, heightSens, GEST_UP));
+		Assert::AreEqual(1, gr.detectTopChange(t, heightSens, KINECT_UP));
+		Assert::AreEqual(0, gr.detectTopChange(t, heightSens, KINECT_NORMAL));
+		Assert::AreEqual(0, gr.detectTopChange(t, heightSens, KINECT_DOWN));
 
 		//mantem
-		Assert::AreEqual(-1, gr.detectTopChange(t, heightSens, GEST_DOWN));
-		
-		//desceu
-		t.pos[1] = 1.0;
-		Assert::AreEqual(1, gr.detectTopChange(t, heightSens, GEST_DOWN));
+		Assert::AreEqual(1, gr.detectTopChange(t, heightSens, KINECT_UP));
+		Assert::AreEqual(0, gr.detectTopChange(t, heightSens, KINECT_NORMAL));
+		Assert::AreEqual(0, gr.detectTopChange(t, heightSens, KINECT_DOWN));
 
+		//altura normal
+		t.pos[1] = 1.0;
+		Assert::AreEqual(0, gr.detectTopChange(t, heightSens, KINECT_UP));
+		Assert::AreEqual(1, gr.detectTopChange(t, heightSens, KINECT_NORMAL));
+		Assert::AreEqual(0, gr.detectTopChange(t, heightSens, KINECT_DOWN));
+
+		//dobrou os joelhos, esta um degrau abaixo do normal
+		t.pos[1] = 0.74;
+		Assert::AreEqual(0, gr.detectTopChange(t, heightSens, KINECT_UP));
+		Assert::AreEqual(0, gr.detectTopChange(t, heightSens, KINECT_NORMAL));
+		Assert::AreEqual(1, gr.detectTopChange(t, heightSens, KINECT_DOWN));
 	}
 
 	TEST_METHOD(GestureRecognizer_detectHandTop) {
@@ -52,7 +65,7 @@ public:
 		vrpn_TRACKERCB t = getTrackerCB();
 		t.sensor = 0; //head 1.0
 
-		GestureRecognizer gr = GestureRecognizer();
+		KinectGestures gr = KinectGestures();
 		gr.detectRightHandTop(t, 5, 0);
 
 		t.sensor = 11; //right hand
@@ -84,7 +97,7 @@ public:
 		vrpn_TRACKERCB t = getTrackerCB();
 		t.sensor = 0; //head 1.0, 1.0
 
-		GestureRecognizer gr = GestureRecognizer();
+		KinectGestures gr = KinectGestures();
 		gr.detectRightHandTop(t, 1, 0);//handXPos depende do HandTop
 		//HandTop deve ser chamado antes
 
@@ -114,7 +127,7 @@ public:
 		vrpn_TRACKERCB t = getTrackerCB();
 		
 
-		GestureRecognizer gr = GestureRecognizer();
+		KinectGestures gr = KinectGestures();
 		
 		t.sensor = 13; // usa joelho direito
 		t.pos[1] = 1.0; //inicia
@@ -143,7 +156,7 @@ public:
 		vrpn_TRACKERCB t = getTrackerCB();
 		t.sensor = 3; // usa bacia
 
-		GestureRecognizer gr = GestureRecognizer();
+		KinectGestures gr = KinectGestures();
 		t.pos[0] = 1.0;
 		t.pos[2] = 1.0;
 		gr.setCenterPos(t);
@@ -173,7 +186,7 @@ public:
 		vrpn_TRACKERCB t = getTrackerCB();
 		t.sensor = 3; // usa bacia
 
-		GestureRecognizer gr = GestureRecognizer();
+		KinectGestures gr = KinectGestures();
 		t.quat[2] = 0;
 		gr.setCenterPos(t);
 

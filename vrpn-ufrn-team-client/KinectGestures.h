@@ -5,21 +5,21 @@
 #include <time.h>
 #include "FlexedMember.h"
 
-const int GEST_UP = 1;
-const int GEST_DOWN = 2;
-const int GEST_LEFT = 1;
-const int GEST_RIGHT = 2;
-const int GEST_FRONT = 3;
-const int GEST_BACK = 4;
+const int KINECT_UP = 1;
+const int KINECT_DOWN = 2;
+const int KINECT_NORMAL = 3;
+const int KINECT_LEFT = 1;
+const int KINECT_RIGHT = 2;
+const int KINECT_FRONT = 3;
+const int KINECT_BACK = 4;
 
 class KinectGestures : public FlexedMember {
 private:
 	//nao pode usar o mesmo headHeight para detectTopChange porque se nao ele so ira detectar mudancas bruscas
 	//porque dentro do detectHandTop o headHeight é atualizado a todo momento
-	static double lastHeight;
-	static bool lastHeightDefined;
 	static std::vector<double> KinectGestures::headTopPositions;
 
+	static double normalStepHeight;
 	static double lastHeadHeight;
 	static bool lastHeadHeightDefined;
 	double handTopInterval = 0.10;
@@ -44,17 +44,15 @@ private:
 
 
 	//deteccao marcha estacionaria
-	int walkDelay = 500; //ms;
 	static long int lastWalk;
 	static double leftKneeLastHeight;
 	static double rightKneeLastHeight;
-	double kneeHeightFactor = 0.15;
 
 	
 	double turnFactor = 0.07;
 	static double turnZeroQuat;
 
-	bool detectWalkHeight(double &kneeLastHeight, const vrpn_TRACKERCB t);
+	bool detectWalkHeight(double &kneeLastHeight, const vrpn_TRACKERCB t, int delay, double sensitivity);
 	int detectBody(const vrpn_TRACKERCB t, int direction);
 	bool detectMemberFast(const vrpn_TRACKERCB t, double maxVelMs);
 
@@ -97,7 +95,7 @@ public:
 	int setCenterPos(const vrpn_TRACKERCB t);
 
 
-	int detectWalk(const vrpn_TRACKERCB t);
+	int detectWalk(const vrpn_TRACKERCB t, int delay, double sensitivity);
 
 
 	int detectTurnLeft(const vrpn_TRACKERCB t);

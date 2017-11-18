@@ -16,9 +16,9 @@ public:
 
 
 	TEST_METHOD(KeyMapTest_init) {
-		KeyMap m1 = KeyMap("Tracker0@localhost", "KINECT_TOP_ADD=0.15	A");
+		KeyMap m1 = KeyMap("Tracker0@localhost", "KINECT_STEP_UP=0.15	A");
 		Assert::AreEqual("Tracker0@localhost", m1.getDev().c_str());
-		Assert::AreEqual(KINECT_TOP_ADD, m1.getKey());
+		Assert::AreEqual(KINECT_STEP_UP, m1.getKey());
 		Assert::AreEqual((int)'A', m1.getToKey());
 		Assert::AreEqual(0.15, m1.getSensivity());
 		Assert::AreEqual(false, m1.getToKeyIsConstant());

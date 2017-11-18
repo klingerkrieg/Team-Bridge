@@ -300,15 +300,18 @@ bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKE
 
 
 				//se ja foi calculado durante esse reconhecimento nao calcula novamente para as demais configuracoes de teclas
-				if ( keyMap->getKey() == KINECT_TOP_ADD ) {
+				if ( keyMap->getKey() == KINECT_STEP_UP ) {
 					//o active ira controlar se essa acao foi acionada ou nao
 					//caso nao esteja acionada o interpretOnLeave ira identificar se foi configurado para acionar alguma ação quando 
 					//essa key nao estiver mais ativa
 					//a ação ja sera chamada dentro de interpretOnLeave
-					active = gr.detectTopChange(t, keyMap->getSensivity(), GEST_UP);
+					active = gr.detectTopChange(t, keyMap->getSensivity(), KINECT_UP);
 				} else
-				if ( keyMap->getKey() == KINECT_TOP_DEC ) {
-					active = gr.detectTopChange(t, keyMap->getSensivity(), GEST_DOWN);
+				if ( keyMap->getKey() == KINECT_STEP_DOWN ) {
+					active = gr.detectTopChange(t, keyMap->getSensivity(), KINECT_DOWN);
+				} else
+				if ( keyMap->getKey() == KINECT_STEP_NORMAL ) {
+					active = gr.detectTopChange(t, keyMap->getSensivity(), KINECT_NORMAL);
 				} else
 				if ( keyMap->getKey() == KINECT_RIGHT_HAND_TOP || keyMap->getKey() == KINECT_LEFT_HAND_TOP ) {
 			
@@ -360,7 +363,7 @@ bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKE
 					active = gr.detectBodyBack(t);
 				} else
 				if ( keyMap->getKey() == KINECT_WALK ) {
-					active = gr.detectWalk(t);
+					active = gr.detectWalk(t, keyMap->getDelay(), keyMap->getSensivity());
 				} else
 				if ( keyMap->getKey() == KINECT_TURN_LEFT  ) {
 					active = gr.detectTurnLeft(t);
