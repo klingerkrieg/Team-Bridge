@@ -27,7 +27,6 @@
 //#include "DeviceInfo.h"
 #include "Storage.h"
 #include "InputConverter.h"
-#include "GestureRecorder.h"
 
 
 
@@ -50,7 +49,6 @@ class Client {
 private:
 	Storage storage;
 	InputConverter inputConverter;
-	GestureRecorder gestureRecorder;
 	View view;
 
 	char *configFileName = "vrpn-client.cfg";
@@ -88,17 +86,6 @@ public:
 		return &inputConverter;
 	}
 
-	GestureRecorder* getGestureRecorder() {
-		return &gestureRecorder;
-	}
-
-	void setRecordGesture(bool active, std::string name) {
-		recordGesture = active;
-		gestureRecorder.setName(name);
-	}
-	bool getRecordGesture() {
-		return recordGesture;
-	}
 
 	void setConfigFile(char * file_name) {
 		configFileName = file_name;

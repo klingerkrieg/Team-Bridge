@@ -163,7 +163,6 @@
     <ClCompile Include="ConfigFileReader.c" />
     <ClCompile Include="Db.c" />
     <ClCompile Include="FlexedMember.c" />
-    <ClCompile Include="GestureRecorder.c" />
     <ClCompile Include="KinectGestures.c" />
     <ClCompile Include="InputConverter.c" />
     <ClCompile Include="KeyMap.c" />

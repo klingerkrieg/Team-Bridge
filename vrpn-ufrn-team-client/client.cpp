@@ -39,12 +39,8 @@ bool Client::setup(bool test = false) {
 		}
 
 
-		if ( getRecordGesture() ) {
-			gestureRecorder = GestureRecorder(view);
-		} else {
-			//Setando InputConverter
-			inputConverter = InputConverter(map, config.getApp(), view);
-		}
+		//Setando InputConverter
+		inputConverter = InputConverter(map, config.getApp(), view);
 		
 
 		//Setando configs no store
@@ -172,13 +168,10 @@ Client client;
 void VRPN_CALLBACK handle_tracker_pos_quat(void *userdata, const vrpn_TRACKERCB t) {
 	TrackerUserCallback *t_data = static_cast<TrackerUserCallback *>(userdata);
 	
-	if ( client.getRecordGesture() ) {
-		client.getGestureRecorder()->record(t_data, t);
-	} else {
-		client.getStorage().saveToFile(t_data, t);
-		client.getInputConverter()->checkTrack(t_data, t);
-	}
-
+	
+	client.getStorage().saveToFile(t_data, t);
+	client.getInputConverter()->checkTrack(t_data, t);
+	
 	// Make sure we have a count value for this sensor
 	/*while ( t_data->counts.size() <= static_cast<unsigned>(t.sensor) ) {
 	t_data->counts.push_back(0);
@@ -304,16 +297,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			client.setPrintAnalog(false);
 		} else if ( !wcscmp(argv[i], L"-export") ) {
 			client.setExport(true);
-		} else if ( !wcscmp(argv[i], L"-record") ) {
-			printf("Defina o nome do gesto a ser gravado:");
-			scanf("%s", buffer);
-			client.setRecordGesture(true, buffer);
-			client.getGestureRecorder()->printOptions();
 		}
 	}
 
-	//client.setRecordGesture(true, "bla");
-	//client.getGestureRecorder()->printOptions();
 	// Free memory allocated for CommandLineToArgvW arguments.
 	LocalFree(argv);
 
