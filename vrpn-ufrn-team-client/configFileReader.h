@@ -9,6 +9,7 @@
 #include "Config.h"
 #include "KeyMap.h"
 #include "FileParser.h"
+#include "KinectGestures.h"
 #include <iostream>
 #include <Tchar.h>
 #include <sstream>

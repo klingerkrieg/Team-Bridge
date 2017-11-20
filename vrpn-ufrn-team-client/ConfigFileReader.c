@@ -6,6 +6,12 @@ void ConfigFileReader::printConfig(std::vector<std::string> &devs,
 								   Config &config) {
 
 	printf("\n*******************\n");
+
+	printf("\nKinect");
+
+	printf("KINECT_X_INTERVAL=%.2f\n", KinectGestures::getKinectXInterval());
+
+
 	printf("\nDispositivos:\n");
 	for ( std::vector<std::string>::iterator it = devs.begin(); it != devs.end(); ++it ) {
 		printf("%s\n", it->c_str());
@@ -38,6 +44,7 @@ bool ConfigFileReader::readConfigFile(char * fileName,
 	char *pch;
 	char scrap[LINESIZE];
 	char s1[LINESIZE], s2[LINESIZE];
+	double dbl = 0;
 	std::string lastDev;
 	std::map<std::string, std::string> configMap;
 	std::string line;
@@ -68,6 +75,18 @@ bool ConfigFileReader::readConfigFile(char * fileName,
 
 
 		//Identifica o tipo de configuracao que sera lido
+		if ( !strcmp(pch = strtok(scrap, " \t"), "CONF") ) {
+
+			//Pula a primeira string
+			pch += strlen(pch) + 1;
+
+			if ( sscanf(pch, "%s\t%lf", s1, &dbl) ) {
+				if ( !strcmp(s1, "KINECT_X_INTERVAL") ) {
+					KinectGestures::setKinectXInterval(dbl);
+				}
+			}
+
+		} else
 		if ( !strcmp(pch = strtok(scrap, " \t"), "KEY") ) {
 
 			//Pula a primeira string

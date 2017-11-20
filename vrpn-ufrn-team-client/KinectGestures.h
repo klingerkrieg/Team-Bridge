@@ -27,7 +27,8 @@ private:
 
 	static double lastHeadXPos;
 	static bool lastHeadXPosDefined;
-	double handXPosInterval = 0.40;
+	static double handXPosInterval;
+	static double lastCenterXPos;
 	
 
 	//usado para detectBody
@@ -109,6 +110,14 @@ public:
 	
 
 	int bodyBalance(const vrpn_TRACKERCB t, int angle, int angleMod);
+
+	static void setKinectXInterval(double interval) {
+		handXPosInterval = interval;
+	}
+
+	static double getKinectXInterval() {
+		return handXPosInterval;
+	}
 		
 };
 

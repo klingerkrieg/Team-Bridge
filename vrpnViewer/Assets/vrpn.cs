@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Runtime.InteropServices;
 using System;
-
+using UnityEngine.UI;
 
 public class VRPN : MonoBehaviour {
 
@@ -32,8 +32,11 @@ public class VRPN : MonoBehaviour {
 	List<Bone> bones = new List<Bone> ();
 	List<GameObject> spheres = new List<GameObject>();
 
+	Vector3 centerPos;
 	Vector3 headPos;
 	public bool kinectLimit = true;
+
+	InputField xIntervalField;
 
 	[DllImport ("unityVrpn")]
 	private static extern double vrpnTrackerExtern(string address, int channel, int component, int frameCount);
@@ -104,6 +107,8 @@ public class VRPN : MonoBehaviour {
 	void Start(){
 		createView ();
 		createLines ();
+
+		xIntervalField = GameObject.Find ("xIntervalField").GetComponent<InputField>();
 	}
 
 
@@ -320,7 +325,12 @@ public class VRPN : MonoBehaviour {
 
 			if (i == 0) {
 				headPos = pos;
+			} else
+			if (i == 3) {
+				centerPos = pos;
 			}
+
+
 
 			if (freezed == false) {
 				Destroy(sphere.GetComponent<Rigidbody>());
@@ -429,9 +439,19 @@ public class VRPN : MonoBehaviour {
 	void Update() {
 		if (kinect && kinectLimit) {
 			float handTopInterval = 0.10f;
-			float leftLimit = headPos.x - 1;
-			float rightLimit = headPos.x + 1;
+			float handXInterval;
+
+
+			if (!float.TryParse(xIntervalField.text, out handXInterval)) {
+				handXInterval = 0.40f;
+			}
+
+
+			float leftLimit = centerPos.x - (handXInterval*3);
+			float rightLimit = centerPos.x + (handXInterval*3);
 			float topLimit = headPos.y + 1;
+
+
 
 			float top5 = headPos.y + (handTopInterval * 5);
 			float top4 = headPos.y + (handTopInterval * 2);
@@ -440,10 +460,10 @@ public class VRPN : MonoBehaviour {
 			float top1 = headPos.y - (handTopInterval * 5);
 			float top0 = -0.95f;
 
-			Vector3[] positions = new Vector3[21];
+			Vector3[] positions = new Vector3[26];
 			//Left Up
 			positions [0] = headPos;
-			positions [0].x += 0.4f;
+			positions [0].x = centerPos.x + (handXInterval);
 			positions [0].y = top5;
 
 			//Left down
@@ -453,7 +473,7 @@ public class VRPN : MonoBehaviour {
 
 			//Right down
 			positions [2] = headPos;
-			positions [2].x -= 0.4f;
+			positions [2].x = centerPos.x - (handXInterval);
 			positions [2].y = top0;
 
 			//Right up
@@ -523,6 +543,21 @@ public class VRPN : MonoBehaviour {
 
 			positions [20] = positions [16];
 			positions [20] = positions [15];
+
+			positions [21] = positions [20];
+			positions [21].x = centerPos.x + (handXInterval*2);
+
+			positions [22] = positions [21];
+			positions [22].y = top0;
+
+			positions [23] = positions [22];
+			positions [23].y = top5;
+
+			positions [24] = positions [23];
+			positions [24].x = centerPos.x - (handXInterval*2);
+
+			positions [25] = positions [24];
+			positions [25].y = top0;
 
 			line.SetPositions (positions);
 			line.enabled = true;
