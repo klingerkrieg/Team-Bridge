@@ -167,22 +167,8 @@ Client client;
 
 void VRPN_CALLBACK handle_tracker_pos_quat(void *userdata, const vrpn_TRACKERCB t) {
 	TrackerUserCallback *t_data = static_cast<TrackerUserCallback *>(userdata);
-	
-	
 	client.getStorage().saveToFile(t_data, t);
 	client.getInputConverter()->checkTrack(t_data, t);
-	
-	// Make sure we have a count value for this sensor
-	/*while ( t_data->counts.size() <= static_cast<unsigned>(t.sensor) ) {
-	t_data->counts.push_back(0);
-	}
-
-	t_data->counts[t.sensor] = 0;
-	printf("Tracker %s, sensor %d:\n     pos (%5.2f, %5.2f, %5.2f); "
-	"quat (%5.2f, %5.2f, %5.2f, %5.2f)\n",
-	t_data->name, t.sensor, t.pos[0], t.pos[1], t.pos[2],
-	t.quat[0], t.quat[1], t.quat[2], t.quat[3]);*/
-
 }
 
 
@@ -208,25 +194,13 @@ void VRPN_CALLBACK handle_button_states(void *userdata, const vrpn_BUTTONSTATESC
 	const char *name = (const char *)userdata;
 
 	printf("Button %s has %d buttons with states!!!:", name, b.num_buttons);
-	/*int i;
-	for ( i = 0; i < b.num_buttons; i++ ) {
-	printf(" %d", b.states[i]);
-	}*/
 	printf("\n");
-
 }
 
 
 void VRPN_CALLBACK handle_analog(void *userdata, const vrpn_ANALOGCB a) {
-	//int i;
 	const char *name = (const char *)userdata;
-
 	client.getInputConverter()->checkAnalog(name, a);
-	/*printf("!!!Analog %s:\n         %5.2f", name, a.channel[0]);
-	for ( i = 1; i < a.num_channel; i++ ) {
-	printf(", %5.2f", a.channel[i]);
-	}
-	printf(" (%d chans)\n", a.num_channel);*/
 }
 
 
@@ -241,8 +215,7 @@ void Usage() {
 	printf("Usage: \n"
 		" -notracker:  Don't print tracker reports for following devices\n"
 		"  -nobutton:  Don't print button reports for following devices\n"
-		"  -noanalog:  Don't print analog reports for following devices\n"
-		"  -export:  Exporta arquivos para o banco de dados\n");
+		"  -noanalog:  Don't print analog reports for following devices\n");
 
 	exit(0);
 }
@@ -257,8 +230,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	freopen("conout$", "w", stdout);
 	freopen("conout$", "w", stderr);
 
-	
-	
+
+
 
 	View view = View(hInstance);
 	view.showMsg("Starting TEAM-VRPN :)");

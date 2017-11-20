@@ -35,6 +35,7 @@ private:
 	static TCHAR szTitle[];
 
 	static HWND hWnd;
+	static std::deque<HWND> hWndVect;
 
 	static HINSTANCE hInstance;
 	static WNDCLASSEX wcex;
@@ -44,6 +45,7 @@ private:
 	static bool isAlert;
 	static std::string msgToShow;
 	static int msgTop;
+	static int lastTime;
 
 	static LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 

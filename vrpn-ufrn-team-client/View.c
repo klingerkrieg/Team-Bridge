@@ -10,7 +10,9 @@ std::string View::msgToShow;
 bool View::isAlert;
 int View::delay;
 
+int View::lastTime = 0;
 
+std::deque<HWND> View::hWndVect;
 HWND View::hWnd;
 HINSTANCE View::hInstance;
 WNDCLASSEX View::wcex;
@@ -90,11 +92,25 @@ void View::showMsg(std::string text, int delay) {
 void View::sendClose() {
 	std::this_thread::sleep_for(std::chrono::milliseconds(delay));
 	//msgTop -= fontHeight + 10;
-	PostMessage(hWnd, WM_CLOSE, 0, 0);
+	//printf("Close window\n");
+	if ( hWndVect.size() > 0 ) {
+		PostMessage(hWndVect.at(0), WM_CLOSE, 0, 0);
+		hWndVect.pop_front();
+	}
+
+	//PostMessage(hWnd, WM_CLOSE, 0, 0);
 }
 
 
 void View::call(bool alert, std::string text, int delay) {
+
+	//Filtro para não permitir que a mesma mensagem seja acionada repetidas vezes em curto espaço de tempo
+	int actTime = (int)time(0);
+	if ( actTime - lastTime < (this->delay/1000) && text.compare(msgToShow) == 0) {
+		return;
+	}
+	lastTime = actTime;
+	
 
 	isAlert = alert;
 	this->delay = delay;
@@ -103,7 +119,9 @@ void View::call(bool alert, std::string text, int delay) {
 
 	int nCmdShow = 1;
 	
-	PostMessage(hWnd, WM_CLOSE, 0, 0);
+	//PostMessage(hWnd, WM_CLOSE, 0, 0);
+	
+
 	Sleep(100);//Espera fechar a janela
 	std::thread([=] { show(hInstance, wcex); }).detach();
 	
@@ -113,22 +131,26 @@ void View::call(bool alert, std::string text, int delay) {
 
 
 int WINAPI View::show(HINSTANCE hInstance, WNDCLASSEX wcex) {
+	std::this_thread::sleep_for(std::chrono::milliseconds(500));
+	//printf("Show window\n");
 
 	DWORD Flags1 = WS_EX_COMPOSITED | WS_EX_LAYERED | WS_EX_NOACTIVATE | WS_EX_TOPMOST | WS_EX_TRANSPARENT;
 	DWORD Flags2 = WS_POPUP;
 
-	hWnd = CreateWindowEx(Flags1, szWindowClass, szTitle, Flags2, 10, msgTop, msgToShow.length()*fontWidth + (fontPadding*2), 60, 0, 0, hInstance, 0);
+	HWND hWndC = CreateWindowEx(Flags1, szWindowClass, szTitle, Flags2, 10, msgTop, msgToShow.length()*fontWidth + (fontPadding * 2), 60, 0, 0, hInstance, 0);
+	
+	//hWnd = CreateWindowEx(Flags1, szWindowClass, szTitle, Flags2, 10, msgTop, msgToShow.length()*fontWidth + (fontPadding*2), 60, 0, 0, hInstance, 0);
 	//msgTop += fontHeight+10;
-	if ( !hWnd ) {
+	if ( !hWndC ) {
 		printf("Call to CreateWindow failed!");
 		return 1;
 	}
 
 	//Alpha
-	int exStyle = GetWindowLong(hWnd, GWL_EXSTYLE);
+	int exStyle = GetWindowLong(hWndC, GWL_EXSTYLE);
 	exStyle |= WS_EX_LAYERED;
-	SetWindowLong(hWnd, GWL_EXSTYLE, exStyle);
-	SetLayeredWindowAttributes(hWnd, NULL, 240, LWA_ALPHA);
+	SetWindowLong(hWndC, GWL_EXSTYLE, exStyle);
+	SetLayeredWindowAttributes(hWndC, NULL, 240, LWA_ALPHA);
 
 	/*HRGN GGG = CreateRectRgn(0, 0, 1920, 1200);
 	InvertRgn(GetDC(hWnd), GGG);
@@ -137,10 +159,12 @@ int WINAPI View::show(HINSTANCE hInstance, WNDCLASSEX wcex) {
 	COLORREF RRR = RGB(255, 0, 255);
 	SetLayeredWindowAttributes(hWnd, RRR, (BYTE)0, LWA_COLORKEY);
 	*/
-	ShowWindow(hWnd, 1);
-	UpdateWindow(hWnd);
+	ShowWindow(hWndC, 1);
+	UpdateWindow(hWndC);
 
 	//DeleteObject(GGG);
+
+	hWndVect.push_back(hWndC);
 
 	std::thread([=] { sendClose();  }).detach();
 

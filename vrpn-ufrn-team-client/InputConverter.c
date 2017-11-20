@@ -164,30 +164,8 @@ void InputConverter::press(KeyMap key) {
 	}
 
 }
-/*
-void InputConverter::release(char key) {
-printf("Release: %d\n", key);
-
-if ( app != "" ) {
-
-HWND window = FindWindow(_T(app.c_str()), NULL);
-HWND edit = FindWindowEx(window, NULL, _T("Edit"), NULL);
-
-if ( edit != NULL ) {
-printf(" em %s.\n", app.c_str());
-//PostMessage(edit, WM_KEYUP, VkKeyScanEx(key, GetKeyboardLayout(0)), 0);
-PostMessage(edit, WM_KEYUP,VK_LEFT, 0);
-return;
-}
 
 
-}
-printf(" no Windows.\n");
-keybd_event(key, 0, KEYEVENTF_KEYUP, 0);
-
-}
-
-*/
 
 void InputConverter::interpretKeyMap(KeyMap &keyMap) {
 	
@@ -247,7 +225,6 @@ bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKE
 
 	//Quando uma pessoa for reconhecida pelo Kinect ou LeapMotion ele ira avisar
 	if ( lastTimeTrack == 0 || actualTime - lastTimeTrack > 1 ) {
-		printf("Capturando\n");
 		if ( viewOn )
 			view->showMsg("Capturando");
 	}
