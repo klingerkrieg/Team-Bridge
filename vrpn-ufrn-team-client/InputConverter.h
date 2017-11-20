@@ -14,6 +14,9 @@
 #include "View.h"
 #include "util.h"
 
+
+#define PERFORMANCE_TEST
+
 class InputConverter {
 private:
 	 static std::vector<KeyMap> map;
@@ -31,6 +34,12 @@ private:
 	 static bool mouseLeftPressed;
 	 static bool mouseRightPressed;
 	 static bool mouseMiddlePressed;
+
+ #ifdef PERFORMANCE_TEST
+	 static double qtdMed;
+	 static double usecMed;
+	 static double secMed;
+ #endif
 
 public:
 

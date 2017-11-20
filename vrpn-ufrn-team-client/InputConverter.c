@@ -10,6 +10,14 @@ bool InputConverter::mouseLeftPressed = false;
 bool InputConverter::mouseRightPressed = false;
 bool InputConverter::mouseMiddlePressed = false;
 
+
+#ifdef PERFORMANCE_TEST
+double InputConverter::qtdMed = 0;
+double InputConverter::usecMed = 0;
+double InputConverter::secMed = 0;
+#endif
+
+
 void InputConverter::press(KeyMap key) {
 
 	bool print = true;
@@ -384,6 +392,25 @@ bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKE
 				//nao pode retornar aqui porque podem ter outros comandos
 				if ( interpretOnLeave(active, (*keyMap)) ) {
 					pressed = true;
+
+					#ifdef PERFORMANCE_TEST
+						timeval t2;
+						vrpn_gettimeofday(&t2, NULL);
+
+						int pressedUsecSize = std::to_string(t2.tv_usec).length();
+						int sentUsecSize = std::to_string(t.msg_time.tv_usec).length();
+
+						double pressed	= (double)t2.tv_sec + ((double)t2.tv_usec / pow(10, pressedUsecSize));
+						double sent		= (double)t.msg_time.tv_sec + ((double)t.msg_time.tv_usec / pow(10, pressedUsecSize));
+						double delay	= pressed - sent;
+
+						secMed += delay;
+						qtdMed++;
+
+						printf("Delay: %.4f - %.4f = ", pressed, sent);
+						printf("%.4f", delay);
+						printf(" Media: %.3f\n", (secMed / qtdMed));
+					#endif
 				}
 			}
 

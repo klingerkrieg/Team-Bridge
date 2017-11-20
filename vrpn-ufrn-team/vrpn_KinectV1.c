@@ -24,7 +24,13 @@ vrpn_KinectV1::vrpn_KinectV1(const char *name, vrpn_Connection *c) : vrpn_Tracke
 	if ( connected ) {
 		printf("Kinect conectado.\n");
 	}
-	vrpn_gettimeofday(&_timestamp, NULL);
+	//vrpn_gettimeofday(&_timestamp, NULL);
+
+	/*#ifdef PERFORMANCE_TEST
+		fileOutput = std::ofstream("kinect-server-performance-test.txt");
+		fileOutput << "STARTED\n";
+		printf("Performance test\n");
+	#endif*/
 }
 
 void vrpn_KinectV1::mainloop() {
@@ -42,6 +48,10 @@ vrpn_KinectV1::~vrpn_KinectV1() {
 	if ( m_hNextSkeletonEvent && (m_hNextSkeletonEvent != INVALID_HANDLE_VALUE) ) {
 		CloseHandle(m_hNextSkeletonEvent);
 	}
+
+	/*#ifdef PERFORMANCE_TEST
+		fileOutput.close();
+	#endif*/
 }
 
 
@@ -114,7 +124,7 @@ void vrpn_KinectV1::reportPose(int sensor, timeval t,Vector4 position) {
 	int len = vrpn_Tracker::encode_to(msgbuf);
 	//if (sensor == 0 )
 	//	printf("sensor: %d %.2f %.2f %.2f \n", sensor, position.x, position.y, position.z);
-	if ( d_connection->pack_message(len, _timestamp, position_m_id, d_sender_id, msgbuf,
+	if ( d_connection->pack_message(len, t, position_m_id, d_sender_id, msgbuf,
 		vrpn_CONNECTION_LOW_LATENCY) ) {
 		fprintf(stderr, "vrpn_LeapMotion: cannot write message: tossing\n");
 	}
@@ -130,6 +140,14 @@ void vrpn_KinectV1::onFrame() {
 
 	timeval t;
 	vrpn_gettimeofday(&t, NULL);
+
+	/*#ifdef PERFORMANCE_TEST
+		gettimeofday(&tp, NULL);
+		long int actualTime = tp.tv_usec / 1000;
+		//fileOutput << (int)time(0) << "." << actualTime << " < \n";
+		t.tv_sec = (long int)time(0);
+		t.tv_usec = actualTime;
+	#endif*/
 
 	// smooth out the skeleton data
 	m_pNuiSensor->NuiTransformSmooth(&skeletonFrame, NULL);

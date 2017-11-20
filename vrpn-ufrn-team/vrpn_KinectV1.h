@@ -8,8 +8,14 @@
 #pragma once
 #define __STRUCT__ struct
 #define interface __STRUCT__
+/*
+#include <fstream>
+#include <iostream>
+#include <time.h>*/
 
 #include "NuiApi.h"
+
+
 
 class VRPN_API vrpn_KinectV1 : public  vrpn_Tracker {
 	
@@ -20,6 +26,11 @@ class VRPN_API vrpn_KinectV1 : public  vrpn_Tracker {
 	
 	int lastSkeletonCount = 0;
 	bool connected;
+/*
+#ifdef PERFORMANCE_TEST
+	struct timeval tp;
+	std::ofstream fileOutput;
+#endif*/
 	
 	public:
 

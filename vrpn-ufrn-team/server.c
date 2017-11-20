@@ -1,3 +1,6 @@
+
+
+
 #include <stdio.h>  // for fprintf, stderr, NULL, etc
 #include <stdlib.h> // for atoi, exit
 #include <string.h> // for strcmp
@@ -10,6 +13,8 @@
 #include "vrpn_ForwarderController.h"   // for vrpn_Forwarder_Server
 #include "vrpn_Generic_server_object.h" // for vrpn_Generic_Server_Object
 #include "vrpn_Shared.h"                // for vrpn_SleepMsecs
+
+
 
 void Usage(const char *s) {
 	fprintf(stderr, "Usage: %s [-f filename] [-warn] [-v] [port] [-q]\n", s);
