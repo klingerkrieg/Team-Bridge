@@ -224,6 +224,18 @@ bool InputConverter::interpretOnLeave(bool active, KeyMap &keyMap) {
 	return false;
 }
 
+//Solta todas as teclas que foram pressionadas
+InputConverter::~InputConverter() {
+	KeyMap *keyMap;
+	for ( int keyMapId = 0; keyMapId < map.size(); keyMapId++ ) {
+		keyMap = &map.at(keyMapId);
+
+		if (keyMap->getWaitingLeave()) {
+			interpretOnLeave(0, (*keyMap));
+		}
+	}
+}
+
 
 bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKERCB t) {
 

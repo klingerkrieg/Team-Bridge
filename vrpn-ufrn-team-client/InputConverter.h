@@ -47,6 +47,8 @@ public:
 		init();
 	}
 
+	~InputConverter();
+
 	InputConverter(std::vector<KeyMap> map, std::string app) {
 		this->map = map;
 		this->app = app;
