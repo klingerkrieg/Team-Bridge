@@ -1,3 +1,15 @@
 body{
-	background-color:#CCC;
+	
+}
+
+#models div, #mapView div {
+	border:1px solid #ccc;
+}
+
+[type=number]{
+	width:50px;
+}
+
+.deviceLogo{
+	width:50px;
 }

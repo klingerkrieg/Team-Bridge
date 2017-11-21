@@ -1,17 +1,17 @@
 <html lang="pt-br">
 	<head>
 		<meta charset="utf-8">
-		<title>Minha Aplicação</title>
+		<title>ConfigEditor</title>
 		<link rel='stylesheet' href="css.css" type='text/css' />
 		<script type='text/javascript' src="jquery-3.2.1.min.js"></script>
-		<script type='text/javascript' src="script.js"></script>
+		<script type='text/javascript' src="kinectOptions.js"></script>
+		<script type='text/javascript' src="main.js"></script>
+		
 	</head>
 	<body>
 		
 
-	<select id="command">
-		<option value="1">Posição da mão</option>
-	</select>
+	<select id="command"></select>
 
 	<button id="addCommand" type="button">Adiciona</button>
 
@@ -24,50 +24,16 @@
  
 	<div id="models">
 		
-		<div id="handTopModel" class="handTop">
-			Posição da mão (Kinect):
-			<select id="hand">
-				<option value="1">Esquerda</option>
-				<option value="2">Direita</option>
-			</select>
-			X:
-			<select id="x">
-				<option>-2</option>
-				<option>-1</option>
-				<option>0</option>
-				<option>1</option>
-				<option>2</option>
-			</select>
-			Y:
-			<select id="yMod">
-				<option><</option>
-				<option>=</option>
-				<option>></option>
-			</select>
-			<select id="y">
-				<option>5</option>
-				<option>4</option>
-				<option>3</option>
-				<option>2</option>
-				<option>1</option>
-				<option>0</option>
-			</select>
-			<br/>
-			
-			Aciona:
-			<select id="action">
-				<option>A</option>
-				<option>B</option>
-				<option>C</option>
-				<option>D</option>
-			</select>
-
-			<button onclick="removeMap(this)" type="button">Remove</button>
-		</div>
-		
-		
-		
 	</div>
  
+
+	<div id="actionModel" style="display:none;">
+		<span id="act">
+			<br/>
+			Acionar:  
+			<select id="action"></select>
+		</span>
+	</div>
+
 	</body>
 </html>
