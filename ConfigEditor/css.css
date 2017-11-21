@@ -4,6 +4,7 @@ body{
 
 #models div, #mapView div {
 	border:1px solid #ccc;
+	position: relative;
 }
 
 [type=number]{
@@ -12,4 +13,13 @@ body{
 
 .deviceLogo{
 	width:50px;
+}
+
+.close{
+	width: 14px;
+	float: right;
+	top: 2px;
+	position: absolute;
+	right: 5px;
+	cursor: pointer;
 }

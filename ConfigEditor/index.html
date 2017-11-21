@@ -3,9 +3,11 @@
 		<meta charset="utf-8">
 		<title>ConfigEditor</title>
 		<link rel='stylesheet' href="css.css" type='text/css' />
-		<script type='text/javascript' src="jquery-3.2.1.min.js"></script>
-		<script type='text/javascript' src="kinectOptions.js"></script>
-		<script type='text/javascript' src="main.js"></script>
+		<script type='text/javascript' src="js/jquery-3.2.1.min.js"></script>
+		<script type='text/javascript' src="js/kinectOptions.js"></script>
+		<script type='text/javascript' src="js/leapMotionOptions.js"></script>
+		<script type='text/javascript' src="js/keyboardMouseOptions.js"></script>
+		<script type='text/javascript' src="js/main.js"></script>
 		
 	</head>
 	<body>
@@ -17,21 +19,22 @@
 
 	<button id="save" type="button">Salva</button>
 
-	<div id="mapView">
+	<div id="mapView"></div>
 	
-	</div>
-		
+	<div id="models"></div>
  
-	<div id="models">
-		
-	</div>
- 
-
 	<div id="actionModel" style="display:none;">
 		<span id="act">
 			<br/>
 			Acionar:  
-			<select id="action"></select>
+			<select id="action" onchange="showExtraActions(this)"></select>
+			<span id="moveMouseSpace" style="display:none;">
+				X:<input type="number" id="x" value="0">
+				Y:<input type="number" id="y" value="0">
+			</span>
+			<span id="msgSpace"  style="display:none;">
+				Mensagem:<input type="text" id="msg" value="">
+			</span>
 		</span>
 	</div>
 

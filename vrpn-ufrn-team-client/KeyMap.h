@@ -322,7 +322,6 @@ public:
 		m["VK_LAUNCH_MAIL"] = VK_LAUNCH_MAIL;
 
 
-		//nao e possivel gerar eventos de mouse ainda
 		m["VK_LBUTTON"] = VK_LBUTTON;
 		m["VK_MBUTTON"] = VK_MBUTTON;
 		m["VK_RBUTTON"] = VK_RBUTTON;

@@ -130,11 +130,11 @@ function getKinectBody(){
 
 
 
-var kinectActions = [{class:"handTop",func:getHandTopJSON, title:"Altura da mão"},
-  {class:"kinectWalking",func:getKinectWalkingJSON, title:"Marcha estacionária"},
-  {class:"kinectStep",func:getKinectStepJSON, title:"Step"},
-  {class:"kinectBalance",func:getKinectStepJSON, title:"Equilíbrio"},
-  {class:"kinectFist",func:getKinectFist, title:"Flexão de punho"},
-  {class:"kinectTurn", func:getKinectTurn, title:"Girar corpo"},
-  {class:"kinectBody", func:getKinectBody, title:"Inclinar corpo"}
-]
+var kinectActions = [{class:"handTop",func:getHandTopJSON, title:"[Kinect] Altura da mão"},
+  {class:"kinectWalking",func:getKinectWalkingJSON, title:"[Kinect] Marcha estacionária"},
+  {class:"kinectStep",func:getKinectStepJSON, title:"[Kinect] Step"},
+  {class:"kinectBalance",func:getKinectStepJSON, title:"[Kinect] Equilíbrio"},
+  {class:"kinectFist",func:getKinectFist, title:"[Kinect] Flexão de punho"},
+  {class:"kinectTurn", func:getKinectTurn, title:"[Kinect] Girar corpo"},
+  {class:"kinectBody", func:getKinectBody, title:"[Kinect] Inclinar corpo"}
+];
