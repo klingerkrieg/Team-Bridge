@@ -1,11 +1,11 @@
 var fs = require('fs');
 
+var programName = "ConfigEditor";
+var actualName = "";
+
 var modelIncludes = [{url:"kinectOptions.html",onLoad:function(){}},
                     {url:"leapMotionOptions.html",onLoad:function(){}},
                     {url:"keyboardMouseOptions.html",onLoad:loadKeyboardOptions}];
-
-
-
 
 var actions = [{class:"handTop", title:"[Kinect] Altura da mão"},
                     {class:"kinectWalking", title:"[Kinect] Marcha estacionária"},
@@ -43,44 +43,9 @@ $(function(){
     //Cria os options com as possíveis ações
     addActions();
 
-    
-    $('#addCommand').click(function(){
-        clone = $('#'+$('#command').val()+'Model').clone();
-        clone.attr('id',"");
-        clone.append($('#actionModel #act').clone());
-        clone.append('<img class="close" src="./img/close.png" onclick="removeMap(this)"/>');
-        $('#mapView').append(clone);
-    });
 
-
-    $("#save").click(function(){
-        var jsonConfig = [];
-        $('#mapView').children().each(function(i,item){
-            item = $(item);
-            
-            for (var y = 0; y < actions.length; y++){
-                if (item.hasClass(actions[y].class)){
-                    jsonConfig.push(formToJSON(item));
-                }
-            }
-
-        });
-        
-        
-        jsonStr = JSON.stringify(jsonConfig);
-        console.log(jsonStr);
-        fs.writeFile('config.json', jsonStr, 'utf8', function(msg){
-            //console.log(msg);
-        });
-        
-    });
-
+    $('[data-toggle="tooltip"]').tooltip({placement:"bottom"});
 });
-
-
-function removeMap(el){
-    $(el).parent().remove();
-}
 
 function addCommands(){
     cmds = $('#command');
@@ -122,9 +87,11 @@ function showExtraActions(el){
 }
 
 
-function formToJSON(el){
+function formToJSON(el,divClass){
     json = {};
+
     json.type = "key";
+    json.divClass = divClass;
     el.find(".toJSON").each(function(i,el){
         el = $(el);
         json[el.attr('id')] = el.val();
@@ -147,6 +114,35 @@ function formToJSON(el){
     return json;
 }
 
+
+function jsonToForm(json){
+    
+    $.each(json.common,function(key,val){
+        el = $("#"+key);
+        el.val(val);
+        div = el.attr("divideby");
+        if (div != undefined){
+            el.val(parseFloat(val)*parseInt(div));
+        }
+    })
+
+
+    for (var i = 0; i < json.keys.length; i++){
+        option = json.keys[i];
+
+        if (option.type == "key"){
+            div = addCommandToMapView(option.divClass);
+            div.find(".toJSON").each(function(y, el){
+                el = $(el);
+                el.val(option[el.attr('id')]);
+                div = el.attr("divideby");
+                if (div != undefined){
+                    el.val(parseFloat(option[el.attr('id')])*parseInt(div));
+                }
+            })
+        }
+    }
+}
 
 
 function getKeyboardKeys(){
@@ -192,10 +188,10 @@ function getKeyboardKeys(){
     return keys;
   }
   
-  function loadKeyboardOptions(){
-    act = $('#keyboardModel #from');
+function loadKeyboardOptions(){
+    act = $('#keyboardModel #key');
     keys = getKeyboardKeys();
     for(var i = 0; i < keys.length ;i++){
         act.append("<option value='"+keys[i].code+"'>"+keys[i].t+"</option>");
     }
-  }
+}

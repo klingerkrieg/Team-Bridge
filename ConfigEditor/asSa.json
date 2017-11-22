@@ -1,0 +1,1 @@
+{"common":{"patientName":"sdas","saveDir":"./SAVES/","appName":"","host":"","database":"","user":"","passwd":"","KINECT_X_INTERVAL":0.35},"keys":[{"type":"key","divClass":"handTop","key":"KINECT_LEFT_HAND_TOP","x":"-2","yMod":null,"y":"5","toKey":"VK_ESCAPE"},{"type":"key","divClass":"kinectStep","key":"KINECT_STEP_UP","height":0.1,"toKey":"VK_ESCAPE"}]}

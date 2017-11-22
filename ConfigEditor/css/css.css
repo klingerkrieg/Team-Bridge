@@ -1,0 +1,83 @@
+body{
+	padding:5px;
+	line-height: 3.5;
+}
+
+.form-control {
+	display:inline-block;
+	width:auto;
+}
+
+.alert{
+	line-height: 1.5;
+}
+
+.max{
+	width:100%;
+}
+
+.med{
+	width:300px;
+}
+
+
+
+#models div, #mapView div {
+	border:1px solid #ccc;
+	position: relative;
+	border-radius: 5px;
+}
+
+[type=number]{
+	width:80px;
+	padding-right: 1px;
+}
+
+.deviceLogo{
+	height:30px;
+}
+
+.close{
+	width: 20px;
+	float: right;
+	top: 2px;
+	position: absolute;
+	right: 5px;
+	cursor: pointer;
+}
+
+red{
+	color:red;
+	font-weight: bold;
+}
+
+label{
+	width:300px;
+	text-align: right;
+	margin-right: 5px;
+}
+
+fieldset{
+	width: 540px;
+	float: left;
+}
+
+legend{
+	text-align: center;
+}
+
+.clear{
+	clear: both;
+}
+
+.tooltipImg{
+	width:300px;
+}
+
+.tooltip, .tooltip-inner{
+	max-width:420px;
+}
+
+.tooltip.show{
+	opacity: 1.0;
+}

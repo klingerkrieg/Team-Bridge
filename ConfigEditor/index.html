@@ -2,38 +2,150 @@
 	<head>
 		<meta charset="utf-8">
 		<title>ConfigEditor</title>
-		<link rel='stylesheet' href="css.css" type='text/css' />
+		
+		<link rel='stylesheet' href="css/bootstrap.css" type='text/css' />
+		<link rel='stylesheet' href="css/css.css" type='text/css' />
+
 		<script type='text/javascript' src="js/jquery-3.2.1.min.js"></script>
 		<script type='text/javascript' src="js/main.js"></script>
+		<script type='text/javascript' src="js/menu.js"></script>
+
+		<script type='text/javascript' src="js/popper.js"></script>
+		<script type='text/javascript' src="js/bootstrap.js"></script>
+		
+		
 		
 	</head>
 	<body>
-		
+	
+	<button id="new" type="button" class="btn btn-primary">
+		Novo
+	</button>		
+	<button id="open" type="button" class="btn btn-primary" data-toggle="modal" data-target="#openModal">
+		Abrir
+	</button>
+	<button id="openSave" type="button" class="btn btn-primary" disabled>
+		Salvar
+	</button>
+	<button id="openSaveAs" type="button" class="btn btn-primary" disabled>
+		Salvar com outro nome
+	</button>
+	
+	<span id="msgs"></span>
+	
 
-	<select id="command"></select>
+	<form id="commonInfo">
 
-	<button id="addCommand" type="button">Adiciona</button>
+	<div>Campos com <red>*</red> são obrigatórios, é sugerido que mantenha-se o valor padrão.</div>
+<fieldset>
+	<legend>Informações gerais</legend>
+<div>
+	<label>Nome do paciente: </label><input type="text" class="form-control toJSON" id="patientName" value="">
+</div>
+<div>
+	<label>Diretório para salvar <red>*</red>: </label><input type="text" class="form-control toJSON" id="saveDir" value="./SAVES/" data-toggle="tooltip" data-placement="bottom" title="Diretório onde os dados da terapia serão salvos.">
+</div>
+<div>
+	<label>Nome da aplicação: </label><input type="text" class="form-control toJSON" id="appName" value="">
+</div>
+</fieldset>
+	<fieldset>
+		<legend>Banco de dados</legend>
+	<div>
+		<label>Host: 		</label><input type="text" class="form-control toJSON" id="host" value="">
+	</div>
+	<div>
+		<label>Database: </label><input type="text" class="form-control toJSON" id="database" value="">
+	</div>
+	<div>
+		<label>User: 		</label><input type="text" class="form-control toJSON" id="user" value="">
+	</div>
+	<div>
+		<label>Password: </label><input type="text" class="form-control toJSON" id="passwd" value="">
+	</div>
+	</fieldset>
 
-	<button id="save" type="button">Salva</button>
+	<fieldset>
+		<legend>KINECT</legend>
+		<label>Intervalo para posição x das mãos <red>*</red>: </label><input type="number" class="form-control toJSON" id="KINECT_X_INTERVAL" divideby="100" value="35" data-toggle="tooltip" data-html="true" data-placement="bottom" title="<img class='tooltipImg' src='./img/humanTopHandXInterval.png'>">cm
+	</fieldset>
+
+</form><!-- commonInfo -->
+	<div class="clear"></div>
+
+	<div>
+		Comando:
+		<select id="command" class="form-control med"></select>
+
+		<button id="addCommand" type="button" class="btn btn-primary">
+			Adicionar
+		</button>
+	</div>
 
 	<div id="mapView"></div>
 	
-	<div id="models"></div>
- 
-	<div id="actionModel" style="display:none;">
-		<span id="act">
-			<br/>
-			Acionar:  
-			<select id="toKey" onchange="showExtraActions(this)" class="toJSON"></select>
-			<span id="moveMouseSpace" style="display:none;">
-				X:<input type="number" id="x" value="0">
-				Y:<input type="number" id="y" value="0">
-			</span>
-			<span id="msgSpace"  style="display:none;">
-				Mensagem:<input type="text" id="msg" value="">
-			</span>
+
+<!-- MODELOS -->
+<div id="actionModel" style="display:none;">
+	<span id="act">
+		<br/>
+		Acionar:  
+		<select id="toKey" onchange="showExtraActions(this)" class="form-control toJSON"></select>
+		<span id="moveMouseSpace" style="display:none;">
+			X:<input type="number" class="form-control" id="x" value="0">
+			Y:<input type="number" class="form-control" id="y" value="0">
 		</span>
+		<span id="msgSpace"  style="display:none;">
+			Mensagem:<input type="text" class="form-control" id="msg" value="">
+		</span>
+	</span>
+</div>
+
+	<div id="models"></div>
+
+<!-- openModal -->
+<div class="modal fade" id="openModal" tabindex="-1" role="dialog" aria-labelledby="openModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="modal-title" id="openModalLabel">Abrir arquivo</h5>
+		  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		  </button>
+		</div>
+		<div class="modal-body">
+			<select id="files" class="form-control max" onchange="loadFile(this)" ></select>
+		</div>
+		<div class="modal-footer">
+		  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+		  <button type="button" id="openFile" class="btn btn-primary">Abrir</button>
+		</div>
+	  </div>
 	</div>
+	</div>
+	
+
+	<!-- openModal -->
+<div class="modal fade" id="fileNameModal" tabindex="-1" role="dialog" aria-labelledby="fileNameModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="modal-title" id="fileNameModalLabel">Salvar como</h5>
+		  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		  </button>
+		</div>
+		<div class="modal-body">
+			<input type="text" class="form-control" id="fileName" value="">.json
+			
+		</div>
+		<div class="modal-footer">
+		  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+		  <button type="button" id="save" class="btn btn-primary">Salvar</button>
+		</div>
+	  </div>
+	</div>
+  </div>
 
 	</body>
 </html>
