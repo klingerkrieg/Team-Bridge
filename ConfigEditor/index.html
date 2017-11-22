@@ -4,9 +4,6 @@
 		<title>ConfigEditor</title>
 		<link rel='stylesheet' href="css.css" type='text/css' />
 		<script type='text/javascript' src="js/jquery-3.2.1.min.js"></script>
-		<script type='text/javascript' src="js/kinectOptions.js"></script>
-		<script type='text/javascript' src="js/leapMotionOptions.js"></script>
-		<script type='text/javascript' src="js/keyboardMouseOptions.js"></script>
 		<script type='text/javascript' src="js/main.js"></script>
 		
 	</head>
@@ -27,7 +24,7 @@
 		<span id="act">
 			<br/>
 			Acionar:  
-			<select id="action" onchange="showExtraActions(this)"></select>
+			<select id="toKey" onchange="showExtraActions(this)" class="toJSON"></select>
 			<span id="moveMouseSpace" style="display:none;">
 				X:<input type="number" id="x" value="0">
 				Y:<input type="number" id="y" value="0">

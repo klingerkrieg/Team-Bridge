@@ -2,32 +2,29 @@
     <div id="leapCloseHandModel" class="leapCloseHand">
         <img class="deviceLogo" src="./img/leapMotion.png" alt="(LeapMotion)"><br/>
         Fechar mão:
-        <select id="hand">
-            <option value="1">Esquerda</option>
-            <option value="2">Direita</option>
+        <select id="key" class="toJSON">
+            <option value="LEAP_LEFT_CLOSED">Esquerda</option>
+            <option value="LEAP_RIGHT_CLOSED">Direita</option>
         </select>
     </div>
     
     <div id="leapPinchModel" class="leapPinch">
         <img class="deviceLogo" src="./img/leapMotion.png" alt="(LeapMotion)"><br/>
         Pinça com a mão:
-        <select id="hand">
-            <option value="1">Esquerda</option>
-            <option value="2">Direita</option>
+        <select id="key" class="toJSON">
+            <option value="LEAP_LEFT_PINCH">Esquerda</option>
+            <option value="LEAP_RIGHT_PINCH">Direita</option>
         </select>
     </div>
 
     <div id="leapFistModel" class="leapFist">
         <img class="deviceLogo" src="./img/leapMotion.png" alt="(LeapMotion)"><br/>
         Flexionar punho:
-        <select id="hand">
-            <option value="1">Esquerdo</option>
-            <option value="2">Direito</option>
-        </select>
-        para
-        <select id="direction">
-            <option value="1">Cima</option>
-            <option value="2">Baixo</option>
+        <select id="key" class="toJSON">
+            <option value="LEAP_LEFT_FIST_UP">Esquerdo para cima</option>
+            <option value="LEAP_LEFT_FIST_DOWN">Esquerdo para baixo</option>
+            <option value="LEAP_RIGHT_FIST_UP">Direito para cima</option>
+            <option value="LEAP_RIGHT_FIST_DOWN">Direito para baixo</option>
         </select>
     </div>
     

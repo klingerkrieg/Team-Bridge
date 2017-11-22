@@ -2,12 +2,12 @@
 <div id="handTopModel" class="handTop">
     <img class="deviceLogo" src="./img/kinect.png" alt="(Kinect)"><br/>
     Posição da mão:
-    <select id="hand">
-        <option value="1">Esquerda</option>
-        <option value="2">Direita</option>
+    <select id="key" class="toJSON" >
+        <option value="KINECT_LEFT_HAND_TOP">Esquerda</option>
+        <option value="KINECT_RIGHT_HAND_TOP">Direita</option>
     </select>
     X:
-    <select id="x">
+    <select id="x" class="toJSON">
         <option>-2</option>
         <option>-1</option>
         <option>0</option>
@@ -15,26 +15,26 @@
         <option>2</option>
     </select>
     Y:
-    <select id="yMod">
+    <select id="yMod" class="toJSON">
         <option><</option>
         <option>=</option>
         <option>></option>
     </select>
-    <select id="y">
+    <select id="y" class="toJSON">
         <option>5</option>
         <option>4</option>
         <option>3</option>
         <option>2</option>
         <option>1</option>
     </select>
-    
 </div>
 
 <div id="kinectWalkingModel" class="kinectWalking">
     <img class="deviceLogo" src="./img/kinect.png" alt="(Kinect)"><br/>
     Marcha estacionária
-    <input type="number" id="delay" value="1000">ms 
-    altura do joelho <input type="number" id="height" value="10">cm
+    <input type="hidden" class="toJSON" id="key" value="KINECT_WALK">
+    <input type="number" id="delay" value="1000"  class="toJSON">ms 
+    altura do joelho <input type="number" id="height" value="10" divideby="100" class="toJSON">cm
     
 </div>
 
@@ -42,25 +42,25 @@
 <div id="kinectStepModel" class="kinectStep">
     <img class="deviceLogo" src="./img/kinect.png" alt="(Kinect)"><br/>
     Step: 
-    <select id="mode">
-        <option value="1">Subir</option>
-        <option value="2">Normal</option>
-        <option value="3">Descer</option>
+    <select id="key" class="toJSON">
+        <option value="KINECT_STEP_UP">Subir</option>
+        <option value="KINECT_STEP_NORMAL">Normal</option>
+        <option value="KINECT_STEP_DOWN">Descer</option>
     </select>
-    altura <input type="number" id="height" value="10">cm
-    
+    altura <input type="number" id="height" value="10" divideby="100" class="toJSON">cm
 </div>
 
 <div id="kinectBalanceModel" class="kinectBalance">
     <img class="deviceLogo" src="./img/kinect.png" alt="(Kinect)"><br/>
     Equilíbrio: 
     Ângulo
-    <select id="mod">
+    <input type="hidden" class="toJSON" id="key" value="KINECT_BALANCE">
+    <select id="mod" class="toJSON">
         <option>></option>
         <option>=</option>
         <option><</option>
     </select>
-     <input type="number" id="angle" value="35">°
+     <input type="number" id="angle" value="35" class="toJSON">°
    
 </div>
 
@@ -68,36 +68,32 @@
     <img class="deviceLogo" src="./img/kinect.png" alt="(Kinect)"><br/>
     Velocidade do gesto: 
     Mão
-    <select id="hand">
-        <option value="1">Esquerda</option>
-        <option value="2">Direita</option>
+    <select id="key" class="toJSON">
+        <option value="KINECT_LEFT_HAND_FAST">Esquerda</option>
+        <option value="KINECT_RIGHT_HAND_FAST">Direita</option>
     </select>
-     <input type="number" id="velocity" value="4">m/s
+     <input type="number" id="velocity" value="4" class="toJSON">m/s
     
 </div>
 
 <div id="kinectFistModel" class="kinectFist">
     <img class="deviceLogo" src="./img/kinect.png" alt="(Kinect)"><br/>
     Flexão do punho:    
-    <select id="hand">
-        <option value="1">Esquerdo</option>
-        <option value="2">Direito</option>
+    <select id="key" class="toJSON">
+        <option value="KINECT_LEFT_FIST_DOWN">Esquerdo para baixo</option>
+        <option value="KINECT_LEFT_FIST_UP">Esquerdo para cima</option>
+        <option value="KINECT_RIGHT_FIST_DOWN">Direito para baixo</option>
+        <option value="KINECT_RIGHT_FIST_UP">Direito para cima</option>
     </select>
-    para
-    <select id="direction">
-        <option value="1">Cima</option>
-        <option value="2">Baixo</option>
-    </select>
-
 </div>
 
 
 <div id="kinectTurnModel" class="kinectTurn">
     <img class="deviceLogo" src="./img/kinect.png" alt="(Kinect)"><br/>
     Girar corpo para:    
-    <select id="direction">
-        <option value="1">Esquerda</option>
-        <option value="2">Direita</option>
+    <select id="key" class="toJSON">
+        <option value="KINECT_TURN_LEFT">Esquerda</option>
+        <option value="KINECT_TURN_RIGHT">Direita</option>
     </select>
 
 </div>
@@ -106,11 +102,11 @@
 <div id="kinectBodyModel" class="kinectBody">
     <img class="deviceLogo" src="./img/kinect.png" alt="(Kinect)"><br/>
     Inclinar corpo para:    
-    <select id="direction">
-        <option value="1">Frente</option>
-        <option value="2">Direita</option>
-        <option value="3">Trás</option>
-        <option value="4">Esquerda</option>
+    <select id="key" class="toJSON">
+        <option value="KINECT_BODY_FRONT">Frente</option>
+        <option value="KINECT_BODY_RIGHT">Direita</option>
+        <option value="KINECT_BODY_BACK">Trás</option>
+        <option value="KINECT_BODY_LEFT">Esquerda</option>
     </select>
 
 </div>
