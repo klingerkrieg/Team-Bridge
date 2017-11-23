@@ -9,6 +9,7 @@
 
 #include "json.hpp"
 
+
 using json = nlohmann::json;
 
 static const int SSIZE = 512;
@@ -72,8 +73,6 @@ private:
 	//comando que será chamado
 	int toKey;
 
-	//Caso seja para exbição de mensagem
-	int showMsg = 0;
 	//Mensagem que será exibida
 	std::string msg;
 
@@ -237,22 +236,6 @@ public:
 
 	double getMaxVelocityMs() {
 		return maxVelociyMs;
-	}
-
-	/*int getHandTopMod() {
-		return handTopMod;
-	}
-
-	int getHandTopLevel() {
-		return handTopLevel;
-	}
-
-	int getHandXPos() {
-		return handXPos;
-	}*/
-
-	int getShowMsg() {
-		return showMsg;
 	}
 
 	std::string getMsg() {

@@ -14,7 +14,8 @@
 #include <Tchar.h>
 #include <sstream>
 #include "json.hpp"
-
+#include <locale>
+#include <codecvt>
 
 
 class ConfigFileReader {

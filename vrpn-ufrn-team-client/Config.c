@@ -17,21 +17,23 @@ std::string Config::toString() {
 }
 
 void Config::readConfigJSON(json js) {
+
 	for ( json::iterator it = js.begin(); it != js.end(); ++it ) {
+		std::string k = it.key();
 		if ( it.key().compare("user") == 0 )
-			user = it.value().get<std::string>();
+			user = utf8to16(it.value().get<std::string>());
 		else if ( it.key().compare("passwd") == 0 )
-			passwd = it.value().get<std::string>();
+			passwd = utf8to16(it.value().get<std::string>());
 		else if ( it.key().compare("database") == 0 )
-			db = it.value().get<std::string>();
+			db = utf8to16(it.value().get<std::string>());
 		else if ( it.key().compare("host") == 0 )
-			host = it.value().get<std::string>();
+			host = utf8to16(it.value().get<std::string>());
 		else if ( it.key().compare("patientName") == 0 )
-			patient = it.value().get<std::string>();
+			patient = utf8to16(it.value().get<std::string>());
 		else if ( it.key().compare("saveDir") == 0 )
-			saveDir = it.value().get<std::string>();
+			saveDir = utf8to16(it.value().get<std::string>());
 		else if ( it.key().compare("appName") == 0 )
-			app = it.value().get<std::string>();
+			app = utf8to16(it.value().get<std::string>());
 	}
 }
 

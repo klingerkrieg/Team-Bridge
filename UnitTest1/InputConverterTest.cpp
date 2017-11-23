@@ -19,7 +19,9 @@ namespace InputConverterTest {
 	InputConverter iC;
 	char keybd[] = "Keyboard0@localhost";
 
-	TEST_MODULE_INITIALIZE(InputConverter_init) {
+	TEST_CLASS(InputConverterTest) {
+
+	TEST_CLASS_INITIALIZE(InputConverter_init) {
 		
 		strncpy(tc1->name, "Tracker0@localhost", sizeof(tc1->name));
 
@@ -33,18 +35,47 @@ namespace InputConverterTest {
 
 
 		std::vector<KeyMap> map;
+		json js = {
+			{"divClass", "kinectStep"},
+			{"dev" , "Tracker0@localhost"},
+			{"key" , "KINECT_STEP_UP"},
+			{"sensivity" , 0.15},
+			{"toKeyDown" , "A"},
+			{"toKeyUp" , "A"}
+		};
+		KeyMap m1 = KeyMap(js);
+		js = {
+			{ "divClass", "kinectStep" },
+			{ "dev" , "Tracker0@localhost" },
+			{ "key" , "KINECT_STEP_NORMAL" },
+			{ "sensivity" , 0.15 },
+			{ "toKeyDown" , "A" },
+			{ "toKeyUp" , "A" }
+		};
+		KeyMap m2 = KeyMap(js);
+		js = {
+			{ "divClass", "kinectStep" },
+			{ "dev" , "Tracker0@localhost" },
+			{ "key" , "KINECT_STEP_DOWN" },
+			{ "sensivity" , 0.15 },
+			{ "toKeyDown" , "A" },
+			{ "toKeyUp" , "A" }
+		};
+		KeyMap m3 = KeyMap(js);
 
-		KeyMap m1 = KeyMap("Tracker0@localhost", "KINECT_STEP_UP=0.15	A");
-		KeyMap m2 = KeyMap("Tracker0@localhost", "KINECT_STEP_NORMAL=0.15	A");
-		KeyMap m3 = KeyMap("Tracker0@localhost", "KINECT_STEP_DOWN=0.15	A");
-		KeyMap m4 = KeyMap("Keyboard0@localhost", "A	D");
-		KeyMap m5 = KeyMap("Keyboard0@localhost", "VK_LEFT	VK_RIGHT");
+		js = {
+			{ "divClass", "keyboard" },
+			{ "dev" , "Keyboard0@localhost" },
+			{ "key" , "A" },
+			{ "toKeyDown" , "B" },
+			{ "toKeyUp" , "B" }
+		};
+		KeyMap m4 = KeyMap(js);
 
 		map.push_back(m1);
 		map.push_back(m2);
 		map.push_back(m3);
 		map.push_back(m4);
-		map.push_back(m5);
 
 		std::string app = "";
 
@@ -52,7 +83,7 @@ namespace InputConverterTest {
 	}
 
 
-	TEST_CLASS(InputConverterTest) {
+	
 public:
 
 	TEST_METHOD(InputConverter_checkTrack) {
@@ -85,10 +116,6 @@ public:
 		b.button = 31;//S
 		Assert::IsFalse(iC.checkButton(keybd, b));
 		b.button = 30;//A mapeada
-		Assert::IsTrue(iC.checkButton(keybd, b));
-		b.button = 77;//seta direita
-		Assert::IsFalse(iC.checkButton(keybd, b));
-		b.button = 75;//seta esquerda mapeada
 		Assert::IsTrue(iC.checkButton(keybd, b));
 
 	}

@@ -114,7 +114,7 @@
       <ImageHasSafeExceptionHandlers>true</ImageHasSafeExceptionHandlers>
     </Link>
     <PreBuildEvent>
-      <Command>copy "*.cfg" "../pc_win32/ClientUnitTest/Debug/" &amp; copy "*.dll" "../pc_win32/ClientUnitTest/Debug/"</Command>
+      <Command>copy "*.json" "../pc_win32/ClientUnitTest/Debug/" &amp; copy "*.dll" "../pc_win32/ClientUnitTest/Debug/"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -192,6 +192,7 @@
     <ClCompile Include="UtilTest.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="config.json" />
     <None Include="vrpn-client.cfg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

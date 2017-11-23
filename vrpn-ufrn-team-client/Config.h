@@ -3,6 +3,7 @@
 #include <map>
 #include <iostream>
 #include "json.hpp"
+#include "util.h"
 
 using json = nlohmann::json;
 
@@ -24,6 +25,9 @@ private:
 public:
 
 	Config();
+	Config(json js) {
+		readConfigJSON(js);
+	}
 
 	std::string toString();
 

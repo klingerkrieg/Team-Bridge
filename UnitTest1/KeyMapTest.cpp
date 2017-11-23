@@ -16,24 +16,68 @@ public:
 
 
 	TEST_METHOD(KeyMapTest_init) {
-		KeyMap m1 = KeyMap("Tracker0@localhost", "KINECT_STEP_UP=0.15	A");
+		json js = {
+			{ "divClass", "handTop" },
+			{ "dev" , "Tracker0@localhost" },
+			{ "key" , "KINECT_LEFT_HAND_TOP" },
+			{ "x" , -2 },
+			{ "coordinateMod" , "<=" },
+			{ "y" , 5 },
+			{ "toKeyDown" , "A" },
+			{ "toKeyUp" , "A" }
+		};
+		KeyMap m1 = KeyMap(js);
 		Assert::AreEqual("Tracker0@localhost", m1.getDev().c_str());
-		Assert::AreEqual(KINECT_STEP_UP, m1.getKey());
+		Assert::AreEqual(KINECT_LEFT_HAND_TOP, m1.getKey());
 		Assert::AreEqual((int)'A', m1.getToKey());
-		Assert::AreEqual(0.15, m1.getSensivity());
+		Assert::AreEqual(-2, m1.getX());
+		Assert::AreEqual(5, m1.getY());
+		Assert::AreEqual(-1, m1.getCoordinateMod());
 		Assert::AreEqual(false, m1.getToKeyIsConstant());
 
-		m1 = KeyMap("Mouse0@localhost", "VK_LBUTTON	VK_RIGHT");
-		Assert::AreEqual("Mouse0@localhost", m1.getDev().c_str());
-		Assert::AreEqual(0, m1.getKey());
-		Assert::AreEqual(VK_RIGHT, (int)m1.getToKey());
-		Assert::AreEqual(true, m1.getToKeyIsConstant());
+		js = {
+			{ "divClass", "kinectWalking" },
+			{ "dev" , "Tracker0@localhost" },
+			{ "key" , "KINECT_WALK" },
+			{ "delay" , 1000 },
+			{ "sensivity" , 0.1 },
+			{ "toKeyWhile" , "A" }
+		};
+		m1 = KeyMap(js);
+		Assert::AreEqual(1000, m1.getDelay());
+		Assert::AreEqual(0.1, m1.getSensivity());
+		Assert::AreEqual((int)'A', (int)m1.getToKey());
 
-		m1 = KeyMap("Keyboard0@localhost", "A	B");
-		Assert::AreEqual("Keyboard0@localhost", m1.getDev().c_str());
-		Assert::AreEqual(30, m1.getKey());
-		Assert::AreEqual((int)'B', (int)m1.getToKey());
-		Assert::AreEqual(false, m1.getToKeyIsConstant());
+		js = {
+			{ "divClass","kinectBalance" },
+			{ "dev" ,"Tracker0@localhost" },
+			{ "key" ,"KINECT_BALANCE" },
+			{ "angleMod" ,">" },
+			{ "angle" ,35 },
+			{ "msg" ,"Mensagem" },
+			{ "toKeyDown" ,"ALERT" },
+			{ "toKeyUp" ,"ALERT" }
+		};
+		m1 = KeyMap(js);
+		Assert::AreEqual(1, m1.getAngleMod());
+		Assert::AreEqual(35, m1.getAngle());
+		Assert::AreEqual((std::string)"Mensagem", m1.getMsg());
+		Assert::AreEqual(ALERT, m1.getToKey());
+
+		js = {
+			{ "divClass", "kinectFastHand" },
+			{ "dev" , "Tracker0@localhost" },
+			{ "key" , "KINECT_LEFT_HAND_FAST" },
+			{ "maxVelocityMs" , 4 },
+			{ "msg" ,"Mensagem" },
+			{ "toKeyDown" , "MESSAGE" },
+			{ "toKeyUp" , "MESSAGE" }
+		};
+		m1 = KeyMap(js);
+		Assert::AreEqual(4, (int)m1.getMaxVelocityMs());
+		Assert::AreEqual((std::string)"Mensagem", m1.getMsg());
+		Assert::AreEqual(MESSAGE, m1.getToKey());
+
 	}
 };
 }

@@ -1,20 +1,5 @@
 #include "util.h"
-/*
-template<typename Out>
-void split(const std::string &s, char delim, Out result) {
-	std::stringstream ss(s);
-	std::string item;
-	while ( std::getline(ss, item, delim) ) {
-		*(result++) = item;
-	}
-}
 
-std::vector<std::string> split(const std::string &s, char delim) {
-	std::vector<std::string> elems;
-	split(s, delim, std::back_inserter(elems));
-	return elems;
-}
-*/
 
 std::vector<std::string> split(const std::string &s, std::string delim) {
 	std::vector<std::string> strs;
@@ -58,3 +43,13 @@ double mag(std::vector<double> a) {
 	return a[0] * a[0] + a[1] * a[1] + a[2] * a[2];
 }
 
+std::string utf8to16(std::string text) {
+	std::string utf16line;
+	
+	try {
+		utf8::utf8to16(text.begin(), text.end(), std::back_inserter(utf16line));
+	} catch ( std::exception ex ) {
+		utf16line = text;
+	}
+	return utf16line;
+}

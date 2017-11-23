@@ -112,7 +112,7 @@ function formToJSON(el,divClass){
         json.mouseX = parseInt(parent.find("#moveMouseSpace #x").val());
         json.mouseY = parseInt(parent.find("#moveMouseSpace #y").val());
     } else 
-    if ( json.toKey == "ALERT" || el.val() == "MESSAGE"){
+    if ( json.toKey == "ALERT" || json.toKey == "MESSAGE"){
         json.msg = parent.find("#msg").val();
     }
 
@@ -136,7 +136,7 @@ function formToJSON(el,divClass){
 
 
 function jsonToForm(json){
-    
+    console.log("aqui");
     $.each(json.common,function(key,val){
         el = $("#"+key);
         el.val(val);
@@ -149,18 +149,16 @@ function jsonToForm(json){
 
     for (var i = 0; i < json.keys.length; i++){
         option = json.keys[i];
-
-        if (option.type == "key"){
-            div = addCommandToMapView(option.divClass);
-            div.find(".toJSON").each(function(y, el){
-                el = $(el);
-                el.val(option[el.attr('id')]);
-                div = el.attr("divideby");
-                if (div != undefined){
-                    el.val(parseFloat(option[el.attr('id')])*parseInt(div));
-                }
-            })
-        }
+        
+        div = addCommandToMapView(option.divClass);
+        div.find(".toJSON").each(function(y, el){
+            el = $(el);
+            el.val(option[el.attr('id')]);
+            div = el.attr("divideby");
+            if (div != undefined){
+                el.val(parseFloat(option[el.attr('id')])*parseInt(div));
+            }
+        });
     }
 }
 
@@ -169,12 +167,12 @@ function getKeyboardKeys(){
 
     keys = [];
 
-    for(var i = 9; i < 36 ;i++){
+    for(var i = 10; i < 36 ;i++){
         chr = i.toString(36).toUpperCase();
         keys.push({t:chr,code:chr});
     }
 
-    keys.concat([{t:"ESC",code:"VK_ESCAPE"},
+    keys = keys.concat([{t:"ESC",code:"VK_ESCAPE"},
     {t:"F1",code:"VK_F1"},
     {t:"F2",code:"VK_F2"},
     {t:"F3",code:"VK_F3"},

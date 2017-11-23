@@ -15,7 +15,7 @@
 #include "util.h"
 
 
-#define PERFORMANCE_TEST
+//#define PERFORMANCE_TEST
 
 class InputConverter {
 private:

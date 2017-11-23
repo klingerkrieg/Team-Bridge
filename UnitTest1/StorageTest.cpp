@@ -10,25 +10,39 @@
 #include <Windows.h>
 #include <vrpn_Tracker.h>
 #include "utilTest.h"
+#include "json.hpp"
+
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
+
 namespace StorageTest {
 
+	Config config;
+	Storage st;
 
+	TEST_MODULE_INITIALIZE(Storage_init) {
+		using json = nlohmann::json;
+		json js = {
+			{ "patientName", "Paulo Júnior" },
+			{ "saveDir", "./SAVES/" },
+			{ "appName", "app" },
+			{ "host", "127.0.0.1:3306" },
+			{ "database", "vrpn" },
+			{ "user", "root" },
+			{ "passwd", "" },
+			{ "KINECT_X_INTERVAL", 0.35 }
+		};
+		
+		config = Config(js);
+		st = Storage(config, true);
 
-std::map<std::string,std::string> configMap = { {"HOST","127.0.0.1:3306"},
-												{"DB","vrpn"},
-												{"USER","root" },
-												{"PASSWD","" },
-												{"PATIENT","PAULO"},
-												{"SAVE_DIR", "SAVES"} };
-
-Config config = Config(configMap);
-Storage st = Storage(config, true);
+	}
 
 	TEST_CLASS(StorageTest) {
 public:
+
+	
 
 	TEST_METHOD(Storage_saveToFile) {
 		st.setSaveDir("SAVES");
@@ -57,7 +71,7 @@ public:
 		std::string templateText =
 			"DEV	Tracker0@localhost\n"
 			"DATE	"+st.getDateStr()+"\n"
-			"PATIENT	PAULO\n"
+			"PATIENT	Paulo Júnior\n"
 			"SENSOR	0	TIMESTAMP	1	POS	1	1	1	QUAT	0	0	0	1\n";
 
 
@@ -133,6 +147,7 @@ public:
 			const size_t cSize = strlen(ex.what()) + 1;
 			wchar_t* wc = new wchar_t[cSize];
 			mbstowcs(wc, ex.what(), cSize);
+			Assert::Fail(wc);
 		}
 	}
 

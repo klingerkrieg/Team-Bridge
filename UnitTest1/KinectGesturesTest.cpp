@@ -126,26 +126,27 @@ public:
 		strncpy(tc1->name, "Tracker0@localhost", sizeof(tc1->name));
 		vrpn_TRACKERCB t = getTrackerCB();
 		
-
+		int delay = 1000;
+		double sens = 0.15;
 		KinectGestures gr = KinectGestures();
 		
 		t.sensor = 13; // usa joelho direito
 		t.pos[1] = 1.0; //inicia
-		Assert::IsFalse(gr.detectWalk(t));
+		Assert::IsFalse(gr.detectWalk(t,delay, sens));
 		t.pos[1] = 1.14; //NAO esta suficientemente levantado
-		Assert::IsFalse(gr.detectWalk(t));
+		Assert::IsFalse(gr.detectWalk(t, delay, sens));
 		t.pos[1] = 1.151;
-		Assert::IsTrue(gr.detectWalk(t));
+		Assert::IsTrue(gr.detectWalk(t, delay, sens));
 		t.pos[1] = 1.0;
-		Assert::IsTrue(gr.detectWalk(t));
+		Assert::IsTrue(gr.detectWalk(t, delay, sens));
 
 		t.sensor = 17; // usa joelho esquerdo
 		t.pos[1] = 1.0; //inicia
-		Assert::IsFalse(gr.detectWalk(t));
+		Assert::IsFalse(gr.detectWalk(t, delay, sens));
 		t.pos[1] = 1.151;
-		Assert::IsTrue(gr.detectWalk(t));
+		Assert::IsTrue(gr.detectWalk(t, delay, sens));
 		t.pos[1] = 1.0;
-		Assert::IsTrue(gr.detectWalk(t));
+		Assert::IsTrue(gr.detectWalk(t, delay, sens));
 	}
 
 

@@ -185,15 +185,15 @@ void InputConverter::interpretKeyMap(KeyMap &keyMap) {
 		}
 		
 	} else
-	if ( keyMap.getShowMsg() == 0 ) {
-		press(keyMap);
-	} else
-	if ( keyMap.getShowMsg() == ALERT ) {
+	if ( keyMap.getToKey() == ALERT ) {
 		if ( viewOn )
 			view->showAlert(keyMap.getMsg());
-	} else {
+	} else
+	if ( keyMap.getToKey() == MESSAGE ){
 		if ( viewOn )
 			view->showMsg(keyMap.getMsg());
+	} else {
+		press(keyMap);
 	}
 }
 

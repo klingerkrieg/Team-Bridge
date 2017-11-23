@@ -17,62 +17,86 @@ std::vector<KeyMap> map;
 ConfigFileReader cf = ConfigFileReader();
 
 
-
 	TEST_CLASS(ConfigFileReaderTest) {
 public:
 
 	TEST_CLASS_INITIALIZE(init) {
-		cf.readConfigFile("vrpn-client.cfg", devs, map, config);
+		cf.readConfigFile("config.json", devs, map, config);
 	}
 
 
 	TEST_METHOD(ConfigFileReader_readConfigFile) {
-		Assert::IsTrue(cf.readConfigFile("vrpn-client.cfg", devs, map, config));
+		Assert::IsTrue(cf.readConfigFile("config.json", devs, map, config));
 	}
 
 	TEST_METHOD(ConfigFileReader_ConfigOk) {
-		Assert::AreEqual("Notepad", config.getApp().c_str());
-		Assert::AreEqual("Paulo Júnior Pereira Franco", config.getPatient().c_str());
+		Assert::AreEqual("app", config.getApp().c_str());
+		Assert::AreEqual("Paulo Júnior", config.getPatient().c_str());
 		Assert::AreEqual("db", config.getDb().c_str());
 		Assert::AreEqual("host", config.getHost().c_str());
+		Assert::AreEqual("user", config.getUser().c_str());
 		Assert::AreEqual("passwd", config.getPasswd().c_str());
-		Assert::AreEqual("savedir", config.getSaveDir().c_str());
+		Assert::AreEqual("./SAVES/", config.getSaveDir().c_str());
 	}
 
 	TEST_METHOD(ConfigFileReader_DevsOk) {
 		Assert::AreEqual("Tracker0@localhost", devs.at(0).c_str());
-		Assert::AreEqual("Mouse0@localhost", devs.at(1).c_str());
+		Assert::AreEqual("LeapMotion0@localhost", devs.at(1).c_str());
 		Assert::AreEqual("Keyboard0@localhost", devs.at(2).c_str());
+		Assert::AreEqual("Mouse0@localhost", devs.at(3).c_str());
 	}
 
 	TEST_METHOD(ConfigFileReader_MapsOk) {
 
 		int i = 0;
-		
-		KeyMap m1 = KeyMap("Tracker0@localhost", "KINECT_STEP_UP=0.15 A");
-		Assert::AreEqual(m1.toString(), map.at(i++).toString());
-		m1 = KeyMap("Tracker0@localhost", "KINECT_STEP_DOWN=0.15	D");
-		Assert::AreEqual(m1.toString(), map.at(i++).toString());
-
-		m1 = KeyMap("Tracker0@localhost", "KINECT_LEFT_HAND_TOP=5 O");
-		Assert::AreEqual(m1.toString(), map.at(i++).toString());
-
-		m1 = KeyMap("Tracker0@localhost", "KINECT_RIGHT_HAND_TOP=2,3 9");
-		Assert::AreEqual(m1.toString(), map.at(i++).toString());
-
-		m1 = KeyMap("Mouse0@localhost", "VK_LBUTTON	A");
-		Assert::AreEqual(m1.toString(), map.at(i++).toString());
-		m1 = KeyMap("Mouse0@localhost", "VK_MBUTTON	VK_LEFT");
-		Assert::AreEqual(m1.toString(), map.at(i++).toString());
-		m1 = KeyMap("Mouse0@localhost", "VK_RBUTTON	B");
+		json js = {
+			{"divClass", "handTop"},
+			{"dev" , "Tracker0@localhost"},
+			{"key" , "KINECT_LEFT_HAND_TOP"},
+			{"x" , -2},
+			{"coordinateMod" , "<="},
+			{"y" , 5},
+			{"toKeyDown" , "A"},
+			{"toKeyUp" , "A"}
+		};
+		KeyMap m1 = KeyMap(js);
 		Assert::AreEqual(m1.toString(), map.at(i++).toString());
 
-		m1 = KeyMap("Keyboard0@localhost", "1	1");
+		js = {
+			{"divClass", "kinectWalking"},
+			{"dev" , "Tracker0@localhost"},
+			{"key" , "KINECT_WALK"},
+			{"delay" , 1000},
+			{"sensivity" , 0.1},
+			{ "toKeyWhile" , "A" }
+		};
+
+		m1 = KeyMap(js);
 		Assert::AreEqual(m1.toString(), map.at(i++).toString());
-		m1 = KeyMap("Keyboard0@localhost", "A	B");
+		js = {
+			{"divClass","kinectStep"},
+			{"dev" ,"Tracker0@localhost"},
+			{"key" ,"KINECT_STEP_UP"},
+			{"sensivity" ,0.1},
+			{"toKeyDown" ,"KINECT_DETERMINE_CENTER_POS"},
+			{"toKeyUp" ,"KINECT_DETERMINE_CENTER_POS"}
+		};
+		m1 = KeyMap(js);
 		Assert::AreEqual(m1.toString(), map.at(i++).toString());
-		m1 = KeyMap("Keyboard0@localhost", "VK_LEFT	VK_LEFT");
+
+		js = {
+			{"divClass","kinectBalance"},
+			{"dev" ,"Tracker0@localhost"},
+			{"key" ,"KINECT_BALANCE"},
+			{"angleMod" ,">"},
+			{"angle" ,35},
+			{"msg" ,"Mensagem"},
+			{"toKeyDown" ,"ALERT"},
+			{"toKeyUp" ,"ALERT"}
+		};
+		m1 = KeyMap(js);
 		Assert::AreEqual(m1.toString(), map.at(i++).toString());
+
 
 		
 	}

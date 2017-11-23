@@ -1,6 +1,7 @@
 #include "ConfigFileReader.h"
 
 
+
 void ConfigFileReader::printConfig(std::vector<std::string> &devs,
 								   std::vector<KeyMap> &map,
 								   Config &config) {
@@ -43,9 +44,17 @@ bool ConfigFileReader::readConfigFile(char * fileName,
 
 	using json = nlohmann::json;
 	//Abre o json
-	std::ifstream inputFile(fileName);
+	std::ifstream inputFile;
+	/*inputFile.imbue(std::locale(
+		inputFile.getloc(),
+		new std::codecvt_utf8_utf16<wchar_t, 0x10FFFF, std::consume_header>));*/
+	//inputFile.imbue(std::locale(std::locale::empty(), new std::codecvt_utf8<wchar_t>));
+
+	inputFile.open(fileName);
 	json js;
 	inputFile >> js;
+
+	
 
 	//Lê configurações gerais
 	config.readConfigJSON(js["common"]);

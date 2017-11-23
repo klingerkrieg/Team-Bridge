@@ -231,21 +231,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	freopen("conout$", "w", stdout);
 	freopen("conout$", "w", stderr);
 
-	/*std::ifstream inputFile("config.json");
-	json j;
-	inputFile >> j;
-	cout << "OI:";
-	for ( json::iterator it = j["keys"].begin(); it != j["keys"].end(); ++it ) {
-		if ( it.value()["dev1"].is_null() ) {
-			std::cout << "EEE";
-		}
-		//std::cout << it.value()["dev1"] << '\n';
-
-	}
-
-	Sleep(3000);
-
-	return 0;*/
 
 	View view = View(hInstance);
 	view.showMsg("Starting TEAM-VRPN :)");
@@ -270,7 +255,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		printf("%d: %ws\n", i, argv[i]);
 
 		if ( !wcscmp(argv[i], L"-f") ) { // Specify config-file name
-			wcstombs(buffer, argv[i], 500);
+			wcstombs(buffer, argv[i+1], 500);
 			if ( ++i > argc ) {
 				Usage();
 			}

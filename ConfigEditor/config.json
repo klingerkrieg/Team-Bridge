@@ -17,8 +17,8 @@
       "x": -2,
       "coordinateMod": "<=",
       "y": 5,
-      "toKeyDown": "MESSAGE",
-      "toKeyUp": "MESSAGE"
+      "toKeyDown": "A",
+      "toKeyUp": "A"
     },
     {
       "divClass": "kinectWalking",
@@ -26,17 +26,15 @@
       "key": "KINECT_WALK",
       "delay": 1000,
       "sensivity": 0.1,
-      "toKeyWhile": "W"
+      "toKeyWhile": "A"
     },
     {
       "divClass": "kinectStep",
       "dev": "Tracker0@localhost",
       "key": "KINECT_STEP_UP",
       "sensivity": 0.1,
-      "mouseX": 0,
-      "mouseY": 0,
-      "toKeyDown": "VK_MOUSEMOVE",
-      "toKeyUp": "VK_MOUSEMOVE"
+      "toKeyDown": "KINECT_DETERMINE_CENTER_POS",
+      "toKeyUp": "KINECT_DETERMINE_CENTER_POS"
     },
     {
       "divClass": "kinectBalance",
@@ -44,16 +42,17 @@
       "key": "KINECT_BALANCE",
       "angleMod": ">",
       "angle": 35,
-      "toKeyDown": "KINECT_DETERMINE_CENTER_POS",
-      "toKeyUp": "KINECT_DETERMINE_CENTER_POS"
+      "msg": "Mensagem",
+      "toKeyDown": "ALERT",
+      "toKeyUp": "ALERT"
     },
     {
       "divClass": "kinectFastHand",
       "dev": "Tracker0@localhost",
       "key": "KINECT_LEFT_HAND_FAST",
       "maxVelocityMs": 4,
-      "toKeyDown": "VK_ESCAPE",
-      "toKeyUp": "VK_ESCAPE"
+      "toKeyDown": "MESSAGE",
+      "toKeyUp": "MESSAGE"
     },
     {
       "divClass": "kinectFist",
@@ -61,36 +60,36 @@
       "key": "KINECT_LEFT_FIST_DOWN",
       "angleMod": ">",
       "angle": 35,
-      "toKeyDown": "VK_ESCAPE",
-      "toKeyUp": "VK_ESCAPE"
+      "toKeyDown": "A",
+      "toKeyUp": "A"
     },
     {
       "divClass": "kinectTurn",
       "dev": "Tracker0@localhost",
       "key": "KINECT_TURN_LEFT",
-      "toKeyDown": "VK_ESCAPE",
-      "toKeyUp": "VK_ESCAPE"
+      "toKeyDown": "A",
+      "toKeyUp": "A"
     },
     {
       "divClass": "kinectBody",
       "dev": "Tracker0@localhost",
       "key": "KINECT_BODY_FRONT",
-      "toKeyDown": "VK_ESCAPE",
-      "toKeyUp": "VK_ESCAPE"
+      "toKeyDown": "A",
+      "toKeyUp": "A"
     },
     {
       "divClass": "leapCloseHand",
       "dev": "LeapMotion0@localhost",
       "key": "LEAP_LEFT_CLOSED",
-      "toKeyDown": "VK_ESCAPE",
-      "toKeyUp": "VK_ESCAPE"
+      "toKeyDown": "A",
+      "toKeyUp": "A"
     },
     {
       "divClass": "leapPinch",
       "dev": "LeapMotion0@localhost",
       "key": "LEAP_LEFT_PINCH",
-      "toKeyDown": "VK_ESCAPE",
-      "toKeyUp": "VK_ESCAPE"
+      "toKeyDown": "A",
+      "toKeyUp": "A"
     },
     {
       "divClass": "leapFist",
@@ -98,22 +97,22 @@
       "key": "LEAP_LEFT_FIST_UP",
       "angleMod": ">",
       "angle": 35,
-      "toKeyDown": "VK_ESCAPE",
-      "toKeyUp": "VK_ESCAPE"
+      "toKeyDown": "A",
+      "toKeyUp": "A"
     },
     {
       "divClass": "keyboard",
       "dev": "Keyboard0@localhost",
-      "key": "S",
-      "toKeyDown": "W",
-      "toKeyUp": "W"
+      "key": "A",
+      "toKeyDown": "A",
+      "toKeyUp": "A"
     },
     {
       "divClass": "mouse",
       "dev": "Mouse0@localhost",
-      "key": "VK_LBUTTON_DOWN",
-      "toKeyDown": "V",
-      "toKeyUp": "V"
+      "key": "VK_LBUTTON",
+      "toKeyDown": "A",
+      "toKeyUp": "A"
     }
   ]
 }

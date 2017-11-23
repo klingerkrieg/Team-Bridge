@@ -57,7 +57,7 @@ std::string KeyMap::toString() {
 	}
 
 	//return dev + " " + std::to_string(key) + " " + std::to_string(toKey) + " " + std::to_string(toKeyIsConstant) + " " + std::to_string(heightSens);
-	if ( getShowMsg() != 0 ) {
+	if ( getToKey() == ALERT || getToKey() == MESSAGE ) {
 		ret += " \""+getMsg()+"\"";
 	} else
 	if ( getToKey() == VK_MOUSEMOVE ) {
@@ -88,7 +88,7 @@ std::string KeyMap::toString() {
 
 KeyMap::KeyMap(json js) {
 
-	this->dev = js["key"].get<std::string>();
+	this->dev = js["dev"].get<std::string>();
 	
 	if ( !js["x"].is_null() ) {
 		this->x = js["x"].get<int>();
@@ -98,23 +98,22 @@ KeyMap::KeyMap(json js) {
 		this->y = js["y"].get<int>();
 	}
 
-	if ( !js["yMod"].is_null() ) {
+	if ( !js["coordinateMod"].is_null() ) {
 		std::string coordinateModStr = js["coordinateMod"].get<std::string>();
-		if ( coordinateModStr.compare("<=") ) {
+		if ( !coordinateModStr.compare("<=") ) {
 			this->coordinateMod = -1;
 		} else
-		if ( coordinateModStr.compare(">=") ) {
+		if ( !coordinateModStr.compare(">=") ) {
 			this->coordinateMod = 1;
 		} else 
-		if ( coordinateModStr.compare("=") ) {
+		if ( !coordinateModStr.compare("=") ) {
 			this->coordinateMod = 0;
 		}	
 	}
 
-	if ( !js["height"].is_null() ) {
-		this->sensivity = js["height"].get<int>();
+	if ( !js["sensivity"].is_null() ) {
+		this->sensivity = js["sensivity"].get<double>();
 	}
-
 
 	if ( !js["maxVelociyMs"].is_null() ) {
 		this->maxVelociyMs = js["maxVelociyMs"].get<double>();
@@ -126,13 +125,13 @@ KeyMap::KeyMap(json js) {
 
 	if ( !js["angleMod"].is_null() ) {
 		std::string angleModStr = js["angleMod"].get<std::string>();
-		if ( angleModStr.compare("<") ) {
+		if ( !angleModStr.compare("<") ) {
 			this->angleMod = -1;
 		} else
-		if ( angleModStr.compare(">") ) {
+		if ( !angleModStr.compare(">") ) {
 			this->angleMod = 1;
 		} else
-		if ( angleModStr.compare("=") ) {
+		if ( !angleModStr.compare("=") ) {
 			this->angleMod = 0;
 		}
 	}
@@ -165,9 +164,9 @@ KeyMap::KeyMap(json js) {
 		}
 
 		if ( !this->toKeyRepr.compare("ALERT") ) {
-			this->showMsg = ALERT;
+			this->toKey = ALERT;
 		} else {
-			this->showMsg = MESSAGE;
+			this->toKey = MESSAGE;
 		}
 
 		this->toKeyRepr = "[" + this->toKeyRepr + "]";
