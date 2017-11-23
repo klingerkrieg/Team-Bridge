@@ -2,7 +2,7 @@
 #include <string>
 #include <map>
 #include <iostream>
-#include <json.hpp>
+#include "json.hpp"
 
 using json = nlohmann::json;
 
@@ -24,8 +24,6 @@ private:
 public:
 
 	Config();
-
-	Config(std::map<std::string, std::string> configMap);
 
 	std::string toString();
 

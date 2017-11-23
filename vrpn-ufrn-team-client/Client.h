@@ -29,7 +29,6 @@
 #include "InputConverter.h"
 
 #include "View.h"
-#include "json.hpp"
 
 //GUI
 

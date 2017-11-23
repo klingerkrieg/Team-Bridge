@@ -22,7 +22,7 @@ void Config::readConfigJSON(json js) {
 			user = it.value().get<std::string>();
 		else if ( it.key().compare("passwd") == 0 )
 			passwd = it.value().get<std::string>();
-		else if ( it.key().compare("db") == 0 )
+		else if ( it.key().compare("database") == 0 )
 			db = it.value().get<std::string>();
 		else if ( it.key().compare("host") == 0 )
 			host = it.value().get<std::string>();
