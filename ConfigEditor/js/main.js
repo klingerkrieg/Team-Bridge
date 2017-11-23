@@ -1,3 +1,4 @@
+
 var fs = require('fs');
 
 var programName = "ConfigEditor";
@@ -91,11 +92,14 @@ function showExtraActions(el){
 function formToJSON(el,divClass){
     json = {};
     
-
     json.divClass = divClass;
     el.find(".toJSON").each(function(i,el){
         el = $(el);
         json[el.attr('id')] = el.val();
+
+        if ($.isNumeric(json[el.attr('id')])){
+            json[el.attr('id')] = parseFloat(json[el.attr('id')]);
+        }
 
         div = el.attr("divideby");
         if (div != undefined){
@@ -105,8 +109,8 @@ function formToJSON(el,divClass){
 
 
     if ( json.toKey == "VK_MOUSEMOVE"){
-        json.mouseX = parent.find("#moveMouseSpace #x").val();
-        json.mouseY = parent.find("#moveMouseSpace #y").val();
+        json.mouseX = parseInt(parent.find("#moveMouseSpace #x").val());
+        json.mouseY = parseInt(parent.find("#moveMouseSpace #y").val());
     } else 
     if ( json.toKey == "ALERT" || el.val() == "MESSAGE"){
         json.msg = parent.find("#msg").val();
@@ -162,7 +166,15 @@ function jsonToForm(json){
 
 
 function getKeyboardKeys(){
-    keys = [{t:"ESC",code:"VK_ESCAPE"},
+
+    keys = [];
+
+    for(var i = 9; i < 36 ;i++){
+        chr = i.toString(36).toUpperCase();
+        keys.push({t:chr,code:chr});
+    }
+
+    keys.concat([{t:"ESC",code:"VK_ESCAPE"},
     {t:"F1",code:"VK_F1"},
     {t:"F2",code:"VK_F2"},
     {t:"F3",code:"VK_F3"},
@@ -187,20 +199,23 @@ function getKeyboardKeys(){
     {t:"END",code:"VK_END"},        
     {t:"INSERT",code:"VK_INSERT"},        
     {t:"DELETE",code:"VK_DELETE"},
-    {t:"PrtScreen",code:"VK_SNAPSHOT"},        
+    {t:"Print Screen",code:"VK_SNAPSHOT"},        
     {t:"Seta cima",code:"VK_UP"},        
     {t:"Seta direita",code:"VK_RIGHT"},        
-    {t:"Seta baixo",code:"VK_DOWN"},        
-    {t:"Seta esquerda",code:"VK_LEFT"}
-  ];
-  
+    {t:"Seta baixo",code:"VK_DOWN"},    
+    {t:"Seta esquerda",code:"VK_LEFT"},    
+    {t:"Mouse esquerdo (Apertar)",code:"VK_LBUTTON_DOWN"},
+    {t:"Mouse esquerdo (Soltar)",code:"VK_LBUTTON_UP"},
+    {t:"Mouse meio (Apertar)",code:"VK_MBUTTON_DOWN"},
+    {t:"Mouse meio (Soltar)",code:"VK_MBUTTON_UP"},
+    {t:"Mouse direito (Apertar)",code:"VK_RBUTTON_DOWN"},
+    {t:"Mouse direito (Soltar)",code:"VK_RBUTTON_UP"}
+  ]);
+
     for (var i = 0; i <= 9; i++){
         keys.push({t:i,code:i});
     }
-    for(var i = 9; i < 36 ;i++){
-        chr = i.toString(36).toUpperCase();
-        keys.push({t:chr,code:chr});
-    }
+    
     return keys;
   }
   

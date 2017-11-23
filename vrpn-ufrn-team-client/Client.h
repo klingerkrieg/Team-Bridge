@@ -52,7 +52,7 @@ private:
 	InputConverter inputConverter;
 	View view;
 
-	char *configFileName = "vrpn-client.cfg";
+	char *configFileName = "config.json";
 	bool printTracker = true;
 	bool printButton = true;
 	bool printAnalog = true;

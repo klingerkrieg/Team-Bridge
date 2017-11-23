@@ -29,8 +29,6 @@ public:
 
 	std::string toString();
 
-	void readConfigMap(std::map<std::string, std::string> configMap);
-
 	void readConfigJSON(json js);
 
 	std::string& getHost();

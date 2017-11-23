@@ -42,32 +42,30 @@ bool ConfigFileReader::readConfigFile(char * fileName,
 									  Config &config) {
 
 	using json = nlohmann::json;
-
+	//Abre o json
 	std::ifstream inputFile(fileName);
 	json js;
 	inputFile >> js;
 
+	//Lê configurações gerais
 	config.readConfigJSON(js["common"]);
 
-
+	//Lê o mapeamento
 	for ( json::iterator it = js["keys"].begin(); it != js["keys"].end(); ++it ) {
-		KeyMap km = KeyMap((json)it);
+
+		json js2 = (json)*it;
+		KeyMap km = KeyMap(js2);
 		map.push_back(km);
+
+		//Cada novo dispositivo é adicionado em um vetor separado
+		std::vector<std::string>::iterator check = std::find(devs.begin(), devs.end(), js2["dev"]);
+		if ( check == devs.end() ) {
+			//Se não existir
+			devs.push_back(js2["dev"]);
+		}
 	}
-
-	Sleep(3000);
-
-	return 0;
-
-
-
-
-	/*map.push_back(km);
-	devs.push_back(s2);
-
-	config.readConfigMap(configMap);
-
-	printConfig(devs, map, config);*/
+	//Imprime configurações para check
+	printConfig(devs, map, config);
 
 	return true;
 }

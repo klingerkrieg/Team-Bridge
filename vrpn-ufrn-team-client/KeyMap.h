@@ -103,6 +103,9 @@ private:
 	//Guarda o evento para desacionar
 	KeyMap *onLeave;
 
+	int mouseX = -100;
+	int mouseY = -100;
+
 	//Possiveis propriedades
 	int x = -100;
 	int y = -100;
@@ -153,6 +156,14 @@ public:
 
 	int getY() {
 		return y;
+	}
+
+	int getMouseX() {
+		return mouseX;
+	}
+
+	int getMouseY() {
+		return mouseY;
 	}
 
 
@@ -261,10 +272,11 @@ public:
 	}
 
 	KeyMap(){}
-	KeyMap(std::string dev, int key, char toKey);
-	KeyMap(std::string dev, std::string config);
+	KeyMap(std::string dev, std::string toKeyUp);
 	KeyMap(json config);
 
+	void setToKey(std::string toKeyFind);
+	void KeyMap::setKey(std::string key);
 
 
 	static  std::map<std::string, int> configToAscii;

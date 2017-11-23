@@ -41,8 +41,8 @@ void InputConverter::press(KeyMap key) {
 		
 		if ( key.getToKey() == VK_MOUSEMOVE ) {
 			input.mi.dwFlags = MOUSEEVENTF_MOVE;
-			input.mi.dx = key.getX();
-			input.mi.dy = key.getY();
+			input.mi.dx = key.getMouseX();
+			input.mi.dy = key.getMouseY();
 			//std::cout << "move to x:" << input.mi.dx << "y:" << input.mi.dy << "\n";
 		} else
 		if ( key.getToKey() == VK_RBUTTON || key.getToKey() == VK_RBUTTON_DOWN ) {
