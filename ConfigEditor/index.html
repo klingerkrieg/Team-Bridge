@@ -66,6 +66,21 @@
 	</fieldset>
 
 	<fieldset>
+		<legend>Endereço dos dispositivos</legend>
+		<label>Kinect <red>*</red>:</label>
+		<input type="text" class="form-control" id="KINECT" value="Tracker0@localhost">
+
+		<label>LeapMotion <red>*</red>:</label>
+		<input type="text" class="form-control" id="LEAPMOTION" value="LeapMotion0@localhost">
+
+		<label>Teclado <red>*</red>:</label>
+		<input type="text" class="form-control" id="KEYBOARD" value="Keyboard0@localhost">
+
+		<label>Mouse <red>*</red>:</label>
+		<input type="text" class="form-control" id="MOUSE" value="Mouse0@localhost">
+	</fieldset>
+
+	<fieldset>
 		<legend>KINECT</legend>
 		<label>Intervalo para posição x das mãos <red>*</red>: </label><input type="number" class="form-control toJSON" id="KINECT_X_INTERVAL" divideby="100" value="35" data-toggle="tooltip" data-html="true" data-placement="bottom" title="<img class='tooltipImg' src='./img/humanTopHandXInterval.png'>">cm
 	</fieldset>
@@ -89,8 +104,13 @@
 <div id="actionModel" style="display:none;">
 	<span id="act">
 		<br/>
+		<label><input type="checkbox" id="toKeyWhile" value="1" onchange="toKeyWhileVerify(this)"> Enquanto </label><br/>
+		<label><input type="checkbox" id="toKeyDown" value="1" checked="checked" onclick="toKeyWhileVerify(this)"> Ao entrar </label><br/>
+		<label><input type="checkbox" id="toKeyUp" value="1" checked="checked" onclick="toKeyWhileVerify(this)"> Ao sair </label><br/>
 		Acionar:  
-		<select id="toKey" onchange="showExtraActions(this)" class="form-control toJSON"></select>
+		<select id="toKey" onchange="showExtraActions(this)" class="form-control toJSON">
+			<option></option>
+		</select>
 		<span id="moveMouseSpace" style="display:none;">
 			X:<input type="number" class="form-control" id="x" value="0">
 			Y:<input type="number" class="form-control" id="y" value="0">

@@ -1,6 +1,6 @@
 body{
 	padding:5px;
-	line-height: 3.5;
+	line-height: 1.5;
 }
 
 .form-control {
@@ -51,7 +51,7 @@ red{
 	font-weight: bold;
 }
 
-label{
+#commonInfo label{
 	width:300px;
 	text-align: right;
 	margin-right: 5px;

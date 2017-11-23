@@ -7,6 +7,9 @@
 
 #include "util.h"
 
+#include <json.hpp>
+
+using json = nlohmann::json;
 
 static const int SSIZE = 512;
 
@@ -260,6 +263,7 @@ public:
 	KeyMap(){}
 	KeyMap(std::string dev, int key, char toKey);
 	KeyMap(std::string dev, std::string config);
+	KeyMap(json config);
 
 
 

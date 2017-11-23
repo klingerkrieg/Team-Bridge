@@ -1,0 +1,30 @@
+{
+  "common": {
+    "patientName": "Paulo Júnior",
+    "saveDir": "./SAVES/",
+    "appName": "app",
+    "host": "host",
+    "database": "db",
+    "user": "user",
+    "passwd": "passwd",
+    "KINECT_X_INTERVAL": 0.35
+  },
+  "keys": [
+    {
+      "divClass": "handTop",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_LEFT_HAND_TOP",
+      "x": "-2",
+      "yMod": "<=",
+      "y": "5",
+      "toKey": "VK_ESCAPE"
+    },
+    {
+      "divClass": "kinectStep",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_STEP_UP",
+      "height": 0.1,
+      "toKey": "VK_ESCAPE"
+    }
+  ]
+}

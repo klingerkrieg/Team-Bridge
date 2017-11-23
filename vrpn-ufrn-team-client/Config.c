@@ -20,6 +20,25 @@ std::string Config::toString() {
 	return "HOST:" + host + "\nUSER:" + user + "\nPASSWD:" + passwd + "\nDB:" + db + "\nPATIENT:" + patient + "\nSAVE_DIR:" + saveDir + "\nAPP:" + app;
 }
 
+void Config::readConfigJSON(json js) {
+	for ( json::iterator it = js.begin(); it != js.end(); ++it ) {
+		if ( it.key().compare("USER") == 0 )
+			user = it.value().get<std::string>();
+		else if ( it.key().compare("PASSWD") == 0 )
+			passwd = it.value().get<std::string>();
+		else if ( it.key().compare("DB") == 0 )
+			db = it.value().get<std::string>();
+		else if ( it.key().compare("HOST") == 0 )
+			host = it.value().get<std::string>();
+		else if ( it.key().compare("PATIENT") == 0 )
+			patient = it.value().get<std::string>();
+		else if ( it.key().compare("SAVE_DIR") == 0 )
+			saveDir = it.value().get<std::string>();
+		else if ( it.key().compare("APP") == 0 )
+			app = it.value().get<std::string>();
+	}
+}
+
 void Config::readConfigMap(std::map<std::string, std::string> configMap) {
 	for ( std::map<std::string, std::string>::iterator it = configMap.begin(); it != configMap.end(); ++it ) {
 

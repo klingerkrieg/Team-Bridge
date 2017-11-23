@@ -90,6 +90,41 @@ std::string KeyMap::toString() {
 	return ret;
 }
 
+
+KeyMap::KeyMap(json js) {
+
+	this->dev = js["key"].get<std::string>();
+	//this->key = 
+	if ( !js["x"].is_null() ) {
+		this->x = js["x"].get<int>();
+	}
+
+	if ( !js["y"].is_null() ) {
+		this->y = js["y"].get<int>();
+	}
+
+	if ( !js["yMod"].is_null() ) {
+		std::string yMod = js["yMod"].get<std::string>();
+		if ( yMod.compare("<=") ) {
+			this->coordinateMod = -1;
+		} else
+		if ( yMod.compare(">=") ) {
+			this->coordinateMod = 1;
+		} else 
+		if ( yMod.compare("=") ) {
+			this->coordinateMod = 0;
+		}	
+	}
+
+	if ( !js["height"].is_null() ) {
+		this->sensivity = js["height"].get<int>();
+	}
+
+
+
+
+}
+
 KeyMap::KeyMap(std::string dev, std::string config) {
 
 	this->dev = dev;

@@ -2,7 +2,9 @@
 #include <string>
 #include <map>
 #include <iostream>
+#include <json.hpp>
 
+using json = nlohmann::json;
 
 class Config {
 
@@ -28,6 +30,8 @@ public:
 	std::string toString();
 
 	void readConfigMap(std::map<std::string, std::string> configMap);
+
+	void readConfigJSON(json js);
 
 	std::string& getHost();
 

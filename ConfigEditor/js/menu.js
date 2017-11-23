@@ -74,13 +74,14 @@ function saveFile(){
         for (var y = 0; y < actions.length; y++){
             if (item.hasClass(actions[y].class)){
                 jsonConfig.keys.push(formToJSON(item, actions[y].class));
+    
             }
         }
 
     });
     
     
-    jsonStr = JSON.stringify(jsonConfig);
+    jsonStr = JSON.stringify(jsonConfig,null,2);
     
     fs.writeFile(actualName, jsonStr, 'utf8', function(msg){
         
@@ -141,6 +142,7 @@ function addCommandToMapView(model){
     clone.attr('id',"");
     clone.append($('#actionModel #act').clone());
     clone.append('<img class="close" src="./img/close.png" onclick="removeMap(this)"/>');
+    clone.find("#toKey option:eq(1)").attr("selected","");
     $('#mapView').append(clone);
     $('[data-toggle="tooltip"]').tooltip({animated: 'fade',html: true});
     

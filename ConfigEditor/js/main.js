@@ -11,6 +11,7 @@ var actions = [{class:"handTop", title:"[Kinect] Altura da mão"},
                     {class:"kinectWalking", title:"[Kinect] Marcha estacionária"},
                     {class:"kinectStep", title:"[Kinect] Step"},
                     {class:"kinectBalance", title:"[Kinect] Equilíbrio"},
+                    {class:"kinectFastHand", title:"[Kinect] Velocidade do gesto"},
                     {class:"kinectFist", title:"[Kinect] Flexão de punho"},
                     {class:"kinectTurn", title:"[Kinect] Girar corpo"},
                     {class:"kinectBody", title:"[Kinect] Inclinar corpo"}
@@ -89,8 +90,8 @@ function showExtraActions(el){
 
 function formToJSON(el,divClass){
     json = {};
+    
 
-    json.type = "key";
     json.divClass = divClass;
     el.find(".toJSON").each(function(i,el){
         el = $(el);
@@ -108,8 +109,23 @@ function formToJSON(el,divClass){
         json.mouseY = parent.find("#moveMouseSpace #y").val();
     } else 
     if ( json.toKey == "ALERT" || el.val() == "MESSAGE"){
-        json.msg = parent.find("#msgSpace #msg").val();
+        json.msg = parent.find("#msg").val();
     }
+
+    if (el.find("#toKeyWhile").prop("checked")){
+        json.toKeyWhile = json.toKey;
+    }
+    if (el.find("#toKeyDown").prop("checked")){
+        json.toKeyDown = json.toKey;
+    }
+    if (el.find("#toKeyUp").prop("checked")){
+        json.toKeyUp = json.toKey;
+    }
+
+    delete json.toKey;
+
+    //Adiciona o endereço do dispositivo
+    json.dev = $('#'+json.dev).val();
 
     return json;
 }
@@ -193,5 +209,15 @@ function loadKeyboardOptions(){
     keys = getKeyboardKeys();
     for(var i = 0; i < keys.length ;i++){
         act.append("<option value='"+keys[i].code+"'>"+keys[i].t+"</option>");
+    }
+}
+
+function toKeyWhileVerify(el){
+    el = $(el);
+    if (el.attr("id") == "toKeyWhile" && el.prop("checked") ){
+        el.parent().parent().find("#toKeyDown,#toKeyUp").prop("checked",false);
+    } else
+    if ( (el.attr("id") == "toKeyDown" || el.attr("id") == "toKeyUp") && el.prop("checked") ){
+        el.parent().parent().find("#toKeyWhile").prop("checked",false);
     }
 }

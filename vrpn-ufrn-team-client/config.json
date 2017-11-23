@@ -1,0 +1,116 @@
+{
+  "common": {
+    "patientName": "Paulo Júnior",
+    "saveDir": "./SAVES/",
+    "appName": "app",
+    "host": "host",
+    "database": "db",
+    "user": "user",
+    "passwd": "passwd",
+    "KINECT_X_INTERVAL": 0.35
+  },
+  "keys": [
+    {
+      "divClass": "kinectFastHand",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_LEFT_HAND_FAST",
+      "velocity": "4",
+      "msg": "alerta",
+      "toKeyDown": "ALERT",
+      "toKeyUp": "ALERT"
+    },
+    {
+      "divClass": "kinectBalance",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_BALANCE",
+      "mod": ">",
+      "angle": "35",
+      "toKeyDown": "KINECT_DETERMINE_CENTER_POS",
+      "toKeyUp": "KINECT_DETERMINE_CENTER_POS"
+    },
+    {
+      "divClass": "kinectStep",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_STEP_UP",
+      "height": 0.1,
+      "mouseX": "1",
+      "mouseY": "1",
+      "toKeyWhile": "VK_MOUSEMOVE"
+    },
+    {
+      "divClass": "handTop",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_LEFT_HAND_TOP",
+      "x": "-2",
+      "yMod": "<=",
+      "y": "5",
+      "toKeyDown": "VK_ESCAPE",
+      "toKeyUp": "VK_ESCAPE"
+    },
+    {
+      "divClass": "kinectWalking",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_WALK",
+      "delay": "1000",
+      "height": 0.1,
+      "toKeyDown": "VK_ESCAPE",
+      "toKeyUp": "VK_ESCAPE"
+    },
+    {
+      "divClass": "kinectFist",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_LEFT_FIST_DOWN",
+      "toKeyDown": "VK_ESCAPE",
+      "toKeyUp": "VK_ESCAPE"
+    },
+    {
+      "divClass": "kinectTurn",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_TURN_LEFT",
+      "toKeyDown": "VK_ESCAPE",
+      "toKeyUp": "VK_ESCAPE"
+    },
+    {
+      "divClass": "kinectBody",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_BODY_FRONT",
+      "toKeyDown": "VK_ESCAPE",
+      "toKeyUp": "VK_ESCAPE"
+    },
+    {
+      "divClass": "leapCloseHand",
+      "dev": "LeapMotion0@localhost",
+      "key": "LEAP_LEFT_CLOSED",
+      "toKeyDown": "VK_ESCAPE",
+      "toKeyUp": "VK_ESCAPE"
+    },
+    {
+      "divClass": "leapPinch",
+      "dev": "LeapMotion0@localhost",
+      "key": "LEAP_LEFT_PINCH",
+      "toKeyDown": "VK_ESCAPE",
+      "toKeyUp": "VK_ESCAPE"
+    },
+    {
+      "divClass": "leapFist",
+      "dev": "LeapMotion0@localhost",
+      "key": "LEAP_LEFT_FIST_UP",
+      "toKeyDown": "VK_ESCAPE",
+      "toKeyUp": "VK_ESCAPE"
+    },
+    {
+      "divClass": "keyboard",
+      "dev": "Keyboard0@localhost",
+      "key": "VK_ESCAPE",
+      "toKeyDown": "VK_ESCAPE",
+      "toKeyUp": "VK_ESCAPE"
+    },
+    {
+      "divClass": "mouse",
+      "dev": "Mouse0@localhost",
+      "key": "VK_LBUTTON",
+      "toKeyDown": "VK_ESCAPE",
+      "toKeyUp": "VK_ESCAPE"
+    }
+  ]
+}

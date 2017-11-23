@@ -1,6 +1,7 @@
 <div style="display:none;">
 <div id="handTopModel" class="handTop" data-toggle="tooltip" data-placement="top" title="<img class='tooltipImg' src='./img/humanTopHandY.png'>">
     <img class="deviceLogo" src="./img/kinect.png" alt="(Kinect)">
+    <input type="hidden" id="dev" value="KINECT" class="form-control toJSON">
     Posição da mão:
     <select id="key" class="form-control toJSON" >
         <option value="KINECT_LEFT_HAND_TOP">Esquerda</option>
@@ -32,6 +33,7 @@
 
 <div id="kinectWalkingModel" class="kinectWalking">
     <img class="deviceLogo" src="./img/kinect.png" alt="(Kinect)">
+    <input type="hidden" id="dev" value="KINECT" class="form-control toJSON">
     Marcha estacionária
     <input type="hidden" class="form-control toJSON" id="key" value="KINECT_WALK">
     <input type="number" id="delay" value="1000"  class="form-control toJSON">ms 
@@ -42,6 +44,7 @@
 
 <div id="kinectStepModel" class="kinectStep">
     <img class="deviceLogo" src="./img/kinect.png" alt="(Kinect)">
+    <input type="hidden" id="dev" value="KINECT" class="form-control toJSON">
     Step: 
     <select id="key" class="form-control toJSON">
         <option value="KINECT_STEP_UP">Subir</option>
@@ -53,6 +56,7 @@
 
 <div id="kinectBalanceModel" class="kinectBalance" data-toggle="tooltip" data-placement="top" title="<img class='tooltipImg' src='./img/equilibrio.png'>">
     <img class="deviceLogo" src="./img/kinect.png" alt="(Kinect)">
+    <input type="hidden" id="dev" value="KINECT" class="form-control toJSON">
     Equilíbrio: 
     Ângulo
     <input type="hidden" class="form-control toJSON" id="key" value="KINECT_BALANCE">
@@ -62,11 +66,11 @@
         <option><</option>
     </select>
      <input type="number" id="angle" value="35" class="form-control toJSON">°
-   
 </div>
 
 <div id="kinectFastHandModel" class="kinectFastHand">
     <img class="deviceLogo" src="./img/kinect.png" alt="(Kinect)">
+    <input type="hidden" id="dev" value="KINECT" class="form-control toJSON">
     Velocidade do gesto: 
     Mão
     <select id="key" class="form-control toJSON">
@@ -79,6 +83,7 @@
 
 <div id="kinectFistModel" class="kinectFist">
     <img class="deviceLogo" src="./img/kinect.png" alt="(Kinect)">
+    <input type="hidden" id="dev" value="KINECT" class="form-control toJSON">
     Flexão do punho:    
     <select id="key" class="form-control toJSON">
         <option value="KINECT_LEFT_FIST_DOWN">Esquerdo para baixo</option>
@@ -91,6 +96,7 @@
 
 <div id="kinectTurnModel" class="kinectTurn">
     <img class="deviceLogo" src="./img/kinect.png" alt="(Kinect)">
+    <input type="hidden" id="dev" value="KINECT" class="form-control toJSON">
     Girar corpo para:    
     <select id="key" class="form-control toJSON">
         <option value="KINECT_TURN_LEFT">Esquerda</option>
@@ -102,6 +108,7 @@
 
 <div id="kinectBodyModel" class="kinectBody">
     <img class="deviceLogo" src="./img/kinect.png" alt="(Kinect)">
+    <input type="hidden" id="dev" value="KINECT" class="form-control toJSON">
     Inclinar corpo para:    
     <select id="key" class="form-control toJSON">
         <option value="KINECT_BODY_FRONT">Frente</option>

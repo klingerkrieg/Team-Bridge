@@ -49,7 +49,7 @@
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);..\..\vrpn-master-2017-up;C:\Program Files (x86)\MySQL\MySQL Connector C++ 1.1.9\include;</IncludePath>
+    <IncludePath>../../json-develop/src;$(VC_IncludePath);$(WindowsSDK_IncludePath);..\..\vrpn-master-2017-up;C:\Program Files (x86)\MySQL\MySQL Connector C++ 1.1.9\include;</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);..\..\vrpn-master-2017-up;C:\Program Files (x86)\MySQL\MySQL Connector C++ 1.1.9\include;</IncludePath>
@@ -103,7 +103,7 @@
       </Command>
     </PostBuildEvent>
     <PreBuildEvent>
-      <Command>copy "*.cfg" "../pc_win32/vrpn-ufrn-team-client/Debug/" &amp; copy "*.dll" "../pc_win32/vrpn-ufrn-team-client/Debug/"</Command>
+      <Command>copy "*.json" "../pc_win32/vrpn-ufrn-team-client/Debug/" &amp; copy "*.dll" "../pc_win32/vrpn-ufrn-team-client/Debug/"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

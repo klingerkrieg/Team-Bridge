@@ -13,8 +13,11 @@
 #include <iostream>
 #include <Tchar.h>
 #include <sstream>
+#include <json.hpp>
 
-class ConfigFileReader : public FileParser {
+
+
+class ConfigFileReader {
 public:
 	bool readConfigFile(char * fileName,
 							   std::vector<std::string> &devs,
@@ -32,9 +35,5 @@ private:
 							   std::vector<KeyMap> &map,
 							   Config &config);
 
-
-	
-	/// File-static constant of max line size.
-	static const int LINESIZE = 512;
 };
 

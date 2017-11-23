@@ -41,87 +41,33 @@ bool ConfigFileReader::readConfigFile(char * fileName,
 									  std::vector<KeyMap> &map,
 									  Config &config) {
 
-	char *pch;
-	char scrap[LINESIZE];
-	char s1[LINESIZE], s2[LINESIZE];
-	double dbl = 0;
-	std::string lastDev;
-	std::map<std::string, std::string> configMap;
-	std::string line;
-	
+	using json = nlohmann::json;
 
-	if ( !openIn(fileName) ) {
-		return false;
+	std::ifstream inputFile(fileName);
+	json js;
+	inputFile >> js;
+
+	config.readConfigJSON(js["common"]);
+
+
+	for ( json::iterator it = js["keys"].begin(); it != js["keys"].end(); ++it ) {
+		KeyMap km = KeyMap((json)it);
+		map.push_back(km);
 	}
 
-	//Remove todos os comentarios
-	std::string withouBlockComment = "";
-	while ( getline(fileInput, line) ) {
-		withouBlockComment += line + "\n";
-	}
-	withouBlockComment = removeComments(withouBlockComment);
+	Sleep(3000);
+
+	return 0;
 
 
 
-	std::istringstream iss(withouBlockComment);
-	while ( std::getline(iss, line) ) {
 
-		if ( ignoreLine(line) ) {
-			continue;
-		}
-
-		strncpy(scrap, line.c_str(), LINESIZE - 1);
-		scrap[sizeof(scrap) - 1] = '\0';
-
-
-		//Identifica o tipo de configuracao que sera lido
-		if ( !strcmp(pch = strtok(scrap, " \t"), "CONF") ) {
-
-			//Pula a primeira string
-			pch += strlen(pch) + 1;
-
-			if ( sscanf(pch, "%s\t%lf", s1, &dbl) ) {
-				if ( !strcmp(s1, "KINECT_X_INTERVAL") ) {
-					KinectGestures::setKinectXInterval(dbl);
-				}
-			}
-
-		} else
-		if ( !strcmp(pch = strtok(scrap, " \t"), "KEY") ) {
-
-			//Pula a primeira string
-			pch += strlen(pch) + 1;
-
-			KeyMap km = KeyMap(lastDev, pch);
-
-			map.push_back(km);
-		} else
-		if ( !strcmp(pch = strtok(scrap, " \t"), "DEV") ) {
-
-			if ( sscanf(line.c_str(), "%s\t%s", s1, s2) != 2 ) {
-				fprintf(stderr, "Falha ao ler %s linha: %s\n", fileName, line.c_str());
-				return false;
-			}
-
-			lastDev = s2;
-			//Adiciona um dispositivo
-			devs.push_back(s2);
-		} else {
-			if ( sscanf(line.c_str(), "%s\t%[^\t\n]", s1, s2) != 2 ) {
-				fprintf(stderr, "Falha ao ler %s linha: %s\n", fileName, line.c_str());
-				return false;
-			}
-			//Adiciona configuracao
-
-			configMap[s1] = s2;
-
-		}
-
-	}
+	/*map.push_back(km);
+	devs.push_back(s2);
 
 	config.readConfigMap(configMap);
 
-	printConfig(devs, map, config);
+	printConfig(devs, map, config);*/
 
 	return true;
 }
