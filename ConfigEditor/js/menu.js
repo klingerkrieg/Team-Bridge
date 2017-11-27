@@ -57,6 +57,11 @@ function saveFile(){
     jsonConfig.common = {};
     jsonConfig.keys = [];
 
+    jsonConfig.kinect = [$('#KINECT').val()];
+    jsonConfig.leapMotion = [$('#LEAPMOTION').val()];
+    jsonConfig.keyboard = [$('#KEYBOARD').val()];
+    jsonConfig.mouse = [$('#MOUSE').val()];
+
     $('#commonInfo .toJSON').each(function(i,el){
         el = $(el);
         jsonConfig.common[el.attr('id')] = el.val();

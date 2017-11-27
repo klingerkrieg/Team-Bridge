@@ -17,11 +17,28 @@
 #include <locale>
 #include <codecvt>
 
+const int DEVTYPE_KINECT = 0;
+const int DEVTYPE_LEAPMOTION = 1;
+const int DEVTYPE_KEYBOARD = 2;
+const int DEVTYPE_MOUSE = 3;
+
+const std::vector<std::string> DEVTYPE_STR = { "KINECT", "LEAP MOTION", "TECLADO", "MOUSE" };
+
+struct DeviceType {
+	std::string name;
+	int type = -1;
+	std::string type_str = "";
+
+	bool operator== (const DeviceType &rhs) {
+		return !rhs.name.compare(name);
+	}
+};
+
 
 class ConfigFileReader {
 public:
 	bool readConfigFile(char * fileName,
-							   std::vector<std::string> &devs,
+							   std::vector<DeviceType> &devs,
 							   std::vector<KeyMap> &map,
 							   Config &config);
 
@@ -32,9 +49,11 @@ public:
 	
 
 private:
-	void printConfig(std::vector<std::string> &devs,
+	void printConfig(std::vector<DeviceType> &devs,
 							   std::vector<KeyMap> &map,
 							   Config &config);
+
+	bool findDev(json js, std::string textDev, int devConstant, DeviceType &devs);
 
 };
 

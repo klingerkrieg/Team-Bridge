@@ -29,7 +29,7 @@ bool Client::setup(bool test = false) {
 
 		ConfigFileReader configFileReader = ConfigFileReader();
 
-		std::vector<string> devs = {};
+		std::vector<DeviceType> devs = {};
 		std::vector<KeyMap> map = {};
 		Config config = Config();
 
@@ -40,7 +40,7 @@ bool Client::setup(bool test = false) {
 
 
 		//Setando InputConverter
-		inputConverter = InputConverter(map, config.getApp(), view);
+		inputConverter = InputConverter(map, devs, config.getApp(), view);
 		
 
 		//Setando configs no store
@@ -63,12 +63,12 @@ bool Client::setup(bool test = false) {
 		}
 
 
-		for ( std::vector<std::string>::iterator it = devs.begin(); it != devs.end(); ++it ) {
+		for ( std::vector<DeviceType>::iterator it = devs.begin(); it != devs.end(); ++it ) {
 			
 
 			// Name the device and open it as everything
 			dev = &deviceList[num_devices];
-			dev->name = (char *)it->c_str();
+			dev->name = (char *)it->name.c_str();
 			dev->tkr = new vrpn_Tracker_Remote(dev->name);
 			dev->ana = new vrpn_Analog_Remote(dev->name);
 			dev->btn = new vrpn_Button_Remote(dev->name);

@@ -115,5 +115,17 @@
       "toKeyDown": "A",
       "toKeyUp": "A"
     }
+  ],
+  "kinect": [
+    "Tracker0@localhost"
+  ],
+  "leapMotion": [
+    "LeapMotion0@localhost"
+  ],
+  "keyboard": [
+    "Keyboard0@localhost"
+  ],
+  "mouse": [
+    "Mouse0@localhost"
   ]
 }

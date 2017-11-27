@@ -30,6 +30,8 @@ TEST_CLASS(LeapMotionGesturesTest) {
 		Assert::IsFalse(gr.leftPinch(a));
 		a.channel[1] = 55;
 		Assert::IsTrue(gr.leftPinch(a));
+
+		//Fazer teste de flexão
 		
 	}
 

@@ -2,7 +2,7 @@
 
 
 
-void ConfigFileReader::printConfig(std::vector<std::string> &devs,
+void ConfigFileReader::printConfig(std::vector<DeviceType> &devs,
 								   std::vector<KeyMap> &map,
 								   Config &config) {
 
@@ -14,8 +14,8 @@ void ConfigFileReader::printConfig(std::vector<std::string> &devs,
 
 
 	printf("\nDispositivos:\n");
-	for ( std::vector<std::string>::iterator it = devs.begin(); it != devs.end(); ++it ) {
-		printf("%s\n", it->c_str());
+	for ( std::vector<DeviceType>::iterator it = devs.begin(); it != devs.end(); ++it ) {
+		printf("%s[%s]\n", it->name.c_str(), it->type_str.c_str());
 	}
 
 	printf("\nMapeamento:\n");
@@ -38,7 +38,7 @@ void ConfigFileReader::printConfig(std::vector<std::string> &devs,
 
 
 bool ConfigFileReader::readConfigFile(char * fileName,
-									  std::vector<std::string> &devs,
+									  std::vector<DeviceType> &devs,
 									  std::vector<KeyMap> &map,
 									  Config &config) {
 
@@ -59,6 +59,8 @@ bool ConfigFileReader::readConfigFile(char * fileName,
 	//Lê configurações gerais
 	config.readConfigJSON(js["common"]);
 
+	DeviceType dt;
+
 	//Lê o mapeamento
 	for ( json::iterator it = js["keys"].begin(); it != js["keys"].end(); ++it ) {
 
@@ -66,15 +68,51 @@ bool ConfigFileReader::readConfigFile(char * fileName,
 		KeyMap km = KeyMap(js2);
 		map.push_back(km);
 
+		dt.name = js2["dev"].get<std::string>();
 		//Cada novo dispositivo é adicionado em um vetor separado
-		std::vector<std::string>::iterator check = std::find(devs.begin(), devs.end(), js2["dev"]);
+		std::vector<DeviceType>::iterator check = std::find(devs.begin(), devs.end(), dt);
 		if ( check == devs.end() ) {
 			//Se não existir
-			devs.push_back(js2["dev"]);
+			devs.push_back(dt);
 		}
 	}
+
+	for ( int i = 0; i < devs.size(); i++ ) {
+		
+		if ( findDev(js,"kinect",DEVTYPE_KINECT,devs.at(i)) ) {
+			continue;
+		}
+
+		if ( findDev(js, "leapMotion", DEVTYPE_LEAPMOTION, devs.at(i)) ) {
+			continue;
+		}
+
+		if ( findDev(js, "keyboard", DEVTYPE_KEYBOARD, devs.at(i)) ) {
+			continue;
+		}
+
+		if ( findDev(js, "mouse", DEVTYPE_MOUSE, devs.at(i)) ) {
+			continue;
+		}
+
+	}
+
 	//Imprime configurações para check
 	printConfig(devs, map, config);
 
 	return true;
+}
+
+bool ConfigFileReader::findDev(json js,std::string textDev, int devConstant, DeviceType &devT) {
+	for ( json::iterator it = js[textDev].begin(); it != js[textDev].end(); ++it ) {
+		json js2 = (json)*it;
+		//Percorre os arrays de dispositivos para setar o tipo
+		//Atualmente isso so e necessario para dispositivos de tracking
+		if ( !devT.name.compare(js2) ) {
+			devT.type = devConstant;
+			devT.type_str = DEVTYPE_STR[devConstant];
+			return true;
+		}
+	}
+	return false;
 }

@@ -5,6 +5,7 @@ bool InputConverter::nextDefineCenterPos = false;
 int InputConverter::lastTimeCenterPos = 0;
 
 std::vector<KeyMap> InputConverter::map;
+std::vector<DeviceType> InputConverter::devs;
 
 bool InputConverter::mouseLeftPressed = false;
 bool InputConverter::mouseRightPressed = false;
@@ -241,39 +242,30 @@ InputConverter::~InputConverter() {
 
 bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKERCB t) {
 
-	//Kinect V1 modo grosseiro de tentar identificar o dispositivo
 	SkeletonPart skelPart;
-	DeviceSensorCount dvs;
 
-	//Inicia a contagem de sensores do dispositivo
-	if ( devicesSensorsCount[userdata->name].finalized == false ) {
-		if ( t.sensor == devicesSensorsCount[userdata->name].sensorStarted ) {
-			devicesSensorsCount[userdata->name].finalized = true;
-			dvs = devicesSensorsCount[userdata->name];
+	//Identifica qual dispositivo esta sendo usado
+	int devType = -1;
+	for ( int i = 0; i < devs.size(); i++ ) {
+		if ( !devs.at(i).name.compare(userdata->name) ) {
+			devType = devs.at(i).type;
+		}
+	}
+
+	//De acordo com cada dispositivo um esqueleto diferente sera utilizado
+	if ( devType == DEVTYPE_KINECT ) {
+		vrpnToSkeleton(gr.skeleton, gr.skeletonMap1, t, skelPart);
+	} else
+		if ( devType == DEVTYPE_LEAPMOTION ) {
+		//LeapMotion
+		if ( t.sensor <= 22 ) {
+			vrpnToSkeleton(gr.skeleton, gr.handSkeletonMap1, t, skelPart);
 		} else {
-			devicesSensorsCount[userdata->name].count++;
-			if ( devicesSensorsCount[userdata->name].sensorStarted == -1 ) {
-				devicesSensorsCount[userdata->name].sensorStarted = t.sensor;
-			}
+			vrpnToSkeleton(gr.skeleton, gr.handSkeletonMap1, t, skelPart);
 		}
 	} else {
-		dvs = devicesSensorsCount[userdata->name];
-	}
-
-
-	//Se a contagem de sensores ainda nao foi finalizada
-	if ( dvs.finalized == false ) {
+		printf("Dispositivo desconhecido:%s", userdata->name);
 		return false;
-	}
-
-	// Após a contagem de sensores será possível de maneira grosseira identificar o dispositivo que está sendo usado
-
-
-	if ( dvs.count == 20 ) {
-		vrpnToSkeleton(gr.skeleton, gr.skeletonMap1, t, skelPart);
-	} else {
-		//LeapMotion
-		//vrpnToSkeleton(gr.skeleton, gr.skeletonMap1, t, skelPart);
 	}
 
 	int actualTime = (int)time(0);
@@ -420,16 +412,16 @@ bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKE
 					active = gr.KinectGestures::rightFistFlexedDown(skelPart, keyMap->getAngle(), keyMap->getAngleMod());
 				} else
 				if ( keyMap->getKey() == LEAP_LEFT_FIST_UP  ) {
-					active = gr.LeapMotionGestures::leftFistFlexedUp(t, keyMap->getAngle(), keyMap->getAngleMod());
+					active = gr.LeapMotionGestures::leftFistFlexedUp(skelPart, keyMap->getAngle(), keyMap->getAngleMod());
 				} else
 				if ( keyMap->getKey() == LEAP_LEFT_FIST_DOWN ) {
-					active = gr.LeapMotionGestures::leftFistFlexedDown(t, keyMap->getAngle(), keyMap->getAngleMod());
+					active = gr.LeapMotionGestures::leftFistFlexedDown(skelPart, keyMap->getAngle(), keyMap->getAngleMod());
 				} else
 				if ( keyMap->getKey() == LEAP_RIGHT_FIST_UP  ) {
-					active = gr.LeapMotionGestures::rightFistFlexedUp(t, keyMap->getAngle(), keyMap->getAngleMod());
+					active = gr.LeapMotionGestures::rightFistFlexedUp(skelPart, keyMap->getAngle(), keyMap->getAngleMod());
 				} else
 				if ( keyMap->getKey() == LEAP_RIGHT_FIST_DOWN ) {
-					active = gr.LeapMotionGestures::rightFistFlexedDown(t, keyMap->getAngle(), keyMap->getAngleMod());
+					active = gr.LeapMotionGestures::rightFistFlexedDown(skelPart, keyMap->getAngle(), keyMap->getAngleMod());
 				}
 
 			}

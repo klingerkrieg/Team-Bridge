@@ -79,7 +79,19 @@ namespace InputConverterTest {
 
 		std::string app = "";
 
-		iC = InputConverter(map, app);
+		std::vector<DeviceType> devs;
+		DeviceType dt;
+		dt.name = "Tracker0@localhost";
+		dt.type = DEVTYPE_KINECT;
+		dt.type_str = DEVTYPE_STR[dt.type];
+		devs.push_back(dt);
+
+		dt.name = "Keyboard0@localhost";
+		dt.type = DEVTYPE_KEYBOARD;
+		dt.type_str = DEVTYPE_STR[dt.type];
+		devs.push_back(dt);
+
+		iC = InputConverter(map, devs, app);
 	}
 
 

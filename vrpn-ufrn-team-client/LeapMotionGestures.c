@@ -3,35 +3,36 @@
 
 std::map<int, std::vector<double>> LeapMotionGestures::lastPositions[10];
 
+std::map<int, int> LeapMotionGestures::handSkeletonMap1 = LeapMotionGestures::create_handSkeletonMap1();
+std::map<int, int> LeapMotionGestures::handSkeletonMap2 = LeapMotionGestures::create_handSkeletonMap2();
 
-
-int LeapMotionGestures::leftFistFlexedUp(const vrpn_TRACKERCB t, int angle, int angleMod) {
+int LeapMotionGestures::leftFistFlexedUp(SkeletonPart skelPart, int angle, int angleMod) {
 	
-	std::map<int, std::vector<double>> points = getPoints(t, 24, 25, 23, *lastPositions);
+	std::map<int, std::vector<double>> points = getPoints(skelPart, 24, 25, 23, *lastPositions);
 	if ( points.size() == 0 ) {
 		return -1;
 	}
 	return flexed3d(points, angle, angleMod, UP);
 }
-int LeapMotionGestures::leftFistFlexedDown(const vrpn_TRACKERCB t, int angle, int angleMod) {
+int LeapMotionGestures::leftFistFlexedDown(SkeletonPart skelPart, int angle, int angleMod) {
 
-	std::map<int, std::vector<double>> points = getPoints(t, 24, 25, 23, *lastPositions);
+	std::map<int, std::vector<double>> points = getPoints(skelPart, 24, 25, 23, *lastPositions);
 	if ( points.size() == 0 ) {
 		return -1;
 	}
 	return flexed3d(points, angle, angleMod, DOWN);
 }
-int LeapMotionGestures::rightFistFlexedUp(const vrpn_TRACKERCB t, int angle, int angleMod) {
+int LeapMotionGestures::rightFistFlexedUp(SkeletonPart skelPart, int angle, int angleMod) {
 
-	std::map<int, std::vector<double>> points = getPoints(t, 1, 2, 0, *lastPositions);
+	std::map<int, std::vector<double>> points = getPoints(skelPart, 1, 2, 0, *lastPositions);
 	if ( points.size() == 0 ) {
 		return -1;
 	}
 	return flexed3d(points, angle, angleMod, UP);
 }
-int LeapMotionGestures::rightFistFlexedDown(const vrpn_TRACKERCB t, int angle, int angleMod) {
+int LeapMotionGestures::rightFistFlexedDown(SkeletonPart skelPart, int angle, int angleMod) {
 
-	std::map<int, std::vector<double>> points = getPoints(t, 1, 2, 0, *lastPositions);
+	std::map<int, std::vector<double>> points = getPoints(skelPart, 1, 2, 0, *lastPositions);
 	if ( points.size() == 0 ) {
 		return -1;
 	}

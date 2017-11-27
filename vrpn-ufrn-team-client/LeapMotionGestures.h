@@ -20,14 +20,44 @@ private:
 
 public:
 	
-	int leftFistFlexedUp(const vrpn_TRACKERCB t, int angle, int angleMod);
-	int leftFistFlexedDown(const vrpn_TRACKERCB t, int angle, int angleMod);
+	int leftFistFlexedUp(SkeletonPart skelPart, int angle, int angleMod);
+	int leftFistFlexedDown(SkeletonPart skelPart, int angle, int angleMod);
 	int leftClosed(const vrpn_ANALOGCB a);
 	int leftPinch(const vrpn_ANALOGCB a);
 
-	int rightFistFlexedUp(const vrpn_TRACKERCB t, int angle, int angleMod);
-	int rightFistFlexedDown(const vrpn_TRACKERCB t, int angle, int angleMod);
+	int rightFistFlexedUp(SkeletonPart skelPart, int angle, int angleMod);
+	int rightFistFlexedDown(SkeletonPart skelPart, int angle, int angleMod);
 	int rightClosed(const vrpn_ANALOGCB a);
 	int rightPinch(const vrpn_ANALOGCB a);
+
+	static std::map<int, int> handSkeletonMap1;
+	static std::map<int, int> create_handSkeletonMap1() {
+		//Caso o mapa ja tenha sido criado, nao cria novamente
+		if ( handSkeletonMap1.size() > 0 ) {
+			return handSkeletonMap1;
+		}
+
+		std::map<int, int> map;
+		map[0] = SKELETON_HAND_R;
+		map[2] = SKELETON_FIST_R;
+		map[1] = SKELETON_ELBOW_R;
+
+		return map;
+	}
+
+	static std::map<int, int> handSkeletonMap2;
+	static std::map<int, int> create_handSkeletonMap2() {
+		//Caso o mapa ja tenha sido criado, nao cria novamente
+		if ( handSkeletonMap2.size() > 0 ) {
+			return handSkeletonMap2;
+		}
+
+		std::map<int, int> map;
+		map[23] = SKELETON_HAND_L;
+		map[25] = SKELETON_FIST_L;
+		map[24] = SKELETON_ELBOW_L;
+
+		return map;
+	}
 
 };

@@ -126,17 +126,18 @@ function formToJSON(el,divClass){
         json.toKeyUp = json.toKey;
     }
 
-    delete json.toKey;
 
+    delete json.toKey;
+    
     //Adiciona o endereço do dispositivo
-    json.dev = $('#'+json.dev).val();
+    //json.dev = $('#'+json.dev).val();
 
     return json;
 }
 
 
 function jsonToForm(json){
-    console.log("aqui");
+    
     $.each(json.common,function(key,val){
         el = $("#"+key);
         el.val(val);
@@ -154,12 +155,34 @@ function jsonToForm(json){
         div.find(".toJSON").each(function(y, el){
             el = $(el);
             el.val(option[el.attr('id')]);
-            div = el.attr("divideby");
-            if (div != undefined){
+            divBy = el.attr("divideby");
+            if (divBy != undefined){
                 el.val(parseFloat(option[el.attr('id')])*parseInt(div));
             }
         });
+
+        if (option.toKeyWhile != undefined){
+            div.find("#toKeyWhile").prop("checked",true);
+            div.find("#toKey").val(option.toKeyWhile);
+        } else {
+            div.find("#toKeyWhile").prop("checked",false);
+        }
+        if (option.toKeyDown != undefined){
+            div.find("#toKeyDown").prop("checked",true);
+            div.find("#toKey").val(option.toKeyDown);
+        } else {
+            div.find("#toKeyDown").prop("checked",false);
+        }
+        if (option.toKeyUp != undefined){
+            div.find("#toKeyUp").prop("checked",true);
+            div.find("#toKey").val(option.toKeyUp);
+        } else {
+            div.find("#toKeyUp").prop("checked",false);
+        }
     }
+
+
+    
 }
 
 

@@ -13,7 +13,7 @@
 #include <Tchar.h>
 #include "View.h"
 #include "util.h"
-
+#include "ConfigFileReader.h"
 
 //#define PERFORMANCE_TEST
 
@@ -26,6 +26,7 @@ struct DeviceSensorCount {
 class InputConverter {
 private:
 	 static std::vector<KeyMap> map;
+	 static std::vector<DeviceType> devs;
 	 std::string app;
 	 GestureRecognizer gr;
 
@@ -57,15 +58,17 @@ public:
 
 	~InputConverter();
 
-	InputConverter(std::vector<KeyMap> map, std::string app) {
+	InputConverter(std::vector<KeyMap> &map, std::vector<DeviceType> &devs, std::string &app) {
 		this->map = map;
 		this->app = app;
+		this->devs = devs;
 		init();
 	}
 
-	InputConverter(std::vector<KeyMap> map, std::string app, View &view) {
+	InputConverter(std::vector<KeyMap> &map, std::vector<DeviceType> &devs, std::string &app, View &view) {
 		this->map = map;
 		this->app = app;
+		this->devs = devs;
 		this->view = &view;
 		viewOn = true;
 		init();

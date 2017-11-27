@@ -12,7 +12,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 namespace ConfigFileReaderTest {
 
 Config config;
-std::vector<std::string> devs;
+std::vector<DeviceType> devs;
 std::vector<KeyMap> map;
 ConfigFileReader cf = ConfigFileReader();
 
@@ -40,10 +40,14 @@ public:
 	}
 
 	TEST_METHOD(ConfigFileReader_DevsOk) {
-		Assert::AreEqual("Tracker0@localhost", devs.at(0).c_str());
-		Assert::AreEqual("LeapMotion0@localhost", devs.at(1).c_str());
-		Assert::AreEqual("Keyboard0@localhost", devs.at(2).c_str());
-		Assert::AreEqual("Mouse0@localhost", devs.at(3).c_str());
+		Assert::AreEqual("Tracker0@localhost", devs.at(0).name.c_str());
+		Assert::AreEqual(DEVTYPE_KINECT, devs.at(0).type);
+		Assert::AreEqual("LeapMotion0@localhost", devs.at(1).name.c_str());
+		Assert::AreEqual(DEVTYPE_LEAPMOTION, devs.at(1).type);
+		Assert::AreEqual("Keyboard0@localhost", devs.at(2).name.c_str());
+		Assert::AreEqual(DEVTYPE_KEYBOARD, devs.at(2).type);
+		Assert::AreEqual("Mouse0@localhost", devs.at(3).name.c_str());
+		Assert::AreEqual(DEVTYPE_MOUSE, devs.at(3).type);
 	}
 
 	TEST_METHOD(ConfigFileReader_MapsOk) {
