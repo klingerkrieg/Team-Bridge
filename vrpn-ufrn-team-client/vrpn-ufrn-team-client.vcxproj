@@ -196,6 +196,7 @@
   <ItemGroup>
     <None Include="config.json" />
     <None Include="drunkbug.json" />
+    <None Include="performance.json" />
     <None Include="runner.json" />
     <None Include="vrpn-client-mb.cfg" />
   </ItemGroup>

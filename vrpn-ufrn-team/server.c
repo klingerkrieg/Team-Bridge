@@ -306,13 +306,13 @@ int main(int argc, char *argv[]) {
 		forwarderServer->mainloop();
 
 		// Sleep so we don't eat the CPU
-	#if defined(_WIN32)
-		if ( milli_sleep_time >= 0 ) {
+		#if defined(_WIN32)
+			if ( milli_sleep_time >= 0 ) {
 		#else
-		if ( milli_sleep_time > 0 ) {
+			if ( milli_sleep_time > 0 ) {
 		#endif
-			vrpn_SleepMsecs(milli_sleep_time);
-		}
+				vrpn_SleepMsecs(milli_sleep_time);
+			}
 		}
 
 	shutDown();

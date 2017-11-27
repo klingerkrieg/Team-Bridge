@@ -20,7 +20,7 @@ double InputConverter::secMed = 0;
 
 void InputConverter::press(KeyMap key) {
 
-	bool print = true;
+	bool print = false;
 	int actualTime = (int)time(0);
 
 	if ( key.getToKey() == VK_RBUTTON || key.getToKey() == VK_LBUTTON || key.getToKey() == VK_MBUTTON

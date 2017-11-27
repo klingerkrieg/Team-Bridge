@@ -53,8 +53,8 @@
     <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;C:\Program Files (x86)\Leap Motion\LeapSDK\lib\x86;</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);..\..\vrpn-master-2017-up;..\..\vrpn-master-2017-up\quat;C:\Program Files (x86)\Leap Motion\LeapSDK\include;</IncludePath>
-    <LibraryPath>E:\ufrn\vrpn-master-2017-up\pc_win32\Release\;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;C:\Program Files (x86)\Leap Motion\LeapSDK\lib\x86;</LibraryPath>
+    <IncludePath>$(KINECTSDK10_DIR)\inc;$(VC_IncludePath);$(WindowsSDK_IncludePath);..\..\vrpn-master-2017-up;..\..\vrpn-master-2017-up\quat;C:\Program Files (x86)\Leap Motion\LeapSDK\include;</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;C:\Program Files (x86)\Leap Motion\LeapSDK\lib\x86;</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Midl>
@@ -138,14 +138,14 @@
     <Link>
       <OutputFile>.\../pc_win32/vrpn-ufrn-team/Release/vrpn-ufrn-team.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>../gpsnmealib/Release/;..\..\vrpn-master-2017-up\pc_win32\Release\;..\..\vrpn-master-2017-up\quat\pc_win32\Release;$(SYSTEMDRIVE)\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib;%(AdditionalLibraryDirectories);C:\Program Files (x86)\Leap Motion\LeapSDK\lib\x86</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(KINECTSDK10_DIR)Lib\x86\;../gpsnmealib/Release;..\..\vrpn-master-2017-up\pc_win32\Release\;..\..\vrpn-master-2017-up\quat\pc_win32\Release;$(SYSTEMDRIVE)\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib;%(AdditionalLibraryDirectories);C:\Program Files (x86)\Leap Motion\LeapSDK\lib\x86</AdditionalLibraryDirectories>
       <ProgramDatabaseFile>.\../pc_win32/vrpn-ufrn-team/Release/vrpn-ufrn-team.pdb</ProgramDatabaseFile>
       <SubSystem>Console</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalDependencies>gpsnmealib.lib;quat.lib;vrpn.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Leap.lib;%(AdditionalDependencies);</AdditionalDependencies>
+      <AdditionalDependencies>Kinect10.lib;gpsnmealib.lib;quat.lib;vrpn.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);Leap.lib;</AdditionalDependencies>
       <GenerateDebugInformation>DebugFull</GenerateDebugInformation>
     </Link>
     <Bscmake>

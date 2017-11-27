@@ -16,21 +16,11 @@
 VRPN_SUPPRESS_EMPTY_OBJECT_WARNING()
 
 
-
-
-
 vrpn_KinectV1::vrpn_KinectV1(const char *name, vrpn_Connection *c) : vrpn_Tracker(name, c) {
 	connected = connect();
 	if ( connected ) {
 		printf("Kinect conectado.\n");
 	}
-	//vrpn_gettimeofday(&_timestamp, NULL);
-
-	/*#ifdef PERFORMANCE_TEST
-		fileOutput = std::ofstream("kinect-server-performance-test.txt");
-		fileOutput << "STARTED\n";
-		printf("Performance test\n");
-	#endif*/
 }
 
 void vrpn_KinectV1::mainloop() {
@@ -48,10 +38,6 @@ vrpn_KinectV1::~vrpn_KinectV1() {
 	if ( m_hNextSkeletonEvent && (m_hNextSkeletonEvent != INVALID_HANDLE_VALUE) ) {
 		CloseHandle(m_hNextSkeletonEvent);
 	}
-
-	/*#ifdef PERFORMANCE_TEST
-		fileOutput.close();
-	#endif*/
 }
 
 
@@ -119,7 +105,7 @@ void vrpn_KinectV1::reportPose(int sensor, timeval t,Vector4 position) {
 	d_quat[2] = 0;
 	d_quat[3] = 0;
 
-
+	
 	char msgbuf[512];
 	int len = vrpn_Tracker::encode_to(msgbuf);
 	//if (sensor == 0 )
@@ -140,14 +126,6 @@ void vrpn_KinectV1::onFrame() {
 
 	timeval t;
 	vrpn_gettimeofday(&t, NULL);
-
-	/*#ifdef PERFORMANCE_TEST
-		gettimeofday(&tp, NULL);
-		long int actualTime = tp.tv_usec / 1000;
-		//fileOutput << (int)time(0) << "." << actualTime << " < \n";
-		t.tv_sec = (long int)time(0);
-		t.tv_usec = actualTime;
-	#endif*/
 
 	// smooth out the skeleton data
 	m_pNuiSensor->NuiTransformSmooth(&skeletonFrame, NULL);
@@ -181,18 +159,6 @@ void vrpn_KinectV1::onFrame() {
 				reportPose(sensor, t, skeletonFrame.SkeletonData[i].SkeletonPositions[y]);
 			}
 		}
-		/*if ( NUI_SKELETON_TRACKED == trackingState ) {
-			// We're tracking the skeleton, draw it
-			reportPose(i,t,skeletonFrame.SkeletonData[i].Position);
-			//DrawSkeleton(skeletonFrame.SkeletonData[i], width, height);
-		} else if ( NUI_SKELETON_POSITION_ONLY == trackingState ) {
-			// we've only received the center point of the skeleton, draw that
-			/*D2D1_ELLIPSE ellipse = D2D1::Ellipse(
-				SkeletonToScreen(skeletonFrame.SkeletonData[i].Position, width, height),
-				g_JointThickness,
-				g_JointThickness
-			);
-		}*/
 
 	}
 
