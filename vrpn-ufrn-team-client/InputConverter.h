@@ -17,11 +17,19 @@
 
 //#define PERFORMANCE_TEST
 
+struct DeviceSensorCount {
+	int count = 0;
+	bool finalized = false;
+	int sensorStarted = -1;
+};
+
 class InputConverter {
 private:
 	 static std::vector<KeyMap> map;
 	 std::string app;
 	 GestureRecognizer gr;
+
+	 static std::map<std::string, DeviceSensorCount> devicesSensorsCount;
 
 	 static bool nextDefineCenterPos;
 

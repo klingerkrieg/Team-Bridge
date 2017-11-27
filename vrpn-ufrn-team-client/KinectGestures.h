@@ -13,32 +13,43 @@ const int KINECT_RIGHT = 2;
 const int KINECT_FRONT = 3;
 const int KINECT_BACK = 4;
 
+struct KinectDetection {
+	bool centerPosDefined = false;
+	double centerPos[3];
+	//usado para detectBody
+	std::map<int, std::vector<double>> lastMemberPos;
+	std::map<long, long> lastMemberTime;
+
+	//deteccao marcha estacionaria
+	long int lastWalk;
+	double leftKneeLastHeight;
+	double rightKneeLastHeight;
+
+	double turnZeroQuat;
+};
+
+
 class KinectGestures : public FlexedMember {
 private:
+
 	//nao pode usar o mesmo headHeight para detectTopChange porque se nao ele so ira detectar mudancas bruscas
 	//porque dentro do detectHandTop o headHeight é atualizado a todo momento
 	static std::vector<double> KinectGestures::headTopPositions;
 
 	static double normalStepHeight;
-	static double lastHeadHeight;
-	static bool lastHeadHeightDefined;
 	double handTopInterval = 0.10;
 
-
-	static double lastHeadXPos;
-	static bool lastHeadXPosDefined;
 	static double handXPosInterval;
-	static double lastCenterXPos;
-	
+	static KinectDetection kinectDetection;
 
 	//usado para detectBody
 	static std::map<int, std::vector<double>> bodyDirectionPoints;
-	static bool centerPosDefined;
-	static double centerPos[3];
+	//static bool centerPosDefined;
+	//static double centerPos[3];
 	double bodyCenterDistance = 0.15;
 
-	static std::map<int, std::vector<double>> lastMemberPos;
-	static std::map<long, long> lastMemberTime;
+	//static std::map<int, std::vector<double>> lastMemberPos;
+	//static std::map<long, long> lastMemberTime;
 
 	
 	//Garanto que ele ira calcular a distancia em intervalo de tempo de 250 a 300ms
@@ -46,71 +57,73 @@ private:
 
 
 	//deteccao marcha estacionaria
-	static long int lastWalk;
-	static double leftKneeLastHeight;
-	static double rightKneeLastHeight;
+	//static long int lastWalk;
+	//static double leftKneeLastHeight;
+	//static double rightKneeLastHeight;
 
 	
 	double turnFactor = 0.07;
-	static double turnZeroQuat;
+	//static double turnZeroQuat;
 
-	bool detectWalkHeight(double &kneeLastHeight, const vrpn_TRACKERCB t, int delay, double sensitivity);
-	int detectBody(const vrpn_TRACKERCB t, int direction, int angle);
-	bool detectMemberFast(const vrpn_TRACKERCB t, double maxVelMs);
+	bool detectWalkHeight(double &kneeLastHeight, SkeletonPart skelPart, int delay, double sensitivity);
+	int detectBody(SkeletonPart skelPart, int direction, int angle);
+	bool detectMemberFast(SkeletonPart skelPart, double maxVelMs);
 
-	int detectHandTop(const vrpn_TRACKERCB t, int topLevel, int handTopMod);
+	int detectHandTop(SkeletonPart skelPart, int topLevel, int handTopMod);
 
 	//Flexao
 	static std::map<int, std::vector<double>> lastPositions[20];
 
 public:
 
+	static Skeleton skeleton;
+
 	//flexao
-	int leftFistFlexedUp(const vrpn_TRACKERCB t, int angle, int angleMod);
-	int leftFistFlexedDown(const vrpn_TRACKERCB t, int angle, int angleMod);
-	int rightFistFlexedUp(const vrpn_TRACKERCB t, int angle, int angleMod);
-	int rightFistFlexedDown(const vrpn_TRACKERCB t, int angle, int angleMod);
+	int leftFistFlexedUp(SkeletonPart skelPart, int angle, int angleMod);
+	int leftFistFlexedDown(SkeletonPart skelPart, int angle, int angleMod);
+	int rightFistFlexedUp(SkeletonPart skelPart, int angle, int angleMod);
+	int rightFistFlexedDown(SkeletonPart skelPart, int angle, int angleMod);
 
 	std::vector<double> getLastMemberPos(int sensor);
 	int getLastMemberTime(int sensor);
 
 	double euclidianDistance(std::vector<double> pos1, std::vector<double> pos2);
 
-	int detectLeftHandTop(const vrpn_TRACKERCB t, int topLevel, int handTopMod);
+	int detectLeftHandTop(SkeletonPart skelPart, int topLevel, int handTopMod);
 
-	int detectRightHandTop(const vrpn_TRACKERCB t, int topLevel, int handTopMod);
+	int detectRightHandTop(SkeletonPart skelPart, int topLevel, int handTopMod);
 
 
-	int detectTopChange(const vrpn_TRACKERCB t, double heightSens, int direction);
+	int detectTopChange(SkeletonPart skelPart, double heightSens, int direction);
 
-	int detectLeftHandFast(const vrpn_TRACKERCB t, double maxVelMs);
-	int detectRightHandFast(const vrpn_TRACKERCB t, double maxVelMs);
+	int detectLeftHandFast(SkeletonPart skelPart, double maxVelMs);
+	int detectRightHandFast(SkeletonPart skelPart, double maxVelMs);
 
 	
 
 
-	int detectBodyFront(const vrpn_TRACKERCB t, int angle);
-	int detectBodyRight(const vrpn_TRACKERCB t, int angle);
-	int detectBodyLeft(const vrpn_TRACKERCB t, int angle);
-	int detectBodyBack(const vrpn_TRACKERCB t, int angle);
+	int detectBodyFront(SkeletonPart skelPart, int angle);
+	int detectBodyRight(SkeletonPart skelPart, int angle);
+	int detectBodyLeft(SkeletonPart skelPart, int angle);
+	int detectBodyBack(SkeletonPart skelPart, int angle);
 
-	int setCenterPos(const vrpn_TRACKERCB t);
-
-
-	int detectWalk(const vrpn_TRACKERCB t, int delay, double sensitivity);
+	int setCenterPos(SkeletonPart skelPart);
 
 
-	int detectTurnLeft(const vrpn_TRACKERCB t);
-	int detectTurnRight(const vrpn_TRACKERCB t);
+	int detectWalk(SkeletonPart skelPart, int delay, double sensitivity);
+
+
+	int detectTurnLeft(SkeletonPart skelPart);
+	int detectTurnRight(SkeletonPart skelPart);
 
 
 
-	int detectLeftHandXPos(const vrpn_TRACKERCB t, int xPos);
-	int detectRightHandXPos(const vrpn_TRACKERCB t, int xPos);
-	int detectHandXPos(const vrpn_TRACKERCB t, int xPos);
+	int detectLeftHandXPos(SkeletonPart skelPart, int xPos);
+	int detectRightHandXPos(SkeletonPart skelPart, int xPos);
+	int detectHandXPos(SkeletonPart skelPart, int xPos);
 	
 
-	int bodyBalance(const vrpn_TRACKERCB t, int angle, int angleMod);
+	int bodyBalance(SkeletonPart skelPart, int angle, int angleMod);
 
 	static void setKinectXInterval(double interval) {
 		handXPosInterval = interval;
@@ -118,6 +131,39 @@ public:
 
 	static double getKinectXInterval() {
 		return handXPosInterval;
+	}
+
+
+	static std::map<int, int> skeletonMap1;
+	static std::map<int, int> create_SkeletonMap1() {
+		//Caso o mapa ja tenha sido criado, nao cria novamente
+		if ( skeletonMap1.size() > 0 ) {
+			return skeletonMap1;
+		}
+
+		std::map<int, int> map;
+		map[0] = SKELETON_HEAD;
+		map[1] = SKELETON_CHEST;
+		map[8] = SKELETON_SHOULDER_R;
+		map[4] = SKELETON_SHOULDER_L;
+		map[9] = SKELETON_ELBOW_R;
+		map[5] = SKELETON_ELBOW_L;
+		map[10] = SKELETON_FIST_R;
+		map[6] = SKELETON_FIST_L;
+		map[11] = SKELETON_HAND_R;
+		map[7] = SKELETON_HAND_L;
+		map[2] = SKELETON_BELLY;
+		map[3] = SKELETON_PELVIS;
+		map[16] = SKELETON_LEG_R;
+		map[12] = SKELETON_LEG_L;
+		map[17] = SKELETON_KNEE_R;
+		map[13] = SKELETON_KNEE_L;
+		map[18] = SKELETON_HEEL_R;
+		map[14] = SKELETON_HEEL_L;
+		map[19] = SKELETON_FOOT_R;
+		map[15] = SKELETON_FOOT_L;
+		
+		return map;
 	}
 		
 };

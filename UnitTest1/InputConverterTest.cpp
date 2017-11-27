@@ -87,6 +87,13 @@ namespace InputConverterTest {
 public:
 
 	TEST_METHOD(InputConverter_checkTrack) {
+
+			//Agora há o mecanismo para identificar o tipo do dispositivo pela quantidade de sensores
+			//Então os primeiros 20 inputs são descartados
+			for ( int i = 0; i < 20; i++ ) {
+				t.sensor = i;
+				iC.checkTrack(tc1, t);
+			}
 		
 			t.sensor = 0;
 			t.pos[1] = 1.0;

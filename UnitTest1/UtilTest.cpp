@@ -29,3 +29,18 @@ vrpn_ANALOGCB getAnalogCB() {
 	a.num_channel = 4;
 	return a;
 }
+
+SkeletonPart getSkeletonPart() {
+	SkeletonPart skelPart;
+	skelPart.defined = true;
+	skelPart.x = 1;
+	skelPart.y = 1;
+	skelPart.z = 1;
+	skelPart.quat_x = 0;
+	skelPart.quat_y = 0;
+	skelPart.quat_z = 0;
+	skelPart.quat_w = 0;
+	skelPart.sensor = 0;
+	skelPart.skelConstant = SKELETON_HEAD;
+	return skelPart;
+}

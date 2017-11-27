@@ -10,6 +10,8 @@ bool InputConverter::mouseLeftPressed = false;
 bool InputConverter::mouseRightPressed = false;
 bool InputConverter::mouseMiddlePressed = false;
 
+std::map<std::string, DeviceSensorCount> InputConverter::devicesSensorsCount;
+
 
 #ifdef PERFORMANCE_TEST
 double InputConverter::qtdMed = 0;
@@ -20,7 +22,7 @@ double InputConverter::secMed = 0;
 
 void InputConverter::press(KeyMap key) {
 
-	bool print = false;
+	bool print = true;
 	int actualTime = (int)time(0);
 
 	if ( key.getToKey() == VK_RBUTTON || key.getToKey() == VK_LBUTTON || key.getToKey() == VK_MBUTTON
@@ -239,9 +241,43 @@ InputConverter::~InputConverter() {
 
 bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKERCB t) {
 
+	//Kinect V1 modo grosseiro de tentar identificar o dispositivo
+	SkeletonPart skelPart;
+	DeviceSensorCount dvs;
+
+	//Inicia a contagem de sensores do dispositivo
+	if ( devicesSensorsCount[userdata->name].finalized == false ) {
+		if ( t.sensor == devicesSensorsCount[userdata->name].sensorStarted ) {
+			devicesSensorsCount[userdata->name].finalized = true;
+			dvs = devicesSensorsCount[userdata->name];
+		} else {
+			devicesSensorsCount[userdata->name].count++;
+			if ( devicesSensorsCount[userdata->name].sensorStarted == -1 ) {
+				devicesSensorsCount[userdata->name].sensorStarted = t.sensor;
+			}
+		}
+	} else {
+		dvs = devicesSensorsCount[userdata->name];
+	}
+
+
+	//Se a contagem de sensores ainda nao foi finalizada
+	if ( dvs.finalized == false ) {
+		return false;
+	}
+
+	// Após a contagem de sensores será possível de maneira grosseira identificar o dispositivo que está sendo usado
+
+
+	if ( dvs.count == 20 ) {
+		vrpnToSkeleton(gr.skeleton, gr.skeletonMap1, t, skelPart);
+	} else {
+		//LeapMotion
+		//vrpnToSkeleton(gr.skeleton, gr.skeletonMap1, t, skelPart);
+	}
 
 	int actualTime = (int)time(0);
-
+	
 
 	//Quando uma pessoa for reconhecida pelo Kinect ou LeapMotion ele ira avisar
 	if ( lastTimeTrack == 0 || actualTime - lastTimeTrack > 1 ) {
@@ -286,7 +322,7 @@ bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKE
 				if ( nextDefineCenterPos) {
 					//o sensor esperado é definido dentro do metodo, aqui todos os sensores são enviados
 					//caso nao seja o sensor correto, terá retornado -1
-					if ( gr.setCenterPos(t) == 1) {
+					if ( gr.setCenterPos(skelPart) == 1) {
 						lastTimeCenterPos = actualTime;
 						printf("Posicao definida.\n");
 						nextDefineCenterPos = false;
@@ -302,20 +338,20 @@ bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKE
 					//caso nao esteja acionada o interpretOnLeave ira identificar se foi configurado para acionar alguma ação quando 
 					//essa key nao estiver mais ativa
 					//a ação ja sera chamada dentro de interpretOnLeave
-					active = gr.detectTopChange(t, keyMap->getSensivity(), KINECT_UP);
+					active = gr.detectTopChange(skelPart, keyMap->getSensivity(), KINECT_UP);
 				} else
 				if ( keyMap->getKey() == KINECT_STEP_DOWN ) {
-					active = gr.detectTopChange(t, keyMap->getSensivity(), KINECT_DOWN);
+					active = gr.detectTopChange(skelPart, keyMap->getSensivity(), KINECT_DOWN);
 				} else
 				if ( keyMap->getKey() == KINECT_STEP_NORMAL ) {
-					active = gr.detectTopChange(t, keyMap->getSensivity(), KINECT_NORMAL);
+					active = gr.detectTopChange(skelPart, keyMap->getSensivity(), KINECT_NORMAL);
 				} else
 				if ( keyMap->getKey() == KINECT_RIGHT_HAND_TOP || keyMap->getKey() == KINECT_LEFT_HAND_TOP ) {
 			
 					if ( keyMap->getKey() == KINECT_RIGHT_HAND_TOP )
-						active = gr.detectRightHandTop(t, keyMap->getY(), keyMap->getCoordinateMod());
+						active = gr.detectRightHandTop(skelPart, keyMap->getY(), keyMap->getCoordinateMod());
 					else
-						active = gr.detectLeftHandTop(t, keyMap->getY(), keyMap->getCoordinateMod());
+						active = gr.detectLeftHandTop(skelPart, keyMap->getY(), keyMap->getCoordinateMod());
 
 				
 
@@ -323,9 +359,9 @@ bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKE
 					if ( active == 1 && keyMap->getX() != -100 ) {
 					
 						if ( keyMap->getKey() == KINECT_RIGHT_HAND_TOP )
-							activeSecondary = gr.detectRightHandXPos(t, keyMap->getX());
+							activeSecondary = gr.detectRightHandXPos(skelPart, keyMap->getX());
 						else
-							activeSecondary = gr.detectLeftHandXPos(t, keyMap->getX());
+							activeSecondary = gr.detectLeftHandXPos(skelPart, keyMap->getX());
 
 					} else {
 						//Caso nao exista acao secundaria
@@ -342,46 +378,46 @@ bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKE
 		
 				} else //FAST HAND
 				if ( keyMap->getKey() == KINECT_LEFT_HAND_FAST ) {
-					active = gr.detectLeftHandFast(t, keyMap->getMaxVelocityMs());
+					active = gr.detectLeftHandFast(skelPart, keyMap->getMaxVelocityMs());
 				} else
 				if ( keyMap->getKey() == KINECT_RIGHT_HAND_FAST ) {
-					active = gr.detectRightHandFast(t, keyMap->getMaxVelocityMs());
+					active = gr.detectRightHandFast(skelPart, keyMap->getMaxVelocityMs());
 				} else //BODY
 				if ( keyMap->getKey() == KINECT_BODY_FRONT) {
-					active = gr.detectBodyFront(t, keyMap->getAngle());
+					active = gr.detectBodyFront(skelPart, keyMap->getAngle());
 				} else
 				if ( keyMap->getKey() == KINECT_BODY_RIGHT) {
-					active = gr.detectBodyRight(t, keyMap->getAngle());
+					active = gr.detectBodyRight(skelPart, keyMap->getAngle());
 				} else
 				if ( keyMap->getKey() == KINECT_BODY_LEFT ) {
-					active = gr.detectBodyLeft(t, keyMap->getAngle());
+					active = gr.detectBodyLeft(skelPart, keyMap->getAngle());
 				} else
 				if ( keyMap->getKey() == KINECT_BODY_BACK ) {
-					active = gr.detectBodyBack(t, keyMap->getAngle());
+					active = gr.detectBodyBack(skelPart, keyMap->getAngle());
 				} else
 				if ( keyMap->getKey() == KINECT_WALK ) {
-					active = gr.detectWalk(t, keyMap->getDelay(), keyMap->getSensivity());
+					active = gr.detectWalk(skelPart, keyMap->getDelay(), keyMap->getSensivity());
 				} else
 				if ( keyMap->getKey() == KINECT_TURN_LEFT  ) {
-					active = gr.detectTurnLeft(t);
+					active = gr.detectTurnLeft(skelPart);
 				} else
 				if ( keyMap->getKey() == KINECT_TURN_RIGHT ) {
-					active = gr.detectTurnRight(t);
+					active = gr.detectTurnRight(skelPart);
 				} else
 				if ( keyMap->getKey() == KINECT_BALANCE ) {
-					active = gr.bodyBalance(t, keyMap->getAngle(), keyMap->getAngleMod());
+					active = gr.bodyBalance(skelPart, keyMap->getAngle(), keyMap->getAngleMod());
 				} else
 				if ( keyMap->getKey() == KINECT_LEFT_FIST_UP  ) {
-					active = gr.KinectGestures::leftFistFlexedUp(t, keyMap->getAngle(), keyMap->getAngleMod());
+					active = gr.KinectGestures::leftFistFlexedUp(skelPart, keyMap->getAngle(), keyMap->getAngleMod());
 				} else
 				if ( keyMap->getKey() == KINECT_LEFT_FIST_DOWN ) {
-					active = gr.KinectGestures::leftFistFlexedDown(t, keyMap->getAngle(), keyMap->getAngleMod());
+					active = gr.KinectGestures::leftFistFlexedDown(skelPart, keyMap->getAngle(), keyMap->getAngleMod());
 				} else
 				if ( keyMap->getKey() == KINECT_RIGHT_FIST_UP  ) {
-					active = gr.KinectGestures::rightFistFlexedUp(t, keyMap->getAngle(), keyMap->getAngleMod());
+					active = gr.KinectGestures::rightFistFlexedUp(skelPart, keyMap->getAngle(), keyMap->getAngleMod());
 				} else
 				if ( keyMap->getKey() == KINECT_RIGHT_FIST_DOWN ) {
-					active = gr.KinectGestures::rightFistFlexedDown(t, keyMap->getAngle(), keyMap->getAngleMod());
+					active = gr.KinectGestures::rightFistFlexedDown(skelPart, keyMap->getAngle(), keyMap->getAngleMod());
 				} else
 				if ( keyMap->getKey() == LEAP_LEFT_FIST_UP  ) {
 					active = gr.LeapMotionGestures::leftFistFlexedUp(t, keyMap->getAngle(), keyMap->getAngleMod());

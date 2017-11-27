@@ -167,6 +167,7 @@
     <ClCompile Include="InputConverter.c" />
     <ClCompile Include="KeyMap.c" />
     <ClCompile Include="LeapMotionGestures.c" />
+    <ClCompile Include="Skeleton.c" />
     <ClCompile Include="Storage.c" />
     <ClCompile Include="util.c" />
     <ClCompile Include="View.c" />
@@ -183,6 +184,7 @@
     <ClInclude Include="json.hpp" />
     <ClInclude Include="KinectGestures.h" />
     <ClInclude Include="LeapMotionGestures.h" />
+    <ClInclude Include="Skeleton.h" />
     <ClInclude Include="utf8.h" />
     <ClInclude Include="utf8\checked.h" />
     <ClInclude Include="utf8\core.h" />

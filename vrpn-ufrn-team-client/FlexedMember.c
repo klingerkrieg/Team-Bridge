@@ -68,7 +68,27 @@ int FlexedMember::flexed3d(std::map<int, std::vector<double>> points, int paramA
 }
 
 
+std::map<int, std::vector<double>> FlexedMember::getPoints(SkeletonPart skelPart, int constant1, int constant2, int constant3, std::map<int, std::vector<double>> &positions) {
 
+	std::map<int, std::vector<double>> points;
+
+	if ( skelPart.skelConstant == constant1 || skelPart.skelConstant == constant2 || skelPart.skelConstant == constant3 ) {
+		std::vector<double> actPos = { skelPart.x, skelPart.y, skelPart.z };
+		positions.insert_or_assign(skelPart.skelConstant, actPos);
+	} else {
+		return points;
+	}
+
+	if ( positions.find(constant1) == positions.end() || positions.find(constant2) == positions.end() || positions.find(constant3) == positions.end() ) {
+		return points;
+	}
+
+	points.insert_or_assign(0, positions.at(constant1));
+	points.insert_or_assign(1, positions.at(constant2));
+	points.insert_or_assign(2, positions.at(constant3));
+
+	return points;
+}
 
 
 

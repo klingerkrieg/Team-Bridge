@@ -2,14 +2,7 @@
 
 
 double KinectGestures::handXPosInterval = 0.40;
-double KinectGestures::lastHeadXPos = 0;
-bool KinectGestures::lastHeadXPosDefined = false;
-
-double KinectGestures::lastCenterXPos = -100;
-
-double KinectGestures::lastHeadHeight = 0;
-bool KinectGestures::lastHeadHeightDefined = false;
-
+/*
 std::map<int, std::vector<double>> KinectGestures::lastMemberPos;
 std::map<long, long> KinectGestures::lastMemberTime;
 
@@ -23,32 +16,38 @@ double KinectGestures::rightKneeLastHeight = 0;
 
 double KinectGestures::turnZeroQuat = 0;
 
-long int KinectGestures::lastWalk = 0;
+long int KinectGestures::lastWalk = 0;*/
 
-int KinectGestures::detectLeftHandFast(const vrpn_TRACKERCB t, double maxVelMs) {
-	if ( t.sensor == 7) {
-		return detectMemberFast(t, maxVelMs);
+Skeleton KinectGestures::skeleton;
+KinectDetection KinectGestures::kinectDetection;
+
+
+std::map<int, int> KinectGestures::skeletonMap1 = KinectGestures::create_SkeletonMap1();
+
+int KinectGestures::detectLeftHandFast(SkeletonPart skelPart, double maxVelMs) {
+	if ( skelPart.skelConstant == SKELETON_HAND_L ) {
+		return detectMemberFast(skelPart, maxVelMs);
 	}
 	return -1;
 }
 
-int KinectGestures::detectRightHandFast(const vrpn_TRACKERCB t, double maxVelMs) {
-	if ( t.sensor == 11) {
-		return detectMemberFast(t, maxVelMs);
+int KinectGestures::detectRightHandFast(SkeletonPart skelPart, double maxVelMs) {
+	if ( skelPart.skelConstant == SKELETON_HAND_R ) {
+		return detectMemberFast(skelPart, maxVelMs);
 	}
 	return -1;
 }
 
 std::vector<double> KinectGestures::getLastMemberPos(int sensor) {
-	if ( lastMemberPos[sensor].empty() ) {
+	if ( kinectDetection.lastMemberPos[sensor].empty() ) {
 		return { 0,0,0 };
 	} else {
-		return lastMemberPos[sensor];
+		return kinectDetection.lastMemberPos[sensor];
 	}
 }
 
 int KinectGestures::getLastMemberTime(int sensor) {
-	return lastMemberTime[sensor];
+	return kinectDetection.lastMemberTime[sensor];
 }
 
 double KinectGestures::euclidianDistance(std::vector<double> pos1, std::vector<double> pos2) {
@@ -57,10 +56,10 @@ double KinectGestures::euclidianDistance(std::vector<double> pos1, std::vector<d
 
 struct timeval tp;
 
-bool KinectGestures::detectMemberFast(const vrpn_TRACKERCB t, double maxVelMs) {
+bool KinectGestures::detectMemberFast(SkeletonPart skelPart, double maxVelMs) {
 	
-	std::vector<double> pos = getLastMemberPos(t.sensor);
-	std::vector<double> actPos = { t.pos[0], t.pos[1], t.pos[2] };
+	std::vector<double> pos = getLastMemberPos(skelPart.sensor);
+	std::vector<double> actPos = { skelPart.x, skelPart.y, skelPart.z };
 	
 
 	gettimeofday(&tp, NULL);
@@ -68,27 +67,27 @@ bool KinectGestures::detectMemberFast(const vrpn_TRACKERCB t, double maxVelMs) {
 
 
 	//Primeira execucao
-	if ( lastMemberTime[t.sensor] == 0 ) {
-		lastMemberPos[t.sensor] = actPos;
-		lastMemberTime[t.sensor] = now;
+	if ( kinectDetection.lastMemberTime[skelPart.sensor] == 0 ) {
+		kinectDetection.lastMemberPos[skelPart.sensor] = actPos;
+		kinectDetection.lastMemberTime[skelPart.sensor] = now;
 		return false;
 	} else
 	//Delay para nao calcular a velocidade com espaço de tempo muito curto
-	if ( now - lastMemberTime[t.sensor] < fastMemberDelay ) {
+	if ( now - kinectDetection.lastMemberTime[skelPart.sensor] < fastMemberDelay ) {
 		return false;
 	} else
 	//Delay para nao calcular a velocidade com espaço de tempo muito superior ao esperado
-	if ( now - lastMemberTime[t.sensor] > fastMemberDelay + 50 ) {
+	if ( now - kinectDetection.lastMemberTime[skelPart.sensor] > fastMemberDelay + 50 ) {
 		//reseta a contagem
-		lastMemberPos[t.sensor] = actPos;
-		lastMemberTime[t.sensor] = now;
+		kinectDetection.lastMemberPos[skelPart.sensor] = actPos;
+		kinectDetection.lastMemberTime[skelPart.sensor] = now;
 		return false;
 	}
 	
-	long last = lastMemberTime[t.sensor];
+	long last = kinectDetection.lastMemberTime[skelPart.sensor];
 	double dst = euclidianDistance(pos, actPos);
-	lastMemberPos[t.sensor] = actPos;
-	lastMemberTime[t.sensor] = now;
+	kinectDetection.lastMemberPos[skelPart.sensor] = actPos;
+	kinectDetection.lastMemberTime[skelPart.sensor] = now;
 
 	double time = ( (double)(now - last) / 1000.0);
 	double velocityMs = (dst / time);
@@ -104,23 +103,11 @@ bool KinectGestures::detectMemberFast(const vrpn_TRACKERCB t, double maxVelMs) {
 
 
 
-int KinectGestures::detectHandTop(const vrpn_TRACKERCB t, int topLevel, int handTopMod) {
-	//pega a posicao da cabeca
-	if ( t.sensor == 0 ) {
-		lastHeadHeight = t.pos[1];
-		lastHeadHeightDefined = true;
+int KinectGestures::detectHandTop(SkeletonPart skelPart, int topLevel, int handTopMod) {
+	
+	if ( skeleton.head.defined == false ) {
 		return -1;
 	}
-
-	if ( t.sensor == 3 ) {
-		lastCenterXPos = t.pos[0];
-		return -1;
-	}
-
-	if ( lastHeadHeightDefined == false ) {
-		return -1;
-	}
-
 
 	//
 	//...  - 5
@@ -131,33 +118,33 @@ int KinectGestures::detectHandTop(const vrpn_TRACKERCB t, int topLevel, int hand
 	//0.50 - 2
 	// ... - 1
 	//if (t.sensor == 11)
-	//printf("head:%.2f hand:%.2f\n", lastHeadHeight, t.pos[1]);
+	//printf("head:%.2f hand:%.2f\n", skeleton.head.y, t.pos[1]);
 
 	if ( topLevel == 5 &&
-		(t.pos[1] > lastHeadHeight + (handTopInterval * 2) || handTopMod == -1) ) {
+		(skelPart.y > skeleton.head.y + (handTopInterval * 2) || handTopMod == -1) ) {
 		return true;
 	} else
 	if ( topLevel == 4 && (
-		(t.pos[1] <= lastHeadHeight + (handTopInterval * 2) && t.pos[1] > lastHeadHeight + handTopInterval && handTopMod == 0)
-		|| (t.pos[1] > lastHeadHeight + handTopInterval && handTopMod == 1)
-		|| (t.pos[1] <= lastHeadHeight + (handTopInterval * 2) && handTopMod == -1) )) {
+		(skelPart.y <= skeleton.head.y + (handTopInterval * 2) && skelPart.y > skeleton.head.y + handTopInterval && handTopMod == 0)
+		|| (skelPart.y > skeleton.head.y + handTopInterval && handTopMod == 1)
+		|| (skelPart.y <= skeleton.head.y + (handTopInterval * 2) && handTopMod == -1) )) {
 		return true;
 	} else
 	if ( topLevel == 3 && (
-		(t.pos[1] <= lastHeadHeight + handTopInterval && t.pos[1] > lastHeadHeight - (handTopInterval * 2) && handTopMod == 0)
-		|| (t.pos[1] > lastHeadHeight - (handTopInterval * 2) && handTopMod == 1)
-		|| (t.pos[1] <= lastHeadHeight + handTopInterval && handTopMod == -1) )) {
+		(skelPart.y <= skeleton.head.y + handTopInterval && skelPart.y > skeleton.head.y - (handTopInterval * 2) && handTopMod == 0)
+		|| (skelPart.y > skeleton.head.y - (handTopInterval * 2) && handTopMod == 1)
+		|| (skelPart.y <= skeleton.head.y + handTopInterval && handTopMod == -1) )) {
 		return true;
 	} else
 	if ( topLevel == 2 && (
-		(t.pos[1] <= lastHeadHeight - (handTopInterval * 2) && t.pos[1] > lastHeadHeight - (handTopInterval * 5) && handTopMod == 0)
-		|| (t.pos[1] > lastHeadHeight - (handTopInterval * 5)  && handTopMod == 1)
-		|| (t.pos[1] <= lastHeadHeight - (handTopInterval * 2) && handTopMod == -1) )) {
+		(skelPart.y <= skeleton.head.y - (handTopInterval * 2) && skelPart.y > skeleton.head.y - (handTopInterval * 5) && handTopMod == 0)
+		|| (skelPart.y > skeleton.head.y - (handTopInterval * 5)  && handTopMod == 1)
+		|| (skelPart.y <= skeleton.head.y - (handTopInterval * 2) && handTopMod == -1) )) {
 
 		return true;
 	} else
 	if ( topLevel == 1 &&
-		(t.pos[1] <= lastHeadHeight - (handTopInterval * 5) || handTopMod == 1) ) {
+		(skelPart.y <= skeleton.head.y - (handTopInterval * 5) || handTopMod == 1) ) {
 		return true;
 	}
 
@@ -165,68 +152,75 @@ int KinectGestures::detectHandTop(const vrpn_TRACKERCB t, int topLevel, int hand
 }
 
 
-int KinectGestures::detectLeftHandTop(const vrpn_TRACKERCB t, int topLevel, int handTopMod) {
-	if ( t.sensor == 7 || t.sensor == 0 || t.sensor == 3 ) {
-		return detectHandTop(t, topLevel, handTopMod);
-	}
-	return -1;
-}
-
-int KinectGestures::detectRightHandTop(const vrpn_TRACKERCB t, int topLevel, int handTopMod) {
-	if ( t.sensor == 11 || t.sensor == 0 || t.sensor == 3 ) {
-		return detectHandTop(t, topLevel, handTopMod);
-	}
-	return -1;
-}
-
-/**
-* Esse metodo depende do detectHandTop, ele deve ser chamado primeiro para captura da posicao central
-*/
-int KinectGestures::detectLeftHandXPos(const vrpn_TRACKERCB t, int xPos) {
-	if ( t.sensor == 7 || t.sensor == 3 ) {
-		return detectHandXPos(t, xPos);
-	}
-	return -1;
-}
-
-/**
-* Esse metodo depende do detectHandTop, ele deve ser chamado primeiro para captura da posicao central
-*/
-int KinectGestures::detectRightHandXPos(const vrpn_TRACKERCB t, int xPos) {
-	if ( t.sensor == 11 || t.sensor == 3 ) {
-		return detectHandXPos(t, xPos);
-	}
-	return -1;
-}
-
-/**
-* Esse metodo depende do detectHandTop, ele deve ser chamado primeiro para captura da posicao central
-*/
-int KinectGestures::detectHandXPos(const vrpn_TRACKERCB t, int xPos) {
+int KinectGestures::detectLeftHandTop(SkeletonPart skelPart, int topLevel, int handTopMod) {
 	
-	if ( lastCenterXPos == -100 ) {
+	//Caso seja cabeca ou bacia salva
+	if ( skelPart.skelConstant == SKELETON_HEAD || skelPart.skelConstant == SKELETON_PELVIS ) {
+		//nao faz nada
+	} else
+		if ( skelPart.skelConstant == SKELETON_HAND_L ) {
+		return detectHandTop(skelPart, topLevel, handTopMod);
+	}
+	return -1;
+}
+
+int KinectGestures::detectRightHandTop(SkeletonPart skelPart, int topLevel, int handTopMod) {
+	if ( skelPart.skelConstant == SKELETON_HEAD || skelPart.skelConstant == SKELETON_PELVIS ) {
+		//nao faz nada
+	} else
+	if ( skelPart.skelConstant == SKELETON_HAND_R ) {
+		return detectHandTop(skelPart, topLevel, handTopMod);
+	}
+	return -1;
+}
+
+/**
+* Esse metodo depende do detectHandTop, ele deve ser chamado primeiro para captura da posicao central
+*/
+int KinectGestures::detectLeftHandXPos(SkeletonPart skelPart, int xPos) {
+	if ( skelPart.skelConstant == SKELETON_HAND_L ) {
+		return detectHandXPos(skelPart, xPos);
+	}
+	return -1;
+}
+
+/**
+* Esse metodo depende do detectHandTop, ele deve ser chamado primeiro para captura da posicao central
+*/
+int KinectGestures::detectRightHandXPos(SkeletonPart skelPart, int xPos) {
+	if ( skelPart.skelConstant == SKELETON_HAND_R ) {
+		return detectHandXPos(skelPart, xPos);
+	}
+	return -1;
+}
+
+/**
+* Esse metodo depende do detectHandTop, ele deve ser chamado primeiro para captura da posicao central
+*/
+int KinectGestures::detectHandXPos(SkeletonPart skelPart, int xPos) {
+	if ( skeleton.pelvis.defined == false ) {
 		return -1;
 	}
 
 
 	//printf("%.2f > %.2f + %.2f | %d\n", t.pos[0], lastHeadXPos, (handXPosInterval * 2), xPos);
 
-	if ( xPos == 2 && t.pos[0] >= lastCenterXPos + (handXPosInterval*2) ) {
+	if ( xPos == 2 && skelPart.x >= skeleton.pelvis.x + (handXPosInterval*2) ) {
 		return true;
 	} else
-	if ( xPos == 1 && t.pos[0] >= lastCenterXPos + handXPosInterval &&
-		 t.pos[0] < lastCenterXPos + (handXPosInterval * 2) ) {
+	if ( xPos == 1 && skelPart.x >= skeleton.pelvis.x + handXPosInterval &&
+		skelPart.x < skeleton.pelvis.x + (handXPosInterval * 2) ) {
 		return true;
 	} else
-	if ( xPos == 0 && t.pos[0] <= lastCenterXPos + handXPosInterval &&
-		t.pos[0] > lastCenterXPos - handXPosInterval ) {
+	if ( xPos == 0 && skelPart.x <= skeleton.pelvis.x + handXPosInterval &&
+		skelPart.x > skeleton.pelvis.x - handXPosInterval ) {
 		return true;
 	} else
-	if ( xPos == -1 && t.pos[0] <= lastCenterXPos - handXPosInterval &&
-		 t.pos[0] > lastCenterXPos - (handXPosInterval * 2)  ) {
+	if ( xPos == -1 && skelPart.x <= skeleton.pelvis.x - handXPosInterval &&
+		skelPart.x > skeleton.pelvis.x - (handXPosInterval * 2)  ) {
 		return true;
 	} else
-	if ( xPos == -2 && t.pos[0] <= lastCenterXPos - (handXPosInterval*2)  ) {
+	if ( xPos == -2 && skelPart.x <= skeleton.pelvis.x - (handXPosInterval*2)  ) {
 		return true;
 	}
 
@@ -238,12 +232,12 @@ int KinectGestures::detectHandXPos(const vrpn_TRACKERCB t, int xPos) {
 std::vector<double> KinectGestures::headTopPositions;
 double KinectGestures::normalStepHeight = -100;
 
-int KinectGestures::detectTopChange(const vrpn_TRACKERCB t, double heightSens, int direction) {
-	if ( t.sensor == 0 ) {
+int KinectGestures::detectTopChange(SkeletonPart skelPart, double heightSens, int direction) {
+	if ( skelPart.skelConstant == SKELETON_HEAD ) {
 
 		
 		if ( normalStepHeight == -100 ) {
-			normalStepHeight = t.pos[1];
+			normalStepHeight = skelPart.y;
 			return -1;
 		}
 
@@ -251,7 +245,7 @@ int KinectGestures::detectTopChange(const vrpn_TRACKERCB t, double heightSens, i
 		//pos  - last
 		//0.59 - 0.57 = 0.02 >= 0.02
 		if ( direction == KINECT_UP ) {
-			if ( t.pos[1] - normalStepHeight >= (float)heightSens ) {
+			if ( skelPart.y - normalStepHeight >= (float)heightSens ) {
 				return true;
 			} else {
 				return 0;
@@ -262,14 +256,14 @@ int KinectGestures::detectTopChange(const vrpn_TRACKERCB t, double heightSens, i
 			//last - pos
 			//0.57 - 0.55 = 0.02 >= 0.02
 			//printf("%.2f >= %.2f\n", lastHeight - t.pos[1], heightSens);
-			if ( normalStepHeight - t.pos[1] >= (float)heightSens ) {
+			if ( normalStepHeight - skelPart.y >= (float)heightSens ) {
 				return true;
 			} else {
 				return 0;
 			}
 		} else 
 		if ( direction == KINECT_NORMAL ) {
-			if ( normalStepHeight - t.pos[1] < (float)heightSens && t.pos[1] - normalStepHeight < (float)heightSens ) {
+			if ( normalStepHeight - skelPart.y < (float)heightSens && skelPart.y - normalStepHeight < (float)heightSens ) {
 				return true;
 			} else {
 				return 0;
@@ -279,13 +273,14 @@ int KinectGestures::detectTopChange(const vrpn_TRACKERCB t, double heightSens, i
 	return -1;
 }
 
-int KinectGestures::setCenterPos(const vrpn_TRACKERCB t) {
-	if ( t.sensor == 3 ) {
-		centerPos[0] = t.pos[0];
-		centerPos[1] = t.pos[1];
-		centerPos[2] = t.pos[2];
-		turnZeroQuat = t.quat[2];
-		centerPosDefined = true;
+int KinectGestures::setCenterPos(SkeletonPart skelPart) {
+	
+	if ( skelPart.skelConstant == SKELETON_PELVIS ) {
+		kinectDetection.centerPos[0] = skelPart.x;
+		kinectDetection.centerPos[1] = skelPart.y;
+		kinectDetection.centerPos[2] = skelPart.z;
+		kinectDetection.turnZeroQuat = skelPart.quat_z;
+		kinectDetection.centerPosDefined = true;
 		return true;
 	}
 	return -1;
@@ -294,22 +289,24 @@ int KinectGestures::setCenterPos(const vrpn_TRACKERCB t) {
 
 std::map<int, std::vector<double>> KinectGestures::bodyDirectionPoints;
 
-int KinectGestures::detectBody(const vrpn_TRACKERCB t, int direction, int angle) {
-	if ( t.sensor == 3 || t.sensor == 0) {
-		std::vector<double> vec = { t.pos[0],t.pos[1],t.pos[2] };
-		if ( t.sensor == 3 ) {
-			vec = { t.pos[0],0,t.pos[2] };
-			std::vector<double> vec2 = { t.pos[0],1,t.pos[2] };
+int KinectGestures::detectBody(SkeletonPart skelPart, int direction, int angle) {
+	
+	if ( skelPart.skelConstant == SKELETON_PELVIS || skelPart.skelConstant == SKELETON_HEAD ) {
+		//Cria vetor com pontos para formação do angulo
+		std::vector<double> vec = { skelPart.x, skelPart.y, skelPart.z };
+		if ( skelPart.skelConstant == SKELETON_PELVIS ) {
+			vec = { skelPart.x, 0, skelPart.z };
+			std::vector<double> vec2 = { skelPart.x, 1, skelPart.z };
 			bodyDirectionPoints.insert_or_assign(2, vec2);
 		}
 		int pos = 0;
-		if ( t.sensor == 3 ) {
+		if ( skelPart.skelConstant == SKELETON_PELVIS ) {
 			pos = 1;
 		}
 		bodyDirectionPoints.insert_or_assign(pos, vec);
 	}
 
-	if ( bodyDirectionPoints.size() == 3 && t.sensor == 0) {
+	if ( bodyDirectionPoints.size() == 3 && skelPart.skelConstant == SKELETON_HEAD ) {
 		//Está inclinado
 		if ( flexed3d(bodyDirectionPoints, angle, 1) ) {
 
@@ -325,30 +322,33 @@ int KinectGestures::detectBody(const vrpn_TRACKERCB t, int direction, int angle)
 			if ( direction == KINECT_LEFT ) {
 				return bodyDirectionPoints.at(0)[0] < bodyDirectionPoints.at(1)[0];
 			}
+		} else {
+			return false;
 		}
 	}
 
 	return -1;
 }
 
-int KinectGestures::detectBodyFront(const vrpn_TRACKERCB t, int angle) {
-	return detectBody(t, KINECT_FRONT, angle);
+int KinectGestures::detectBodyFront(SkeletonPart skelPart, int angle) {
+	return detectBody(skelPart, KINECT_FRONT, angle);
 }
-int KinectGestures::detectBodyRight(const vrpn_TRACKERCB t, int angle) {
-	return detectBody(t, KINECT_RIGHT, angle);
+int KinectGestures::detectBodyRight(SkeletonPart skelPart, int angle) {
+	return detectBody(skelPart, KINECT_RIGHT, angle);
 }
-int KinectGestures::detectBodyLeft(const vrpn_TRACKERCB t, int angle) {
-	return detectBody(t, KINECT_LEFT, angle);
+int KinectGestures::detectBodyLeft(SkeletonPart skelPart, int angle) {
+	return detectBody(skelPart, KINECT_LEFT, angle);
 }
-int KinectGestures::detectBodyBack(const vrpn_TRACKERCB t, int angle) {
-	return detectBody(t, KINECT_BACK, angle);
+int KinectGestures::detectBodyBack(SkeletonPart skelPart, int angle) {
+	return detectBody(skelPart, KINECT_BACK, angle);
 }
 
 
 
-bool KinectGestures::detectWalkHeight(double &kneeLastHeight, const vrpn_TRACKERCB t, int delay, double sensitivity) {
+bool KinectGestures::detectWalkHeight(double &kneeLastHeight, SkeletonPart skelPart, int delay, double sensitivity) {
+	
 	if ( kneeLastHeight == 0 ) {
-		kneeLastHeight = t.pos[1];
+		kneeLastHeight = skelPart.y;
 		return false;
 	}
 
@@ -357,21 +357,21 @@ bool KinectGestures::detectWalkHeight(double &kneeLastHeight, const vrpn_TRACKER
 	//int actualTime = (int)time(0);
 	bool ret = false;
 
-	if ( kneeLastHeight - sensitivity >= t.pos[1] ) {//abaixou o joelho
-		kneeLastHeight = t.pos[1];
+	if ( kneeLastHeight - sensitivity >= skelPart.y ) {//abaixou o joelho
+		kneeLastHeight = skelPart.y;
 		ret = true;
 	} else
-	if ( kneeLastHeight + sensitivity <= t.pos[1] ) {//levantou o joelho
-		kneeLastHeight = t.pos[1];
+	if ( kneeLastHeight + sensitivity <= skelPart.y ) {//levantou o joelho
+		kneeLastHeight = skelPart.y;
 		ret = true;
 	}
 
 
 	if ( ret ) {
-		lastWalk = actualTime;
+		kinectDetection.lastWalk = actualTime;
 		return true;
 	} else
-	if ( lastWalk != 0 && actualTime - lastWalk < delay ) {
+	if ( kinectDetection.lastWalk != 0 && actualTime - kinectDetection.lastWalk < delay ) {
 		return true;
 	} else {
 		return false;
@@ -379,14 +379,12 @@ bool KinectGestures::detectWalkHeight(double &kneeLastHeight, const vrpn_TRACKER
 }
 
 
-int KinectGestures::detectWalk(const vrpn_TRACKERCB t, int delay, double sensitivity) {
-	//17 13
-	
-	if ( t.sensor == 13 ) {
-		return detectWalkHeight(rightKneeLastHeight, t, delay, sensitivity);
+int KinectGestures::detectWalk(SkeletonPart skelPart, int delay, double sensitivity) {
+	if ( skelPart.skelConstant == SKELETON_KNEE_R ) {
+		return detectWalkHeight(kinectDetection.rightKneeLastHeight, skelPart, delay, sensitivity);
 	} else 
-	if ( t.sensor == 17 ) {
-		return detectWalkHeight(leftKneeLastHeight, t, delay, sensitivity);
+	if ( skelPart.skelConstant == SKELETON_KNEE_L ) {
+		return detectWalkHeight(kinectDetection.leftKneeLastHeight, skelPart, delay, sensitivity);
 	}
 	return -1;
 }
@@ -394,9 +392,10 @@ int KinectGestures::detectWalk(const vrpn_TRACKERCB t, int delay, double sensiti
 
 
 //Z Axis
-int KinectGestures::detectTurnLeft(const vrpn_TRACKERCB t) {
-	if ( t.sensor == 3 ) {
-		if ( t.quat[2] < turnZeroQuat - turnFactor ) {
+int KinectGestures::detectTurnLeft(SkeletonPart skelPart) {
+	
+	if ( skelPart.skelConstant == SKELETON_PELVIS ) {
+		if ( skelPart.quat_z < kinectDetection.turnZeroQuat - turnFactor ) {
 			return 1;
 		} else {
 			return 0;
@@ -405,9 +404,10 @@ int KinectGestures::detectTurnLeft(const vrpn_TRACKERCB t) {
 	return -1;
 }
 
-int KinectGestures::detectTurnRight(const vrpn_TRACKERCB t) {
-	if ( t.sensor == 3 ) {
-		if ( t.quat[2] > turnZeroQuat + turnFactor ) {
+int KinectGestures::detectTurnRight(SkeletonPart skelPart) {
+	
+	if ( skelPart.skelConstant == SKELETON_PELVIS ) {
+		if ( skelPart.quat_z > kinectDetection.turnZeroQuat + turnFactor ) {
 			return 1;
 		} else {
 			return 0;
@@ -425,33 +425,29 @@ int KinectGestures::detectTurnRight(const vrpn_TRACKERCB t) {
 std::map<int, std::vector<double>> KinectGestures::lastPositions[20];
 
 
-int KinectGestures::leftFistFlexedUp(const vrpn_TRACKERCB t, int angle, int angleMod) {
-
-	std::map<int, std::vector<double>> points = getPoints(t, 5, 6, 7, *lastPositions);
+int KinectGestures::leftFistFlexedUp(SkeletonPart skelPart, int angle, int angleMod) {
+	std::map<int, std::vector<double>> points = getPoints(skelPart, SKELETON_ELBOW_L, SKELETON_FIST_L, SKELETON_HAND_L, *lastPositions);
 	if ( points.size() == 0 ) {
 		return -1;
 	}
 	return flexed3d(points, angle, angleMod, UP);
 }
-int KinectGestures::leftFistFlexedDown(const vrpn_TRACKERCB t, int angle, int angleMod) {
-
-	std::map<int, std::vector<double>> points = getPoints(t, 5, 6, 7, *lastPositions);
+int KinectGestures::leftFistFlexedDown(SkeletonPart skelPart, int angle, int angleMod) {
+	std::map<int, std::vector<double>> points = getPoints(skelPart, SKELETON_ELBOW_L, SKELETON_FIST_L, SKELETON_HAND_L, *lastPositions);
 	if ( points.size() == 0 ) {
 		return -1;
 	}
 	return flexed3d(points, angle, angleMod, DOWN);
 }
-int KinectGestures::rightFistFlexedUp(const vrpn_TRACKERCB t, int angle, int angleMod) {
-
-	std::map<int, std::vector<double>> points = getPoints(t, 9, 10, 11, *lastPositions);
+int KinectGestures::rightFistFlexedUp(SkeletonPart skelPart, int angle, int angleMod) {
+	std::map<int, std::vector<double>> points = getPoints(skelPart, SKELETON_ELBOW_R, SKELETON_FIST_R, SKELETON_HAND_R, *lastPositions);
 	if ( points.size() == 0 ) {
 		return -1;
 	}
 	return flexed3d(points, angle, angleMod, UP);
 }
-int KinectGestures::rightFistFlexedDown(const vrpn_TRACKERCB t, int angle, int angleMod) {
-
-	std::map<int, std::vector<double>> points = getPoints(t, 9, 10, 11, *lastPositions);
+int KinectGestures::rightFistFlexedDown(SkeletonPart skelPart, int angle, int angleMod) {
+	std::map<int, std::vector<double>> points = getPoints(skelPart, SKELETON_ELBOW_R, SKELETON_FIST_R, SKELETON_HAND_R, *lastPositions);
 	if ( points.size() == 0 ) {
 		return -1;
 	}
@@ -459,14 +455,14 @@ int KinectGestures::rightFistFlexedDown(const vrpn_TRACKERCB t, int angle, int a
 }
 
 
-int  KinectGestures::bodyBalance(const vrpn_TRACKERCB t, int angle, int angleMod) {
+int  KinectGestures::bodyBalance(SkeletonPart skelPart, int angle, int angleMod) {
 	
-	std::map<int, std::vector<double>> points = getPoints(t, 2, 3, 1, *lastPositions);
+	std::map<int, std::vector<double>> points = getPoints(skelPart, SKELETON_BELLY, SKELETON_PELVIS, SKELETON_CHEST, *lastPositions);
 	if ( points.size() == 0 ) {
 		return -1;
 	}
 
-	//o ponto 0 nao sera real, sera o angulo 1 no y de 0, fazendo uma linha reta para cima
+	//o ponto 0 nao sera real, sera o angulo 1(PELVIS) com y = 0, fazendo uma linha reta para cima
 	bool y = points.at(1)[1];
 	points.insert_or_assign(0, points.at(1));
 	points.at(0)[1] = y;
