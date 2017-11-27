@@ -348,16 +348,16 @@ bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKE
 					active = gr.detectRightHandFast(t, keyMap->getMaxVelocityMs());
 				} else //BODY
 				if ( keyMap->getKey() == KINECT_BODY_FRONT) {
-					active = gr.detectBodyFront(t);
+					active = gr.detectBodyFront(t, keyMap->getAngle());
 				} else
 				if ( keyMap->getKey() == KINECT_BODY_RIGHT) {
-					active = gr.detectBodyRight(t);
+					active = gr.detectBodyRight(t, keyMap->getAngle());
 				} else
 				if ( keyMap->getKey() == KINECT_BODY_LEFT ) {
-					active = gr.detectBodyLeft(t);
+					active = gr.detectBodyLeft(t, keyMap->getAngle());
 				} else
 				if ( keyMap->getKey() == KINECT_BODY_BACK ) {
-					active = gr.detectBodyBack(t);
+					active = gr.detectBodyBack(t, keyMap->getAngle());
 				} else
 				if ( keyMap->getKey() == KINECT_WALK ) {
 					active = gr.detectWalk(t, keyMap->getDelay(), keyMap->getSensivity());

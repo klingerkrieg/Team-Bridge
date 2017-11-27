@@ -291,41 +291,57 @@ int KinectGestures::setCenterPos(const vrpn_TRACKERCB t) {
 	return -1;
 }
 
-int KinectGestures::detectBody(const vrpn_TRACKERCB t, int direction) {
-	if ( t.sensor != 3 ) {
-		return -1;
+
+std::map<int, std::vector<double>> KinectGestures::bodyDirectionPoints;
+
+int KinectGestures::detectBody(const vrpn_TRACKERCB t, int direction, int angle) {
+	if ( t.sensor == 3 || t.sensor == 0) {
+		std::vector<double> vec = { t.pos[0],t.pos[1],t.pos[2] };
+		if ( t.sensor == 3 ) {
+			vec = { t.pos[0],0,t.pos[2] };
+			std::vector<double> vec2 = { t.pos[0],1,t.pos[2] };
+			bodyDirectionPoints.insert_or_assign(2, vec2);
+		}
+		int pos = 0;
+		if ( t.sensor == 3 ) {
+			pos = 1;
+		}
+		bodyDirectionPoints.insert_or_assign(pos, vec);
 	}
 
-	if ( centerPosDefined == false ) {
-		return -1;
+	if ( bodyDirectionPoints.size() == 3 && t.sensor == 0) {
+		//Está inclinado
+		if ( flexed3d(bodyDirectionPoints, angle, 1) ) {
+
+			if ( direction == KINECT_FRONT ) {
+				return bodyDirectionPoints.at(0)[2] < bodyDirectionPoints.at(1)[2];
+			} else
+			if ( direction == KINECT_BACK ) {
+				return bodyDirectionPoints.at(0)[2] > bodyDirectionPoints.at(1)[2];
+			} else
+			if ( direction == KINECT_RIGHT ) {
+				return bodyDirectionPoints.at(0)[0] > bodyDirectionPoints.at(1)[0];
+			} else
+			if ( direction == KINECT_LEFT ) {
+				return bodyDirectionPoints.at(0)[0] < bodyDirectionPoints.at(1)[0];
+			}
+		}
 	}
 
-	if ( direction == KINECT_FRONT ) {
-		return t.pos[2] < centerPos[2] - bodyCenterDistance;
-	} else
-	if ( direction == KINECT_BACK ) {
-		return t.pos[2] > centerPos[2] + bodyCenterDistance;
-	} else
-	if ( direction == KINECT_RIGHT ) {
-		return t.pos[0] > centerPos[0] + bodyCenterDistance;
-	} else
-	if ( direction == KINECT_LEFT ) {
-		return t.pos[0] < centerPos[0] - bodyCenterDistance;
-	}
-	return false;
+	return -1;
 }
 
-int KinectGestures::detectBodyFront(const vrpn_TRACKERCB t) {
-	return detectBody(t, KINECT_FRONT);
+int KinectGestures::detectBodyFront(const vrpn_TRACKERCB t, int angle) {
+	return detectBody(t, KINECT_FRONT, angle);
 }
-int KinectGestures::detectBodyRight(const vrpn_TRACKERCB t) {
-	return detectBody(t, KINECT_RIGHT);
+int KinectGestures::detectBodyRight(const vrpn_TRACKERCB t, int angle) {
+	return detectBody(t, KINECT_RIGHT, angle);
 }
-int KinectGestures::detectBodyLeft(const vrpn_TRACKERCB t) {
-	return detectBody(t, KINECT_LEFT);
+int KinectGestures::detectBodyLeft(const vrpn_TRACKERCB t, int angle) {
+	return detectBody(t, KINECT_LEFT, angle);
 }
-int KinectGestures::detectBodyBack(const vrpn_TRACKERCB t) {
-	return detectBody(t, KINECT_BACK);
+int KinectGestures::detectBodyBack(const vrpn_TRACKERCB t, int angle) {
+	return detectBody(t, KINECT_BACK, angle);
 }
 
 

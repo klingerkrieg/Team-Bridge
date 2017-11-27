@@ -32,6 +32,7 @@ private:
 	
 
 	//usado para detectBody
+	static std::map<int, std::vector<double>> bodyDirectionPoints;
 	static bool centerPosDefined;
 	static double centerPos[3];
 	double bodyCenterDistance = 0.15;
@@ -54,7 +55,7 @@ private:
 	static double turnZeroQuat;
 
 	bool detectWalkHeight(double &kneeLastHeight, const vrpn_TRACKERCB t, int delay, double sensitivity);
-	int detectBody(const vrpn_TRACKERCB t, int direction);
+	int detectBody(const vrpn_TRACKERCB t, int direction, int angle);
 	bool detectMemberFast(const vrpn_TRACKERCB t, double maxVelMs);
 
 	int detectHandTop(const vrpn_TRACKERCB t, int topLevel, int handTopMod);
@@ -88,10 +89,10 @@ public:
 	
 
 
-	int detectBodyFront(const vrpn_TRACKERCB t);
-	int detectBodyRight(const vrpn_TRACKERCB t);
-	int detectBodyLeft(const vrpn_TRACKERCB t);
-	int detectBodyBack(const vrpn_TRACKERCB t);
+	int detectBodyFront(const vrpn_TRACKERCB t, int angle);
+	int detectBodyRight(const vrpn_TRACKERCB t, int angle);
+	int detectBodyLeft(const vrpn_TRACKERCB t, int angle);
+	int detectBodyBack(const vrpn_TRACKERCB t, int angle);
 
 	int setCenterPos(const vrpn_TRACKERCB t);
 

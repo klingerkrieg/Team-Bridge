@@ -1,0 +1,82 @@
+{
+  "common": {
+    "patientName": "",
+    "saveDir": "./SAVES/",
+    "appName": "",
+    "host": "",
+    "database": "",
+    "user": "",
+    "passwd": "",
+    "KINECT_X_INTERVAL": 0.35
+  },
+  "keys": [
+    {
+      "divClass": "handTop",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_LEFT_HAND_TOP",
+      "x": 0,
+      "coordinateMod": "=",
+      "y": 2,
+      "toKeyDown": "VK_RBUTTON_DOWN"
+    },
+    {
+      "divClass": "handTop",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_LEFT_HAND_TOP",
+      "x": 0,
+      "coordinateMod": "=",
+      "y": 2,
+      "toKeyUp": "VK_RBUTTON_UP"
+    },
+    {
+      "divClass": "handTop",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_RIGHT_HAND_TOP",
+      "x": 1,
+      "coordinateMod": "=",
+      "y": 2,
+      "toKeyDown": "VK_LBUTTON_DOWN"
+    },
+    {
+      "divClass": "handTop",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_RIGHT_HAND_TOP",
+      "x": 1,
+      "coordinateMod": "=",
+      "y": 2,
+      "mouseX": 0,
+      "mouseY": 0,
+      "toKeyDown": "VK_MOUSEMOVE"
+    },
+    {
+      "divClass": "handTop",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_RIGHT_HAND_TOP",
+      "x": 0,
+      "coordinateMod": "<=",
+      "y": 3,
+      "toKeyDown": "VK_LBUTTON_DOWN"
+    },
+    {
+      "divClass": "handTop",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_RIGHT_HAND_TOP",
+      "x": 0,
+      "coordinateMod": "<=",
+      "y": 3,
+      "mouseX": 0,
+      "mouseY": 0,
+      "toKeyDown": "VK_MOUSEMOVE"
+    },
+    {
+      "divClass": "handTop",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_RIGHT_HAND_TOP",
+      "x": 1,
+      "coordinateMod": "=",
+      "y": 2,
+      "toKeyDown": "VK_LBUTTON_DOWN",
+      "toKeyUp": "VK_LBUTTON_DOWN"
+    }
+  ]
+}
