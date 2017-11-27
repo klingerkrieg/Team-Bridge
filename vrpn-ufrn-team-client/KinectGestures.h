@@ -44,26 +44,12 @@ private:
 
 	//usado para detectBody
 	static std::map<int, std::vector<double>> bodyDirectionPoints;
-	//static bool centerPosDefined;
-	//static double centerPos[3];
 	double bodyCenterDistance = 0.15;
 
-	//static std::map<int, std::vector<double>> lastMemberPos;
-	//static std::map<long, long> lastMemberTime;
-
-	
 	//Garanto que ele ira calcular a distancia em intervalo de tempo de 250 a 300ms
 	double fastMemberDelay = 250;
 
-
-	//deteccao marcha estacionaria
-	//static long int lastWalk;
-	//static double leftKneeLastHeight;
-	//static double rightKneeLastHeight;
-
-	
 	double turnFactor = 0.07;
-	//static double turnZeroQuat;
 
 	bool detectWalkHeight(double &kneeLastHeight, SkeletonPart skelPart, int delay, double sensitivity);
 	int detectBody(SkeletonPart skelPart, int direction, int angle);

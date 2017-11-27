@@ -87,11 +87,6 @@ public:
 
 
 	TEST_METHOD(GestureRecognizer_detectHandXPos) {
-		//TrackerUserCallback *tc1 = new TrackerUserCallback;
-		//strncpy(tc1->name, "Tracker0@localhost", sizeof(tc1->name));
-		//vrpn_TRACKERCB t = getTrackerCB();
-		//t.sensor = 0; //head 1.0, 1.0
-
 		SkeletonPart t = getSkeletonPart();
 
 		KinectGestures gr = KinectGestures();

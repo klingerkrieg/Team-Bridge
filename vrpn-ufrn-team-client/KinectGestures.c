@@ -2,21 +2,7 @@
 
 
 double KinectGestures::handXPosInterval = 0.40;
-/*
-std::map<int, std::vector<double>> KinectGestures::lastMemberPos;
-std::map<long, long> KinectGestures::lastMemberTime;
 
-bool KinectGestures::centerPosDefined = false;
-double KinectGestures::centerPos[3] = { 0,0,0 };
-
-//17
-double KinectGestures::leftKneeLastHeight = 0;
-//13
-double KinectGestures::rightKneeLastHeight = 0;
-
-double KinectGestures::turnZeroQuat = 0;
-
-long int KinectGestures::lastWalk = 0;*/
 
 Skeleton KinectGestures::skeleton;
 KinectDetection KinectGestures::kinectDetection;
