@@ -1,60 +1,38 @@
 #include "NEDGloveGestures.h"
 
-int NEDGloveGestures::sum(const vrpn_ANALOGCB a) {
+
+bool NEDGloveGestures::closed(const vrpn_ANALOGCB a, KeyMap *keyMap) {
 	int sum = 0;
 	for ( int i = 0; i < 5; i++ ) {
 		sum += (int)a.channel[i];
 	}
-	//printf("%d\n", sum/5);
-	return sum / 5;
-}
+	sum /= 5;
 
-bool NEDGloveGestures::handClosed(const vrpn_ANALOGCB a, KeyMap *keyMap) {
-	if ( sum(a) <= keyMap->getOpenHand() - (keyMap->getOpenHand() - keyMap->getClosedHand()) / 2 ) {
+	int str = strengthNormal - sum;
+
+	int maxStr = keyMap->getStrengthMax() == 0 ? strengthNormal : keyMap->getStrengthMax();
+	int minStr = keyMap->getStrengthMin() == 0 ? 0 : keyMap->getStrengthMin();
+
+	//printf("%d %d %d\n", minStr, str, maxStr);
+	if ( minStr <= str && str < maxStr ) {
 		return true;
 	} else {
 		return false;
 	}
 }
 
-bool NEDGloveGestures::handOpen(const vrpn_ANALOGCB a, KeyMap *keyMap) {
-	if ( sum(a) > keyMap->getOpenHand() - (keyMap->getOpenHand() - keyMap->getClosedHand()) / 2 ) {
-		return true;
-	} else {
-		return false;
-	}
-}
 
-bool NEDGloveGestures::handOpenMax(const vrpn_ANALOGCB a, KeyMap *keyMap) {
-	if ( sum(a) >= keyMap->getOpenHand() ) {
-		return true;
-	} else {
-		return false;
-	}
-}
+bool NEDGloveGestures::pinch(const vrpn_ANALOGCB a, KeyMap *keyMap) {
+	int str = strengthNormal - (((int)a.channel[0] + (int)a.channel[4]) / 2);
 
-bool NEDGloveGestures::handSemiOpen(const vrpn_ANALOGCB a, KeyMap *keyMap) {
-	if ( sum(a) > keyMap->getOpenHand() - (keyMap->getOpenHand() - keyMap->getClosedHand()) / 2
-		&& sum(a) < keyMap->getOpenHand() ) {
-		return true;
-	} else {
-		return false;
-	}
-}
+	int maxStr = keyMap->getStrengthMax() == 0 ? strengthNormal : keyMap->getStrengthMax();
+	int minStr = keyMap->getStrengthMin() == 0 ? 0 : keyMap->getStrengthMin();
 
-bool NEDGloveGestures::handClosedMax(const vrpn_ANALOGCB a, KeyMap *keyMap) {
-	if ( sum(a) <= keyMap->getClosedHand() ) {
+	//printf("%d %d %d\n", minStr, str, maxStr);
+	if ( minStr <= str && str < maxStr ) {
 		return true;
 	} else {
 		return false;
 	}
-}
 
-bool NEDGloveGestures::handSemiClose(const vrpn_ANALOGCB a, KeyMap *keyMap) {
-	if ( sum(a) < keyMap->getOpenHand() - (keyMap->getOpenHand() - keyMap->getClosedHand()) / 2
-		&& sum(a) > keyMap->getClosedHand() ) {
-		return true;
-	} else {
-		return false;
-	}
 }

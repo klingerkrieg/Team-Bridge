@@ -107,10 +107,11 @@ public:
 		js = {
 			{ "divClass","nedGlove" },
 			{ "dev" ,"Analog0@localhost" },
-			{ "key" ,"NEDGLOVE_CLOSE" },
-			{ "angle" ,206 },
-			{ "toKeyDown" ,"B" },
-			{ "toKeyUp" ,"B" }
+			{ "key" ,"NEDGLOVE_PINCH" },
+			{ "strengthMin" ,40 },
+			{ "strengthMax" ,0 },
+			{ "toKeyDown" ,"A" },
+			{ "toKeyUp" ,"A" }
 		};
 		m1 = KeyMap(js);
 		Assert::AreEqual(m1.toString(), map.at(i+9).toString());

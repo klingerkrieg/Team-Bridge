@@ -28,40 +28,40 @@
   },
   "keys": [
     {
-      "divClass": "nedGlove",
+      "divClass": "nedGloveGrab",
       "dev": "Analog0@localhost",
-      "key": "NEDGLOVE_OPEN_MAX",
-      "openHandCalib": 230,
-      "closedHandCalib": 210,
+      "key": "NEDGLOVE_GRAB",
+      "strengthMin": 0,
+      "strengthMax": 30,
       "toKeyDown": "A",
       "toKeyUp": "A"
     },
     {
-      "divClass": "nedGlove",
+      "divClass": "nedGloveGrab",
       "dev": "Analog0@localhost",
-      "key": "NEDGLOVE_SEMI_OPEN",
-      "openHandCalib": 230,
-      "closedHandCalib": 210,
+      "key": "NEDGLOVE_GRAB",
+      "strengthMin": 30,
+      "strengthMax": 40,
       "toKeyDown": "Q",
       "toKeyUp": "Q"
     },
     {
-      "divClass": "nedGlove",
+      "divClass": "nedGloveGrab",
       "dev": "Analog0@localhost",
-      "key": "NEDGLOVE_CLOSE_MAX",
-      "openHandCalib": 230,
-      "closedHandCalib": 210,
-      "toKeyDown": "D",
-      "toKeyUp": "D"
-    },
-    {
-      "divClass": "nedGlove",
-      "dev": "Analog0@localhost",
-      "key": "NEDGLOVE_SEMI_OPEN",
-      "openHandCalib": 230,
-      "closedHandCalib": 210,
+      "key": "NEDGLOVE_GRAB",
+      "strengthMin": 40,
+      "strengthMax": 50,
       "toKeyDown": "E",
       "toKeyUp": "E"
+    },
+    {
+      "divClass": "nedGloveGrab",
+      "dev": "Analog0@localhost",
+      "key": "NEDGLOVE_GRAB",
+      "strengthMin": 50,
+      "strengthMax": 0,
+      "toKeyDown": "D",
+      "toKeyUp": "D"
     }
   ]
 }

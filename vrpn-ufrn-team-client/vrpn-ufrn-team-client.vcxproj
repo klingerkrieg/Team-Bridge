@@ -200,6 +200,7 @@
   <ItemGroup>
     <None Include="config.json" />
     <None Include="drunkbug.json" />
+    <None Include="kayak.json" />
     <None Include="nedglove.json" />
     <None Include="performance.json" />
     <None Include="runner.json" />

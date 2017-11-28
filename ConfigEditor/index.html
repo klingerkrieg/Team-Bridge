@@ -108,20 +108,26 @@
 <div id="actionModel" style="display:none;">
 	<span id="act">
 		<br/>
-		<label><input type="checkbox" id="toKeyWhile" value="1" onchange="toKeyWhileVerify(this)"> Enquanto </label><br/>
-		<label><input type="checkbox" id="toKeyDown" value="1" checked="checked" onclick="toKeyWhileVerify(this)"> Ao entrar </label><br/>
-		<label><input type="checkbox" id="toKeyUp" value="1" checked="checked" onclick="toKeyWhileVerify(this)"> Ao sair </label><br/>
-		Acionar:  
+		Acionar a tecla/comando: 
 		<select id="toKey" onchange="showExtraActions(this)" class="form-control toJSON">
 			<option></option>
 		</select>
+
 		<span id="moveMouseSpace" style="display:none;">
+			Para 
 			X:<input type="number" class="form-control" id="x" value="0">
 			Y:<input type="number" class="form-control" id="y" value="0">
 		</span>
 		<span id="msgSpace"  style="display:none;">
 			Mensagem:<input type="text" class="form-control" id="msg" value="">
+			<br/>
 		</span>
+
+		<label><input type="checkbox" id="toKeyWhile" value="1" onchange="toKeyWhileVerify(this)"> Enquanto </label>
+		<label><input type="checkbox" id="toKeyDown" value="1" checked="checked" onclick="toKeyWhileVerify(this)"> Ao entrar </label>
+		<label><input type="checkbox" id="toKeyUp" value="1" checked="checked" onclick="toKeyWhileVerify(this)"> Ao sair </label>
+	
+		
 	</span>
 </div>
 

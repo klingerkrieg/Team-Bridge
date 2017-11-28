@@ -28,22 +28,13 @@
   },
   "keys": [
     {
-      "divClass": "nedGlove",
+      "divClass": "nedGloveGrab",
       "dev": "Analog0@localhost",
-      "key": "NEDGLOVE_OPEN_MAX",
-      "openHandCalib": 230,
-      "closedHandCalib": 210,
+      "key": "NEDGLOVE_PINCH",
+      "strengthMin": 40,
+      "strengthMax": 0,
       "toKeyDown": "A",
       "toKeyUp": "A"
-    },
-    {
-      "divClass": "nedGlove",
-      "dev": "Analog0@localhost",
-      "key": "NEDGLOVE_CLOSED_MAX",
-      "openHandCalib": 230,
-      "closedHandCalib": 210,
-      "toKeyDown": "B",
-      "toKeyUp": "B"
     }
   ]
 }

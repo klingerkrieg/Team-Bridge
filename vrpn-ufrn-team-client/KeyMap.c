@@ -23,12 +23,14 @@ std::string KeyMap::toString() {
 	} else {
 		ret = "[" + getDev() + "] " + getKeyRepr();
 		
-		if ( getOpenHand() != -1 ) {
-			
-			ret += "Open Hand:" + std::to_string(getOpenHand());
-			ret += "Closed Hand:" + std::to_string(getClosedHand());
+		if ( getStrengthMax() != 0 ) {
+			ret += "Max:" + std::to_string(getStrengthMax());
+		}
+		if ( getStrengthMin() != 0 ) {
+			ret += "Min:" + std::to_string(getStrengthMin());
+		}
 
-		} else
+
 		if ( getAngle() != -1 ) {
 			ret += "[";
 			if ( getAngleMod() == 1 ) {
@@ -123,11 +125,11 @@ KeyMap::KeyMap(json js) {
 
 	//NedGlove angulo para fechar e abrir mao, cada luva pode ter um valor diferente
 	//Depende da calibração
-	if ( !js["closedHandCalib"].is_null() ) {
-		this->closedHand = js["closedHandCalib"].get<double>();
+	if ( !js["strengthMax"].is_null() ) {
+		this->strengthMax = js["strengthMax"].get<int>();
 	}
-	if ( !js["openHandCalib"].is_null() ) {
-		this->openHand = js["openHandCalib"].get<double>();
+	if ( !js["strengthMin"].is_null() ) {
+		this->strengthMin = js["strengthMin"].get<int>();
 	}
 
 
@@ -195,10 +197,14 @@ KeyMap::KeyMap(json js) {
 			this->hasOnLeave = true;
 			this->btnDown = true;
 			this->btnUp = false;
+			
+			if ( !js["toKeyDown"].is_null() )
+				setToKey(js["toKeyDown"].get<std::string>());
 
-			setToKey(js["toKeyDown"].get<std::string>());
-			onLeave = new KeyMap(this->dev, js["toKeyUp"].get<std::string>());
-			this->hasOnLeave = true;
+			if ( !js["toKeyUp"].is_null() ) {
+				onLeave = new KeyMap(this->dev, js["toKeyUp"].get<std::string>());
+				this->hasOnLeave = true;
+			}
 
 		}
 

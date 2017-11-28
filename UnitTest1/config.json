@@ -133,12 +133,13 @@
       "toKeyUp": "A"
     },
     {
-      "divClass": "nedGlove",
+      "divClass": "nedGloveGrab",
       "dev": "Analog0@localhost",
-      "key": "NEDGLOVE_CLOSE",
-      "closedHandCalib": 206,
-      "toKeyDown": "B",
-      "toKeyUp": "B"
+      "key": "NEDGLOVE_PINCH",
+      "strengthMin": 40,
+      "strengthMax": 0,
+      "toKeyDown": "A",
+      "toKeyUp": "A"
     }
   ]
 }

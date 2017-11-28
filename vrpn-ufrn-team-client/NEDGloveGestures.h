@@ -5,16 +5,10 @@
 
 class NEDGloveGestures {
 	
-	int sum(const vrpn_ANALOGCB a);
+	int strengthNormal = 250;
 
 	public:
-	bool handClosed(const vrpn_ANALOGCB a, KeyMap *keyMap);
-	bool handOpen(const vrpn_ANALOGCB a, KeyMap *keyMap);
-
-	bool handOpenMax(const vrpn_ANALOGCB a, KeyMap *keyMap);
-	bool handSemiOpen(const vrpn_ANALOGCB a, KeyMap *keyMap);
-
-	bool handClosedMax(const vrpn_ANALOGCB a, KeyMap *keyMap);
-	bool handSemiClose(const vrpn_ANALOGCB a, KeyMap *keyMap);
+	bool closed(const vrpn_ANALOGCB a, KeyMap *keyMap);
+	bool pinch(const vrpn_ANALOGCB a, KeyMap *keyMap);
 
 };

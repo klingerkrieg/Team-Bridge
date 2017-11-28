@@ -81,3 +81,7 @@ legend{
 .tooltip.show{
 	opacity: 1.0;
 }
+
+.help{
+	font-style: italic;
+}

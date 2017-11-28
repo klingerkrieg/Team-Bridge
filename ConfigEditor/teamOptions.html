@@ -1,20 +1,29 @@
 <div style="display:none;">
-    <div class="nedGlove">
+    
+    <div class="nedGloveGrab">
         <img class="deviceLogo" src="./img/nedglove.png" alt="(NEDGlove)">
         <input type="hidden" id="dev" value="NEDGLOVE" class="form-control toJSON">
-        Ação:
-        <select id="key" class="form-control toJSON">
-            <option value="NEDGLOVE_OPEN">Mão aberta</option>
-            <option value="NEDGLOVE_CLOSE">Mão fechada</option>
-            <option value="NEDGLOVE_OPEN_MAX">Mão aberta ao máximo</option>
-            <option value="NEDGLOVE_CLOSED_MAX">Mão fechada ao máximo</option>
-            <option value="NEDGLOVE_SEMI_OPEN">Mão semiaberta</option>
-            <option value="NEDGLOVE_SEMI_CLOSED">Mão semifechada</option>
-        </select>
+        <input type="hidden" id="key" value="NEDGLOVE_GRAB" class="toJSON">
+        Força ao fechar mão
+        de:
+        <input type="number" id="strengthMin" value="40" class="form-control toJSON">
+        Até:
+        <input type="number" id="strengthMax" value="0" class="form-control toJSON">
+        
+        <span class="help">(Deixe 0 caso queira desativar o campo)</span>
+    </div>
 
-        Calibração:
-        Mão aberta <input type="text" id="openHandCalib" value="230" class="form-control toJSON">
-        Mão fechada <input type="text" id="closedHandCalib" value="210" class="form-control toJSON">
+    <div class="nedGlovePinch">
+        <img class="deviceLogo" src="./img/nedglove.png" alt="(NEDGlove)">
+        <input type="hidden" id="dev" value="NEDGLOVE" class="form-control toJSON">
+        <input type="hidden" id="key" value="NEDGLOVE_PINCH" class="toJSON">
+        Força ao fazer movimento de pinça
+        de:
+        <input type="number" id="strengthMin" value="40" class="form-control toJSON">
+        Até:
+        <input type="number" id="strengthMax" value="0" class="form-control toJSON">
+        
+        <span class="help">(Deixe 0 caso queira desativar o campo)</span>
     </div>
 
 </div>

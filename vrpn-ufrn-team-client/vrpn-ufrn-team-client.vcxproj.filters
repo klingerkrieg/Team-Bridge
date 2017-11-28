@@ -133,5 +133,6 @@
     <None Include="runner.json" />
     <None Include="performance.json" />
     <None Include="nedglove.json" />
+    <None Include="kayak.json" />
   </ItemGroup>
 </Project>

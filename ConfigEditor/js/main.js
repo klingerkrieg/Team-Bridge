@@ -30,7 +30,8 @@ var keyboardMouseActions = [{class:"keyboard", title:"Teclado"},
                 {class:"mouse", title:"Mouse"}
               ];
 
-var teamActions = [{class:"nedglove", title:"NEDGlove"}];
+var teamActions = [{class:"nedGloveGrab", title:"[NEDGlove] Fechar mão"},
+                    {class:"nedGlovePinch", title:"[NEDGlove] Movimento de pinça"}];
 
 actions = actions.concat(leapMotionActions);
 actions = actions.concat(keyboardMouseActions);
@@ -146,6 +147,12 @@ function formToJSON(el){
         json.toKeyUp = json.toKey;
     }
 
+    if (json.strengthMin < 0){
+        json.strengthMin = 0;
+    }
+    if (json.strengthMax < 0){
+        json.strengthMax = 0;
+    }
 
     delete json.toKey;
     
