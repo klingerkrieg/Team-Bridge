@@ -59,7 +59,11 @@ const int LEAP_RIGHT_FIST_DOWN = 7007;
 
 
 const int NEDGLOVE_OPEN = 7500;
-const int NEDGLOVE_CLOSE = 7501;
+const int NEDGLOVE_CLOSED = 7501;
+const int NEDGLOVE_OPEN_MAX = 7502;
+const int NEDGLOVE_CLOSED_MAX = 7503;
+const int NEDGLOVE_SEMI_OPEN = 7504;
+const int NEDGLOVE_SEMI_CLOSED = 7505;
 
 const int MESSAGE = 6000;
 const int ALERT = 6001;
@@ -122,6 +126,10 @@ private:
 	int angle = -1;
 	//Como o angulo será comparado
 	int angleMod = 0;// 0 =, 1 >, -1 <
+
+	//NEDGlove
+	int openHand = -1;
+	int closedHand = -1;
 
 	//sensibilidade do comando (para mudanca de altura)
 	//step e marcha estacionaria
@@ -248,6 +256,14 @@ public:
 
 	bool getDetermineCenterPos() {
 		return determineCenterPos;
+	}
+
+	int getOpenHand() {
+		return openHand;
+	}
+
+	int getClosedHand() {
+		return closedHand;
 	}
 
 	KeyMap(){}
@@ -380,8 +396,13 @@ public:
 		m["LEAP_RIGHT_FIST_DOWN"] = LEAP_RIGHT_FIST_DOWN;
 
 		//NEDGlove
-		m["NEDGLOVE_CLOSE"] = NEDGLOVE_CLOSE;
+		m["NEDGLOVE_CLOSED"] = NEDGLOVE_CLOSED;
 		m["NEDGLOVE_OPEN"] = NEDGLOVE_OPEN;
+		m["NEDGLOVE_OPEN_MAX"] = NEDGLOVE_OPEN_MAX;
+		m["NEDGLOVE_CLOSED_MAX"] = NEDGLOVE_CLOSED_MAX;
+		m["NEDGLOVE_SEMI_OPEN"] = NEDGLOVE_SEMI_OPEN;
+		m["NEDGLOVE_SEMI_CLOSED"] = NEDGLOVE_SEMI_CLOSED;
+
 
 
 		//Mapeamento para ABNT2

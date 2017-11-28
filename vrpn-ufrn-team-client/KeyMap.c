@@ -23,6 +23,12 @@ std::string KeyMap::toString() {
 	} else {
 		ret = "[" + getDev() + "] " + getKeyRepr();
 		
+		if ( getOpenHand() != -1 ) {
+			
+			ret += "Open Hand:" + std::to_string(getOpenHand());
+			ret += "Closed Hand:" + std::to_string(getClosedHand());
+
+		} else
 		if ( getAngle() != -1 ) {
 			ret += "[";
 			if ( getAngleMod() == 1 ) {
@@ -115,11 +121,15 @@ KeyMap::KeyMap(json js) {
 		this->sensivity = js["sensivity"].get<double>();
 	}
 
-	//NedGlove angulo para fechar a mao, cada luva pode ter um valor diferente
+	//NedGlove angulo para fechar e abrir mao, cada luva pode ter um valor diferente
 	//Depende da calibração
 	if ( !js["closedHandCalib"].is_null() ) {
-		this->angle = js["closedHandCalib"].get<double>();
+		this->closedHand = js["closedHandCalib"].get<double>();
 	}
+	if ( !js["openHandCalib"].is_null() ) {
+		this->openHand = js["openHandCalib"].get<double>();
+	}
+
 
 	if ( !js["maxVelociyMs"].is_null() ) {
 		this->maxVelociyMs = js["maxVelociyMs"].get<double>();

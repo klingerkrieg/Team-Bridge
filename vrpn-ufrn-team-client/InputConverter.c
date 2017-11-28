@@ -520,11 +520,23 @@ bool InputConverter::checkAnalog(const char *name, const vrpn_ANALOGCB a) {
 					case LEAP_RIGHT_PINCH:
 						active = gr.rightPinch(a);
 						break;
-					case NEDGLOVE_CLOSE:
-						active = gr.NEDGloveGestures::handClosed(a, keyMap->getAngle());
+					case NEDGLOVE_CLOSED:
+						active = gr.NEDGloveGestures::handClosed(a, keyMap);
 						break;
 					case NEDGLOVE_OPEN:
-						active = gr.NEDGloveGestures::handOpen(a, keyMap->getAngle());
+						active = gr.NEDGloveGestures::handOpen(a, keyMap);
+						break;
+					case NEDGLOVE_CLOSED_MAX:
+						active = gr.NEDGloveGestures::handClosedMax(a, keyMap);
+						break;
+					case NEDGLOVE_OPEN_MAX:
+						active = gr.NEDGloveGestures::handOpenMax(a, keyMap);
+						break;
+					case NEDGLOVE_SEMI_CLOSED:
+						active = gr.NEDGloveGestures::handSemiClose(a, keyMap);
+						break;
+					case NEDGLOVE_SEMI_OPEN:
+						active = gr.NEDGloveGestures::handSemiOpen(a, keyMap);
 						break;
 				}
 			}

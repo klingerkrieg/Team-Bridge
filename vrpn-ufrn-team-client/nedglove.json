@@ -30,16 +30,18 @@
     {
       "divClass": "nedGlove",
       "dev": "Analog0@localhost",
-      "key": "NEDGLOVE_OPEN",
-      "closedHandCalib": 206,
+      "key": "NEDGLOVE_OPEN_MAX",
+      "openHandCalib": 230,
+      "closedHandCalib": 210,
       "toKeyDown": "A",
       "toKeyUp": "A"
     },
     {
       "divClass": "nedGlove",
       "dev": "Analog0@localhost",
-      "key": "NEDGLOVE_CLOSE",
-      "closedHandCalib": 206,
+      "key": "NEDGLOVE_CLOSED_MAX",
+      "openHandCalib": 230,
+      "closedHandCalib": 210,
       "toKeyDown": "B",
       "toKeyUp": "B"
     }

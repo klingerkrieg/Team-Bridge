@@ -30,20 +30,38 @@
     {
       "divClass": "nedGlove",
       "dev": "Analog0@localhost",
-      "key": "NEDGLOVE_SEMI_OPEN",
+      "key": "NEDGLOVE_OPEN_MAX",
       "openHandCalib": 230,
-      "closedHandCalib": 205,
+      "closedHandCalib": 210,
       "toKeyDown": "A",
       "toKeyUp": "A"
     },
     {
       "divClass": "nedGlove",
       "dev": "Analog0@localhost",
-      "key": "NEDGLOVE_SEMI_CLOSE",
+      "key": "NEDGLOVE_SEMI_OPEN",
       "openHandCalib": 230,
-      "closedHandCalib": 205,
-      "toKeyDown": "B",
-      "toKeyUp": "B"
+      "closedHandCalib": 210,
+      "toKeyDown": "Q",
+      "toKeyUp": "Q"
+    },
+    {
+      "divClass": "nedGlove",
+      "dev": "Analog0@localhost",
+      "key": "NEDGLOVE_CLOSED_MAX",
+      "openHandCalib": 230,
+      "closedHandCalib": 210,
+      "toKeyDown": "D",
+      "toKeyUp": "D"
+    },
+    {
+      "divClass": "nedGlove",
+      "dev": "Analog0@localhost",
+      "key": "NEDGLOVE_SEMI_CLOSED",
+      "openHandCalib": 230,
+      "closedHandCalib": 210,
+      "toKeyDown": "E",
+      "toKeyUp": "E"
     }
   ]
 }
