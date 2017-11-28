@@ -480,29 +480,59 @@ bool InputConverter::checkButton(const char * name, const vrpn_BUTTONCB b) {
 bool InputConverter::checkAnalog(const char *name, const vrpn_ANALOGCB a) {
 	bool pressed = false;
 	int active = -1;
-	
-	for ( std::vector<KeyMap>::iterator keyMap = map.begin(); keyMap != map.end(); ++keyMap ) {
+	KeyMap *keyMap;
 
-		if ( !strcmp(name, keyMap->getDev().c_str()) ) {
+	//primeiro loop
+	//Esse loop é realizado duas vezes, a primeira vez é somente para verificar o status das teclas já ativas e que possuam evento onleave
+	//isso é para evitar conflitos com aplicações que não suportam duas teclas pressionadas ao mesmo tempo
+	for ( int firstLoop = 1; firstLoop > -1; firstLoop-- ) {
 
-			switch ( keyMap->getKey() ) {
-				case LEAP_LEFT_CLOSED:
-					active = gr.leftClosed(a);
-					break;
-				case LEAP_LEFT_PINCH:
-					active = gr.leftPinch(a);
-					break;
-				case LEAP_RIGHT_CLOSED:
-					active = gr.rightClosed(a);
-					break;
-				case LEAP_RIGHT_PINCH:
-					active = gr.rightPinch(a);
-					break;
+		for ( int keyMapId = 0; keyMapId < map.size(); keyMapId++ ) {
+			keyMap = &map.at(keyMapId);
+
+
+			//primeiro loop
+			if ( firstLoop == 1 && !keyMap->getWaitingLeave() || keyMap->getVerified() ) {
+				//Reseta para a proxima vez que chamar a funcao
+				if ( firstLoop == 0 ) {
+					keyMap->setVerified(false);
+				}
+				continue;
+			} else
+			//Nao permitir que no proximo loop as mesmas keys sejam verificadas
+			if ( firstLoop == 1 && keyMap->getWaitingLeave() ) {
+				keyMap->setVerified(true);
 			}
-		}
+
+
+			if ( !strcmp(name, keyMap->getDev().c_str()) ) {
+
+				switch ( keyMap->getKey() ) {
+					case LEAP_LEFT_CLOSED:
+						active = gr.leftClosed(a);
+						break;
+					case LEAP_LEFT_PINCH:
+						active = gr.leftPinch(a);
+						break;
+					case LEAP_RIGHT_CLOSED:
+						active = gr.rightClosed(a);
+						break;
+					case LEAP_RIGHT_PINCH:
+						active = gr.rightPinch(a);
+						break;
+					case NEDGLOVE_CLOSE:
+						active = gr.NEDGloveGestures::handClosed(a, keyMap->getAngle());
+						break;
+					case NEDGLOVE_OPEN:
+						active = gr.NEDGloveGestures::handOpen(a, keyMap->getAngle());
+						break;
+				}
+			}
 		
-		if ( active != -1 ) {
-			pressed = interpretOnLeave(active, (*keyMap));
+		
+			if ( active != -1 ) {
+				pressed = interpretOnLeave(active, (*keyMap));
+			}
 		}
 	}
 

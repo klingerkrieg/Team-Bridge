@@ -1,12 +1,15 @@
 
 var fs = require('fs');
 
+/* Configurações gerais */
 var programName = "ConfigEditor";
 var actualName = "";
 
+
 var modelIncludes = [{url:"kinectOptions.html",onLoad:function(){}},
                     {url:"leapMotionOptions.html",onLoad:function(){}},
-                    {url:"keyboardMouseOptions.html",onLoad:loadKeyboardOptions}];
+                    {url:"keyboardMouseOptions.html",onLoad:loadKeyboardOptions},
+                    {url:"teamOptions.html",onLoad:function(){}}];
 
 var actions = [{class:"handTop", title:"[Kinect] Altura da mão"},
                     {class:"kinectWalking", title:"[Kinect] Marcha estacionária"},
@@ -25,10 +28,27 @@ var leapMotionActions = [{class:"leapCloseHand", title:"[LeapMotion] Fechar mão
 
 var keyboardMouseActions = [{class:"keyboard", title:"Teclado"},
                 {class:"mouse", title:"Mouse"}
-              ]
+              ];
+
+var teamActions = [{class:"nedglove", title:"NEDGlove"}];
 
 actions = actions.concat(leapMotionActions);
 actions = actions.concat(keyboardMouseActions);
+actions = actions.concat(teamActions);
+
+
+
+var devicesFormToJSON = [{"jsonName":"nedglove","inputId":"NEDGLOVE"},
+                        {"jsonName":"leapMotion","inputId":"LEAPMOTION"},
+                        {"jsonName":"kinect","inputId":"KINECT"},
+                        {"jsonName":"keyboard","inputId":"KEYBOARD"},
+                        {"jsonName":"mouse","inputId":"MOUSE"}];
+
+
+
+/* Fim Configurações gerais */
+
+
 
 $(function(){
 
@@ -89,10 +109,10 @@ function showExtraActions(el){
 }
 
 
-function formToJSON(el,divClass){
+function formToJSON(el){
     json = {};
     
-    json.divClass = divClass;
+    json.divClass = el.attr('class');
     el.find(".toJSON").each(function(i,el){
         el = $(el);
         json[el.attr('id')] = el.val();
@@ -130,7 +150,7 @@ function formToJSON(el,divClass){
     delete json.toKey;
     
     //Adiciona o endereço do dispositivo
-    //json.dev = $('#'+json.dev).val();
+    json.dev = $('#'+json.dev).val();
 
     return json;
 }
@@ -154,6 +174,13 @@ function jsonToForm(json){
         div = addCommandToMapView(option.divClass);
         div.find(".toJSON").each(function(y, el){
             el = $(el);
+            //Quando encontrar o campo dev ele nao pode fazer a substituição direta
+            //Ele tem que atualizar no dev principal
+            if (el.attr('id') == "dev"){
+                ("#"+div.find("#dev").val()).valueOf(option[el.attr('id')]);
+                return;
+            }
+            //Para todos os outros campos, preenche normalmente
             el.val(option[el.attr('id')]);
             divBy = el.attr("divideby");
             if (divBy != undefined){

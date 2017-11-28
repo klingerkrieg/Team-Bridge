@@ -28,13 +28,20 @@
   },
   "keys": [
     {
-      "divClass": "handTop",
-      "dev": "Tracker0@localhost",
-      "key": "KINECT_RIGHT_HAND_TOP",
-      "x": 0,
-      "coordinateMod": ">=",
-      "y": 4,
-      "toKeyWhile": "A"
+      "divClass": "nedGlove",
+      "dev": "Analog0@localhost",
+      "key": "NEDGLOVE_OPEN",
+      "closedHandCalib": 206,
+      "toKeyDown": "A",
+      "toKeyUp": "A"
+    },
+    {
+      "divClass": "nedGlove",
+      "dev": "Analog0@localhost",
+      "key": "NEDGLOVE_CLOSE",
+      "closedHandCalib": 206,
+      "toKeyDown": "B",
+      "toKeyUp": "B"
     }
   ]
 }

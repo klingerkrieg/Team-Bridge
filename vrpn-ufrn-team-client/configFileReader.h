@@ -21,8 +21,9 @@ const int DEVTYPE_KINECT = 0;
 const int DEVTYPE_LEAPMOTION = 1;
 const int DEVTYPE_KEYBOARD = 2;
 const int DEVTYPE_MOUSE = 3;
+const int DEVTYPE_NEDGLOVE = 4;
 
-const std::vector<std::string> DEVTYPE_STR = { "KINECT", "LEAP MOTION", "TECLADO", "MOUSE" };
+const std::vector<std::string> DEVTYPE_STR = { "KINECT", "LEAP MOTION", "TECLADO", "MOUSE", "NEDGLOVE" };
 
 struct DeviceType {
 	std::string name;
@@ -53,7 +54,7 @@ private:
 							   std::vector<KeyMap> &map,
 							   Config &config);
 
-	bool findDev(json js, std::string textDev, int devConstant, DeviceType &devs);
+	bool setDevType(json js, std::string textDev, int devConstant, DeviceType &devs);
 
 };
 

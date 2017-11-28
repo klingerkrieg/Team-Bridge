@@ -26,7 +26,8 @@ vrpn_ANALOGCB getAnalogCB() {
 	a.channel[1] = 0;
 	a.channel[2] = 0;
 	a.channel[3] = 0;
-	a.num_channel = 4;
+	a.channel[4] = 0;
+	a.num_channel = 5;
 	return a;
 }
 

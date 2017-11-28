@@ -3,15 +3,16 @@
 		<meta charset="utf-8">
 		<title>ConfigEditor</title>
 		
-		<link rel='stylesheet' href="css/bootstrap.css" type='text/css' />
+		<link rel='stylesheet' href="css/bootstrap/bootstrap.css" type='text/css' />
 		<link rel='stylesheet' href="css/css.css" type='text/css' />
 
-		<script type='text/javascript' src="js/jquery-3.2.1.min.js"></script>
+		<script type='text/javascript' src="js/req/jquery-3.2.1.min.js"></script>
+		<script type='text/javascript' src="js/req/popper.js"></script>
+		<script type='text/javascript' src="js/req/bootstrap.js"></script>
+
 		<script type='text/javascript' src="js/main.js"></script>
 		<script type='text/javascript' src="js/menu.js"></script>
 
-		<script type='text/javascript' src="js/popper.js"></script>
-		<script type='text/javascript' src="js/bootstrap.js"></script>
 		
 		
 		
@@ -78,6 +79,9 @@
 
 		<label>Mouse <red>*</red>:</label>
 		<input type="text" class="form-control" id="MOUSE" value="Mouse0@localhost">
+
+		<label>NEDGlove <red>*</red>:</label>
+		<input type="text" class="form-control" id="NEDGLOVE" value="Analog0@localhost">
 	</fieldset>
 
 	<fieldset>
@@ -145,7 +149,7 @@
 	</div>
 	
 
-	<!-- openModal -->
+	<!-- saveModal -->
 <div class="modal fade" id="fileNameModal" tabindex="-1" role="dialog" aria-labelledby="fileNameModalLabel" aria-hidden="true">
 	<div class="modal-dialog" role="document">
 	  <div class="modal-content">

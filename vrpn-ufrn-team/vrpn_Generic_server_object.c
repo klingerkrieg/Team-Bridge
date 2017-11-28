@@ -50,8 +50,11 @@
 #include "vrpn_Joywin32.h"
 #include "vrpn_Keyboard.h"                // for vrpn_Keyboard
 #include "vrpn_Laputa.h"                  // for vrpn_Laputa
+//TEAM
+#include "vrpn_NEDGlove.h"
 #include "vrpn_LeapMotion.h"                 
-#include "vrpn_KinectV1.h"                 
+#include "vrpn_KinectV1.h"              
+//
 #include "vrpn_LUDL.h"                    // for vrpn_LUDL_USBMAC6000
 #include "vrpn_Logitech_Controller_Raw.h" // for vrpn_Logitech_Extreme_3D_Pro, etc.
 #include "vrpn_Magellan.h"                // for vrpn_Magellan
@@ -4945,6 +4948,29 @@ int vrpn_Generic_Server_Object::setup_Laputa(char *&pch, char *line, FILE *) {
 }
 
 
+int vrpn_Generic_Server_Object::setup_NEDGlove(char *&pch, char *line, FILE *) {
+	char name[LINESIZE];
+	int port = 0, bauds = 0;
+
+	VRPN_CONFIG_NEXT();
+	int ret = sscanf(pch, "%511s\t%d\t%d", name, &port, &bauds);
+	if ( ret != 3 ) {
+		fprintf(stderr, "Bad NEDGlove line: %s\n", line);
+		return -1;
+	}
+
+	// Open the Laputa
+	if ( verbose ) {
+		printf("Opening vrpn_NEGDlove\n");
+	}
+
+	// Open the tracker
+	_devices->add(new vrpn_NEDGlove(name, port, bauds, connection));
+
+	return 0; // successful completion
+}
+
+
 int vrpn_Generic_Server_Object::setup_LeapMotion(char *&pch, char *line, FILE *) {
 	char name[LINESIZE];
 
@@ -5432,6 +5458,8 @@ vrpn_Generic_Server_Object::vrpn_Generic_Server_Object(
 					VRPN_CHECK(setup_OzzMaker_BerryIMU);
 				} else if ( VRPN_ISIT("vrpn_Laputa") ) {
 					VRPN_CHECK(setup_Laputa);
+				} else if ( VRPN_ISIT("vrpn_NEDGlove") ) {
+					VRPN_CHECK(setup_NEDGlove);
 				} else if ( VRPN_ISIT("vrpn_LeapMotion") ) {
 					VRPN_CHECK(setup_LeapMotion);
 				} else if ( VRPN_ISIT("vrpn_KinectV1") ) {

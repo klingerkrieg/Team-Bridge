@@ -10,6 +10,7 @@ $(function(){
     });
 
     $("#openFile").click(function(){
+        clear();
         var json = JSON.parse(fs.readFileSync($("#files").val(), 'utf8'));
         jsonToForm(json);
         actualName = $("#files").val();
@@ -19,12 +20,7 @@ $(function(){
     });
 
     $('#new').click(function(){
-        $("title").html(programName);
-        $('#mapView').html("");
-        enableSave();
-        actualName = "";
-        $('#commonInfo')[0].reset();
-        $('#msgOk').remove();
+        clear();
     });
 
     $("#openSave").click(function(){
@@ -40,6 +36,13 @@ $(function(){
         
     });
 
+    $('#fileName').keypress(function(evt){
+        if (evt.which == 13){
+            actualName = $('#fileName').val() + ".json";
+            saveFile();
+        }
+    });
+
     $('#save').click(function(){
         actualName = $('#fileName').val() + ".json";
         saveFile();
@@ -51,16 +54,26 @@ $(function(){
 });
 
 
+function clear(){
+    $("title").html(programName);
+    $('#mapView').html("");
+    enableSave();
+    actualName = "";
+    $('#commonInfo')[0].reset();
+    $('#msgOk').remove();
+}
+
 
 function saveFile(){
     var jsonConfig = {};
     jsonConfig.common = {};
+    jsonConfig.common.devs = {};
     jsonConfig.keys = [];
 
-    jsonConfig.kinect = [$('#KINECT').val()];
-    jsonConfig.leapMotion = [$('#LEAPMOTION').val()];
-    jsonConfig.keyboard = [$('#KEYBOARD').val()];
-    jsonConfig.mouse = [$('#MOUSE').val()];
+    for (var i = 0; i < devicesFormToJSON.length; i++){
+        jsonConfig.common.devs[devicesFormToJSON[i].jsonName] = [$("#"+devicesFormToJSON[i].inputId).val()];
+    }
+    
 
     $('#commonInfo .toJSON').each(function(i,el){
         el = $(el);
@@ -75,13 +88,7 @@ function saveFile(){
 
     $('#mapView').children().each(function(i,item){
         item = $(item);
-        
-        for (var y = 0; y < actions.length; y++){
-            if (item.hasClass(actions[y].class)){
-                jsonConfig.keys.push(formToJSON(item, actions[y].class));
-    
-            }
-        }
+        jsonConfig.keys.push(formToJSON(item));
 
     });
     
@@ -142,9 +149,8 @@ function loadFiles(){
     });
 }
 
-function addCommandToMapView(model){
-    clone = $('#'+model+'Model').clone();
-    clone.attr('id',"");
+function addCommandToMapView(modelClass){
+    clone =  $('#models').find("."+modelClass).clone();
     clone.append($('#actionModel #act').clone());
     clone.append('<img class="close" src="./img/close.png" onclick="removeMap(this)"/>');
     clone.find("#toKey option:eq(1)").attr("selected","");

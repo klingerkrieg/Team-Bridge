@@ -79,19 +79,24 @@ bool ConfigFileReader::readConfigFile(char * fileName,
 
 	for ( int i = 0; i < devs.size(); i++ ) {
 		
-		if ( findDev(js,"kinect",DEVTYPE_KINECT,devs.at(i)) ) {
+		if ( setDevType(js,"kinect",DEVTYPE_KINECT,devs.at(i)) ) {
 			continue;
 		}
 
-		if ( findDev(js, "leapMotion", DEVTYPE_LEAPMOTION, devs.at(i)) ) {
+		if ( setDevType(js, "leapMotion", DEVTYPE_LEAPMOTION, devs.at(i)) ) {
+			continue;
+		}
+		//somente dispositivos de tracking necessitam do devtype para a escolha do skeleton correto
+		//Mesmo assim ainda estao presentes aqui para fins de teste
+		if ( setDevType(js, "keyboard", DEVTYPE_KEYBOARD, devs.at(i)) ) {
 			continue;
 		}
 
-		if ( findDev(js, "keyboard", DEVTYPE_KEYBOARD, devs.at(i)) ) {
+		if ( setDevType(js, "mouse", DEVTYPE_MOUSE, devs.at(i)) ) {
 			continue;
 		}
 
-		if ( findDev(js, "mouse", DEVTYPE_MOUSE, devs.at(i)) ) {
+		if ( setDevType(js, "nedglove", DEVTYPE_NEDGLOVE, devs.at(i)) ) {
 			continue;
 		}
 
@@ -103,8 +108,8 @@ bool ConfigFileReader::readConfigFile(char * fileName,
 	return true;
 }
 
-bool ConfigFileReader::findDev(json js,std::string textDev, int devConstant, DeviceType &devT) {
-	for ( json::iterator it = js[textDev].begin(); it != js[textDev].end(); ++it ) {
+bool ConfigFileReader::setDevType(json js,std::string textDev, int devConstant, DeviceType &devT) {
+	for ( json::iterator it = js["common"]["devs"][textDev].begin(); it != js["common"]["devs"][textDev].end(); ++it ) {
 		json js2 = (json)*it;
 		//Percorre os arrays de dispositivos para setar o tipo
 		//Atualmente isso so e necessario para dispositivos de tracking

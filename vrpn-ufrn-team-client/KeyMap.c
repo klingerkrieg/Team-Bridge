@@ -115,6 +115,12 @@ KeyMap::KeyMap(json js) {
 		this->sensivity = js["sensivity"].get<double>();
 	}
 
+	//NedGlove angulo para fechar a mao, cada luva pode ter um valor diferente
+	//Depende da calibração
+	if ( !js["closedHandCalib"].is_null() ) {
+		this->angle = js["closedHandCalib"].get<double>();
+	}
+
 	if ( !js["maxVelociyMs"].is_null() ) {
 		this->maxVelociyMs = js["maxVelociyMs"].get<double>();
 	}

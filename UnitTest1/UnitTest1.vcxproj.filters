@@ -62,9 +62,11 @@
     <ClCompile Include="KinectGesturesTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="NEDGloveGesturesTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="vrpn-client.cfg" />
     <None Include="config.json" />
   </ItemGroup>
 </Project>

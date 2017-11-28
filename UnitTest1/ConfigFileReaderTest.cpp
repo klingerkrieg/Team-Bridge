@@ -48,10 +48,12 @@ public:
 		Assert::AreEqual(DEVTYPE_KEYBOARD, devs.at(2).type);
 		Assert::AreEqual("Mouse0@localhost", devs.at(3).name.c_str());
 		Assert::AreEqual(DEVTYPE_MOUSE, devs.at(3).type);
+		Assert::AreEqual("Analog0@localhost", devs.at(4).name.c_str());
+		Assert::AreEqual(DEVTYPE_NEDGLOVE, devs.at(4).type);
 	}
 
 	TEST_METHOD(ConfigFileReader_MapsOk) {
-
+		//Para esse teste o arquivo config.json deve seguir a exata sequencia.
 		int i = 0;
 		json js = {
 			{"divClass", "handTop"},
@@ -101,6 +103,17 @@ public:
 		m1 = KeyMap(js);
 		Assert::AreEqual(m1.toString(), map.at(i++).toString());
 
+
+		js = {
+			{ "divClass","nedGlove" },
+			{ "dev" ,"Analog0@localhost" },
+			{ "key" ,"NEDGLOVE_CLOSE" },
+			{ "angle" ,206 },
+			{ "toKeyDown" ,"B" },
+			{ "toKeyUp" ,"B" }
+		};
+		m1 = KeyMap(js);
+		Assert::AreEqual(m1.toString(), map.at(i+9).toString());
 
 		
 	}

@@ -8,6 +8,8 @@
 #pragma once
 #include "Leap.h"
 #include "vrpn_Analog.h"
+#include <iostream>
+#include <string>
 
 class VRPN_API vrpn_LeapMotion : public Leap::Listener, public vrpn_Analog, public  vrpn_Tracker {
 public:

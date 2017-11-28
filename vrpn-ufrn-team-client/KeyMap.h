@@ -58,6 +58,9 @@ const int LEAP_LEFT_FIST_DOWN = 7006;
 const int LEAP_RIGHT_FIST_DOWN = 7007;
 
 
+const int NEDGLOVE_OPEN = 7500;
+const int NEDGLOVE_CLOSE = 7501;
+
 const int MESSAGE = 6000;
 const int ALERT = 6001;
 
@@ -126,13 +129,6 @@ private:
 
 	//delay atualmente usado somente para marcha estacionaria
 	int delay = 400; //ms;
-
-
-	//int handTopMod = 0;// 0 =, 1 >, -1 <
-	//int handTopLevel = -100;
-	//int handXPos = -100;
-
-	void init(std::string dev, char key[SSIZE], char toKey[SSIZE]);
 
 public:
 
@@ -382,6 +378,10 @@ public:
 		m["LEAP_RIGHT_FIST_UP"] = LEAP_RIGHT_FIST_UP;
 		m["LEAP_LEFT_FIST_DOWN"] = LEAP_LEFT_FIST_DOWN;
 		m["LEAP_RIGHT_FIST_DOWN"] = LEAP_RIGHT_FIST_DOWN;
+
+		//NEDGlove
+		m["NEDGLOVE_CLOSE"] = NEDGLOVE_CLOSE;
+		m["NEDGLOVE_OPEN"] = NEDGLOVE_OPEN;
 
 
 		//Mapeamento para ABNT2
