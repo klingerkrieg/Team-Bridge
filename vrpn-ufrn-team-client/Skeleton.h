@@ -5,25 +5,25 @@
 
 
 const int SKELETON_HEAD			= 1;
-const int SKELETON_CHEST		= 2;
+const int SKELETON_SHOULDER_CENTER= 2;
 const int SKELETON_SHOULDER_R	= 3;
 const int SKELETON_SHOULDER_L	= 4;
 const int SKELETON_ELBOW_R		= 5;
 const int SKELETON_ELBOW_L		= 6;
-const int SKELETON_FIST_R		= 7;
-const int SKELETON_FIST_L		= 8;
+const int SKELETON_WRIST_R		= 7;
+const int SKELETON_WRIST_L		= 8;
 const int SKELETON_HAND_R		= 9;
 const int SKELETON_HAND_L		= 10;
 const int SKELETON_THUMB_R		= 11;
 const int SKELETON_THUMB_L		= 12;
-const int SKELETON_BELLY		= 13;
-const int SKELETON_PELVIS		= 14;
-const int SKELETON_LEG_R		= 15;
-const int SKELETON_LEG_L		= 16;
+const int SKELETON_SPINE		= 13;
+const int SKELETON_HIP_CENTER	= 14;
+const int SKELETON_HIP_R		= 15;
+const int SKELETON_HIP_L		= 16;
 const int SKELETON_KNEE_R		= 17;
 const int SKELETON_KNEE_L		= 18;
-const int SKELETON_HEEL_R		= 19;
-const int SKELETON_HEEL_L		= 20;
+const int SKELETON_ANKLE_R		= 19;
+const int SKELETON_ANKLE_L		= 20;
 const int SKELETON_FOOT_R		= 21;
 const int SKELETON_FOOT_L		= 22;
 
@@ -43,25 +43,25 @@ struct SkeletonPart {
 
 struct Skeleton {
 	SkeletonPart head;
-	SkeletonPart chest;
+	SkeletonPart shoulderCenter;
 	SkeletonPart shoulderR;
 	SkeletonPart shoulderL;
 	SkeletonPart elbowR;
 	SkeletonPart elbowL;
-	SkeletonPart fistR;
-	SkeletonPart fistL;
+	SkeletonPart wristR;
+	SkeletonPart wristL;
 	SkeletonPart handR;
 	SkeletonPart handL;
 	SkeletonPart thumbR;
 	SkeletonPart thumbL;
-	SkeletonPart belly;
-	SkeletonPart pelvis;
+	SkeletonPart spine;
+	SkeletonPart hipCenter;
 	SkeletonPart legR;
 	SkeletonPart legL;
 	SkeletonPart kneeR;
 	SkeletonPart kneeL;
-	SkeletonPart heelR;
-	SkeletonPart heelL;
+	SkeletonPart ankleR;
+	SkeletonPart ankleL;
 	SkeletonPart footR;
 	SkeletonPart footL;
 };

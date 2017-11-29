@@ -26,25 +26,25 @@ bool vrpnToSkeleton(Skeleton &skeleton, std::map<int, int> &skeletonMap, const v
 
 	switch ( partConst ) {
 		case SKELETON_HEAD:			skelPart = assignSkeletonPart(skeleton.head,		t, SKELETON_HEAD); break;
-		case SKELETON_CHEST:		skelPart = assignSkeletonPart(skeleton.chest,		t, SKELETON_CHEST); break;
+		case SKELETON_SHOULDER_CENTER:		skelPart = assignSkeletonPart(skeleton.shoulderCenter,		t, SKELETON_SHOULDER_CENTER); break;
 		case SKELETON_SHOULDER_R:	skelPart = assignSkeletonPart(skeleton.shoulderR,	t, SKELETON_SHOULDER_R); break;
 		case SKELETON_SHOULDER_L:	skelPart = assignSkeletonPart(skeleton.shoulderL,	t, SKELETON_SHOULDER_L); break;
 		case SKELETON_ELBOW_R:		skelPart = assignSkeletonPart(skeleton.elbowR,		t, SKELETON_ELBOW_R); break;
 		case SKELETON_ELBOW_L:		skelPart = assignSkeletonPart(skeleton.elbowL,		t, SKELETON_ELBOW_L); break;
-		case SKELETON_FIST_R:		skelPart = assignSkeletonPart(skeleton.fistR,		t, SKELETON_FIST_R); break;
-		case SKELETON_FIST_L:		skelPart = assignSkeletonPart(skeleton.fistL,		t, SKELETON_FIST_L); break;
+		case SKELETON_WRIST_R:		skelPart = assignSkeletonPart(skeleton.wristR,		t, SKELETON_WRIST_R); break;
+		case SKELETON_WRIST_L:		skelPart = assignSkeletonPart(skeleton.wristL,		t, SKELETON_WRIST_L); break;
 		case SKELETON_HAND_R:		skelPart = assignSkeletonPart(skeleton.handR,		t, SKELETON_HAND_R); break;
 		case SKELETON_HAND_L:		skelPart = assignSkeletonPart(skeleton.handL,		t, SKELETON_HAND_L); break;
 		case SKELETON_THUMB_R:		skelPart = assignSkeletonPart(skeleton.thumbR,		t, SKELETON_THUMB_R); break;
 		case SKELETON_THUMB_L:		skelPart = assignSkeletonPart(skeleton.thumbL,		t, SKELETON_THUMB_L); break;
-		case SKELETON_BELLY:		skelPart = assignSkeletonPart(skeleton.belly,		t, SKELETON_BELLY); break;
-		case SKELETON_PELVIS:		skelPart = assignSkeletonPart(skeleton.pelvis,		t, SKELETON_PELVIS); break;
-		case SKELETON_LEG_R:		skelPart = assignSkeletonPart(skeleton.legR,		t, SKELETON_LEG_R); break;
-		case SKELETON_LEG_L:		skelPart = assignSkeletonPart(skeleton.legL,		t, SKELETON_LEG_L); break;
+		case SKELETON_SPINE:		skelPart = assignSkeletonPart(skeleton.spine,		t, SKELETON_SPINE); break;
+		case SKELETON_HIP_CENTER:		skelPart = assignSkeletonPart(skeleton.hipCenter,		t, SKELETON_HIP_CENTER); break;
+		case SKELETON_HIP_R:		skelPart = assignSkeletonPart(skeleton.legR,		t, SKELETON_HIP_R); break;
+		case SKELETON_HIP_L:		skelPart = assignSkeletonPart(skeleton.legL,		t, SKELETON_HIP_L); break;
 		case SKELETON_KNEE_R:		skelPart = assignSkeletonPart(skeleton.kneeR,		t, SKELETON_KNEE_R); break;
 		case SKELETON_KNEE_L:		skelPart = assignSkeletonPart(skeleton.kneeL,		t, SKELETON_KNEE_L); break;
-		case SKELETON_HEEL_R:		skelPart = assignSkeletonPart(skeleton.heelR,		t, SKELETON_HEEL_R); break;
-		case SKELETON_HEEL_L:		skelPart = assignSkeletonPart(skeleton.heelL,		t, SKELETON_HEEL_L); break;
+		case SKELETON_ANKLE_R:		skelPart = assignSkeletonPart(skeleton.ankleR,		t, SKELETON_ANKLE_R); break;
+		case SKELETON_ANKLE_L:		skelPart = assignSkeletonPart(skeleton.ankleL,		t, SKELETON_ANKLE_L); break;
 		case SKELETON_FOOT_R:		skelPart = assignSkeletonPart(skeleton.footR,		t, SKELETON_FOOT_R); break;
 		case SKELETON_FOOT_L:		skelPart = assignSkeletonPart(skeleton.footL,		t, SKELETON_FOOT_L); break;
 		default:

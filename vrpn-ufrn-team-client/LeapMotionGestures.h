@@ -20,13 +20,13 @@ private:
 
 public:
 	
-	int leftFistFlexedUp(SkeletonPart skelPart, int angle, int angleMod);
-	int leftFistFlexedDown(SkeletonPart skelPart, int angle, int angleMod);
+	int leftWristFlexedUp(SkeletonPart skelPart, int angle, int angleMod);
+	int leftWristFlexedDown(SkeletonPart skelPart, int angle, int angleMod);
 	int leftClosed(const vrpn_ANALOGCB a);
 	int leftPinch(const vrpn_ANALOGCB a);
 
-	int rightFistFlexedUp(SkeletonPart skelPart, int angle, int angleMod);
-	int rightFistFlexedDown(SkeletonPart skelPart, int angle, int angleMod);
+	int rightWristFlexedUp(SkeletonPart skelPart, int angle, int angleMod);
+	int rightWristFlexedDown(SkeletonPart skelPart, int angle, int angleMod);
 	int rightClosed(const vrpn_ANALOGCB a);
 	int rightPinch(const vrpn_ANALOGCB a);
 
@@ -39,7 +39,7 @@ public:
 
 		std::map<int, int> map;
 		map[0] = SKELETON_HAND_R;
-		map[2] = SKELETON_FIST_R;
+		map[2] = SKELETON_WRIST_R;
 		map[1] = SKELETON_ELBOW_R;
 
 		return map;
@@ -54,7 +54,7 @@ public:
 
 		std::map<int, int> map;
 		map[23] = SKELETON_HAND_L;
-		map[25] = SKELETON_FIST_L;
+		map[25] = SKELETON_WRIST_L;
 		map[24] = SKELETON_ELBOW_L;
 
 		return map;

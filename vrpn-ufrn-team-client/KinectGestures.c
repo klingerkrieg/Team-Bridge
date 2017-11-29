@@ -141,7 +141,7 @@ int KinectGestures::detectHandTop(SkeletonPart skelPart, int topLevel, int handT
 int KinectGestures::detectLeftHandTop(SkeletonPart skelPart, int topLevel, int handTopMod) {
 	
 	//Caso seja cabeca ou bacia salva
-	if ( skelPart.skelConstant == SKELETON_HEAD || skelPart.skelConstant == SKELETON_PELVIS ) {
+	if ( skelPart.skelConstant == SKELETON_HEAD || skelPart.skelConstant == SKELETON_HIP_CENTER ) {
 		//nao faz nada
 	} else
 		if ( skelPart.skelConstant == SKELETON_HAND_L ) {
@@ -151,7 +151,7 @@ int KinectGestures::detectLeftHandTop(SkeletonPart skelPart, int topLevel, int h
 }
 
 int KinectGestures::detectRightHandTop(SkeletonPart skelPart, int topLevel, int handTopMod) {
-	if ( skelPart.skelConstant == SKELETON_HEAD || skelPart.skelConstant == SKELETON_PELVIS ) {
+	if ( skelPart.skelConstant == SKELETON_HEAD || skelPart.skelConstant == SKELETON_HIP_CENTER ) {
 		//nao faz nada
 	} else
 	if ( skelPart.skelConstant == SKELETON_HAND_R ) {
@@ -184,29 +184,29 @@ int KinectGestures::detectRightHandXPos(SkeletonPart skelPart, int xPos) {
 * Esse metodo depende do detectHandTop, ele deve ser chamado primeiro para captura da posicao central
 */
 int KinectGestures::detectHandXPos(SkeletonPart skelPart, int xPos) {
-	if ( skeleton.pelvis.defined == false ) {
+	if ( skeleton.hipCenter.defined == false ) {
 		return -1;
 	}
 
 
 	//printf("%.2f > %.2f + %.2f | %d\n", t.pos[0], lastHeadXPos, (handXPosInterval * 2), xPos);
 
-	if ( xPos == 2 && skelPart.x >= skeleton.pelvis.x + (handXPosInterval*2) ) {
+	if ( xPos == 2 && skelPart.x >= skeleton.hipCenter.x + (handXPosInterval*2) ) {
 		return true;
 	} else
-	if ( xPos == 1 && skelPart.x >= skeleton.pelvis.x + handXPosInterval &&
-		skelPart.x < skeleton.pelvis.x + (handXPosInterval * 2) ) {
+	if ( xPos == 1 && skelPart.x >= skeleton.hipCenter.x + handXPosInterval &&
+		skelPart.x < skeleton.hipCenter.x + (handXPosInterval * 2) ) {
 		return true;
 	} else
-	if ( xPos == 0 && skelPart.x <= skeleton.pelvis.x + handXPosInterval &&
-		skelPart.x > skeleton.pelvis.x - handXPosInterval ) {
+	if ( xPos == 0 && skelPart.x <= skeleton.hipCenter.x + handXPosInterval &&
+		skelPart.x > skeleton.hipCenter.x - handXPosInterval ) {
 		return true;
 	} else
-	if ( xPos == -1 && skelPart.x <= skeleton.pelvis.x - handXPosInterval &&
-		skelPart.x > skeleton.pelvis.x - (handXPosInterval * 2)  ) {
+	if ( xPos == -1 && skelPart.x <= skeleton.hipCenter.x - handXPosInterval &&
+		skelPart.x > skeleton.hipCenter.x - (handXPosInterval * 2)  ) {
 		return true;
 	} else
-	if ( xPos == -2 && skelPart.x <= skeleton.pelvis.x - (handXPosInterval*2)  ) {
+	if ( xPos == -2 && skelPart.x <= skeleton.hipCenter.x - (handXPosInterval*2)  ) {
 		return true;
 	}
 
@@ -261,7 +261,7 @@ int KinectGestures::detectTopChange(SkeletonPart skelPart, double heightSens, in
 
 int KinectGestures::setCenterPos(SkeletonPart skelPart) {
 	
-	if ( skelPart.skelConstant == SKELETON_PELVIS ) {
+	if ( skelPart.skelConstant == SKELETON_HIP_CENTER ) {
 		kinectDetection.centerPos[0] = skelPart.x;
 		kinectDetection.centerPos[1] = skelPart.y;
 		kinectDetection.centerPos[2] = skelPart.z;
@@ -277,16 +277,16 @@ std::map<int, std::vector<double>> KinectGestures::bodyDirectionPoints;
 
 int KinectGestures::detectBody(SkeletonPart skelPart, int direction, int angle) {
 	
-	if ( skelPart.skelConstant == SKELETON_PELVIS || skelPart.skelConstant == SKELETON_HEAD ) {
+	if ( skelPart.skelConstant == SKELETON_HIP_CENTER || skelPart.skelConstant == SKELETON_HEAD ) {
 		//Cria vetor com pontos para formação do angulo
 		std::vector<double> vec = { skelPart.x, skelPart.y, skelPart.z };
-		if ( skelPart.skelConstant == SKELETON_PELVIS ) {
+		if ( skelPart.skelConstant == SKELETON_HIP_CENTER ) {
 			vec = { skelPart.x, 0, skelPart.z };
 			std::vector<double> vec2 = { skelPart.x, 1, skelPart.z };
 			bodyDirectionPoints.insert_or_assign(2, vec2);
 		}
 		int pos = 0;
-		if ( skelPart.skelConstant == SKELETON_PELVIS ) {
+		if ( skelPart.skelConstant == SKELETON_HIP_CENTER ) {
 			pos = 1;
 		}
 		bodyDirectionPoints.insert_or_assign(pos, vec);
@@ -380,7 +380,7 @@ int KinectGestures::detectWalk(SkeletonPart skelPart, int delay, double sensitiv
 //Z Axis
 int KinectGestures::detectTurnLeft(SkeletonPart skelPart) {
 	
-	if ( skelPart.skelConstant == SKELETON_PELVIS ) {
+	if ( skelPart.skelConstant == SKELETON_HIP_CENTER ) {
 		if ( skelPart.quat_z < kinectDetection.turnZeroQuat - turnFactor ) {
 			return 1;
 		} else {
@@ -392,7 +392,7 @@ int KinectGestures::detectTurnLeft(SkeletonPart skelPart) {
 
 int KinectGestures::detectTurnRight(SkeletonPart skelPart) {
 	
-	if ( skelPart.skelConstant == SKELETON_PELVIS ) {
+	if ( skelPart.skelConstant == SKELETON_HIP_CENTER ) {
 		if ( skelPart.quat_z > kinectDetection.turnZeroQuat + turnFactor ) {
 			return 1;
 		} else {
@@ -411,29 +411,29 @@ int KinectGestures::detectTurnRight(SkeletonPart skelPart) {
 std::map<int, std::vector<double>> KinectGestures::lastPositions[20];
 
 
-int KinectGestures::leftFistFlexedUp(SkeletonPart skelPart, int angle, int angleMod) {
-	std::map<int, std::vector<double>> points = getPoints(skelPart, SKELETON_ELBOW_L, SKELETON_FIST_L, SKELETON_HAND_L, *lastPositions);
+int KinectGestures::leftWristFlexedUp(SkeletonPart skelPart, int angle, int angleMod) {
+	std::map<int, std::vector<double>> points = getPoints(skelPart, SKELETON_ELBOW_L, SKELETON_WRIST_L, SKELETON_HAND_L, *lastPositions);
 	if ( points.size() == 0 ) {
 		return -1;
 	}
 	return flexed3d(points, angle, angleMod, UP);
 }
-int KinectGestures::leftFistFlexedDown(SkeletonPart skelPart, int angle, int angleMod) {
-	std::map<int, std::vector<double>> points = getPoints(skelPart, SKELETON_ELBOW_L, SKELETON_FIST_L, SKELETON_HAND_L, *lastPositions);
+int KinectGestures::leftWristFlexedDown(SkeletonPart skelPart, int angle, int angleMod) {
+	std::map<int, std::vector<double>> points = getPoints(skelPart, SKELETON_ELBOW_L, SKELETON_WRIST_L, SKELETON_HAND_L, *lastPositions);
 	if ( points.size() == 0 ) {
 		return -1;
 	}
 	return flexed3d(points, angle, angleMod, DOWN);
 }
-int KinectGestures::rightFistFlexedUp(SkeletonPart skelPart, int angle, int angleMod) {
-	std::map<int, std::vector<double>> points = getPoints(skelPart, SKELETON_ELBOW_R, SKELETON_FIST_R, SKELETON_HAND_R, *lastPositions);
+int KinectGestures::rightWristFlexedUp(SkeletonPart skelPart, int angle, int angleMod) {
+	std::map<int, std::vector<double>> points = getPoints(skelPart, SKELETON_ELBOW_R, SKELETON_WRIST_R, SKELETON_HAND_R, *lastPositions);
 	if ( points.size() == 0 ) {
 		return -1;
 	}
 	return flexed3d(points, angle, angleMod, UP);
 }
-int KinectGestures::rightFistFlexedDown(SkeletonPart skelPart, int angle, int angleMod) {
-	std::map<int, std::vector<double>> points = getPoints(skelPart, SKELETON_ELBOW_R, SKELETON_FIST_R, SKELETON_HAND_R, *lastPositions);
+int KinectGestures::rightWristFlexedDown(SkeletonPart skelPart, int angle, int angleMod) {
+	std::map<int, std::vector<double>> points = getPoints(skelPart, SKELETON_ELBOW_R, SKELETON_WRIST_R, SKELETON_HAND_R, *lastPositions);
 	if ( points.size() == 0 ) {
 		return -1;
 	}
@@ -443,7 +443,7 @@ int KinectGestures::rightFistFlexedDown(SkeletonPart skelPart, int angle, int an
 
 int  KinectGestures::bodyBalance(SkeletonPart skelPart, int angle, int angleMod) {
 	
-	std::map<int, std::vector<double>> points = getPoints(skelPart, SKELETON_BELLY, SKELETON_PELVIS, SKELETON_CHEST, *lastPositions);
+	std::map<int, std::vector<double>> points = getPoints(skelPart, SKELETON_SPINE, SKELETON_HIP_CENTER, SKELETON_SHOULDER_CENTER, *lastPositions);
 	if ( points.size() == 0 ) {
 		return -1;
 	}

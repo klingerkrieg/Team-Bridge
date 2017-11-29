@@ -147,7 +147,7 @@ public:
 		KinectGestures gr = KinectGestures();
 		int angle = 15;
 		//Inicia
-		t.skelConstant = SKELETON_PELVIS;
+		t.skelConstant = SKELETON_HIP_CENTER;
 		gr.detectBodyFront(t, angle);
 		t.y = 1.4;
 		t.skelConstant = SKELETON_HEAD;
@@ -171,7 +171,7 @@ public:
 
 	TEST_METHOD(GestureRecognizer_detectTurn) {
 		SkeletonPart t = getSkeletonPart();
-		t.skelConstant = SKELETON_PELVIS;
+		t.skelConstant = SKELETON_HIP_CENTER;
 
 		KinectGestures gr = KinectGestures();
 		t.quat_z = 0;

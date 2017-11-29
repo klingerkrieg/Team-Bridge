@@ -33,7 +33,7 @@
       "key": "NEDGLOVE_PINCH",
       "thumb": 0,
       "index": 4,
-      "strengthMin": 14,
+      "strengthMin": 25,
       "strengthMax": 0,
       "toKeyDown": "A",
       "toKeyUp": "A"

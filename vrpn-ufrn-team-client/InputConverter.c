@@ -400,28 +400,28 @@ bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKE
 					active = gr.bodyBalance(skelPart, keyMap->getAngle(), keyMap->getAngleMod());
 				} else
 				if ( keyMap->getKey() == KINECT_LEFT_FIST_UP  ) {
-					active = gr.KinectGestures::leftFistFlexedUp(skelPart, keyMap->getAngle(), keyMap->getAngleMod());
+					active = gr.KinectGestures::leftWristFlexedUp(skelPart, keyMap->getAngle(), keyMap->getAngleMod());
 				} else
 				if ( keyMap->getKey() == KINECT_LEFT_FIST_DOWN ) {
-					active = gr.KinectGestures::leftFistFlexedDown(skelPart, keyMap->getAngle(), keyMap->getAngleMod());
+					active = gr.KinectGestures::leftWristFlexedDown(skelPart, keyMap->getAngle(), keyMap->getAngleMod());
 				} else
 				if ( keyMap->getKey() == KINECT_RIGHT_FIST_UP  ) {
-					active = gr.KinectGestures::rightFistFlexedUp(skelPart, keyMap->getAngle(), keyMap->getAngleMod());
+					active = gr.KinectGestures::rightWristFlexedUp(skelPart, keyMap->getAngle(), keyMap->getAngleMod());
 				} else
 				if ( keyMap->getKey() == KINECT_RIGHT_FIST_DOWN ) {
-					active = gr.KinectGestures::rightFistFlexedDown(skelPart, keyMap->getAngle(), keyMap->getAngleMod());
+					active = gr.KinectGestures::rightWristFlexedDown(skelPart, keyMap->getAngle(), keyMap->getAngleMod());
 				} else
 				if ( keyMap->getKey() == LEAP_LEFT_FIST_UP  ) {
-					active = gr.LeapMotionGestures::leftFistFlexedUp(skelPart, keyMap->getAngle(), keyMap->getAngleMod());
+					active = gr.LeapMotionGestures::leftWristFlexedUp(skelPart, keyMap->getAngle(), keyMap->getAngleMod());
 				} else
 				if ( keyMap->getKey() == LEAP_LEFT_FIST_DOWN ) {
-					active = gr.LeapMotionGestures::leftFistFlexedDown(skelPart, keyMap->getAngle(), keyMap->getAngleMod());
+					active = gr.LeapMotionGestures::leftWristFlexedDown(skelPart, keyMap->getAngle(), keyMap->getAngleMod());
 				} else
 				if ( keyMap->getKey() == LEAP_RIGHT_FIST_UP  ) {
-					active = gr.LeapMotionGestures::rightFistFlexedUp(skelPart, keyMap->getAngle(), keyMap->getAngleMod());
+					active = gr.LeapMotionGestures::rightWristFlexedUp(skelPart, keyMap->getAngle(), keyMap->getAngleMod());
 				} else
 				if ( keyMap->getKey() == LEAP_RIGHT_FIST_DOWN ) {
-					active = gr.LeapMotionGestures::rightFistFlexedDown(skelPart, keyMap->getAngle(), keyMap->getAngleMod());
+					active = gr.LeapMotionGestures::rightWristFlexedDown(skelPart, keyMap->getAngle(), keyMap->getAngleMod());
 				}
 
 			}

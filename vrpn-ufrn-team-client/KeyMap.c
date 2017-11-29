@@ -248,8 +248,8 @@ void KeyMap::setKey(std::string key) {
 		if ( strlen(key.c_str()) > 1 ) {
 			std::string msg = key;
 			msg = "Nao foi possivel encontrar mapeamento para " + msg;
-			throw std::exception((msg).c_str());
 			std::cout << msg << "\n";
+			throw std::exception((msg).c_str());
 		}
 	} else {
 		//Entretanto com o Kinect espera-se uma constante

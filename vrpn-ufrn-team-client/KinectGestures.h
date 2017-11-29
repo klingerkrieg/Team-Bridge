@@ -65,10 +65,10 @@ public:
 	static Skeleton skeleton;
 
 	//flexao
-	int leftFistFlexedUp(SkeletonPart skelPart, int angle, int angleMod);
-	int leftFistFlexedDown(SkeletonPart skelPart, int angle, int angleMod);
-	int rightFistFlexedUp(SkeletonPart skelPart, int angle, int angleMod);
-	int rightFistFlexedDown(SkeletonPart skelPart, int angle, int angleMod);
+	int leftWristFlexedUp(SkeletonPart skelPart, int angle, int angleMod);
+	int leftWristFlexedDown(SkeletonPart skelPart, int angle, int angleMod);
+	int rightWristFlexedUp(SkeletonPart skelPart, int angle, int angleMod);
+	int rightWristFlexedDown(SkeletonPart skelPart, int angle, int angleMod);
 
 	std::vector<double> getLastMemberPos(int sensor);
 	int getLastMemberTime(int sensor);
@@ -129,23 +129,23 @@ public:
 
 		std::map<int, int> map;
 		map[0] = SKELETON_HEAD;
-		map[1] = SKELETON_CHEST;
+		map[1] = SKELETON_SHOULDER_CENTER;
 		map[8] = SKELETON_SHOULDER_R;
 		map[4] = SKELETON_SHOULDER_L;
 		map[9] = SKELETON_ELBOW_R;
 		map[5] = SKELETON_ELBOW_L;
-		map[10] = SKELETON_FIST_R;
-		map[6] = SKELETON_FIST_L;
+		map[10] = SKELETON_WRIST_R;
+		map[6] = SKELETON_WRIST_L;
 		map[11] = SKELETON_HAND_R;
 		map[7] = SKELETON_HAND_L;
-		map[2] = SKELETON_BELLY;
-		map[3] = SKELETON_PELVIS;
-		map[16] = SKELETON_LEG_R;
-		map[12] = SKELETON_LEG_L;
+		map[2] = SKELETON_SPINE;
+		map[3] = SKELETON_HIP_CENTER;
+		map[16] = SKELETON_HIP_R;
+		map[12] = SKELETON_HIP_L;
 		map[17] = SKELETON_KNEE_R;
 		map[13] = SKELETON_KNEE_L;
-		map[18] = SKELETON_HEEL_R;
-		map[14] = SKELETON_HEEL_L;
+		map[18] = SKELETON_ANKLE_R;
+		map[14] = SKELETON_ANKLE_L;
 		map[19] = SKELETON_FOOT_R;
 		map[15] = SKELETON_FOOT_L;
 		
