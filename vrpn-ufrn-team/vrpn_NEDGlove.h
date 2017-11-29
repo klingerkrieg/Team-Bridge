@@ -20,6 +20,8 @@ class VRPN_API vrpn_NEDGlove : public vrpn_Analog {
 
 	struct timeval _timestamp;
 
+	bool connected = false;
+
 	protected:
 
 	int port;
@@ -32,7 +34,7 @@ class VRPN_API vrpn_NEDGlove : public vrpn_Analog {
 	HANDLE hPort;
 
 	virtual bool connect();
-	virtual void frame();
+	virtual bool frame();
 
 
 };

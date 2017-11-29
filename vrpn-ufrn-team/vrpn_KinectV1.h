@@ -20,12 +20,15 @@
 class VRPN_API vrpn_KinectV1 : public  vrpn_Tracker {
 	
 	private:
+	INuiSensor * pNuiSensor;
 	INuiSensor* m_pNuiSensor;
 	HANDLE      m_pSkeletonStreamHandle;
 	HANDLE      m_hNextSkeletonEvent;
+	int iSensorCount;
+	HRESULT hr;
 	
 	int lastSkeletonCount = 0;
-	bool connected;
+	bool connected = false;
 /*
 #ifdef PERFORMANCE_TEST
 	struct timeval tp;
@@ -42,8 +45,8 @@ class VRPN_API vrpn_KinectV1 : public  vrpn_Tracker {
 
 	protected:
 	bool connect();
-	void onFrame();
-	void reportPose(int sensor, timeval t, Vector4 position);
+	bool onFrame();
+	void reportPose(int sensor, timeval t, Vector4 position, Vector4 quat);
 
 };
 

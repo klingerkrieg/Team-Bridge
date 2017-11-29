@@ -25,16 +25,19 @@ vrpn_NEDGlove::vrpn_NEDGlove(const char *name, int port, int bauds, vrpn_Connect
 	memset(last, 0, sizeof(last));
 
 	vrpn_gettimeofday(&_timestamp, NULL);
-
-	if ( connect() ) {
-		std::cout << "NED Glove conectado.\n";
-	} else {
-		std::cout << "Falha ao se conectar ao NED Glove.\n";
-	}
+	
+	connect();
 }
 
 void vrpn_NEDGlove::mainloop() {
-	frame();
+	if ( connected ) {
+		if ( !frame() ) {
+			std::cout << "Perda de conexao com a NED Glove.\n";
+			CloseHandle(hPort);
+			connected = false;
+			connect();
+		}
+	}
 	server_mainloop();
 }
 
@@ -45,39 +48,47 @@ vrpn_NEDGlove::~vrpn_NEDGlove() {
 
 bool vrpn_NEDGlove::connect() {
 	
-	wchar_t comConf[5];
-	wsprintfW(comConf, L"COM%d", port);
+	while ( connected == false ) {
+		wchar_t comConf[5];
+		wsprintfW(comConf, L"COM%d", port);
 
-	hPort = CreateFileW(
-		comConf,
-		GENERIC_READ,
-		0,
-		NULL,
-		OPEN_EXISTING,
-		0,
-		NULL
-	);
+		hPort = CreateFileW(
+			comConf,
+			GENERIC_READ,
+			0,
+			NULL,
+			OPEN_EXISTING,
+			0,
+			NULL
+		);
 
-	if ( !GetCommState(hPort, &dcb) ) {
-		return false; //ERROR
+		if ( !GetCommState(hPort, &dcb) ) {
+			std::cout << "Falha ao se conectar ao NED Glove.\n";
+			Sleep(1000);
+			continue; //ERROR
+		}
+
+		dcb.BaudRate = bauds;          //9600 Baud 
+		dcb.ByteSize = 8;                 //8 data bits 
+		dcb.Parity = NOPARITY;            //no parity 
+		dcb.StopBits = ONESTOPBIT;        //1 stop
+
+		if ( !SetCommState(hPort, &dcb) ) {
+			std::cout << "Falha ao usar configurar a NED Glove.\n";
+			Sleep(1000);
+			continue; //ERROR
+		}
+
+		SetCommMask(hPort, EV_RXCHAR | EV_TXEMPTY);       //receive character event  
+		connected = true;
+		std::cout << "NED Glove conectado.\n";
 	}
-
-	dcb.BaudRate = bauds;          //9600 Baud 
-	dcb.ByteSize = 8;                 //8 data bits 
-	dcb.Parity = NOPARITY;            //no parity 
-	dcb.StopBits = ONESTOPBIT;        //1 stop
-
-	if ( !SetCommState(hPort, &dcb) ) {
-		return false; //ERROR
-	} 
-
-	SetCommMask(hPort, EV_RXCHAR | EV_TXEMPTY);       //receive character event  
-
+	
 	return true;
 }
 
 
-void vrpn_NEDGlove::frame() {
+bool vrpn_NEDGlove::frame() {
 	
 	WaitCommEvent(hPort, &dwCommModemStatus, 0);  //wait for character 
 
@@ -85,12 +96,17 @@ void vrpn_NEDGlove::frame() {
 		ReadFile(hPort, &Byte, numBytes, &dwBytesTransferred, 0);  //read 1 
 	else if ( dwCommModemStatus & EV_ERR ) {
 		std::cout << "Erro na leitura";
-		return;
+		return false;
 	}
 
+	if ( !GetCommState(hPort, &dcb) ) {
+		return false; //ERROR
+	}
+	
+	
 	std::string data = ((char *)Byte);
 	data = data.substr(0, data.find("\n"));
-	
+	std::cout << data << "\r";
 	char * pch;
 
 	pch = strtok((char *)data.c_str(), ";");
@@ -100,4 +116,5 @@ void vrpn_NEDGlove::frame() {
 	}
 
 	vrpn_Analog::report();
+	return true;
 }

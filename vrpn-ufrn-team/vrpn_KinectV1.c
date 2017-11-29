@@ -13,19 +13,22 @@
 
 #include "vrpn_BaseClass.h" // for ::vrpn_TEXT_NORMAL, etc
 
+#include <iostream>
+
 VRPN_SUPPRESS_EMPTY_OBJECT_WARNING()
 
 
 vrpn_KinectV1::vrpn_KinectV1(const char *name, vrpn_Connection *c) : vrpn_Tracker(name, c) {
-	connected = connect();
-	if ( connected ) {
-		printf("Kinect conectado.\n");
-	}
+	connect();
 }
 
 void vrpn_KinectV1::mainloop() {
 	if ( connected ) {
-		onFrame();
+		if ( !onFrame() ) {
+			std::cout << "Perda de conexao com o Kinect.\n";
+			connected = false;
+			connect();
+		}
 	}
 	server_mainloop();
 }
@@ -42,68 +45,78 @@ vrpn_KinectV1::~vrpn_KinectV1() {
 
 
 bool vrpn_KinectV1::connect() {
-	INuiSensor * pNuiSensor;
+	
+	while (connected == false) {
 
-	int iSensorCount = 0;
-	HRESULT hr = NuiGetSensorCount(&iSensorCount);
-	if ( FAILED(hr) ) {
-		return false;
-	}
+		printf("Conectando-se ao Kinect...\n");
 
-	m_pNuiSensor = NULL;
-
-	// Look at each Kinect sensor
-	for ( int i = 0; i < iSensorCount; ++i ) {
-		// Create the sensor so we can check status, if we can't create it, move on to the next
-		hr = NuiCreateSensorByIndex(i, &pNuiSensor);
+		iSensorCount = 0;
+		hr = NuiGetSensorCount(&iSensorCount);
 		if ( FAILED(hr) ) {
+			printf("Nenhum Kinect encontrado.\n");
+			Sleep(1000);
 			continue;
 		}
 
-		// Get the status of the sensor, and if connected, then we can initialize it
-		hr = pNuiSensor->NuiStatus();
-		if ( S_OK == hr ) {
-			m_pNuiSensor = pNuiSensor;
-			break;
+		m_pNuiSensor = NULL;
+
+		// Look at each Kinect sensor
+		for ( int i = 0; i < iSensorCount; ++i ) {
+			// Create the sensor so we can check status, if we can't create it, move on to the next
+			hr = NuiCreateSensorByIndex(i, &pNuiSensor);
+			if ( FAILED(hr) ) {
+				continue;
+			}
+
+			// Get the status of the sensor, and if connected, then we can initialize it
+			hr = pNuiSensor->NuiStatus();
+			if ( S_OK == hr ) {
+				m_pNuiSensor = pNuiSensor;
+				break;
+			}
+
+			// This sensor wasn't OK, so release it since we're not using it
+			pNuiSensor->Release();
 		}
 
-		// This sensor wasn't OK, so release it since we're not using it
-		pNuiSensor->Release();
-	}
-
-	if ( NULL != m_pNuiSensor) {
+		if ( NULL != m_pNuiSensor) {
 		
-		// Initialize the Kinect and specify that we'll be using skeleton
-		hr = m_pNuiSensor->NuiInitialize(NUI_INITIALIZE_FLAG_USES_SKELETON);
+			// Initialize the Kinect and specify that we'll be using skeleton
+			hr = m_pNuiSensor->NuiInitialize(NUI_INITIALIZE_FLAG_USES_SKELETON);
 		
-		if ( SUCCEEDED(hr) ) {
-			// Create an event that will be signaled when skeleton data is available
-			m_hNextSkeletonEvent = CreateEventW(NULL, TRUE, FALSE, NULL);
+			if ( SUCCEEDED(hr) ) {
+				// Create an event that will be signaled when skeleton data is available
+				m_hNextSkeletonEvent = CreateEventW(NULL, TRUE, FALSE, NULL);
 
-			// Open a skeleton stream to receive skeleton data
-			hr = m_pNuiSensor->NuiSkeletonTrackingEnable(m_hNextSkeletonEvent, 0);
+				// Open a skeleton stream to receive skeleton data
+				hr = m_pNuiSensor->NuiSkeletonTrackingEnable(m_hNextSkeletonEvent, 0);
+			}
 		}
-	}
 
-	if ( NULL == m_pNuiSensor || FAILED(hr) ) {
-		printf("No ready Kinect found!");
-		return false;
-	}
+		if ( NULL == m_pNuiSensor || FAILED(hr) ) {
+			printf("Nenhum Kinect encontrado.\n");
+			Sleep(1000);
+			continue;
+		}
 
+		connected = true;
+		printf("Kinect conectado.\n");
+	}
+	
 	return true;
 }
 
-void vrpn_KinectV1::reportPose(int sensor, timeval t,Vector4 position) {
+void vrpn_KinectV1::reportPose(int sensor, timeval t,Vector4 position, Vector4 quat) {
 	//Seta dados para envio
 	d_sensor = sensor;
 	pos[0] = position.x;
 	pos[1] = position.y;
 	pos[2] = position.z;
 	
-	d_quat[0] = 0;
-	d_quat[1] = 0;
-	d_quat[2] = 0;
-	d_quat[3] = 0;
+	d_quat[0] = quat.x;
+	d_quat[1] = quat.y;
+	d_quat[2] = quat.z;
+	d_quat[3] = quat.w;
 
 	
 	char msgbuf[512];
@@ -116,12 +129,21 @@ void vrpn_KinectV1::reportPose(int sensor, timeval t,Vector4 position) {
 	}
 }
 
-void vrpn_KinectV1::onFrame() {
+bool vrpn_KinectV1::onFrame() {
+
+	//Verifica conexao
+	hr = m_pNuiSensor->NuiStatus();
+	if ( S_OK != hr ) {
+		return false;
+	}
+
+
 	NUI_SKELETON_FRAME skeletonFrame = { 0 };
 
 	HRESULT hr = m_pNuiSensor->NuiSkeletonGetNextFrame(0, &skeletonFrame);
 	if ( FAILED(hr) ) {
-		return;
+		//printf("Falha ao capturar frame.\n");
+		return true;//Mesmo tendo essa falha ainda pode estar conectado
 	}
 
 	timeval t;
@@ -130,10 +152,12 @@ void vrpn_KinectV1::onFrame() {
 	// smooth out the skeleton data
 	m_pNuiSensor->NuiTransformSmooth(&skeletonFrame, NULL);
 	
+	NUI_SKELETON_BONE_ORIENTATION boneOrientations[NUI_SKELETON_POSITION_COUNT];
 	int countSkeletons = 0;
 	for ( int i = 0; i < NUI_SKELETON_COUNT; ++i ) {
 		NUI_SKELETON_TRACKING_STATE trackingState = skeletonFrame.SkeletonData[i].eTrackingState;
-		
+		NuiSkeletonCalculateBoneOrientations(&skeletonFrame.SkeletonData[i], boneOrientations);
+
 		int sensor = 0;
 		if ( NUI_SKELETON_TRACKED == trackingState ) {
 			countSkeletons++;
@@ -156,7 +180,11 @@ void vrpn_KinectV1::onFrame() {
 						sensor = y;
 					break;
 				}
-				reportPose(sensor, t, skeletonFrame.SkeletonData[i].SkeletonPositions[y]);
+
+				NUI_SKELETON_BONE_ORIENTATION & orientation = boneOrientations[y];
+				
+				reportPose(sensor, t, skeletonFrame.SkeletonData[i].SkeletonPositions[y],
+						   orientation.absoluteRotation.rotationQuaternion);
 			}
 		}
 
@@ -169,5 +197,6 @@ void vrpn_KinectV1::onFrame() {
 		printf("Kinect Parado.\n");
 		lastSkeletonCount = countSkeletons;
 	}
-
+	
+	return true;
 }
