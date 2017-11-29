@@ -14,6 +14,7 @@
 #include "View.h"
 #include "util.h"
 #include "ConfigFileReader.h"
+#include "AbstractAction.h"
 
 //#define PERFORMANCE_TEST
 
@@ -33,6 +34,8 @@ private:
 	 static std::map<std::string, DeviceSensorCount> devicesSensorsCount;
 
 	 static bool nextDefineCenterPos;
+
+	 AbstractAction *act;
 
 	 bool viewOn = false;
 	 View *view;
@@ -58,18 +61,21 @@ public:
 
 	~InputConverter();
 
-	InputConverter(std::vector<KeyMap> &map, std::vector<DeviceType> &devs, std::string &app) {
+	InputConverter(std::vector<KeyMap> &map, std::vector<DeviceType> &devs, std::string &app, AbstractAction *act) {
 		this->map = map;
 		this->app = app;
 		this->devs = devs;
+		this->act = act;
+
 		init();
 	}
 
-	InputConverter(std::vector<KeyMap> &map, std::vector<DeviceType> &devs, std::string &app, View &view) {
+	InputConverter(std::vector<KeyMap> &map, std::vector<DeviceType> &devs, std::string &app, AbstractAction *act, View &view) {
 		this->map = map;
 		this->app = app;
 		this->devs = devs;
 		this->view = &view;
+		this->act = act;
 		viewOn = true;
 		init();
 	}
@@ -78,8 +84,6 @@ public:
 		gr = GestureRecognizer();
 	}
 	
-	 void press(KeyMap key);
-
 	 void interpretKeyMap(KeyMap &keyMap);
 
 	// void release(char key);

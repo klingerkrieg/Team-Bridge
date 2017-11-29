@@ -7,9 +7,7 @@ int InputConverter::lastTimeCenterPos = 0;
 std::vector<KeyMap> InputConverter::map;
 std::vector<DeviceType> InputConverter::devs;
 
-bool InputConverter::mouseLeftPressed = false;
-bool InputConverter::mouseRightPressed = false;
-bool InputConverter::mouseMiddlePressed = false;
+
 
 std::map<std::string, DeviceSensorCount> InputConverter::devicesSensorsCount;
 
@@ -19,163 +17,6 @@ double InputConverter::qtdMed = 0;
 double InputConverter::usecMed = 0;
 double InputConverter::secMed = 0;
 #endif
-
-
-void InputConverter::press(KeyMap key) {
-
-	bool print = true;
-	int actualTime = (int)time(0);
-
-	if ( key.getToKey() == VK_RBUTTON || key.getToKey() == VK_LBUTTON || key.getToKey() == VK_MBUTTON
-		|| key.getToKey() == VK_MOUSEMOVE
-		|| key.getToKey() == VK_RBUTTON_DOWN || key.getToKey() == VK_LBUTTON_DOWN
-		|| key.getToKey() == VK_RBUTTON_UP || key.getToKey() == VK_LBUTTON_UP
-		|| key.getToKey() == VK_MBUTTON_UP || key.getToKey() == VK_MBUTTON_UP ) {
-
-
-		INPUT input, inputUp;
-		input.type = INPUT_MOUSE;//Ele automaticamente soma com a posicao atual do mouse
-		inputUp.type = INPUT_MOUSE;
-
-		input.mi.mouseData = 0;
-		input.mi.time = 0;
-		inputUp.mi.mouseData = 0;
-		inputUp.mi.time = 0;
-		
-		if ( key.getToKey() == VK_MOUSEMOVE ) {
-			input.mi.dwFlags = MOUSEEVENTF_MOVE;
-			input.mi.dx = key.getMouseX();
-			input.mi.dy = key.getMouseY();
-			//std::cout << "move to x:" << input.mi.dx << "y:" << input.mi.dy << "\n";
-		} else
-		if ( key.getToKey() == VK_RBUTTON || key.getToKey() == VK_RBUTTON_DOWN ) {
-			input.mi.dwFlags = MOUSEEVENTF_RIGHTDOWN;
-			inputUp.mi.dwFlags = MOUSEEVENTF_RIGHTUP;
-			//Se o botao ja esta pressionado nao pressiona de novo
-			if ( mouseRightPressed ) {
-				return;
-			}
-			mouseRightPressed = true;
-		} else 
-		if ( key.getToKey() == VK_LBUTTON || key.getToKey() == VK_LBUTTON_DOWN ) {
-			input.mi.dwFlags = MOUSEEVENTF_LEFTDOWN;
-			inputUp.mi.dwFlags = MOUSEEVENTF_LEFTUP;
-			//Se o botao ja esta pressionado nao pressiona de novo
-			if ( mouseLeftPressed ) {
-				return;
-			}
-			mouseLeftPressed = true;
-		} else 
-		if ( key.getToKey() == VK_MBUTTON || key.getToKey() == VK_MBUTTON_DOWN ) {
-			input.mi.dwFlags = MOUSEEVENTF_MIDDLEDOWN;
-			inputUp.mi.dwFlags = MOUSEEVENTF_MIDDLEUP;
-			if ( mouseMiddlePressed ) {
-				return;
-			}
-			mouseMiddlePressed = true;
-		} else 
-		if ( key.getToKey() == VK_RBUTTON_UP ) {
-			input.mi.dwFlags = MOUSEEVENTF_RIGHTUP;
-			//Se o botao nao esta pressionado, nao tem nada pra despressionar
-			if ( mouseRightPressed == false ) {
-				return;
-			}
-			mouseRightPressed = false;
-		} else 
-		if ( key.getToKey() == VK_LBUTTON_UP ) {
-			input.mi.dwFlags = MOUSEEVENTF_LEFTUP;
-			if ( mouseLeftPressed == false ) {
-				return;
-			}
-			mouseLeftPressed = false;
-		} else 
-		if ( key.getToKey() == VK_MBUTTON_UP ) {
-			input.mi.dwFlags = MOUSEEVENTF_MIDDLEUP;
-			if ( mouseMiddlePressed == false ) {
-				return;
-			}
-			mouseMiddlePressed = false;
-		}
-
-		/*input.mi.mouseData = 0;
-		input.mi.dwExtraInfo = NULL;
-		input.mi.time = 0;*/
-		if ( print && mouseMiddlePressed )
-			printf("Press: %s on windows.\n", key.getToKeyRepr().c_str());
-		else if ( print && !mouseMiddlePressed )
-			printf("Unpress: %s on windows.\n", key.getToKeyRepr().c_str());
-
-		SendInput(1, &input, sizeof(INPUT));
-		ZeroMemory(&input, sizeof(INPUT));
-		//So vai pressionar o soltar se for o evento normal
-		if ( key.getToKey() == VK_RBUTTON || key.getToKey() == VK_LBUTTON || key.getToKey() == VK_MBUTTON ) {
-			SendInput(1, &inputUp, sizeof(INPUT));
-			ZeroMemory(&inputUp, sizeof(INPUT));
-
-			//Caso tenha sido os dois eventos em um só
-			if ( key.getToKey() == VK_LBUTTON ) {
-				mouseLeftPressed = false;
-			} else
-			if ( key.getToKey() == VK_RBUTTON ) {
-				mouseRightPressed = false;
-			} else
-			if ( key.getToKey() == VK_MBUTTON ) {
-				mouseMiddlePressed = false;
-			}
-		}
-		
-	} else {
-		
-
-		if ( app != "" ) {
-			//Não irá funcionar em jogos com DirectInput, para funcionar não use APP
-			//HWND window = FindWindow(_T(app.c_str()), NULL);
-			HWND window = FindWindowA(NULL, app.c_str());
-			if ( window ) {
-				HWND edit = FindWindowEx(window, NULL, _T("Edit"), NULL);
-				if ( print )
-					printf(" em %s [%d].\n", app.c_str(), actualTime);
-				//btnKeyDown e btnKeyUp podem nao funcionar aqui
-				if ( key.getToKeyIsConstant() ) {
-					PostMessage(edit, WM_KEYDOWN, key.getToKey(), 0);
-				} else {
-					PostMessage(edit, WM_KEYDOWN, VkKeyScanEx(key.getToKey(), GetKeyboardLayout(0)), 0);
-				}
-				return;
-			}
-		}
-
-		//Caso nenhum app tenha sido configurado ou encontrado lanca evento no windows
-		//keybd_event(key.getToKey(), 0, 0, 0);
-		INPUT input;
-		WORD vkey = key.getToKey();
-		input.type = INPUT_KEYBOARD;
-		input.ki.wScan = MapVirtualKey(vkey, MAPVK_VK_TO_VSC);
-		input.ki.time = 0;
-		input.ki.dwExtraInfo = 0;
-		input.ki.wVk = vkey;
-
-		if ( key.getBtnDown() ) {
-			input.ki.dwFlags = 0;// there is no KEYEVENTF_KEYDOWN
-			SendInput(1, &input, sizeof(INPUT));
-
-			//Um delay para o game realizar a acao
-			//Sleep(10);
-			if ( print )
-				printf("Press: %s on Windows [%d].\n", key.getToKeyRepr().c_str(), actualTime);
-		}
-		if ( key.getBtnUp() ) {
-			input.ki.dwFlags = KEYEVENTF_KEYUP;
-			SendInput(1, &input, sizeof(INPUT));
-
-			if ( print )
-				printf("Unpress: %s on Windows [%d].\n", key.getToKeyRepr().c_str(), actualTime);
-		}
-		
-	}
-
-}
-
 
 
 void InputConverter::interpretKeyMap(KeyMap &keyMap) {
@@ -196,7 +37,8 @@ void InputConverter::interpretKeyMap(KeyMap &keyMap) {
 		if ( viewOn )
 			view->showMsg(keyMap.getMsg());
 	} else {
-		press(keyMap);
+		//Executa a ação, para essa aplicação são inputs de mouse e teclado
+		act->run(keyMap);
 	}
 }
 

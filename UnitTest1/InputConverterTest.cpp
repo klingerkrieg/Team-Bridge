@@ -7,7 +7,7 @@
 #include <vrpn_Button.h>
 #include <math.h>
 #include "utilTest.h"
-
+#include "KeyPressAction.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -91,7 +91,9 @@ namespace InputConverterTest {
 		dt.type_str = DEVTYPE_STR[dt.type];
 		devs.push_back(dt);
 
-		iC = InputConverter(map, devs, app);
+		KeyPressAction *keyPresser = new KeyPressAction();
+
+		iC = InputConverter(map, devs, app, keyPresser);
 	}
 
 

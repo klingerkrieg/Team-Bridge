@@ -27,7 +27,7 @@
 //#include "DeviceInfo.h"
 #include "Storage.h"
 #include "InputConverter.h"
-
+#include "KeyPressAction.h"
 #include "View.h"
 
 //GUI

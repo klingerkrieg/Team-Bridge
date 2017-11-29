@@ -163,6 +163,7 @@
     <ClCompile Include="ConfigFileReader.c" />
     <ClCompile Include="Db.c" />
     <ClCompile Include="FlexedMember.c" />
+    <ClCompile Include="KeyPressAction.c" />
     <ClCompile Include="KinectGestures.c" />
     <ClCompile Include="InputConverter.c" />
     <ClCompile Include="KeyMap.c" />
@@ -174,6 +175,7 @@
     <ClCompile Include="View.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AbstractAction.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="Config.h" />
     <ClInclude Include="ConfigFileReader.h" />
@@ -183,6 +185,7 @@
     <ClInclude Include="FlexedMember.h" />
     <ClInclude Include="GestureRecognizer.h" />
     <ClInclude Include="json.hpp" />
+    <ClInclude Include="KeyPressAction.h" />
     <ClInclude Include="KinectGestures.h" />
     <ClInclude Include="LeapMotionGestures.h" />
     <ClInclude Include="NEDGloveGestures.h" />

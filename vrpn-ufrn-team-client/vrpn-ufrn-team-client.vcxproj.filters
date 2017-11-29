@@ -31,6 +31,12 @@
     <Filter Include="Source Files\therapy">
       <UniqueIdentifier>{533004cb-f786-4edd-8f63-9f4736458234}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Actions">
+      <UniqueIdentifier>{4a3a3bdc-3bf9-4386-b0d9-451e78391421}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Actions">
+      <UniqueIdentifier>{c9229489-4108-4653-8757-e16cb1908444}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Config.c">
@@ -74,6 +80,9 @@
     </ClCompile>
     <ClCompile Include="Storage.c">
       <Filter>Source Files\therapy</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyPressAction.c">
+      <Filter>Source Files\Actions</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -142,6 +151,12 @@
     </ClInclude>
     <ClInclude Include="Storage.h">
       <Filter>Header Files\therapy</Filter>
+    </ClInclude>
+    <ClInclude Include="AbstractAction.h">
+      <Filter>Header Files\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyPressAction.h">
+      <Filter>Header Files\Actions</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -39,8 +39,12 @@ bool Client::setup(bool test = false) {
 		}
 
 
+		//Cria acionador de eventos, para essa aplicação será eventos de teclado e mouse
+		KeyPressAction *keyPresser = new KeyPressAction();
+
+
 		//Setando InputConverter
-		inputConverter = InputConverter(map, devs, config.getApp(), view);
+		inputConverter = InputConverter(map, devs, config.getApp(), keyPresser, view);
 		
 
 		//Setando configs no store
