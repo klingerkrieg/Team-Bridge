@@ -13,7 +13,6 @@
 
 #include "vrpn_BaseClass.h" // for ::vrpn_TEXT_NORMAL, etc
 
-#include <iostream>
 
 VRPN_SUPPRESS_EMPTY_OBJECT_WARNING()
 
@@ -25,7 +24,7 @@ vrpn_KinectV1::vrpn_KinectV1(const char *name, vrpn_Connection *c) : vrpn_Tracke
 void vrpn_KinectV1::mainloop() {
 	if ( connected ) {
 		if ( !onFrame() ) {
-			std::cout << "Perda de conexao com o Kinect.\n";
+			printf("Perda de conexao com o Kinect.\n");
 			connected = false;
 			connect();
 		}

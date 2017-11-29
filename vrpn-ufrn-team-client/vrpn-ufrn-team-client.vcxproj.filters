@@ -13,11 +13,26 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\GestureRecognizer">
+      <UniqueIdentifier>{900db547-782b-4e09-8e95-b5c3ff32ae42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GestureRecognizer">
+      <UniqueIdentifier>{7816c53c-7b40-49f9-a6eb-7a92755d2fbb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\therapy">
+      <UniqueIdentifier>{82d0fe48-d887-4b27-82f8-61eee9909d1c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\external">
+      <UniqueIdentifier>{f5302726-3920-48e7-b672-ace78096ff14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\external">
+      <UniqueIdentifier>{aa85a0e9-aeda-452e-a0a6-155e659da6e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\therapy">
+      <UniqueIdentifier>{533004cb-f786-4edd-8f63-9f4736458234}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Db.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Config.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -25,9 +40,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="KeyMap.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Storage.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="InputConverter.c">
@@ -42,20 +54,26 @@
     <ClCompile Include="util.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="KinectGestures.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="LeapMotionGestures.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FlexedMember.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Skeleton.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="NEDGloveGestures.c">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\GestureRecognizer</Filter>
+    </ClCompile>
+    <ClCompile Include="KinectGestures.c">
+      <Filter>Source Files\GestureRecognizer</Filter>
+    </ClCompile>
+    <ClCompile Include="LeapMotionGestures.c">
+      <Filter>Source Files\GestureRecognizer</Filter>
+    </ClCompile>
+    <ClCompile Include="Db.c">
+      <Filter>Source Files\therapy</Filter>
+    </ClCompile>
+    <ClCompile Include="FlexedMember.c">
+      <Filter>Source Files\GestureRecognizer</Filter>
+    </ClCompile>
+    <ClCompile Include="Storage.c">
+      <Filter>Source Files\therapy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -66,12 +84,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DeviceInfo.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Storage.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Db.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Config.h">
@@ -92,38 +104,44 @@
     <ClInclude Include="util.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="KinectGestures.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GestureRecognizer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="LeapMotionGestures.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FlexedMember.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="json.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="utf8.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="utf8\checked.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="utf8\core.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="utf8\unchecked.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Skeleton.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="KinectGestures.h">
+      <Filter>Header Files\GestureRecognizer</Filter>
+    </ClInclude>
+    <ClInclude Include="LeapMotionGestures.h">
+      <Filter>Header Files\GestureRecognizer</Filter>
+    </ClInclude>
     <ClInclude Include="NEDGloveGestures.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\GestureRecognizer</Filter>
+    </ClInclude>
+    <ClInclude Include="utf8\checked.h">
+      <Filter>Header Files\external</Filter>
+    </ClInclude>
+    <ClInclude Include="utf8\core.h">
+      <Filter>Header Files\external</Filter>
+    </ClInclude>
+    <ClInclude Include="Db.h">
+      <Filter>Header Files\therapy</Filter>
+    </ClInclude>
+    <ClInclude Include="GestureRecognizer.h">
+      <Filter>Header Files\GestureRecognizer</Filter>
+    </ClInclude>
+    <ClInclude Include="FlexedMember.h">
+      <Filter>Header Files\GestureRecognizer</Filter>
+    </ClInclude>
+    <ClInclude Include="json.hpp">
+      <Filter>Header Files\external</Filter>
+    </ClInclude>
+    <ClInclude Include="utf8.h">
+      <Filter>Header Files\external</Filter>
+    </ClInclude>
+    <ClInclude Include="utf8\unchecked.h">
+      <Filter>Header Files\external</Filter>
+    </ClInclude>
+    <ClInclude Include="Storage.h">
+      <Filter>Header Files\therapy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
