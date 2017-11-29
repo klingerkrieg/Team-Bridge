@@ -28,10 +28,12 @@
   },
   "keys": [
     {
-      "divClass": "nedGloveGrab",
+      "divClass": "nedGlovePinch",
       "dev": "Analog0@localhost",
       "key": "NEDGLOVE_PINCH",
-      "strengthMin": 40,
+      "thumb": 0,
+      "index": 4,
+      "strengthMin": 14,
       "strengthMax": 0,
       "toKeyDown": "A",
       "toKeyUp": "A"

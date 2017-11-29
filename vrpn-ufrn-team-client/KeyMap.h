@@ -126,7 +126,8 @@ private:
 	
 	int strengthMin = 0;
 	int strengthMax = 0;
-
+	int thumb = -1;
+	int index = -1;
 	
 	
 
@@ -263,6 +264,14 @@ public:
 
 	bool getDetermineCenterPos() {
 		return determineCenterPos;
+	}
+
+	int getThumb() {
+		return thumb;
+	}
+
+	int getIndex() {
+		return index;
 	}
 
 

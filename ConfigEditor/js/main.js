@@ -1,5 +1,8 @@
-
 var fs = require('fs');
+var exec = require('child_process');
+
+
+
 
 /* Configurações gerais */
 var programName = "ConfigEditor";
@@ -290,4 +293,98 @@ function toKeyWhileVerify(el){
     if ( (el.attr("id") == "toKeyDown" || el.attr("id") == "toKeyUp") && el.prop("checked") ){
         el.parent().parent().find("#toKeyWhile").prop("checked",false);
     }
+}
+
+var nedGloveDivSelected;
+var nedGloveInterval;
+var nedGloveThumb;
+var nedGloveIndex;
+var nedGloveMode;
+
+function closeNedGloveModal(){
+    $('#nedGloveModal').modal("hide");
+    clearInterval(nedGloveInterval);
+}
+
+function openNedGloveModal(btn, mode){
+    nedGloveMode = mode;
+    $('#nedGloveModal').modal("show");
+    if (nedGloveMode == 'pinch'){
+        $('#pinchModeDiv').show();
+    } else {
+        $('#pinchModeDiv').hide();
+    }
+    changeFingersSensors();
+    nedGloveDivSelected = $(btn).parent();
+    nedGloveInterval = setInterval(loadNedGlovesValuesFromSerial, 1000);
+    $('#nedGloveModal #btnSaveStrDiv button').removeClass('btn-primary').addClass('btn-secondary').val(0);
+}
+
+function saveStrToButton(btn){
+    //Quando o botão for  clicado a classe secundaria é removida
+    //A classe primária é adicionada
+    //O valor da força fica fixo
+    btn = $(btn);
+    btn.addClass('btn-primary').removeClass('btn-secondary');
+    btn.find('span').html($('#nedGloveModal #nedStr').html());
+    btn.val(btn.find('span').html());
+}
+
+function saveNedGloveStr(){
+    //Caso nenhum valor tenha sido escolhido o valor padrão é 0
+    var minStr = $('#nedGloveModal #btnSaveStrDiv #min').val();
+    var maxStr = $('#nedGloveModal #btnSaveStrDiv #max').val();
+    nedGloveDivSelected.find("#strengthMin").val(minStr);
+    nedGloveDivSelected.find("#strengthMax").val(maxStr);
+    closeNedGloveModal();
+}
+
+
+function changeFingersSensors(){
+    //Colore os dedos indicador e polegar
+    $(".thumb").removeClass("thumb");
+    $(".index").removeClass("index");
+
+    if (nedGloveMode == 'pinch'){
+        nedGloveThumb = $('#nedGloveModal #thumb').val();
+        nedGloveIndex = $('#nedGloveModal #index').val();
+        $('#nedGloveModal #sens'+nedGloveThumb).addClass("thumb");
+        $('#nedGloveModal #sens'+nedGloveIndex).addClass("index");
+        $('#nedGloveModal #thumb').addClass("thumb");
+        $('#nedGloveModal #index').addClass("index");
+    }
+}
+
+function loadNedGlovesValuesFromSerial(){
+    exec.exec("SerialPortToString.exe -p "+$("#nedGloveModal #port").val()+" -b "+$("#nedGloveModal #bauds").val()+"", function(error, stdout, stderr) {
+        if (error) {
+          console.log('exec error: '+error);
+          return;
+        }
+        console.log('stdout: '+stdout);
+        values = stdout.split(";");
+        var strength = 0;
+        //Limpa todos
+        for (var i = 0; i < 5; i++){
+            $("#nedGloveModal #sens"+i).html("");
+        }
+        for (var i = 0; i < values.length; i++){
+            strength += parseInt(values[i]);
+            $("#nedGloveModal #sens"+i).html(values[i]);
+        }
+
+        //Conta somente a força do indicador e polegar
+        if (nedGloveMode == 'pinch'){
+            strength = parseInt(values[nedGloveThumb]);
+            strength += parseInt(values[nedGloveIndex]);
+            strength = parseInt(250 - (strength / 2));
+            $('#nedGloveModal #nedStr').html(strength);
+        } else {
+            strength = parseInt(250 - (strength / 5));
+            $('#nedGloveModal #nedStr').html(strength);
+        }
+        //Aplica a força nas spans dentro dos botoes que ainda so possuem a classe secundaria
+        $('#nedGloveModal #btnSaveStrDiv .btn-secondary').find('span').html(strength);
+        
+    });
 }

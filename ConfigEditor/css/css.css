@@ -29,7 +29,7 @@ body{
 }
 
 [type=number]{
-	width:80px;
+	width:85px;
 	padding-right: 1px;
 }
 
@@ -84,4 +84,18 @@ legend{
 
 .help{
 	font-style: italic;
+}
+
+.thumb{
+	background-color: green;
+	color:white;
+	font-weight: bold;
+	border-radius: 5px;
+}
+
+.index{
+	background-color: purple;
+	color:white;
+	font-weight: bold;
+	border-radius: 3px;
 }

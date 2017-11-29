@@ -23,7 +23,7 @@ bool NEDGloveGestures::closed(const vrpn_ANALOGCB a, KeyMap *keyMap) {
 
 
 bool NEDGloveGestures::pinch(const vrpn_ANALOGCB a, KeyMap *keyMap) {
-	int str = strengthNormal - (((int)a.channel[0] + (int)a.channel[4]) / 2);
+	int str = strengthNormal - (((int)a.channel[keyMap->getThumb()] + (int)a.channel[keyMap->getIndex()]) / 2);
 
 	int maxStr = keyMap->getStrengthMax() == 0 ? strengthNormal : keyMap->getStrengthMax();
 	int minStr = keyMap->getStrengthMin() == 0 ? 0 : keyMap->getStrengthMin();

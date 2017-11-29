@@ -108,6 +108,8 @@ public:
 			{ "divClass","nedGlove" },
 			{ "dev" ,"Analog0@localhost" },
 			{ "key" ,"NEDGLOVE_PINCH" },
+			{ "thumb" , 0 },
+			{ "index" , 4 },
 			{ "strengthMin" ,40 },
 			{ "strengthMax" ,0 },
 			{ "toKeyDown" ,"A" },

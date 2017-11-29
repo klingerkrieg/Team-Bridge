@@ -24,10 +24,16 @@ std::string KeyMap::toString() {
 		ret = "[" + getDev() + "] " + getKeyRepr();
 		
 		if ( getStrengthMax() != 0 ) {
-			ret += "Max:" + std::to_string(getStrengthMax());
+			ret += " Max:" + std::to_string(getStrengthMax());
 		}
 		if ( getStrengthMin() != 0 ) {
-			ret += "Min:" + std::to_string(getStrengthMin());
+			ret += " Min:" + std::to_string(getStrengthMin());
+		}
+		if ( getThumb() != -1 ) {
+			ret += " Thumb:" + std::to_string(getThumb());
+		}
+		if ( getStrengthMin() != -1 ) {
+			ret += " Index:" + std::to_string(getIndex());
 		}
 
 
@@ -131,6 +137,13 @@ KeyMap::KeyMap(json js) {
 	if ( !js["strengthMin"].is_null() ) {
 		this->strengthMin = js["strengthMin"].get<int>();
 	}
+	if ( !js["thumb"].is_null() ) {
+		this->thumb = js["thumb"].get<int>();
+	}
+	if ( !js["index"].is_null() ) {
+		this->index = js["index"].get<int>();
+	}
+
 
 
 	if ( !js["maxVelociyMs"].is_null() ) {
