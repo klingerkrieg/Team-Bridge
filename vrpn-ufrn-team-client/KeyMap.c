@@ -102,7 +102,9 @@ std::string KeyMap::toString() {
 
 KeyMap::KeyMap(json js) {
 
-	this->dev = js["dev"].get<std::string>();
+	if ( !js["dev"].is_null() ) {
+		this->dev = js["dev"].get<std::string>();
+	}
 	
 	if ( !js["x"].is_null() ) {
 		this->x = js["x"].get<int>();
@@ -223,8 +225,8 @@ KeyMap::KeyMap(json js) {
 
 	}
 
-
-	setKey(js["key"].get<std::string>());
+	if ( !js["key"].is_null() )
+		setKey(js["key"].get<std::string>());
 
 }
 

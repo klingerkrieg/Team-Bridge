@@ -84,6 +84,9 @@
     <ClCompile Include="KeyPressAction.c">
       <Filter>Source Files\Actions</Filter>
     </ClCompile>
+    <ClCompile Include="GestureRecognizer.c">
+      <Filter>Source Files\GestureRecognizer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="KeyMap.h">
@@ -157,6 +160,9 @@
     </ClInclude>
     <ClInclude Include="KeyPressAction.h">
       <Filter>Header Files\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="AbstractGestureRecognizer.h">
+      <Filter>Header Files\GestureRecognizer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

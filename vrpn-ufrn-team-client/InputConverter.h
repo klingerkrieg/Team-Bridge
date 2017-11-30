@@ -16,6 +16,10 @@
 #include "ConfigFileReader.h"
 #include "AbstractAction.h"
 
+#include "KinectGestures.h"
+#include "LeapMotionGestures.h"
+#include "NEDGloveGestures.h"
+
 //#define PERFORMANCE_TEST
 
 struct DeviceSensorCount {
@@ -30,6 +34,10 @@ private:
 	 static std::vector<DeviceType> devs;
 	 std::string app;
 	 GestureRecognizer gr;
+
+	 /*KinectGestures kinectGr;
+	 LeapMotionGestures leapGr;
+	 NEDGloveGestures nedGr;*/
 
 	 static std::map<std::string, DeviceSensorCount> devicesSensorsCount;
 
@@ -81,7 +89,19 @@ public:
 	}
 
 	void init() {
-		gr = GestureRecognizer();
+		//gr = GestureRecognizer();
+		
+		/*kinectGr = KinectGestures();
+		leapGr = LeapMotionGestures();
+		nedGr = NEDGloveGestures();
+
+		//kinectGr.
+		leapGr.assignChecker(map);
+		nedGr.assignChecker(map);*/
+
+		//Aqui foi aplicado algo semelhante ao padrão Observer
+		//Chama o assign geral, dentro desse sera chamado individualmente o assign de cada GestureRecognizer
+		gr.GestureRecognizer::assignChecker(map);
 	}
 	
 	 void interpretKeyMap(KeyMap &keyMap);

@@ -6,11 +6,18 @@
 #include <iostream>
 
 #include "util.h"
-
 #include "json.hpp"
+#include "Skeleton.h"
+#include "AbstractGestureRecognizer.h"
+
+#include <vrpn_Tracker.h>
+#include <vrpn_Analog.h>
+#include <vrpn_Button.h>
 
 
 using json = nlohmann::json;
+
+using namespace std::placeholders;
 
 static const int SSIZE = 512;
 
@@ -39,11 +46,11 @@ const int KINECT_WALK = 5011;
 const int KINECT_TURN_RIGHT = 5012;
 const int KINECT_TURN_LEFT = 5013;
 
-const int KINECT_RIGHT_FIST_UP = 5014;
-const int KINECT_RIGHT_FIST_DOWN = 5015;
+const int KINECT_RIGHT_WRIST_UP = 5014;
+const int KINECT_RIGHT_WRIST_DOWN = 5015;
 
-const int KINECT_LEFT_FIST_UP = 5016;
-const int KINECT_LEFT_FIST_DOWN = 5017;
+const int KINECT_LEFT_WRIST_UP = 5016;
+const int KINECT_LEFT_WRIST_DOWN = 5017;
 
 const int KINECT_BALANCE = 5018;
 
@@ -52,10 +59,10 @@ const int LEAP_RIGHT_CLOSED = 7001;
 const int LEAP_LEFT_PINCH = 7002;
 const int LEAP_RIGHT_PINCH = 7003;
 
-const int LEAP_LEFT_FIST_UP = 7004;
-const int LEAP_RIGHT_FIST_UP = 7005;
-const int LEAP_LEFT_FIST_DOWN = 7006;
-const int LEAP_RIGHT_FIST_DOWN = 7007;
+const int LEAP_LEFT_WRIST_UP = 7004;
+const int LEAP_RIGHT_WRIST_UP = 7005;
+const int LEAP_LEFT_WRIST_DOWN = 7006;
+const int LEAP_RIGHT_WRIST_DOWN = 7007;
 
 
 const int NEDGLOVE_GRAB = 7500;
@@ -63,6 +70,12 @@ const int NEDGLOVE_PINCH = 7501;
 
 const int MESSAGE = 6000;
 const int ALERT = 6001;
+
+
+const int TRACK_TYPE = 1;
+const int BUTTON_TYPE = 2;
+const int ANALOG_TYPE = 3;
+
 
 class KeyMap {
 private:
@@ -138,9 +151,59 @@ private:
 	//delay atualmente usado somente para marcha estacionaria
 	int delay = 400; //ms;
 
-public:
 
+	//Aqui foi aplicado algo semelhante ao padrão Observer
+public:
+	typedef int (AbstractGestureRecognizer::*gestureCheckerMethod)(void * data, KeyMap *key);
+
+	//Guardo o método responsável por tratar aquele keyMap
+private:
+	AbstractGestureRecognizer *context;
+	gestureCheckerMethod gestureChecker;
+	bool gestureCheckerDefined = false;
+	int checkerType = 0;
+
+public:
 	
+
+	void assignGestureChecker(int type, gestureCheckerMethod method, AbstractGestureRecognizer *ofClass) {
+		gestureChecker = method;
+		context = ofClass;
+		gestureCheckerDefined = true;
+		checkerType = type;
+	}
+
+	//Sempre que chegar um dado novo o método é chamado para verificar
+	//Essa sobrecarga é para garantir que uma função não seja chamada com um tipo de dado não suportado
+	int callGestureChecker(SkeletonPart data) {
+		if ( checkerType == TRACK_TYPE ) {
+			return (context->*gestureChecker)((void *)&data, this);
+		}
+		return -1;
+	}
+
+	int callGestureChecker(vrpn_BUTTONCB data) {
+		if ( checkerType == BUTTON_TYPE ) {
+			return (context->*gestureChecker)((void *)&data, this);
+		}
+		return -1;
+	}
+
+	int callGestureChecker(vrpn_ANALOGCB data) {
+		if ( checkerType == ANALOG_TYPE ) {
+			return (context->*gestureChecker)((void *)&data, this);
+		}
+		return -1;
+	}
+	
+	/*bool callGestureChecker(void * data) {
+		return (context->*gestureChecker)(data, this);
+	}*/
+
+	bool getGestureCheckerDefined() {
+		return gestureCheckerDefined;
+	}
+
 	int scan2ascii(DWORD scancode, USHORT* result);
 
 	std::string getKeyRepr() {
@@ -386,10 +449,10 @@ public:
 		m["KINECT_TURN_RIGHT"] = KINECT_TURN_RIGHT;
 		m["KINECT_TURN_LEFT"] = KINECT_TURN_LEFT;
 
-		m["KINECT_RIGHT_FIST_UP"] = KINECT_RIGHT_FIST_UP;
-		m["KINECT_RIGHT_FIST_DOWN"] = KINECT_RIGHT_FIST_DOWN;
-		m["KINECT_LEFT_FIST_UP"] = KINECT_LEFT_FIST_UP;
-		m["KINECT_LEFT_FIST_DOWN"] = KINECT_LEFT_FIST_DOWN;
+		m["KINECT_RIGHT_WRIST_UP"] = KINECT_RIGHT_WRIST_UP;
+		m["KINECT_RIGHT_WRIST_DOWN"] = KINECT_RIGHT_WRIST_DOWN;
+		m["KINECT_LEFT_WRIST_UP"] = KINECT_LEFT_WRIST_UP;
+		m["KINECT_LEFT_WRIST_DOWN"] = KINECT_LEFT_WRIST_DOWN;
 
 		m["KINECT_BALANCE"] = KINECT_BALANCE;
 
@@ -399,10 +462,10 @@ public:
 		m["LEAP_RIGHT_CLOSED"] = LEAP_RIGHT_CLOSED;
 		m["LEAP_LEFT_PINCH"] = LEAP_LEFT_PINCH;
 		m["LEAP_RIGHT_PINCH"] = LEAP_RIGHT_PINCH;
-		m["LEAP_LEFT_FIST_UP"] = LEAP_LEFT_FIST_UP;
-		m["LEAP_RIGHT_FIST_UP"] = LEAP_RIGHT_FIST_UP;
-		m["LEAP_LEFT_FIST_DOWN"] = LEAP_LEFT_FIST_DOWN;
-		m["LEAP_RIGHT_FIST_DOWN"] = LEAP_RIGHT_FIST_DOWN;
+		m["LEAP_LEFT_WRIST_UP"] = LEAP_LEFT_WRIST_UP;
+		m["LEAP_RIGHT_WRIST_UP"] = LEAP_RIGHT_WRIST_UP;
+		m["LEAP_LEFT_WRIST_DOWN"] = LEAP_LEFT_WRIST_DOWN;
+		m["LEAP_RIGHT_WRIST_DOWN"] = LEAP_RIGHT_WRIST_DOWN;
 
 		//NEDGlove
 		m["NEDGLOVE_GRAB"] = NEDGLOVE_GRAB;

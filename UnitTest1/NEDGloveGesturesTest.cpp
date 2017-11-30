@@ -41,8 +41,8 @@ TEST_CLASS(NEDGloveGesturesTest) {
 		a.channel[2] = val;
 		a.channel[3] = val;
 		a.channel[4] = val;
-		Assert::IsTrue(gr.closed(a, &m1));
-		Assert::IsTrue(gr.pinch(a, &m1));
+		Assert::IsTrue(gr.closed((void *)&a, &m1));
+		Assert::IsTrue(gr.pinch((void *)&a, &m1));
 
 		val = 220;
 		a.channel[0] = val;
@@ -50,8 +50,8 @@ TEST_CLASS(NEDGloveGesturesTest) {
 		a.channel[2] = val;
 		a.channel[3] = val;
 		a.channel[4] = val;
-		Assert::IsFalse(gr.closed(a, &m1));
-		Assert::IsFalse(gr.pinch(a, &m1));
+		Assert::IsFalse(gr.closed((void *)&a, &m1));
+		Assert::IsFalse(gr.pinch((void *)&a, &m1));
 
 	}
 

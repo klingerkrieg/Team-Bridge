@@ -19,14 +19,14 @@ var actions = [{class:"handTop", title:"[Kinect] Altura da mão"},
                     {class:"kinectStep", title:"[Kinect] Step"},
                     {class:"kinectBalance", title:"[Kinect] Equilíbrio"},
                     {class:"kinectFastHand", title:"[Kinect] Velocidade do gesto"},
-                    {class:"kinectFist", title:"[Kinect] Flexão de punho"},
+                    {class:"kinectWrist", title:"[Kinect] Flexão de punho"},
                     {class:"kinectTurn", title:"[Kinect] Girar corpo"},
                     {class:"kinectBody", title:"[Kinect] Inclinar corpo"}
                   ];
 
 var leapMotionActions = [{class:"leapCloseHand", title:"[LeapMotion] Fechar mão"},
                   {class:"leapPinch", title:"[LeapMotion] Movimento de pinça"},
-                  {class:"leapFist", title:"[LeapMotion] Flexionar punho"}
+                  {class:"leapWrist", title:"[LeapMotion] Flexionar punho"}
                 ];
 
 var keyboardMouseActions = [{class:"keyboard", title:"Teclado"},

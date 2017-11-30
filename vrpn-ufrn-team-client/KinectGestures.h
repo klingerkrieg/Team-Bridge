@@ -4,6 +4,7 @@
 #include <map>
 #include <time.h>
 #include "FlexedMember.h"
+#include "KeyMap.h"
 
 const int KINECT_UP = 1;
 const int KINECT_DOWN = 2;
@@ -28,8 +29,8 @@ struct KinectDetection {
 	double turnZeroQuat;
 };
 
-
-class KinectGestures : public FlexedMember {
+//A primeira classe obrigatoriamente precisa ser AbstractGestureRecognizer
+class KinectGestures : public AbstractGestureRecognizer, public FlexedMember {
 private:
 
 	//nao pode usar o mesmo headHeight para detectTopChange porque se nao ele so ira detectar mudancas bruscas
@@ -51,65 +52,73 @@ private:
 
 	double turnFactor = 0.07;
 
-	bool detectWalkHeight(double &kneeLastHeight, SkeletonPart skelPart, int delay, double sensitivity);
-	int detectBody(SkeletonPart skelPart, int direction, int angle);
-	bool detectMemberFast(SkeletonPart skelPart, double maxVelMs);
+	bool detectWalkHeight(SkeletonPart skelPart, KeyMap * keyMap, double &kneeLastHeight);
+	int detectBody(SkeletonPart skelPart, KeyMap * keyMap ,int direction);
+	bool detectMemberFast(SkeletonPart skelPart, KeyMap * keyMap);
 
-	int detectHandTop(SkeletonPart skelPart, int topLevel, int handTopMod);
+	int detectHandTop(SkeletonPart skelPart, KeyMap * keyMap);
+	int detectTopChange(SkeletonPart skelPart, KeyMap * keyMap, int direction);
+	int detectHandXPos(SkeletonPart skelPart, KeyMap * keyMap);
 
 	//Flexao
 	static std::map<int, std::vector<double>> lastPositions[20];
+
+protected:
+	void assignChecker(std::vector<KeyMap> &map);
 
 public:
 
 	static Skeleton skeleton;
 
+	//step
+	int detectTopChangeUp(void * data, KeyMap * keyMap);
+	int detectTopChangeDown(void * data, KeyMap * keyMap);
+	int detectTopChangeNormal(void * data, KeyMap * keyMap);
+
+
 	//flexao
-	int leftWristFlexedUp(SkeletonPart skelPart, int angle, int angleMod);
-	int leftWristFlexedDown(SkeletonPart skelPart, int angle, int angleMod);
-	int rightWristFlexedUp(SkeletonPart skelPart, int angle, int angleMod);
-	int rightWristFlexedDown(SkeletonPart skelPart, int angle, int angleMod);
+	int leftWristFlexedUp(void * data, KeyMap * keyMap);
+	int leftWristFlexedDown(void * data, KeyMap * keyMap);
+	int rightWristFlexedUp(void * data, KeyMap * keyMap);
+	int rightWristFlexedDown(void * data, KeyMap * keyMap);
 
 	std::vector<double> getLastMemberPos(int sensor);
 	int getLastMemberTime(int sensor);
 
 	double euclidianDistance(std::vector<double> pos1, std::vector<double> pos2);
 
-	int detectLeftHandTop(SkeletonPart skelPart, int topLevel, int handTopMod);
+	int detectLeftHandTop(void * data, KeyMap * keyMap);
 
-	int detectRightHandTop(SkeletonPart skelPart, int topLevel, int handTopMod);
+	int detectRightHandTop(void * data, KeyMap * keyMap);
 
 
-	int detectTopChange(SkeletonPart skelPart, double heightSens, int direction);
 
-	int detectLeftHandFast(SkeletonPart skelPart, double maxVelMs);
-	int detectRightHandFast(SkeletonPart skelPart, double maxVelMs);
+	int detectLeftHandFast(void * data, KeyMap * keyMap);
+	int detectRightHandFast(void * data, KeyMap * keyMap);
 
 	
 
 
-	int detectBodyFront(SkeletonPart skelPart, int angle);
-	int detectBodyRight(SkeletonPart skelPart, int angle);
-	int detectBodyLeft(SkeletonPart skelPart, int angle);
-	int detectBodyBack(SkeletonPart skelPart, int angle);
+	int detectBodyFront(void * data, KeyMap * keyMap);
+	int detectBodyRight(void * data, KeyMap * keyMap);
+	int detectBodyLeft(void * data, KeyMap * keyMap);
+	int detectBodyBack(void * data, KeyMap * keyMap);
 
-	int setCenterPos(SkeletonPart skelPart);
-
-
-	int detectWalk(SkeletonPart skelPart, int delay, double sensitivity);
+	int setCenterPos(void * data, KeyMap * keyMap);
 
 
-	int detectTurnLeft(SkeletonPart skelPart);
-	int detectTurnRight(SkeletonPart skelPart);
+	int detectWalk(void * data, KeyMap * keyMap);
+
+
+	int detectTurnLeft(void * data, KeyMap * keyMap);
+	int detectTurnRight(void * data, KeyMap * keyMap);
 
 
 
-	int detectLeftHandXPos(SkeletonPart skelPart, int xPos);
-	int detectRightHandXPos(SkeletonPart skelPart, int xPos);
-	int detectHandXPos(SkeletonPart skelPart, int xPos);
+	int detectLeftHandXPos(void * data, KeyMap * keyMap);
+	int detectRightHandXPos(void * data, KeyMap * keyMap);
 	
-
-	int bodyBalance(SkeletonPart skelPart, int angle, int angleMod);
+	int bodyBalance(void * data, KeyMap * keyMap);
 
 	static void setKinectXInterval(double interval) {
 		handXPosInterval = interval;

@@ -3,12 +3,19 @@
 #include "DeviceInfo.h"
 #include "KeyMap.h"
 
-class NEDGloveGestures {
+//A primeira classe obrigatoriamente precisa ser AbstractGestureRecognizer
+class NEDGloveGestures : public AbstractGestureRecognizer {
 	
 	int strengthNormal = 250;
 
 	public:
-	bool closed(const vrpn_ANALOGCB a, KeyMap *keyMap);
-	bool pinch(const vrpn_ANALOGCB a, KeyMap *keyMap);
+	int closed(void *data, KeyMap *keyMap);
+	int pinch(void *data, KeyMap *keyMap);
+
+
+	protected:
+	void assignChecker(std::vector<KeyMap> &map);
+
+	
 
 };

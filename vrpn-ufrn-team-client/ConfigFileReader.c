@@ -77,7 +77,7 @@ bool ConfigFileReader::readConfigFile(char * fileName,
 		}
 	}
 
-	for ( int i = 0; i < devs.size(); i++ ) {
+	for ( size_t i = 0; i < devs.size(); i++ ) {
 		
 		if ( setDevType(js,"kinect",DEVTYPE_KINECT,devs.at(i)) ) {
 			continue;

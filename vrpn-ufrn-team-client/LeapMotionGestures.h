@@ -5,9 +5,10 @@
 #include <time.h>
 #include "util.h"
 #include "FlexedMember.h"
+#include "KeyMap.h"
 
-
-class LeapMotionGestures : public FlexedMember {
+//A primeira classe obrigatoriamente precisa ser AbstractGestureRecognizer
+class LeapMotionGestures : public AbstractGestureRecognizer, public FlexedMember  {
 private:
 
 	float closeAngle = 2.5;
@@ -18,17 +19,20 @@ private:
 	int handClosed(float angle);
 	int pinch(float angle);
 
-public:
-	
-	int leftWristFlexedUp(SkeletonPart skelPart, int angle, int angleMod);
-	int leftWristFlexedDown(SkeletonPart skelPart, int angle, int angleMod);
-	int leftClosed(const vrpn_ANALOGCB a);
-	int leftPinch(const vrpn_ANALOGCB a);
+protected:
+	void assignChecker(std::vector<KeyMap> &map);
 
-	int rightWristFlexedUp(SkeletonPart skelPart, int angle, int angleMod);
-	int rightWristFlexedDown(SkeletonPart skelPart, int angle, int angleMod);
-	int rightClosed(const vrpn_ANALOGCB a);
-	int rightPinch(const vrpn_ANALOGCB a);
+public:
+
+	int leftWristFlexedUp(void * data, KeyMap * keyMap);
+	int leftWristFlexedDown(void * data, KeyMap * keyMap);
+	int leftClosed(void * data, KeyMap * keyMap);
+	int leftPinch(void * data, KeyMap * keyMap);
+
+	int rightWristFlexedUp(void * data, KeyMap * keyMap);
+	int rightWristFlexedDown(void * data, KeyMap * keyMap);
+	int rightClosed(void * data, KeyMap * keyMap);
+	int rightPinch(void * data, KeyMap * keyMap);
 
 	static std::map<int, int> handSkeletonMap1;
 	static std::map<int, int> create_handSkeletonMap1() {

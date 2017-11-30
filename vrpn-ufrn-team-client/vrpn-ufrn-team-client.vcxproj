@@ -132,6 +132,8 @@
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <CompileAs>CompileAsCpp</CompileAs>
+      <AdditionalOptions>
+      </AdditionalOptions>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -163,6 +165,7 @@
     <ClCompile Include="ConfigFileReader.c" />
     <ClCompile Include="Db.c" />
     <ClCompile Include="FlexedMember.c" />
+    <ClCompile Include="GestureRecognizer.c" />
     <ClCompile Include="KeyPressAction.c" />
     <ClCompile Include="KinectGestures.c" />
     <ClCompile Include="InputConverter.c" />
@@ -176,6 +179,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractAction.h" />
+    <ClInclude Include="AbstractGestureRecognizer.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="Config.h" />
     <ClInclude Include="ConfigFileReader.h" />

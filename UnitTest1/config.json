@@ -75,7 +75,7 @@
     {
       "divClass": "kinectFist",
       "dev": "Tracker0@localhost",
-      "key": "KINECT_LEFT_FIST_DOWN",
+      "key": "KINECT_LEFT_WRIST_DOWN",
       "angleMod": ">",
       "angle": 35,
       "toKeyDown": "A",
@@ -112,7 +112,7 @@
     {
       "divClass": "leapFist",
       "dev": "LeapMotion0@localhost",
-      "key": "LEAP_LEFT_FIST_UP",
+      "key": "LEAP_LEFT_WRIST_UP",
       "angleMod": ">",
       "angle": 35,
       "toKeyDown": "A",

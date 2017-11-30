@@ -21,15 +21,17 @@ TEST_CLASS(LeapMotionGesturesTest) {
 		vrpn_ANALOGCB a = getAnalogCB();
 		
 		LeapMotionGestures gr = LeapMotionGestures();
+		//Esses métodos não usam KeyMap mas está convencionado que todos os métodos devem receber por parâmetro
+		KeyMap * km = new KeyMap();
 		
 		a.channel[0] = 0.4;
-		Assert::IsFalse(gr.leftClosed(a));
+		Assert::IsFalse(gr.leftClosed((void *)&a, km));
 		a.channel[0] = 2.6;
-		Assert::IsTrue(gr.leftClosed(a));
+		Assert::IsTrue(gr.leftClosed((void *)&a, km));
 		a.channel[1] = 65;
-		Assert::IsFalse(gr.leftPinch(a));
+		Assert::IsFalse(gr.leftPinch((void *)&a, km));
 		a.channel[1] = 55;
-		Assert::IsTrue(gr.leftPinch(a));
+		Assert::IsTrue(gr.leftPinch((void *)&a, km));
 
 		//Fazer teste de flexão
 		

@@ -18,6 +18,7 @@ namespace InputConverterTest {
 	vrpn_BUTTONCB b;
 	InputConverter iC;
 	char keybd[] = "Keyboard0@localhost";
+	char analog[] = "Analog0@localhost";
 
 	TEST_CLASS(InputConverterTest) {
 
@@ -71,11 +72,23 @@ namespace InputConverterTest {
 			{ "toKeyUp" , "B" }
 		};
 		KeyMap m4 = KeyMap(js);
+		js = {
+			{ "divClass","nedGlove" },
+			{ "dev" ,"Analog0@localhost" },
+			{ "key" ,"NEDGLOVE_PINCH" },
+			{ "thumb" , 0 },
+			{ "index" , 4 },
+			{ "strengthMin" ,40 },
+			{ "strengthMax" ,0 },
+			{ "toKeyUp" ,"A" }
+		};
+		KeyMap m5 = KeyMap(js);
 
 		map.push_back(m1);
 		map.push_back(m2);
 		map.push_back(m3);
 		map.push_back(m4);
+		map.push_back(m5);
 
 		std::string app = "";
 
@@ -101,14 +114,7 @@ namespace InputConverterTest {
 public:
 
 	TEST_METHOD(InputConverter_checkTrack) {
-
-			//Agora há o mecanismo para identificar o tipo do dispositivo pela quantidade de sensores
-			//Então os primeiros 20 inputs são descartados
-			for ( int i = 0; i < 20; i++ ) {
-				t.sensor = i;
-				iC.checkTrack(tc1, t);
-			}
-		
+	
 			t.sensor = 0;
 			t.pos[1] = 1.0;
 			//Inicia
@@ -128,6 +134,33 @@ public:
 			t.pos[1] = 0.75;
 			Assert::IsTrue(iC.checkTrack(tc1, t));
 
+
+	}
+
+	TEST_METHOD(InputConverter_checkAnalog) {
+
+		vrpn_ANALOGCB a = getAnalogCB();
+
+		NEDGloveGestures gr = NEDGloveGestures();
+		int closedCalib = 205;
+
+		int val = 205;
+		a.channel[0] = val;
+		a.channel[1] = val;
+		a.channel[2] = val;
+		a.channel[3] = val;
+		a.channel[4] = val;
+		//Mapeada
+		Assert::IsTrue(iC.checkAnalog(analog, a));
+
+		val = 240;
+		a.channel[0] = val;
+		a.channel[1] = val;
+		a.channel[2] = val;
+		a.channel[3] = val;
+		a.channel[4] = val;
+		//Nao mapeada
+		Assert::IsTrue(iC.checkAnalog(analog, a));
 
 	}
 
