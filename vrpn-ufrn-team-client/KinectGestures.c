@@ -74,6 +74,9 @@ void KinectGestures::assignChecker(std::vector<KeyMap> &map) {
 			case KINECT_STEP_NORMAL:
 				keyMap->assignGestureChecker(TRACK_TYPE, (KeyMap::gestureCheckerMethod)&KinectGestures::detectTopChangeNormal, this);//criar um metodo pra cada
 				break;
+			case KINECT_SET_CENTER_POS:
+				keyMap->assignGestureChecker(TRACK_TYPE, (KeyMap::gestureCheckerMethod)&KinectGestures::setCenterPos, this);//criar um metodo pra cada
+				break;
 		}
 	}
 }
@@ -375,16 +378,11 @@ int KinectGestures::detectTopChange(SkeletonPart skelPart, KeyMap * keyMap, int 
 
 int KinectGestures::setCenterPos(void * data, KeyMap * keyMap) {
 	SkeletonPart skelPart = *(SkeletonPart*)data;
+	//Salvao o estado atual do hipcenter
+	kinectDetection.hipCenter = skeleton.hipCenter;
+	kinectDetection.centerPosDefined = true;
+	return true;
 	
-	if ( skelPart.skelConstant == SKELETON_HIP_CENTER ) {
-		kinectDetection.centerPos[0] = skelPart.x;
-		kinectDetection.centerPos[1] = skelPart.y;
-		kinectDetection.centerPos[2] = skelPart.z;
-		kinectDetection.turnZeroQuat = skelPart.quat_z;
-		kinectDetection.centerPosDefined = true;
-		return true;
-	}
-	return -1;
 }
 
 
@@ -538,7 +536,7 @@ int KinectGestures::detectTurnLeft(void * data, KeyMap * keyMap) {
 	SkeletonPart skelPart = *(SkeletonPart*)data;
 	
 	if ( skelPart.skelConstant == SKELETON_HIP_CENTER ) {
-		if ( skelPart.quat_z < kinectDetection.turnZeroQuat - turnFactor ) {
+		if ( skelPart.quat_z < kinectDetection.hipCenter.quat_z - turnFactor ) {
 			return 1;
 		} else {
 			return 0;
@@ -551,7 +549,7 @@ int KinectGestures::detectTurnRight(void * data, KeyMap * keyMap) {
 	SkeletonPart skelPart = *(SkeletonPart*)data;
 	
 	if ( skelPart.skelConstant == SKELETON_HIP_CENTER ) {
-		if ( skelPart.quat_z > kinectDetection.turnZeroQuat + turnFactor ) {
+		if ( skelPart.quat_z > kinectDetection.hipCenter.quat_z + turnFactor ) {
 			return 1;
 		} else {
 			return 0;

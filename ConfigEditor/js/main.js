@@ -85,7 +85,7 @@ function addActions(){
     act = $('#actionModel #toKey');
 
     keys = getKeyboardKeys();
-    keys.push({t:"Definir posição",code:"KINECT_DETERMINE_CENTER_POS"});
+    keys.push({t:"Definir posição",code:"KINECT_SET_CENTER_POS"});
     keys.push({t:"Mover mouse",code:"VK_MOUSEMOVE"});
     keys.push({t:"Alerta (Vermelho)",code:"ALERT"});
     keys.push({t:"Mensagem (Verde)",code:"MESSAGE"});

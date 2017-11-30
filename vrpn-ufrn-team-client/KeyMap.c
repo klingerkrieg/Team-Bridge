@@ -1,6 +1,8 @@
 #include "KeyMap.h"
 
 
+char GestureCheckerNotDefined::err[500];
+
 std::map<std::string, int> KeyMap::configToAscii = KeyMap::create_configToAscii();
 std::map<std::string, int> KeyMap::configToScanCode = KeyMap::create_configToScanCode();
 
@@ -264,11 +266,7 @@ void KeyMap::setToKey(std::string toKeyFind) {
 	//Sera um acionamento de botao
 	isBtn = true;
 
-	if ( !toKeyFind.compare("KINECT_DETERMINE_CENTER_POS") ) {
-		this->determineCenterPos = true;
-		this->toKeyRepr = "KINECT_DETERMINE_CENTER_POS";
-		return;
-	} else
+	
 	if ( !toKeyFind.compare("VK_MOUSEMOVE") ) {
 		this->toKeyRepr = "VK_MOUSEMOVE";
 		this->toKey = VK_MOUSEMOVE;

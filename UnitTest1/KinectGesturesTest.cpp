@@ -316,6 +316,36 @@ public:
 
 	}
 
+	TEST_METHOD(GestureRecognizer_setCenterPos) {
+		
+		KinectGestures gr = KinectGestures();
+		vrpn_TRACKERCB trackData = getTrackerCB();
+		SkeletonPart skelPart;
+		//Define a posicao da cabeca e da bacia
+		trackData.sensor = 3;
+		vrpnToSkeleton(gr.skeleton, gr.skeletonMap1, trackData, skelPart);
+
+		SkeletonPart t = getSkeletonPart();
+		t.skelConstant = SKELETON_HAND_R;
+		//Esses métodos não requerem nenhuma informação do KeyMap
+		json js = {};
+		KeyMap *m1 = new KeyMap(js);
+
+		Assert::IsTrue(gr.setCenterPos((void *)&t, m1));
+
+
+		Assert::IsTrue(gr.getKinectDetection().centerPosDefined);
+		Assert::AreEqual(skelPart.x, gr.getKinectDetection().hipCenter.x);
+		Assert::AreEqual(skelPart.y, gr.getKinectDetection().hipCenter.y);
+		Assert::AreEqual(skelPart.z, gr.getKinectDetection().hipCenter.z);
+		Assert::AreEqual(skelPart.quat_x, gr.getKinectDetection().hipCenter.quat_x);
+		Assert::AreEqual(skelPart.quat_y, gr.getKinectDetection().hipCenter.quat_y);
+		Assert::AreEqual(skelPart.quat_z, gr.getKinectDetection().hipCenter.quat_z);
+		Assert::AreEqual(skelPart.quat_w, gr.getKinectDetection().hipCenter.quat_w);
+		
+
+	}
+
 
 
 	};

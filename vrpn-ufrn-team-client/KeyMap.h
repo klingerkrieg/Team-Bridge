@@ -53,6 +53,7 @@ const int KINECT_LEFT_WRIST_UP = 5016;
 const int KINECT_LEFT_WRIST_DOWN = 5017;
 
 const int KINECT_BALANCE = 5018;
+const int KINECT_SET_CENTER_POS = 5020;
 
 const int LEAP_LEFT_CLOSED = 7000;
 const int LEAP_RIGHT_CLOSED = 7001;
@@ -77,6 +78,7 @@ const int BUTTON_TYPE = 2;
 const int ANALOG_TYPE = 3;
 
 
+
 class KeyMap {
 private:
 	//Dispositivo que será lido
@@ -95,8 +97,6 @@ private:
 	//Caso o comando que será chamado seja uma constante
 	bool toKeyIsConstant = false;
 
-	//Caso seja um comando para calibração
-	bool determineCenterPos = false;
 
 	//Automaticamente os botões serão acionados e desacionados imediatamente
 	bool btnDown = true;
@@ -325,9 +325,6 @@ public:
 		return strengthMin;
 	}
 
-	bool getDetermineCenterPos() {
-		return determineCenterPos;
-	}
 
 	int getThumb() {
 		return thumb;
@@ -455,6 +452,8 @@ public:
 		m["KINECT_LEFT_WRIST_DOWN"] = KINECT_LEFT_WRIST_DOWN;
 
 		m["KINECT_BALANCE"] = KINECT_BALANCE;
+		m["KINECT_SET_CENTER_POS"] = KINECT_SET_CENTER_POS;
+		
 
 
 		//Leap Motion
@@ -582,4 +581,22 @@ public:
 	}
 	
 
+};
+
+
+class GestureCheckerNotDefined : public std::runtime_error {
+	private:
+		KeyMap * key;
+		static char err[500];
+	public:
+
+	GestureCheckerNotDefined(KeyMap * keyMap) : std::runtime_error("O metodo de checagem desse evento nao esta definido, esqueceu de chamar o GestureRecognizer::assignChecker?\n") {
+		key = keyMap;
+	}
+
+	virtual const char* what() const noexcept {
+		strcpy(err, runtime_error::what());
+		strcat(err, key->toString().c_str());
+		return err;
+	}
 };

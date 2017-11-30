@@ -16,8 +16,8 @@ const int KINECT_BACK = 4;
 
 struct KinectDetection {
 	bool centerPosDefined = false;
-	double centerPos[3];
-	//usado para detectBody
+	SkeletonPart hipCenter;
+	
 	std::map<int, std::vector<double>> lastMemberPos;
 	std::map<long, long> lastMemberTime;
 
@@ -25,8 +25,6 @@ struct KinectDetection {
 	long int lastWalk;
 	double leftKneeLastHeight;
 	double rightKneeLastHeight;
-
-	double turnZeroQuat;
 };
 
 //A primeira classe obrigatoriamente precisa ser AbstractGestureRecognizer
@@ -69,6 +67,9 @@ protected:
 public:
 
 	static Skeleton skeleton;
+	KinectDetection getKinectDetection() {
+		return kinectDetection;
+	}
 
 	//step
 	int detectTopChangeUp(void * data, KeyMap * keyMap);

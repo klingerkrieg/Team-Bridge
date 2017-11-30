@@ -21,14 +21,6 @@ double InputConverter::secMed = 0;
 
 void InputConverter::interpretKeyMap(KeyMap &keyMap) {
 	
-	if ( keyMap.getDetermineCenterPos()){
-		int actualTime = (int)time(0);
-		if ( nextDefineCenterPos == false &&
-			actualTime - lastTimeCenterPos > centerPosDelay ) {
-			nextDefineCenterPos = true;
-		}
-		
-	} else
 	if ( keyMap.getToKey() == ALERT ) {
 		if ( viewOn )
 			view->showAlert(keyMap.getMsg());
@@ -121,200 +113,59 @@ bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKE
 	}
 	lastTimeTrack = actualTime;
 
-	int top = 0;
+	
 	int active;
 	//int activeSecondary;
 	bool pressed = false;
 	KeyMap *keyMap;
 
-	//primeiro loop
-	//Esse loop é realizado duas vezes, a primeira vez é somente para verificar o status das teclas já ativas e que possuam evento onleave
-	//isso é para evitar conflitos com aplicações que não suportam duas teclas pressionadas ao mesmo tempo
-	//for (int firstLoop = 1; firstLoop > -1; firstLoop--){
-		
-		for ( size_t keyMapId = 0; keyMapId < map.size(); keyMapId++){
-			keyMap = &map.at(keyMapId);
 
-			if ( !strcmp(userdata->name, keyMap->getDev().c_str()) ) {
-				if ( keyMap->getGestureCheckerDefined() ) {
-					try {
-						active = keyMap->callGestureChecker(skelPart);
-					} catch ( ... ) {
-						printf("Falha ao checar:%s\n", keyMap->toString().c_str());
-						active = -1;
-					}
+	for ( size_t keyMapId = 0; keyMapId < map.size(); keyMapId++){
+		keyMap = &map.at(keyMapId);
 
-					//será -1 quando não for o sensor responsável pelo gesto
-					if ( active != -1 ) {
-						//Se pelo menos uma foi pressionada
-						//nao pode retornar aqui porque podem ter outros comandos
-						if ( interpretOnLeave(active, (*keyMap)) ) {
-							pressed = true;
-
-						#ifdef PERFORMANCE_TEST
-							timeval t2;
-							vrpn_gettimeofday(&t2, NULL);
-
-							int pressedUsecSize = std::to_string(t2.tv_usec).length();
-							int sentUsecSize = std::to_string(t.msg_time.tv_usec).length();
-
-							double pressed = (double)t2.tv_sec + ((double)t2.tv_usec / pow(10, pressedUsecSize));
-							double sent = (double)t.msg_time.tv_sec + ((double)t.msg_time.tv_usec / pow(10, pressedUsecSize));
-							double delay = pressed - sent;
-
-							secMed += delay;
-							qtdMed++;
-
-							printf("Delay: %.4f - %.4f = ", pressed, sent);
-							printf("%.4f", delay);
-							printf(" Media: %.3f\n", (secMed / qtdMed));
-						#endif
-						}
-					}
-				} else {
-					printf("Nao possui metodo para checagem:%s\n", keyMap->toString().c_str());
+		if ( !strcmp(userdata->name, keyMap->getDev().c_str()) ) {
+			if ( keyMap->getGestureCheckerDefined() ) {
+				try {
+					active = keyMap->callGestureChecker(skelPart);
+				} catch ( ... ) {
+					printf("Falha ao checar:%s\n", keyMap->toString().c_str());
+					active = -1;
 				}
 
+				//será -1 quando não for o sensor responsável pelo gesto
+				if ( active != -1 ) {
+					//Se pelo menos uma foi pressionada
+					//nao pode retornar aqui porque podem ter outros comandos
+					if ( interpretOnLeave(active, (*keyMap)) ) {
+						pressed = true;
+
+					#ifdef PERFORMANCE_TEST
+						timeval t2;
+						vrpn_gettimeofday(&t2, NULL);
+
+						int pressedUsecSize = std::to_string(t2.tv_usec).length();
+						int sentUsecSize = std::to_string(t.msg_time.tv_usec).length();
+
+						double pressed = (double)t2.tv_sec + ((double)t2.tv_usec / pow(10, pressedUsecSize));
+						double sent = (double)t.msg_time.tv_sec + ((double)t.msg_time.tv_usec / pow(10, pressedUsecSize));
+						double delay = pressed - sent;
+
+						secMed += delay;
+						qtdMed++;
+
+						printf("Delay: %.4f - %.4f = ", pressed, sent);
+						printf("%.4f", delay);
+						printf(" Media: %.3f\n", (secMed / qtdMed));
+					#endif
+					}
+				}
+			} else {
+				GestureCheckerNotDefined err = GestureCheckerNotDefined(keyMap);
+				printf("%s", err.what());
+				throw err;
 			}
 
-			//primeiro loop
-			/*if ( firstLoop == 1 && !keyMap->getWaitingLeave()  || keyMap->getVerified() ) {
-				//Reseta para a proxima vez que chamar a funcao
-				if ( firstLoop == 0 ) {
-					keyMap->setVerified(false);
-				}
-				continue;
-			} else
-			//Nao permitir que no proximo loop as mesmas keys sejam verificadas
-			if ( firstLoop == 1 && keyMap->getWaitingLeave() ) {
-				keyMap->setVerified(true);
-			}*/
-
-			/*if ( !strcmp(userdata->name, keyMap->getDev().c_str()) ) {
-
-				active = -1;
-				activeSecondary = -1;
-
-				//Caso seja para definir uma posicao central
-				if ( nextDefineCenterPos) {
-					//o sensor esperado é definido dentro do metodo, aqui todos os sensores são enviados
-					//caso nao seja o sensor correto, terá retornado -1
-					if ( gr.setCenterPos(skelPart) == 1) {
-						lastTimeCenterPos = actualTime;
-						printf("Posicao definida.\n");
-						nextDefineCenterPos = false;
-						if ( viewOn )
-							view->showMsg("Posição definida.");
-					}
-				}
-
-
-				//se ja foi calculado durante esse reconhecimento nao calcula novamente para as demais configuracoes de teclas
-				if ( keyMap->getKey() == KINECT_STEP_UP ) {
-					//o active ira controlar se essa acao foi acionada ou nao
-					//caso nao esteja acionada o interpretOnLeave ira identificar se foi configurado para acionar alguma ação quando 
-					//essa key nao estiver mais ativa
-					//a ação ja sera chamada dentro de interpretOnLeave
-					active = gr.detectTopChange(skelPart, keyMap->getSensivity(), KINECT_UP);
-				} else
-				if ( keyMap->getKey() == KINECT_STEP_DOWN ) {
-					active = gr.detectTopChange(skelPart, keyMap->getSensivity(), KINECT_DOWN);
-				} else
-				if ( keyMap->getKey() == KINECT_STEP_NORMAL ) {
-					active = gr.detectTopChange(skelPart, keyMap->getSensivity(), KINECT_NORMAL);
-				} else
-				if ( keyMap->getKey() == KINECT_RIGHT_HAND_TOP || keyMap->getKey() == KINECT_LEFT_HAND_TOP ) {
-			
-					if ( keyMap->getKey() == KINECT_RIGHT_HAND_TOP )
-						active = gr.detectRightHandTop(skelPart, keyMap->getY(), keyMap->getCoordinateMod());
-					else
-						active = gr.detectLeftHandTop(skelPart, keyMap->getY(), keyMap->getCoordinateMod());
-
-				
-
-					//Caso o xpos seja != -100 quer dizer que a posição X tabém é requerida para esse comando
-					if ( active == 1 && keyMap->getX() != -100 ) {
-					
-						if ( keyMap->getKey() == KINECT_RIGHT_HAND_TOP )
-							activeSecondary = gr.detectRightHandXPos(skelPart, keyMap->getX());
-						else
-							activeSecondary = gr.detectLeftHandXPos(skelPart, keyMap->getX());
-
-					} else {
-						//Caso nao exista acao secundaria
-						activeSecondary = true;
-					}
-
-					//Caso o sensor atual nao seja o responsavel pela ação a funcao de reconhecimento retornara -1
-					if ( active == -1 || activeSecondary == -1 ) {
-						active = -1;
-					} else {
-						//Caso qualquer um dos dois seja desativado o evento de sair sera chamado
-						active = active && activeSecondary;
-					}
-		
-				} else //FAST HAND
-				if ( keyMap->getKey() == KINECT_LEFT_HAND_FAST ) {
-					active = gr.detectLeftHandFast(skelPart, keyMap->getMaxVelocityMs());
-				} else
-				if ( keyMap->getKey() == KINECT_RIGHT_HAND_FAST ) {
-					active = gr.detectRightHandFast(skelPart, keyMap->getMaxVelocityMs());
-				} else //BODY
-				if ( keyMap->getKey() == KINECT_BODY_FRONT) {
-					active = gr.detectBodyFront(skelPart, keyMap->getAngle());
-				} else
-				if ( keyMap->getKey() == KINECT_BODY_RIGHT) {
-					active = gr.detectBodyRight(skelPart, keyMap->getAngle());
-				} else
-				if ( keyMap->getKey() == KINECT_BODY_LEFT ) {
-					active = gr.detectBodyLeft(skelPart, keyMap->getAngle());
-				} else
-				if ( keyMap->getKey() == KINECT_BODY_BACK ) {
-					active = gr.detectBodyBack(skelPart, keyMap->getAngle());
-				} else
-				if ( keyMap->getKey() == KINECT_WALK ) {
-					active = gr.detectWalk(skelPart, keyMap->getDelay(), keyMap->getSensivity());
-				} else
-				if ( keyMap->getKey() == KINECT_TURN_LEFT  ) {
-					active = gr.detectTurnLeft(skelPart);
-				} else
-				if ( keyMap->getKey() == KINECT_TURN_RIGHT ) {
-					active = gr.detectTurnRight(skelPart);
-				} else
-				if ( keyMap->getKey() == KINECT_BALANCE ) {
-					active = gr.bodyBalance(skelPart, keyMap->getAngle(), keyMap->getAngleMod());
-				} else
-				if ( keyMap->getKey() == KINECT_LEFT_WRIST_UP  ) {
-					active = gr.KinectGestures::leftWristFlexedUp(skelPart, keyMap->getAngle(), keyMap->getAngleMod());
-				} else
-				if ( keyMap->getKey() == KINECT_LEFT_WRIST_DOWN ) {
-					active = gr.KinectGestures::leftWristFlexedDown(skelPart, keyMap->getAngle(), keyMap->getAngleMod());
-				} else
-				if ( keyMap->getKey() == KINECT_RIGHT_WRIST_UP  ) {
-					active = gr.KinectGestures::rightWristFlexedUp(skelPart, keyMap->getAngle(), keyMap->getAngleMod());
-				} else
-				if ( keyMap->getKey() == KINECT_RIGHT_WRIST_DOWN ) {
-					active = gr.KinectGestures::rightWristFlexedDown(skelPart, keyMap->getAngle(), keyMap->getAngleMod());
-				} else
-				if ( keyMap->getKey() == LEAP_LEFT_WRIST_UP  ) {
-					active = gr.LeapMotionGestures::leftWristFlexedUp(skelPart, keyMap->getAngle(), keyMap->getAngleMod());
-				} else
-				if ( keyMap->getKey() == LEAP_LEFT_WRIST_DOWN ) {
-					active = gr.LeapMotionGestures::leftWristFlexedDown(skelPart, keyMap->getAngle(), keyMap->getAngleMod());
-				} else
-				if ( keyMap->getKey() == LEAP_RIGHT_WRIST_UP  ) {
-					active = gr.LeapMotionGestures::rightWristFlexedUp(skelPart, keyMap->getAngle(), keyMap->getAngleMod());
-				} else
-				if ( keyMap->getKey() == LEAP_RIGHT_WRIST_DOWN ) {
-					active = gr.LeapMotionGestures::rightWristFlexedDown(skelPart, keyMap->getAngle(), keyMap->getAngleMod());
-				}
-
-			}*/
-		
-			
-
-			
-		//}
+		}
 
 	}
 
@@ -341,73 +192,29 @@ bool InputConverter::checkAnalog(const char *name, const vrpn_ANALOGCB a) {
 	int active;
 	KeyMap *keyMap;
 
-	//primeiro loop
-	//Esse loop é realizado duas vezes, a primeira vez é somente para verificar o status das teclas já ativas e que possuam evento onleave
-	//isso é para evitar conflitos com aplicações que não suportam duas teclas pressionadas ao mesmo tempo
-	//for ( int firstLoop = 1; firstLoop > -1; firstLoop-- ) {
+	for ( size_t keyMapId = 0; keyMapId < map.size(); keyMapId++ ) {
+		keyMap = &map.at(keyMapId);
 
-		for ( size_t keyMapId = 0; keyMapId < map.size(); keyMapId++ ) {
-			keyMap = &map.at(keyMapId);
-
-
-			//primeiro loop
-			/*if ( firstLoop == 1 && !keyMap->getWaitingLeave() || keyMap->getVerified() ) {
-				//Reseta para a proxima vez que chamar a funcao
-				if ( firstLoop == 0 ) {
-					keyMap->setVerified(false);
+		if ( !strcmp(name, keyMap->getDev().c_str()) ) {
+			//Caso o keyMap possua um método responsável por sua checagem ele será chamado
+			//Semelhante ao padrão Observer
+			if ( keyMap->getGestureCheckerDefined() ) {
+				try {
+					active = keyMap->callGestureChecker(a);
+				} catch ( ... ) {
+					printf("Falha ao checar:%s", keyMap->toString().c_str());
 				}
-				continue;
-			} else
-			//Nao permitir que no proximo loop as mesmas keys sejam verificadas
-			if ( firstLoop == 1 && keyMap->getWaitingLeave() ) {
-				keyMap->setVerified(true);
-			}*/
-			
-			if ( !strcmp(name, keyMap->getDev().c_str()) ) {
-				//Caso o keyMap possua um método responsável por sua checagem ele será chamado
-				//Semelhante ao padrão Observer
-				if ( keyMap->getGestureCheckerDefined() ) {
-					try {
-						active = keyMap->callGestureChecker(a);
-					} catch ( ... ) {
-						printf("Falha ao checar:%s", keyMap->toString().c_str());
-					}
 
-					if ( active != -1 ) {
-						pressed = interpretOnLeave(active, (*keyMap));
-					}
-				} else {
-					printf("Nao possui metodo para checagem:%s\n", keyMap->toString().c_str());
+				if ( active != -1 ) {
+					pressed = interpretOnLeave(active, (*keyMap));
 				}
+			} else {
+				printf("Nao possui metodo para checagem:%s\n", keyMap->toString().c_str());
 			}
-
-				/*
-				switch ( keyMap->getKey() ) {
-					case LEAP_LEFT_CLOSED:
-						active = gr.leftClosed(a);
-						break;
-					case LEAP_LEFT_PINCH:
-						active = gr.leftPinch(a);
-						break;
-					case LEAP_RIGHT_CLOSED:
-						active = gr.rightClosed(a);
-						break;
-					case LEAP_RIGHT_PINCH:
-						active = gr.rightPinch(a);
-						break;
-					case NEDGLOVE_GRAB:
-						active = gr.NEDGloveGestures::closed((void*)&a, keyMap);
-						break;
-					case NEDGLOVE_PINCH:
-						active = gr.NEDGloveGestures::pinch((void*)&a, keyMap);
-						break;
-				}
-				*/
-			
-		
-			
 		}
-	//}
+
+	}
+	
 
 	return true;
 }
