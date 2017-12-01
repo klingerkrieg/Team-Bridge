@@ -1,2 +1,2 @@
-kinect_simulation.exe leapmotionflex.txt 23 p n LeapMotion0 d 100
+kinect_simulation.exe leapmotionflex.txt 23 LeapMotion0 -p -d 100
 pause

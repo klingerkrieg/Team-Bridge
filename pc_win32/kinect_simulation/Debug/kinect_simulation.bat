@@ -1,2 +1,2 @@
-kinect_simulation.exe KinectFlex.txt 20 d 1
+kinect_simulation.exe KinectFlex.txt 20 Tracker0 -d 1
 pause

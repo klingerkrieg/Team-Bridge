@@ -32,12 +32,8 @@ class InputConverter {
 private:
 	 static std::vector<KeyMap> map;
 	 static std::vector<DeviceType> devs;
-	 std::string app;
 	 GestureRecognizer gr;
 
-	 /*KinectGestures kinectGr;
-	 LeapMotionGestures leapGr;
-	 NEDGloveGestures nedGr;*/
 
 	 static std::map<std::string, DeviceSensorCount> devicesSensorsCount;
 
@@ -69,18 +65,16 @@ public:
 
 	~InputConverter();
 
-	InputConverter(std::vector<KeyMap> &map, std::vector<DeviceType> &devs, std::string &app, AbstractAction *act) {
+	InputConverter(std::vector<KeyMap> &map, std::vector<DeviceType> &devs, AbstractAction *act) {
 		this->map = map;
-		this->app = app;
 		this->devs = devs;
 		this->act = act;
 
 		init();
 	}
 
-	InputConverter(std::vector<KeyMap> &map, std::vector<DeviceType> &devs, std::string &app, AbstractAction *act, View &view) {
+	InputConverter(std::vector<KeyMap> &map, std::vector<DeviceType> &devs, AbstractAction *act, View &view) {
 		this->map = map;
-		this->app = app;
 		this->devs = devs;
 		this->view = &view;
 		this->act = act;

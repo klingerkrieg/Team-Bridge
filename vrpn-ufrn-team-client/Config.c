@@ -13,7 +13,7 @@ std::string Config::getConfig(std::string conf) {
 Config::Config() {}
 
 std::string Config::toString() {
-	return "HOST:" + host + "\nUSER:" + user + "\nPASSWD:" + passwd + "\nDB:" + db + "\nPATIENT:" + patient + "\nSAVE_DIR:" + saveDir + "\nAPP Name:" + app;
+	return "HOST:" + host + "\nUSER:" + user + "\nPASSWD:" + passwd + "\nDB:" + db + "\nPATIENT:" + patient + "\nSAVE_DIR:" + saveDir + "\n";
 }
 
 void Config::readConfigJSON(json js) {
@@ -32,8 +32,6 @@ void Config::readConfigJSON(json js) {
 			patient = utf8to16(it.value().get<std::string>());
 		else if ( it.key().compare("saveDir") == 0 )
 			saveDir = utf8to16(it.value().get<std::string>());
-		else if ( it.key().compare("appName") == 0 )
-			app = utf8to16(it.value().get<std::string>());
 	}
 }
 
@@ -59,8 +57,4 @@ std::string& Config::getPatient() {
 
 std::string& Config::getSaveDir() {
 	return saveDir;
-}
-
-std::string& Config::getApp() {
-	return app;
 }

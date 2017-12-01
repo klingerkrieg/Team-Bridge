@@ -1,4 +1,10 @@
 #pragma once
+
+
+//Caso queira desativar o modulo de terapia comente a constante
+#define THERAPY_MODULE
+
+
 #include <stdio.h>  // for printf, fprintf, NULL, etc
 #include <stdlib.h> // for exit, atoi
 
@@ -24,11 +30,13 @@
 #include "ConfigFileReader.h"
 #include "KeyMap.h"
 #include "InputConverter.h"
-//#include "DeviceInfo.h"
-#include "Storage.h"
 #include "InputConverter.h"
 #include "KeyPressAction.h"
 #include "View.h"
+
+#ifdef THERAPY_MODULE
+#include "Storage.h"
+#endif
 
 //GUI
 
@@ -39,6 +47,7 @@
 #include <fcntl.h>
 
 
+
 void VRPN_CALLBACK handle_tracker_pos_quat(void *userdata, const vrpn_TRACKERCB t);
 void VRPN_CALLBACK handle_button(void *userdata, const vrpn_BUTTONCB b);
 void VRPN_CALLBACK handle_button_states(void *userdata, const vrpn_BUTTONSTATESCB b);
@@ -47,7 +56,9 @@ void VRPN_CALLBACK handle_analog(void *userdata, const vrpn_ANALOGCB a);
 
 class Client {
 private:
+#ifdef THERAPY_MODULE
 	Storage storage;
+#endif
 	InputConverter inputConverter;
 	View view;
 
@@ -78,10 +89,11 @@ public:
 		this->view = view;
 	}
 
+#ifdef THERAPY_MODULE
 	Storage& getStorage() {
 		return storage;
 	}
-
+#endif
 	InputConverter* getInputConverter() {
 		return &inputConverter;
 	}

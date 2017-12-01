@@ -8,6 +8,8 @@
 #include "Client.h"
 
 
+
+
 using namespace std;
 
 int done = 0;                // Signals that the program should exit
@@ -44,9 +46,10 @@ bool Client::setup(bool test = false) {
 
 
 		//Setando InputConverter
-		inputConverter = InputConverter(map, devs, config.getApp(), keyPresser, view);
+		inputConverter = InputConverter(map, devs, keyPresser, view);
 		
 
+	#ifdef THERAPY_MODULE
 		//Setando configs no store
 		storage = Storage(config, exportDb);
 
@@ -54,7 +57,7 @@ bool Client::setup(bool test = false) {
 		if ( exportDb ) {
 			storage.checkSent();
 		}
-		
+	#endif
 
 		
 
@@ -155,7 +158,9 @@ bool Client::setup(bool test = false) {
 			delete deviceList[i].ana;
 		}
 
+	#ifdef THERAPY_MODULE
 		storage.close();
+	#endif
 		return true;
 
 }
@@ -171,7 +176,9 @@ Client client;
 
 void VRPN_CALLBACK handle_tracker_pos_quat(void *userdata, const vrpn_TRACKERCB t) {
 	TrackerUserCallback *t_data = static_cast<TrackerUserCallback *>(userdata);
+#ifdef THERAPY_MODULE
 	client.getStorage().saveToFile(t_data, t);
+#endif
 	client.getInputConverter()->checkTrack(t_data, t);
 }
 
@@ -180,7 +187,9 @@ void VRPN_CALLBACK handle_tracker_pos_quat(void *userdata, const vrpn_TRACKERCB 
 void VRPN_CALLBACK handle_button(void *userdata, const vrpn_BUTTONCB b) {
 	const char *name = (const char *)userdata;
 	printf("Button: %d\n", b.button);
-
+#ifdef THERAPY_MODULE
+	client.getStorage().saveToFile(name, b);
+#endif
 
 	//Teste para identificar se o mapeamento esta correto
 	for ( std::map<string,int>::iterator it = KeyMap::configToScanCode.begin(); it != KeyMap::configToScanCode.end(); ++it ) {
@@ -204,6 +213,9 @@ void VRPN_CALLBACK handle_button_states(void *userdata, const vrpn_BUTTONSTATESC
 
 void VRPN_CALLBACK handle_analog(void *userdata, const vrpn_ANALOGCB a) {
 	const char *name = (const char *)userdata;
+#ifdef THERAPY_MODULE
+	client.getStorage().saveToFile(name, a);
+#endif
 	client.getInputConverter()->checkAnalog(name, a);
 }
 

@@ -54,7 +54,7 @@ handle_tracker_pos_quat(void *userdata, const vrpn_TRACKERCB t)
 
 
 void usage() {
-	printf("Usage:\n\n Passe como primeiro parametro o nome do arquivo.txt e numero de sensores em seguida as demais opcoes\np - Print tracking\nany - no print\nd - Delay");
+	printf("Usage:\n\n Obrigatoriamente passe como primeiro parametro o nome do arquivo.txt, o numero de sensores e o endereço do dispositivo, em seguida as demais opcoes\n-p - Print tracking\n-n - no print\nd - Delay");
 }
 
 
@@ -63,33 +63,29 @@ void usage() {
 int main (int argc, char * argv []) {
 
 	printf("default port: %d \n", CONNECTION_PORT);
-	if (argc < 3) {
+	if (argc < 4) {
 		usage();
 		return -1;
 	}
 
 	for ( int i = 0; i < argc; i++ ) {
-		if ( argv[i][0] == 'p' ) {
+		if ( !strcmp(argv[i],"-p") ) {
 			print = true;
 		}
 
-		if ( argv[i][0] == 'd' ) {
+		if ( !strcmp(argv[i], "-d") ) {
 			delay = atoi(argv[i + 1]);
-		}
-
-		if ( argv[i][0] == 'n' ) {
-			TRACKER_NAME = argv[i + 1];
 		}
 	}
 	
 	
-	
+	TRACKER_NAME = argv[3];
 	// explicitly open the connection
 	connection = vrpn_create_server_connection(CONNECTION_PORT);
 
 
 	int sensoresQtd = atoi(argv[2]);
-	printf("Sensores:[%d] Arquivo:[%s]\n", atoi(argv[2]), argv[1]);
+	printf("Sensores:[%d] Arquivo:[%s]\n",atoi(argv[2]), argv[1]);
 
 
 	// Open the tracker server, using this connection, 2 sensors, update 60 times/sec
@@ -128,10 +124,10 @@ int main (int argc, char * argv []) {
 
 			file = fopen(argv[1], "r");
 
-			while ( fgets (str , 100 , file) != NULL ){
+			while ( fgets (str , 512 , file) != NULL ){
 
 				//Caso seja comentario
-				if (str[0] != 's' && str[0] != 'S'){
+				if (str[0] == '#'){
 					continue;
 				}
 
@@ -139,7 +135,13 @@ int main (int argc, char * argv []) {
 				vrpn_gettimeofday(&t, NULL);
 
 				//pula sensor
-				char * part = strtok (str,"\t");
+				char * part = strtok(str, " \t");
+				if ( strcmp(part, TRACKER_NAME.c_str()) ) {
+					//Caso nao seja do dispositivo esperado
+					continue;
+				}
+
+				part = strtok (NULL," \t");
 				part = strtok (NULL, " \t");
 				int sensor = atoi(part);
 
@@ -169,7 +171,8 @@ int main (int argc, char * argv []) {
 				part = strtok (NULL, " \t");
 				double quat3 = atof(part);
 
-				part = strtok (NULL, " \n");
+				
+				part = strtok (NULL, " \t");
 				double quat4 = atof(part);
 
 

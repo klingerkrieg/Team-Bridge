@@ -196,9 +196,6 @@ public:
 		return -1;
 	}
 	
-	/*bool callGestureChecker(void * data) {
-		return (context->*gestureChecker)(data, this);
-	}*/
 
 	bool getGestureCheckerDefined() {
 		return gestureCheckerDefined;

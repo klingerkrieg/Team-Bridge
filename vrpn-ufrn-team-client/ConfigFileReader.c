@@ -26,13 +26,6 @@ void ConfigFileReader::printConfig(std::vector<DeviceType> &devs,
 	printf("\nOutros:\n");
 	printf(config.toString().c_str());
 
-	//HWND window = FindWindow(_T(config.getApp().c_str()), NULL);
-	HWND window = FindWindowA(NULL, config.getApp().c_str());
-	if ( window ) {
-		printf("\nAPP: Encontrada.");
-	} else {
-		printf("\nAPP: Nao encontrada.");
-	}
 	printf("\n*******************\n");
 }
 
@@ -45,16 +38,10 @@ bool ConfigFileReader::readConfigFile(char * fileName,
 	using json = nlohmann::json;
 	//Abre o json
 	std::ifstream inputFile;
-	/*inputFile.imbue(std::locale(
-		inputFile.getloc(),
-		new std::codecvt_utf8_utf16<wchar_t, 0x10FFFF, std::consume_header>));*/
-	//inputFile.imbue(std::locale(std::locale::empty(), new std::codecvt_utf8<wchar_t>));
-
+	
 	inputFile.open(fileName);
 	json js;
 	inputFile >> js;
-
-	
 
 	//Lê configurações gerais
 	config.readConfigJSON(js["common"]);
@@ -73,39 +60,41 @@ bool ConfigFileReader::readConfigFile(char * fileName,
 		std::vector<DeviceType>::iterator check = std::find(devs.begin(), devs.end(), dt);
 		if ( check == devs.end() ) {
 			//Se não existir
+			identifyDevType(js,dt);
 			devs.push_back(dt);
 		}
-	}
-
-	for ( size_t i = 0; i < devs.size(); i++ ) {
 		
-		if ( setDevType(js,"kinect",DEVTYPE_KINECT,devs.at(i)) ) {
-			continue;
-		}
-
-		if ( setDevType(js, "leapMotion", DEVTYPE_LEAPMOTION, devs.at(i)) ) {
-			continue;
-		}
-		//somente dispositivos de tracking necessitam do devtype para a escolha do skeleton correto
-		//Mesmo assim ainda estao presentes aqui para fins de teste
-		if ( setDevType(js, "keyboard", DEVTYPE_KEYBOARD, devs.at(i)) ) {
-			continue;
-		}
-
-		if ( setDevType(js, "mouse", DEVTYPE_MOUSE, devs.at(i)) ) {
-			continue;
-		}
-
-		if ( setDevType(js, "nedglove", DEVTYPE_NEDGLOVE, devs.at(i)) ) {
-			continue;
-		}
-
 	}
 
 	//Imprime configurações para check
 	printConfig(devs, map, config);
 
 	return true;
+}
+
+
+int ConfigFileReader::identifyDevType(json js, DeviceType &dev) {
+	//Identifica o tipo de cada dispositivo
+	if ( setDevType(js, "kinect", DEVTYPE_KINECT, dev) ) {
+		return DEVTYPE_KINECT;
+	}
+
+	if ( setDevType(js, "leapMotion", DEVTYPE_LEAPMOTION, dev) ) {
+		return DEVTYPE_LEAPMOTION;
+	}
+
+	if ( setDevType(js, "keyboard", DEVTYPE_KEYBOARD, dev) ) {
+		return DEVTYPE_KEYBOARD;
+	}
+
+	if ( setDevType(js, "mouse", DEVTYPE_MOUSE, dev) ) {
+		return DEVTYPE_MOUSE;
+	}
+
+	if ( setDevType(js, "nedglove", DEVTYPE_NEDGLOVE, dev) ) {
+		return DEVTYPE_NEDGLOVE;
+	}
+	return -1;
 }
 
 bool ConfigFileReader::setDevType(json js,std::string textDev, int devConstant, DeviceType &devT) {
@@ -121,3 +110,5 @@ bool ConfigFileReader::setDevType(json js,std::string textDev, int devConstant, 
 	}
 	return false;
 }
+
+

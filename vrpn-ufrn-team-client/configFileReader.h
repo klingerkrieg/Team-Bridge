@@ -55,6 +55,7 @@ private:
 							   Config &config);
 
 	bool setDevType(json js, std::string textDev, int devConstant, DeviceType &devs);
+	int identifyDevType(json js, DeviceType &dev);
 
 };
 

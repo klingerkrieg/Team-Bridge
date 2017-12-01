@@ -1,0 +1,45 @@
+{
+  "common": {
+    "devs": {
+      "nedglove": [
+        "Analog0@localhost"
+      ],
+      "leapMotion": [
+        "LeapMotion0@localhost"
+      ],
+      "kinect": [
+        "Tracker0@localhost"
+      ],
+      "keyboard": [
+        "Keyboard0@localhost"
+      ],
+      "mouse": [
+        "Mouse0@localhost"
+      ]
+    },
+    "patientName": "",
+    "saveDir": "./SAVES/",
+    "appName": "",
+    "host": "",
+    "database": "",
+    "user": "",
+    "passwd": "",
+    "KINECT_X_INTERVAL": 0.35
+  },
+  "keys": [
+    {
+      "divClass": "mouse",
+      "dev": "Mouse0@localhost",
+      "key": "VK_LBUTTON",
+      "toKeyDown": "A",
+      "toKeyUp": "A"
+    },
+    {
+      "divClass": "mouse",
+      "dev": "Mouse0@localhost",
+      "key": "VK_RBUTTON",
+      "toKeyDown": "B",
+      "toKeyUp": "B"
+    }
+  ]
+}

@@ -106,7 +106,7 @@ namespace InputConverterTest {
 
 		KeyPressAction *keyPresser = new KeyPressAction();
 
-		iC = InputConverter(map, devs, app, keyPresser);
+		iC = InputConverter(map, devs, keyPresser);
 	}
 
 

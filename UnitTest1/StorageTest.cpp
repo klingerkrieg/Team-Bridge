@@ -28,7 +28,7 @@ namespace StorageTest {
 			{ "saveDir", "./SAVES/" },
 			{ "appName", "app" },
 			{ "host", "127.0.0.1:3306" },
-			{ "database", "vrpn" },
+			{ "database", "vrpn2" },
 			{ "user", "root" },
 			{ "passwd", "" },
 			{ "KINECT_X_INTERVAL", 0.35 }
@@ -72,7 +72,7 @@ public:
 			"DEV	Tracker0@localhost\n"
 			"DATE	"+st.getDateStr()+"\n"
 			"PATIENT	Paulo Júnior\n"
-			"SENSOR	0	TIMESTAMP	1	POS	1	1	1	QUAT	0	0	0	1\n";
+			"Tracker0@localhost	SENSOR	0	TIMESTAMP	1	POS	1	1	1	QUAT	0	0	0	1\n";
 
 
 		Assert::AreEqual(templateText.c_str(),text.c_str());
@@ -86,7 +86,7 @@ public:
 		std::string content = "DEV	Tracker0@localhost\n"
 			"DATE	2017-09-27 19:19:02\n"
 			"PATIENT	PAULO\n"
-			"SENSOR	0	TIMESTAMP	1	POS	1	1	1	QUAT	1	1	1	1\n";
+			"Tracker0@localhost	SENSOR	0	TIMESTAMP	1	POS	1	1	1	QUAT	1	1	1	1\n";
 		if ( fileInput.is_open() ) {
 			fileInput << content;
 			fileInput.close();
@@ -117,7 +117,7 @@ public:
 		std::string content = "DEV	Tracker0@localhost\n"
 			"DATE	2017-09-27 19:19:02\n"
 			"PATIENT	PAULO\n"
-			"SENSOR	0	TIMESTAMP	1	POS	1	1	1	QUAT	1	1	1	1\n";
+			"Tracker0@localhost	SENSOR	0	TIMESTAMP	1	POS	1	1	1	QUAT	1	1	1	1\n";
 
 		if ( fileInput.is_open() ) {
 			fileInput << content;

@@ -177,8 +177,10 @@ bool InputConverter::checkButton(const char * name, const vrpn_BUTTONCB b) {
 	
 	for ( std::vector<KeyMap>::iterator keyMap = map.begin(); keyMap != map.end(); ++keyMap ) {
 
-		if ( !strcmp(name, keyMap->getDev().c_str()) && keyMap->getKey() == b.button ) {
-			pressed = interpretOnLeave(b.state, (*keyMap));
+		if ( !strcmp(name, keyMap->getDev().c_str()) ) {
+			if ( keyMap->callGestureChecker(b) == 1 ) {
+				pressed = interpretOnLeave(b.state, (*keyMap));
+			}
 		}
 	}
 

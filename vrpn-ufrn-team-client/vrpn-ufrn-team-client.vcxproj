@@ -160,6 +160,7 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ButtonChecker.c" />
     <ClCompile Include="client.cpp" />
     <ClCompile Include="Config.c" />
     <ClCompile Include="ConfigFileReader.c" />
@@ -180,6 +181,7 @@
   <ItemGroup>
     <ClInclude Include="AbstractAction.h" />
     <ClInclude Include="AbstractGestureRecognizer.h" />
+    <ClInclude Include="ButtonChecker.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="Config.h" />
     <ClInclude Include="ConfigFileReader.h" />
@@ -208,6 +210,7 @@
     <None Include="config.json" />
     <None Include="drunkbug.json" />
     <None Include="kayak.json" />
+    <None Include="mouse.json" />
     <None Include="nedglove.json" />
     <None Include="performance.json" />
     <None Include="runner.json" />

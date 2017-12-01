@@ -87,6 +87,9 @@
     <ClCompile Include="GestureRecognizer.c">
       <Filter>Source Files\GestureRecognizer</Filter>
     </ClCompile>
+    <ClCompile Include="ButtonChecker.c">
+      <Filter>Source Files\GestureRecognizer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="KeyMap.h">
@@ -164,6 +167,9 @@
     <ClInclude Include="AbstractGestureRecognizer.h">
       <Filter>Header Files\GestureRecognizer</Filter>
     </ClInclude>
+    <ClInclude Include="ButtonChecker.h">
+      <Filter>Header Files\GestureRecognizer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="vrpn-client-mb.cfg" />
@@ -173,5 +179,6 @@
     <None Include="performance.json" />
     <None Include="nedglove.json" />
     <None Include="kayak.json" />
+    <None Include="mouse.json" />
   </ItemGroup>
 </Project>

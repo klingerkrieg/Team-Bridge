@@ -13,8 +13,7 @@ const std::string currentDateTime(std::string format) {
 	return buf;
 }
 
-
-bool Storage::saveToFile(TrackerUserCallback *userdata, const vrpn_TRACKERCB t) {
+bool Storage::startFile(const char * name) {
 	if ( isOpenOut == false ) {
 		if ( fileName == "" ) {
 			dateStr = currentDateTime("%Y-%m-%d %H:%M:%S");
@@ -28,7 +27,7 @@ bool Storage::saveToFile(TrackerUserCallback *userdata, const vrpn_TRACKERCB t) 
 			return false;
 		} else {
 			if ( infoData ) {
-				fileOutput << "DEV\t" << userdata->name << "\n";
+				fileOutput << "DEV\t" << name << "\n";
 				fileOutput << "DATE\t" << dateStr << "\n";
 				fileOutput << "PATIENT\t" << patient << "\n";
 			}
@@ -36,9 +35,45 @@ bool Storage::saveToFile(TrackerUserCallback *userdata, const vrpn_TRACKERCB t) 
 
 		}
 	}
-	//sensor	0	pos	-0.16	 0.51	 1.02	quat	-0.19	 0.21	 0.12	 0.85
+	return true;
+}
+
+bool Storage::saveToFile(const char * name, const vrpn_ANALOGCB a) {
+	//Cria cabeçalho no arquivo
+	startFile(name);
 	if ( fileOutput.is_open() ) {
-		fileOutput << "SENSOR\t" << t.sensor << "\tTIMESTAMP\t" << t.msg_time.tv_usec
+
+		fileOutput << name << "\tTIMESTAMP\t" << a.msg_time.tv_usec << "\tCHANNEL_COUNT\t" << a.num_channel << "\tCHANNELS";
+		for ( int i = 0; i < a.num_channel; i++ ) {
+			fileOutput << "\t" << a.channel[i];
+		}
+		fileOutput  << "\n";
+		return true;
+	} else {
+		return false;
+	}
+}
+
+bool Storage::saveToFile(const char * name, const vrpn_BUTTONCB b) {
+	//Cria cabeçalho no arquivo
+	startFile(name);
+	if ( fileOutput.is_open() ) {
+
+		fileOutput << name << "\tTIMESTAMP\t" << b.msg_time.tv_usec << "\tBUTTON\t" << b.button << "\tSTATE\t" << b.state << "\n";
+
+		return true;
+	} else {
+		return false;
+	}
+}
+
+bool Storage::saveToFile(TrackerUserCallback *userdata, const vrpn_TRACKERCB t) {
+	//Cria cabeçalho no arquivo
+	startFile(userdata->name);
+
+	//Tracker0	sensor	0	pos	-0.16	 0.51	 1.02	quat	-0.19	 0.21	 0.12	 0.85
+	if ( fileOutput.is_open() ) {
+		fileOutput << userdata->name << "\tSENSOR\t" << t.sensor << "\tTIMESTAMP\t" << t.msg_time.tv_usec
 			<< "\tPOS\t" << t.pos[0] << "\t" << t.pos[1] << "\t" << t.pos[2]
 			<< "\tQUAT\t" << t.quat[0] << "\t" << t.quat[1] << "\t" << t.quat[2] << "\t" << t.quat[3] << "\n";
 		return true;
@@ -89,8 +124,8 @@ bool Storage::sendFileToDb(char * fileName) {
 	int idDevice = -1;
 	int idSession = -1;
 
-	int timestamp;
-	int sensor;
+	int timestamp, channelCount, sensor, buttonNumber, buttonState;
+	char dev[512], channels[512];
 	double pos[3];
 	double quat[4];
 	char s1[LINESIZE], s2[LINESIZE];
@@ -98,7 +133,7 @@ bool Storage::sendFileToDb(char * fileName) {
 	std::map<std::string, std::string> values;
 	int processedLines = 0;
 	bool oneExported = false;
-	
+	std::vector<std::string> channelsStr;
 
 	//Conecta
 	if ( !db.connect() ) {
@@ -146,11 +181,12 @@ bool Storage::sendFileToDb(char * fileName) {
 			} else
 			if ( !strcmp(pch = strtok(scrap, " \t"), "PATIENT") ) {
 				if (sscanf(line.c_str(), "%s\t%[^\t\n]", s1, s2) != 2){
-					fprintf(stderr, "Falha ao ler %s linha: %s\n", fileName, line.c_str());
-					throw std::exception("Falha ao ler linha.");
-					return false;
+					fprintf(stderr, "Falha ao ler paciente %s: %s\n", fileName, line.c_str());
+					expPatientName = "";
+				} else {
+					expPatientName = s2;
 				}
-				expPatientName = s2;
+				
 			} else
 			if ( !strcmp(pch = strtok(scrap, " \t"), "DATE") ) {
 				if ( sscanf(line.c_str(), "%s\t%[^\t\n]", s1, s2) != 2 ) {
@@ -159,32 +195,27 @@ bool Storage::sendFileToDb(char * fileName) {
 					return false;
 				}
 				expDateTime = s2;
-			} else
-			if ( !strcmp(pch = strtok(scrap, " \t"), "SENSOR") ) {
-				//Caso chegue nos dados dos sensores e porque o cabecalho com as informacoes ja acabou
+			} else {
+				//Caso não seja nenhum acima é porque o cabeçalho já acabou
 
 				if ( idSession == -1 ) {
 					//Se nao tem a id da sessao
-					values.clear();
-					values["name"] = expPatientName;
-					idPatient = db.findOrCreate("patients", "idpatient", values);
-					if ( idPatient == -1 ) {
-						throw std::exception("Falha inserir paciente.");
-						return false;
+					if ( expPatientName.compare("") ) {
+						values.clear();
+						values["name"] = expPatientName;
+						idPatient = db.findOrCreate("patients", "idpatient", values);
+						if ( idPatient == -1 ) {
+							throw std::exception("Falha inserir paciente.");
+							return false;
+						}
 					}
 
-					values.clear();
-					values["device_name"] = expDev;
-					idDevice = db.findOrCreate("devices", "iddevice", values);
-					if ( idDevice == -1 ) {
-						throw std::exception("Falha inserir dispositivo.");
-						return false;
-					}
+					
 
 					values.clear();
 					values["date_time"] = expDateTime;
-					values["iddevice"] = std::to_string(idDevice);
-					values["idpatient"] = std::to_string(idPatient);
+					if (idPatient != -1)
+						values["idpatient"] = std::to_string(idPatient);
 					idSession = db.findOrCreate("sessions", "idsession", values);
 					if ( idSession == -1 ) {
 						throw std::exception("Falha inserir sessao.");
@@ -192,44 +223,112 @@ bool Storage::sendFileToDb(char * fileName) {
 					}
 				}
 
+				bool trackDev = false;
+				bool analogDev = false;
+				bool buttonDev = false;
 
-				//sensor	0	time	0	pos	-0.16	 0.51	 1.02	quat	-0.19	 0.21	 0.12	 0.85
-				if ( sscanf(line.c_str(), "SENSOR\t%d\tTIMESTAMP\t%d\tPOS\t%lf\t%lf\t%lf\tQUAT\t%lf\t%lf\t%lf\t%lf",
+
+				//Tracker0 SENSOR	0	TIME	0	POS	-0.16	 0.51	 1.02	QUAT	-0.19	 0.21	 0.12	 0.85
+				if ( sscanf(line.c_str(), "%s\tSENSOR\t%d\tTIMESTAMP\t%d\tPOS\t%lf\t%lf\t%lf\tQUAT\t%lf\t%lf\t%lf\t%lf",
+							dev,
 							&sensor,
 							&timestamp,
 							&pos[0], &pos[1], &pos[2],
-							&quat[0], &quat[1], &quat[2], &quat[3]) != 9 ) {
-					fprintf(stderr, "Falha ao ler %s linha: %s\n", fileName, line.c_str());
-					throw std::exception("Falha ao ler linha.");
+							&quat[0], &quat[1], &quat[2], &quat[3]) == 10 ) {
+					trackDev = true;
+				}
+
+				//Se leitura do tracker não deu certo tenta outro dispositivo
+				//Analog0@localhost	TIMESTAMP	277557	CHANNEL_COUNT	5	CHANNELS	245	231	227	214	202
+				if ( trackDev == false && sscanf(line.c_str(), "%s\tTIMESTAMP\t%d\tCHANNEL_COUNT\t%d\tCHANNELS\t%[^\n]",
+					dev, &timestamp, &channelCount, channels) == 4 ) {
+					analogDev = true;
+					channelsStr = split(channels, "\t");
+				}
+
+				//Mouse0@localhost	TIMESTAMP	41790	BUTTON:	0	STATE:	1
+				if ( buttonDev == false && sscanf(line.c_str(), "%s\tTIMESTAMP\t%d\tBUTTON\t%d\tSTATE\t%d",
+					dev, &timestamp, &buttonNumber, &buttonState) == 4 ) {
+					buttonDev = true;
+				}
+
+				values.clear();
+				values["device_name"] = dev;
+				idDevice = db.findOrCreate("devices", "iddevice", values);
+				if ( idDevice == -1 ) {
+					throw std::exception("Falha inserir dispositivo.");
 					return false;
 				}
 
-				//uint = 4294967295
-				//meia hora = 540.000 registros
-				//cabem 7953 sessoes
-				values.clear();
-				values["idsession"] = std::to_string(idSession);
-				values["sensor"] = std::to_string(sensor);
-				values["pos_0"] = std::to_string(pos[0]);
-				values["pos_1"] = std::to_string(pos[1]);
-				values["pos_2"] = std::to_string(pos[2]);
-				values["quat_0"] = std::to_string(quat[0]);
-				values["quat_1"] = std::to_string(quat[1]);
-				values["quat_2"] = std::to_string(quat[2]);
-				values["quat_3"] = std::to_string(quat[3]);
 
-				if ( db.insert("trackers", values, false) == 0 ) {
+				if ( trackDev ) {
+					//uint = 4294967295
+					//meia hora = 540.000 registros
+					//cabem 7953 sessoes
+					values.clear();
+					values["idsession"] = std::to_string(idSession);
+					values["iddevice"] = std::to_string(idDevice);
+					values["sensor"] = std::to_string(sensor);
+					values["pos_0"] = std::to_string(pos[0]);
+					values["pos_1"] = std::to_string(pos[1]);
+					values["pos_2"] = std::to_string(pos[2]);
+					values["quat_0"] = std::to_string(quat[0]);
+					values["quat_1"] = std::to_string(quat[1]);
+					values["quat_2"] = std::to_string(quat[2]);
+					values["quat_3"] = std::to_string(quat[3]);
+					
+
+					if ( db.insert("trackers", values, false) == 0 ) {
+						oneExported = true;
+					} else {
+						throw std::exception("Falha ao inserir no banco linha.");
+						return false;
+					}
+				} else 
+				if ( analogDev ) {
+					values.clear();
+					values["idsession"] = std::to_string(idSession);
+					values["iddevice"] = std::to_string(idDevice);
+					
+					int idAnalog = db.insert("analogs", values, true);
+
+					if ( idAnalog == -1 ) {
+						throw std::exception("Falha ao inserir no banco linha.");
+						return false;
+					}
+					values.clear();
+					values["idanalog"] = std::to_string(idAnalog);
+					for ( size_t i = 0; i < channelsStr.size(); i++ ) {
+						values["num"] = std::to_string(i);
+						values["value"] = channelsStr[i];
+
+						if ( db.insert("channels", values, false) ) {
+							throw std::exception("Falha ao inserir no banco linha.");
+							return false;
+						}
+					}
+					
 					oneExported = true;
-				} else {
-					throw std::exception("Falha ao inserir no banco linha.");
-					return false;
+				} else 
+				if ( buttonDev ) {
+					values.clear();
+					values["idsession"] = std::to_string(idSession);
+					values["iddevice"] = std::to_string(idDevice);
+					values["button"] = std::to_string(buttonNumber);
+					values["pressed"] = std::to_string(buttonState);
+					
+					if ( db.insert("buttons", values, false) ) {
+						throw std::exception("Falha ao inserir no banco linha.");
+						return false;
+					}
+					oneExported = true;
 				}
 			}
 
 
 			//Mostra a porcentagem de envio
 			int perc = (processedLines * 100) / lines;
-			std::cout << "\r " << perc << "%";
+			std::cout << "\r " << perc << "%\r";
 			processedLines++;
 
 		}

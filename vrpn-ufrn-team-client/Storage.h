@@ -7,8 +7,10 @@
 
 #include "DeviceInfo.h"
 #include <vrpn_Tracker.h>
+#include <vrpn_Analog.h>
+#include <vrpn_Button.h>
 
-
+#include "util.h"
 #include "FileParser.h"
 #include "Config.h"
 #include "Db.h"
@@ -71,38 +73,43 @@ public:
 	}
 
 
-	 bool saveToFile(TrackerUserCallback *userdata, const vrpn_TRACKERCB t);
-	 int checkSent();
-	 bool sendFileToDb(char * fileName);
+	bool startFile(const char * name);
+	bool saveToFile(const char * name, const vrpn_ANALOGCB a);
+	bool saveToFile(const char * name, const vrpn_BUTTONCB b);
+	bool saveToFile(TrackerUserCallback *userdata, const vrpn_TRACKERCB t);
 
-	 std::string getFileName() {
-		 return fileName;
-	 }
+	int checkSent();
 
-	 std::string getDateStr() {
-		 return dateStr;
-	 }
+	bool sendFileToDb(char * fileName);
 
-	 Storage() {
+	std::string getFileName() {
+		return fileName;
+	}
 
-	 }
+	std::string getDateStr() {
+		return dateStr;
+	}
 
-	 Storage (Config config, bool exportDb ){
-		 if (exportDb){
-			 db = Db(config.getHost(), config.getDb(), config.getUser(), config.getPasswd());
-			 this->exportDb = exportDb;
-		 }
-		 saveDir = config.getSaveDir();
-		 patient = config.getPatient();
-	 }
+	Storage() {
 
-	 void close() {
-		 if ( exportDb ) {
-			 db.close();
-		 }
-		 closeOut();
-		 closeIn();
-	 }
+	}
+
+	Storage (Config config, bool exportDb ){
+		if (exportDb){
+			db = Db(config.getHost(), config.getDb(), config.getUser(), config.getPasswd());
+			this->exportDb = exportDb;
+		}
+		saveDir = config.getSaveDir();
+		patient = config.getPatient();
+	}
+
+	void close() {
+		if ( exportDb ) {
+			db.close();
+		}
+		closeOut();
+		closeIn();
+	}
 };
 
 

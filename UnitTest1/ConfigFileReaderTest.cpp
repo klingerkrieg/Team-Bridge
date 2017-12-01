@@ -30,7 +30,6 @@ public:
 	}
 
 	TEST_METHOD(ConfigFileReader_ConfigOk) {
-		Assert::AreEqual("app", config.getApp().c_str());
 		Assert::AreEqual("Paulo Júnior", config.getPatient().c_str());
 		Assert::AreEqual("db", config.getDb().c_str());
 		Assert::AreEqual("host", config.getHost().c_str());

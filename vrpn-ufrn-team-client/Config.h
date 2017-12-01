@@ -16,7 +16,6 @@ private:
 	std::string db = "";
 	std::string patient = "";
 	std::string saveDir = "";
-	std::string app = "";
 
 	std::map<std::string, std::string> config;
 
@@ -45,6 +44,5 @@ public:
 
 	std::string& getSaveDir();
 
-	std::string& getApp();
 };
 
