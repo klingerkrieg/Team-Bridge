@@ -36,7 +36,8 @@
       "strengthMin": 25,
       "strengthMax": 0,
       "toKeyDown": "A",
-      "toKeyUp": "A"
+      "toKeyUp": "A",
+      "saveData": "strength"
     }
   ]
 }

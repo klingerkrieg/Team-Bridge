@@ -45,11 +45,11 @@ bool Client::setup(bool test = false) {
 		KeyPressAction *keyPresser = new KeyPressAction();
 
 
-		//Setando InputConverter
-		inputConverter = InputConverter(map, devs, keyPresser, view);
+		
 		
 
 	#ifdef THERAPY_MODULE
+		
 		//Setando configs no store
 		storage = Storage(config, exportDb);
 
@@ -57,6 +57,12 @@ bool Client::setup(bool test = false) {
 		if ( exportDb ) {
 			storage.checkSent();
 		}
+
+		//Setando InputConverter
+		inputConverter = InputConverter(map, devs, storage, keyPresser, view);
+	#else
+		//Setando InputConverter
+		inputConverter = InputConverter(map, devs, keyPresser, view);
 	#endif
 
 		

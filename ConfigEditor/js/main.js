@@ -150,6 +150,10 @@ function formToJSON(el){
         json.toKeyUp = json.toKey;
     }
 
+    if (el.find("#saveData").prop("checked")){
+        json.saveData = el.find("#saveData").val();
+    }
+
     if (json.strengthMin < 0){
         json.strengthMin = 0;
     }
@@ -171,9 +175,9 @@ function jsonToForm(json){
     $.each(json.common,function(key,val){
         el = $("#"+key);
         el.val(val);
-        div = el.attr("divideby");
-        if (div != undefined){
-            el.val(parseFloat(val)*parseInt(div));
+        divBy = el.attr("divideby");
+        if (divBy != undefined){
+            el.val(parseFloat(val)*parseInt(divBy));
         }
     })
 
@@ -194,7 +198,7 @@ function jsonToForm(json){
             el.val(option[el.attr('id')]);
             divBy = el.attr("divideby");
             if (divBy != undefined){
-                el.val(parseFloat(option[el.attr('id')])*parseInt(div));
+                el.val(parseFloat(option[el.attr('id')])*parseInt(divBy));
             }
         });
 
@@ -215,6 +219,12 @@ function jsonToForm(json){
             div.find("#toKey").val(option.toKeyUp);
         } else {
             div.find("#toKeyUp").prop("checked",false);
+        }
+
+        if (option.saveData != undefined){
+            div.find("#saveData").prop("checked",true);
+        } else {
+            div.find("#saveData").prop("checked",false);
         }
     }
 

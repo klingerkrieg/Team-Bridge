@@ -14,7 +14,6 @@
 #include "FileParser.h"
 #include "Config.h"
 #include "Db.h"
-#include "ConfigFileReader.h"
 #include <Windows.h>
 #include <time.h>
 
@@ -74,6 +73,7 @@ public:
 
 
 	bool startFile(const char * name);
+	bool saveToFile(const char * dev, std::string actionName, double value);
 	bool saveToFile(const char * name, const vrpn_ANALOGCB a);
 	bool saveToFile(const char * name, const vrpn_BUTTONCB b);
 	bool saveToFile(TrackerUserCallback *userdata, const vrpn_TRACKERCB t);

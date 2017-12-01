@@ -151,7 +151,7 @@ private:
 	//delay atualmente usado somente para marcha estacionaria
 	int delay = 400; //ms;
 
-
+	std::string saveData = "";
 	//Aqui foi aplicado algo semelhante ao padrão Observer
 public:
 	typedef int (AbstractGestureRecognizer::*gestureCheckerMethod)(void * data, KeyMap *key);
@@ -199,6 +199,12 @@ public:
 
 	bool getGestureCheckerDefined() {
 		return gestureCheckerDefined;
+	}
+
+	//////////////////
+
+	std::string getSaveData() {
+		return saveData;
 	}
 
 	int scan2ascii(DWORD scancode, USHORT* result);

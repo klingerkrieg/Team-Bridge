@@ -14,7 +14,7 @@ int FlexedMember::flexed2d(std::map<int, std::vector<double>> points, int paramA
 }
 
 
-int FlexedMember::flexed3d(std::map<int, std::vector<double>> points, int paramAngle, int angleMod) {
+int FlexedMember::flexed3d(std::map<int, std::vector<double>> points, KeyMap * keyMap) {
 	
 	
 
@@ -32,23 +32,33 @@ int FlexedMember::flexed3d(std::map<int, std::vector<double>> points, int paramA
 
 	double angle = acos(res) * 180.0 / 3.14159265;
 
+
 	//printf("%.2f\n", angle);
 	bool comp;
-	if ( angleMod == -1 ) {
-		comp = paramAngle > angle;
+	if ( keyMap->getAngleMod() == -1 ) {
+		comp = keyMap->getAngle() > angle;
 	} else
-	if ( angleMod == 1 ) {
-		comp = paramAngle < angle;
+	if ( keyMap->getAngleMod() == 1 ) {
+		comp = keyMap->getAngle() < angle;
 	} else
-	if ( angleMod == 0 ) {
-		comp = paramAngle == angle;
+	if ( keyMap->getAngleMod() == 0 ) {
+		comp = keyMap->getAngle() == angle;
 	}
+
+#ifdef THERAPY_MODULE
+	if ( comp ) {
+		if ( keyMap->getSaveData().compare("") ) {
+			storage->saveToFile(keyMap->getDev().c_str(), keyMap->getSaveData(), angle);
+		}
+	}
+#endif
+	
 	return comp;
 }
 
-int FlexedMember::flexed3d(std::map<int, std::vector<double>> points, int paramAngle, int angleMod, int direction) {
+int FlexedMember::flexed3d(std::map<int, std::vector<double>> points, KeyMap * keyMap, int direction) {
 
-	bool comp = flexed3d(points, paramAngle, angleMod);
+	bool comp = flexed3d(points, keyMap);
 	if ( comp ) {
 
 		std::vector<double> p1 = points.at(1);

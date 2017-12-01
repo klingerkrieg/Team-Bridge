@@ -4,18 +4,19 @@
 #include <map>
 #include "util.h"
 #include "Skeleton.h"
+#include "KeyMap.h"
 
 #define PI 3.14159265;
 
 const int UP = 1;
 const int DOWN = 2;
 
-class FlexedMember {
+class FlexedMember : public AbstractGestureRecognizer {
 	public:
 	int flexed2d(std::map<int, std::vector<double>> points, int angle);
 
-	int flexed3d(std::map<int, std::vector<double>> points, int paramAngle, int angleMod);
-	int flexed3d(std::map<int, std::vector<double>> points, int angle, int angleMod, int direction);
+	int flexed3d(std::map<int, std::vector<double>> points, KeyMap * keyMap);
+	int flexed3d(std::map<int, std::vector<double>> points, KeyMap * keyMap, int direction);
 
 	std::map<int, std::vector<double>> getPoints(SkeletonPart skelPart, int sensor1, int sensor2, int sensor3, std::map<int, std::vector<double>> &positions);
 	std::map<int, std::vector<double>> getPoints(const vrpn_TRACKERCB t, int sensor1, int sensor2, int sensor3, std::map<int, std::vector<double>> &positions);

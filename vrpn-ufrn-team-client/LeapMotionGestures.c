@@ -50,7 +50,7 @@ int LeapMotionGestures::leftWristFlexedUp(void * data, KeyMap * keyMap) {
 	if ( points.size() == 0 ) {
 		return -1;
 	}
-	return flexed3d(points, keyMap->getAngle(), keyMap->getAngleMod(), UP);
+	return flexed3d(points, keyMap, UP);
 }
 
 int LeapMotionGestures::leftWristFlexedDown(void * data, KeyMap * keyMap) {
@@ -60,7 +60,7 @@ int LeapMotionGestures::leftWristFlexedDown(void * data, KeyMap * keyMap) {
 	if ( points.size() == 0 ) {
 		return -1;
 	}
-	return flexed3d(points, keyMap->getAngle(), keyMap->getAngleMod(), DOWN);
+	return flexed3d(points, keyMap, DOWN);
 }
 
 
@@ -71,7 +71,7 @@ int LeapMotionGestures::rightWristFlexedUp(void * data, KeyMap * keyMap) {
 	if ( points.size() == 0 ) {
 		return -1;
 	}
-	return flexed3d(points, keyMap->getAngle(), keyMap->getAngleMod(), UP);
+	return flexed3d(points, keyMap, UP);
 }
 
 
@@ -82,50 +82,64 @@ int LeapMotionGestures::rightWristFlexedDown(void * data, KeyMap * keyMap) {
 	if ( points.size() == 0 ) {
 		return -1;
 	}
-	return flexed3d(points, keyMap->getAngle(), keyMap->getAngleMod(), DOWN);
+	return flexed3d(points, keyMap, DOWN);
 }
 
 
 
 
 // Mao fechada
-int LeapMotionGestures::handClosed(float angle) {
+int LeapMotionGestures::handClosed(float angle, KeyMap * keyMap) {
 	if ( angle == -1 ) {
 		return -1;
 	}
 	
 	if ( angle > closeAngle ) {
+
+#ifdef THERAPY_MODULE
+	if ( keyMap->getSaveData().compare("") ) {
+		storage->saveToFile(keyMap->getDev().c_str(), keyMap->getSaveData(), angle);
+	}
+#endif
+
 		return 1;
 	}
 	return 0;
 }
 int LeapMotionGestures::leftClosed(void * data, KeyMap * keyMap) {
 	vrpn_ANALOGCB a = *(vrpn_ANALOGCB *)data;
-	return handClosed((float)a.channel[0]);
+	return handClosed((float)a.channel[0], keyMap);
 }
 
 int LeapMotionGestures::rightClosed(void * data, KeyMap * keyMap) {
 	vrpn_ANALOGCB a = *(vrpn_ANALOGCB *)data;
-	return handClosed((float)a.channel[2]);
+	return handClosed((float)a.channel[2], keyMap);
 }
 
 //Pinça
-int LeapMotionGestures::pinch(float angle) {
+int LeapMotionGestures::pinch(float angle, KeyMap * keyMap) {
 	if ( angle == -1 ) {
 		return -1;
 	}
 	
 	if ( angle < pinchAngle ) {
+
+#ifdef THERAPY_MODULE
+	if ( keyMap->getSaveData().compare("") ) {
+		storage->saveToFile(keyMap->getDev().c_str(), keyMap->getSaveData(), angle);
+	}
+#endif
+
 		return 1;
 	}
 	return 0;
 }
 int LeapMotionGestures::leftPinch(void * data, KeyMap * keyMap) {
 	vrpn_ANALOGCB a = *(vrpn_ANALOGCB *)data;
-	return pinch((float)a.channel[1]);
+	return pinch((float)a.channel[1], keyMap);
 }
 
 int LeapMotionGestures::rightPinch(void * data, KeyMap * keyMap) {
 	vrpn_ANALOGCB a = *(vrpn_ANALOGCB *)data;
-	return pinch((float)a.channel[3]);
+	return pinch((float)a.channel[3], keyMap);
 }

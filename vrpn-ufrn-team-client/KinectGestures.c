@@ -161,6 +161,13 @@ bool KinectGestures::detectMemberFast(SkeletonPart skelPart, KeyMap * keyMap) {
 	double velocityMs = (dst / time);
 
 	if ( velocityMs > keyMap->getMaxVelocityMs() ) {
+
+#ifdef THERAPY_MODULE
+		if ( keyMap->getSaveData().compare("") ) {
+			storage->saveToFile(keyMap->getDev().c_str(), keyMap->getSaveData(), velocityMs);
+		}
+#endif
+
 		return true;
 	} else {
 		return false;
@@ -189,36 +196,45 @@ int KinectGestures::detectHandTop(SkeletonPart skelPart, KeyMap * keyMap) {
 	// ... - 1
 	//if (t.sensor == 11)
 	//printf("head:%.2f hand:%.2f\n", skeleton.head.y, t.pos[1]);
+	bool ret = false;
 
 	if ( keyMap->getY() == 5 &&
 		(skelPart.y > skeleton.head.y + (handTopInterval * 2) || keyMap->getCoordinateMod() == -1) ) {
-		return true;
+		ret = true;
 	} else
 	if ( keyMap->getY() == 4 && (
 		(skelPart.y <= skeleton.head.y + (handTopInterval * 2) && skelPart.y > skeleton.head.y + handTopInterval && keyMap->getCoordinateMod() == 0)
 		|| (skelPart.y > skeleton.head.y + handTopInterval && keyMap->getCoordinateMod() == 1)
 		|| (skelPart.y <= skeleton.head.y + (handTopInterval * 2) && keyMap->getCoordinateMod() == -1) )) {
-		return true;
+		ret = true;
 	} else
 	if ( keyMap->getY() == 3 && (
 		(skelPart.y <= skeleton.head.y + handTopInterval && skelPart.y > skeleton.head.y - (handTopInterval * 2) && keyMap->getCoordinateMod() == 0)
 		|| (skelPart.y > skeleton.head.y - (handTopInterval * 2) && keyMap->getCoordinateMod() == 1)
 		|| (skelPart.y <= skeleton.head.y + handTopInterval && keyMap->getCoordinateMod() == -1) )) {
-		return true;
+		ret = true;
 	} else
 	if ( keyMap->getY() == 2 && (
 		(skelPart.y <= skeleton.head.y - (handTopInterval * 2) && skelPart.y > skeleton.head.y - (handTopInterval * 5) && keyMap->getCoordinateMod() == 0)
 		|| (skelPart.y > skeleton.head.y - (handTopInterval * 5)  && keyMap->getCoordinateMod() == 1)
 		|| (skelPart.y <= skeleton.head.y - (handTopInterval * 2) && keyMap->getCoordinateMod() == -1) )) {
 
-		return true;
+		ret = true;
 	} else
 	if ( keyMap->getY() == 1 &&
 		(skelPart.y <= skeleton.head.y - (handTopInterval * 5) || keyMap->getCoordinateMod() == 1) ) {
-		return true;
+		ret = true;
 	}
 
-	return false;
+#ifdef THERAPY_MODULE
+	if ( ret ) {
+		if ( keyMap->getSaveData().compare("") ) {
+			storage->saveToFile(keyMap->getDev().c_str(), keyMap->getSaveData() + "-Y", skelPart.y);
+		}
+	}
+#endif
+
+	return ret;
 }
 
 
@@ -284,28 +300,38 @@ int KinectGestures::detectHandXPos(SkeletonPart skelPart, KeyMap * keyMap) {
 		return false;
 	}
 
+	bool ret = false;
+
 	//printf("%.2f > %.2f + %.2f | %d\n", t.pos[0], lastHeadXPos, (handXPosInterval * 2), xPos);
 	//Depois de verificar a altura verifica o eixo X
 	if ( keyMap->getX() == 2 && skelPart.x >= skeleton.hipCenter.x + (handXPosInterval*2) ) {
-		return true;
+		ret = true;
 	} else
 	if ( keyMap->getX() == 1 && skelPart.x >= skeleton.hipCenter.x + handXPosInterval &&
 		skelPart.x < skeleton.hipCenter.x + (handXPosInterval * 2) ) {
-		return true;
+		ret = true;
 	} else
 	if ( keyMap->getX() == 0 && skelPart.x <= skeleton.hipCenter.x + handXPosInterval &&
 		skelPart.x > skeleton.hipCenter.x - handXPosInterval ) {
-		return true;
+		ret = true;
 	} else
 	if ( keyMap->getX() == -1 && skelPart.x <= skeleton.hipCenter.x - handXPosInterval &&
 		skelPart.x > skeleton.hipCenter.x - (handXPosInterval * 2)  ) {
-		return true;
+		ret = true;
 	} else
 	if ( keyMap->getX() == -2 && skelPart.x <= skeleton.hipCenter.x - (handXPosInterval*2)  ) {
-		return true;
+		ret = true;
 	}
 
-	return false;
+#ifdef THERAPY_MODULE
+	if ( ret ) {
+		if ( keyMap->getSaveData().compare("") ) {
+			storage->saveToFile(keyMap->getDev().c_str(), keyMap->getSaveData() + "-X", skelPart.x);
+		}
+	}
+#endif
+
+	return ret;
 }
 
 
@@ -334,20 +360,24 @@ int KinectGestures::detectTopChangeNormal(void * data, KeyMap * keyMap) {
 
 int KinectGestures::detectTopChange(SkeletonPart skelPart, KeyMap * keyMap, int direction) {
 	
+	int ret = -1;
+
 	if ( skelPart.skelConstant == SKELETON_HEAD ) {
 		if ( normalStepHeight == -100 ) {
 			normalStepHeight = skelPart.y;
 			return -1;
 		}
 
+		
+
 		//Subiu
 		//pos  - last
 		//0.59 - 0.57 = 0.02 >= 0.02
 		if ( direction == KINECT_UP ) {
 			if ( skelPart.y - normalStepHeight >= keyMap->getSensivity() ) {
-				return true;
+				ret = 1;
 			} else {
-				return 0;
+				ret = 0;
 			}
 		} else
 		if ( direction == KINECT_DOWN ) {
@@ -356,20 +386,31 @@ int KinectGestures::detectTopChange(SkeletonPart skelPart, KeyMap * keyMap, int 
 			//0.57 - 0.55 = 0.02 >= 0.02
 			//printf("%.2f >= %.2f\n", lastHeight - t.pos[1], heightSens);
 			if ( normalStepHeight - skelPart.y >= keyMap->getSensivity() ) {
-				return true;
+				ret = 1;
 			} else {
-				return 0;
+				ret = 0;
 			}
 		} else 
 		if ( direction == KINECT_NORMAL ) {
 			if ( normalStepHeight - skelPart.y < keyMap->getSensivity() && skelPart.y - normalStepHeight < keyMap->getSensivity() ) {
-				return true;
+				ret = 1;
 			} else {
-				return 0;
+				ret = 0;
 			}
 		}
+
+	#ifdef THERAPY_MODULE
+		if ( ret == 1 ) {
+			if ( keyMap->getSaveData().compare("") ) {
+				storage->saveToFile(keyMap->getDev().c_str(), keyMap->getSaveData(), skelPart.y);
+			}
+		}
+	#endif
 	}
-	return -1;
+
+
+
+	return ret;
 }
 
 
@@ -412,7 +453,7 @@ int KinectGestures::detectBody(SkeletonPart skelPart, KeyMap * keyMap, int direc
 
 	if ( bodyDirectionPoints.size() == 3 && skelPart.skelConstant == SKELETON_HEAD ) {
 		//Está inclinado
-		if ( flexed3d(bodyDirectionPoints, keyMap->getAngle(), 1) ) {
+		if ( flexed3d(bodyDirectionPoints, keyMap) ) {
 
 			if ( direction == KINECT_FRONT ) {
 				return bodyDirectionPoints.at(0)[2] < bodyDirectionPoints.at(1)[2];
@@ -471,7 +512,7 @@ int  KinectGestures::bodyBalance(void * data, KeyMap * keyMap) {
 	points.insert_or_assign(0, points.at(1));
 	points.at(0)[1] = y;
 
-	return flexed3d(points, keyMap->getAngle(), keyMap->getAngleMod(), 1);
+	return flexed3d(points, keyMap, 1);
 }
 
 
@@ -503,13 +544,20 @@ bool KinectGestures::detectWalkHeight(SkeletonPart skelPart, KeyMap * keyMap, do
 
 	if ( ret ) {
 		kinectDetection.lastWalk = actualTime;
-		return true;
 	} else
 	if ( kinectDetection.lastWalk != 0 && actualTime - kinectDetection.lastWalk < keyMap->getDelay() ) {
-		return true;
-	} else {
-		return false;
+		ret = true;
 	}
+
+#ifdef THERAPY_MODULE
+	if ( ret) {
+		if ( keyMap->getSaveData().compare("") ) {
+			storage->saveToFile(keyMap->getDev().c_str(), keyMap->getSaveData(), kneeLastHeight);
+		}
+	}
+#endif
+
+	return ret;
 }
 
 
@@ -537,6 +585,12 @@ int KinectGestures::detectTurnLeft(void * data, KeyMap * keyMap) {
 	
 	if ( skelPart.skelConstant == SKELETON_HIP_CENTER ) {
 		if ( skelPart.quat_z < kinectDetection.hipCenter.quat_z - turnFactor ) {
+
+		#ifdef THERAPY_MODULE
+			if ( keyMap->getSaveData().compare("") ) {
+				storage->saveToFile(keyMap->getDev().c_str(), keyMap->getSaveData(), skelPart.quat_z);
+			}
+		#endif
 			return 1;
 		} else {
 			return 0;
@@ -550,6 +604,11 @@ int KinectGestures::detectTurnRight(void * data, KeyMap * keyMap) {
 	
 	if ( skelPart.skelConstant == SKELETON_HIP_CENTER ) {
 		if ( skelPart.quat_z > kinectDetection.hipCenter.quat_z + turnFactor ) {
+		#ifdef THERAPY_MODULE
+			if ( keyMap->getSaveData().compare("") ) {
+				storage->saveToFile(keyMap->getDev().c_str(), keyMap->getSaveData(), skelPart.quat_z);
+			}
+		#endif
 			return 1;
 		} else {
 			return 0;
@@ -574,7 +633,7 @@ int KinectGestures::leftWristFlexedUp(void * data, KeyMap * keyMap) {
 	if ( points.size() == 0 ) {
 		return -1;
 	}
-	return flexed3d(points, keyMap->getAngle(), keyMap->getAngleMod(), UP);
+	return flexed3d(points, keyMap, UP);
 }
 int KinectGestures::leftWristFlexedDown(void * data, KeyMap * keyMap) {
 	SkeletonPart skelPart = *(SkeletonPart*)data;
@@ -582,7 +641,7 @@ int KinectGestures::leftWristFlexedDown(void * data, KeyMap * keyMap) {
 	if ( points.size() == 0 ) {
 		return -1;
 	}
-	return flexed3d(points, keyMap->getAngle(), keyMap->getAngleMod(), DOWN);
+	return flexed3d(points, keyMap, DOWN);
 }
 int KinectGestures::rightWristFlexedUp(void * data, KeyMap * keyMap) {
 	SkeletonPart skelPart = *(SkeletonPart*)data;
@@ -590,7 +649,7 @@ int KinectGestures::rightWristFlexedUp(void * data, KeyMap * keyMap) {
 	if ( points.size() == 0 ) {
 		return -1;
 	}
-	return flexed3d(points, keyMap->getAngle(), keyMap->getAngleMod(), UP);
+	return flexed3d(points, keyMap, UP);
 }
 int KinectGestures::rightWristFlexedDown(void * data, KeyMap * keyMap) {
 	SkeletonPart skelPart = *(SkeletonPart*)data;
@@ -598,7 +657,7 @@ int KinectGestures::rightWristFlexedDown(void * data, KeyMap * keyMap) {
 	if ( points.size() == 0 ) {
 		return -1;
 	}
-	return flexed3d(points, keyMap->getAngle(), keyMap->getAngleMod(),DOWN);
+	return flexed3d(points, keyMap,DOWN);
 }
 
 

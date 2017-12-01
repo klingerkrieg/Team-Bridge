@@ -20,6 +20,11 @@
 #include "LeapMotionGestures.h"
 #include "NEDGloveGestures.h"
 
+#include "VariabilitiesConfig.h"
+#ifdef THERAPY_MODULE
+#include "Storage.h"
+#endif
+
 //#define PERFORMANCE_TEST
 
 struct DeviceSensorCount {
@@ -33,8 +38,9 @@ private:
 	 static std::vector<KeyMap> map;
 	 static std::vector<DeviceType> devs;
 	 GestureRecognizer gr;
-
-
+ #ifdef THERAPY_MODULE
+	 Storage *storage;
+ #endif
 	 static std::map<std::string, DeviceSensorCount> devicesSensorsCount;
 
 	 static bool nextDefineCenterPos;
@@ -65,7 +71,12 @@ public:
 
 	~InputConverter();
 
+#ifdef THERAPY_MODULE
+	InputConverter(std::vector<KeyMap> &map, std::vector<DeviceType> &devs, Storage &storage, AbstractAction *act) {
+		this->storage = &storage;
+#else
 	InputConverter(std::vector<KeyMap> &map, std::vector<DeviceType> &devs, AbstractAction *act) {
+#endif
 		this->map = map;
 		this->devs = devs;
 		this->act = act;
@@ -73,7 +84,12 @@ public:
 		init();
 	}
 
+#ifdef THERAPY_MODULE
+	InputConverter(std::vector<KeyMap> &map, std::vector<DeviceType> &devs, Storage &storage, AbstractAction *act, View &view) {
+		this->storage = &storage;
+#else
 	InputConverter(std::vector<KeyMap> &map, std::vector<DeviceType> &devs, AbstractAction *act, View &view) {
+#endif
 		this->map = map;
 		this->devs = devs;
 		this->view = &view;
@@ -83,15 +99,10 @@ public:
 	}
 
 	void init() {
-		//gr = GestureRecognizer();
-		
-		/*kinectGr = KinectGestures();
-		leapGr = LeapMotionGestures();
-		nedGr = NEDGloveGestures();
-
-		//kinectGr.
-		leapGr.assignChecker(map);
-		nedGr.assignChecker(map);*/
+		gr = GestureRecognizer();
+	#ifdef THERAPY_MODULE
+		gr.AbstractGestureRecognizer::setStorage(storage);
+	#endif
 
 		//Aqui foi aplicado algo semelhante ao padrão Observer
 		//Chama o assign geral, dentro desse sera chamado individualmente o assign de cada GestureRecognizer

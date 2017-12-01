@@ -8,7 +8,7 @@
 #include "KeyMap.h"
 
 //A primeira classe obrigatoriamente precisa ser AbstractGestureRecognizer
-class LeapMotionGestures : public AbstractGestureRecognizer, public FlexedMember  {
+class LeapMotionGestures : public FlexedMember  {
 private:
 
 	float closeAngle = 2.5;
@@ -16,8 +16,8 @@ private:
 
 	static std::map<int, std::vector<double>> lastPositions[10];
 
-	int handClosed(float angle);
-	int pinch(float angle);
+	int handClosed(float angle, KeyMap * keyMap);
+	int pinch(float angle, KeyMap * keyMap);
 
 protected:
 	void assignChecker(std::vector<KeyMap> &map);

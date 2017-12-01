@@ -38,6 +38,18 @@ bool Storage::startFile(const char * name) {
 	return true;
 }
 
+
+bool Storage::saveToFile(const char * dev, std::string actionName, double value) {
+	//Cria cabeçalho no arquivo
+	startFile(dev);
+	if ( fileOutput.is_open() ) {
+		fileOutput << dev << "\tACTION\t" << actionName << "\tVALUE\t" << value << "\n";
+		return true;
+	} else {
+		return false;
+	}
+}
+
 bool Storage::saveToFile(const char * name, const vrpn_ANALOGCB a) {
 	//Cria cabeçalho no arquivo
 	startFile(name);
@@ -124,11 +136,11 @@ bool Storage::sendFileToDb(char * fileName) {
 	int idDevice = -1;
 	int idSession = -1;
 
-	int timestamp, channelCount, sensor, buttonNumber, buttonState;
-	char dev[512], channels[512];
-	double pos[3];
-	double quat[4];
+	int timestamp, channelCount, sensor, buttonNumber, buttonState, idAction;
+	char dev[512], channels[512], action[512];
+	double pos[3], quat[4], value;
 	char s1[LINESIZE], s2[LINESIZE];
+
 
 	std::map<std::string, std::string> values;
 	int processedLines = 0;
@@ -146,6 +158,10 @@ bool Storage::sendFileToDb(char * fileName) {
 
 		int lines = (int)std::count(std::istreambuf_iterator<char>(fileInput),
 									std::istreambuf_iterator<char>(), '\n');
+
+		if ( lines < 3 ) {
+			return false;
+		}
 
 		printf("Enviando: %s\n", fileName);
 		fileInput.seekg(0);
@@ -226,6 +242,8 @@ bool Storage::sendFileToDb(char * fileName) {
 				bool trackDev = false;
 				bool analogDev = false;
 				bool buttonDev = false;
+				bool saveAction = false;
+				bool readSuccess = false;
 
 
 				//Tracker0 SENSOR	0	TIME	0	POS	-0.16	 0.51	 1.02	QUAT	-0.19	 0.21	 0.12	 0.85
@@ -236,20 +254,38 @@ bool Storage::sendFileToDb(char * fileName) {
 							&pos[0], &pos[1], &pos[2],
 							&quat[0], &quat[1], &quat[2], &quat[3]) == 10 ) {
 					trackDev = true;
+					readSuccess = true;
 				}
 
 				//Se leitura do tracker não deu certo tenta outro dispositivo
 				//Analog0@localhost	TIMESTAMP	277557	CHANNEL_COUNT	5	CHANNELS	245	231	227	214	202
-				if ( trackDev == false && sscanf(line.c_str(), "%s\tTIMESTAMP\t%d\tCHANNEL_COUNT\t%d\tCHANNELS\t%[^\n]",
+				if ( readSuccess == false && sscanf(line.c_str(), "%s\tTIMESTAMP\t%d\tCHANNEL_COUNT\t%d\tCHANNELS\t%[^\n]",
 					dev, &timestamp, &channelCount, channels) == 4 ) {
 					analogDev = true;
+					readSuccess = true;
 					channelsStr = split(channels, "\t");
 				}
 
 				//Mouse0@localhost	TIMESTAMP	41790	BUTTON:	0	STATE:	1
-				if ( buttonDev == false && sscanf(line.c_str(), "%s\tTIMESTAMP\t%d\tBUTTON\t%d\tSTATE\t%d",
+				if ( readSuccess == false && sscanf(line.c_str(), "%s\tTIMESTAMP\t%d\tBUTTON\t%d\tSTATE\t%d",
 					dev, &timestamp, &buttonNumber, &buttonState) == 4 ) {
 					buttonDev = true;
+					readSuccess = true;
+				}
+
+				//Analog0@localhost	ACTION	strength	VALUE	42
+				if ( readSuccess == false && sscanf(line.c_str(), "%s\tACTION\t%s\tVALUE\t%lf",
+					dev, action, &value) == 3 ) {
+					saveAction = true;
+					readSuccess = true;
+
+					values.clear();
+					values["action_name"] = action;
+					idAction = db.findOrCreate("actions", "idaction", values);
+					if ( idAction == -1 ) {
+						throw std::exception("Falha inserir action.");
+						return false;
+					}
 				}
 
 				values.clear();
@@ -318,6 +354,19 @@ bool Storage::sendFileToDb(char * fileName) {
 					values["pressed"] = std::to_string(buttonState);
 					
 					if ( db.insert("buttons", values, false) ) {
+						throw std::exception("Falha ao inserir no banco linha.");
+						return false;
+					}
+					oneExported = true;
+				} else 
+				if ( saveAction ) {
+					values.clear();
+					values["idsession"] = std::to_string(idSession);
+					values["iddevice"] = std::to_string(idDevice);
+					values["idaction"] = std::to_string(idAction);
+					values["value"] = std::to_string(value);
+					
+					if ( db.insert("action_history", values, false) ) {
 						throw std::exception("Falha ao inserir no banco linha.");
 						return false;
 					}

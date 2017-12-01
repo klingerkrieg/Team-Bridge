@@ -144,7 +144,9 @@ KeyMap::KeyMap(json js) {
 		this->index = js["index"].get<int>();
 	}
 
-
+	if ( !js["saveData"].is_null() ) {
+		this->saveData = js["saveData"].get<std::string>();
+	}
 
 	if ( !js["maxVelociyMs"].is_null() ) {
 		this->maxVelociyMs = js["maxVelociyMs"].get<double>();
@@ -152,6 +154,7 @@ KeyMap::KeyMap(json js) {
 
 	if ( !js["angle"].is_null() ) {
 		this->angle = js["angle"].get<int>();
+		this->angleMod = 1;//padrão
 	}
 
 	if ( !js["angleMod"].is_null() ) {

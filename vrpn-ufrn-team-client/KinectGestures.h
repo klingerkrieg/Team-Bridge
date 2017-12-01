@@ -28,7 +28,7 @@ struct KinectDetection {
 };
 
 //A primeira classe obrigatoriamente precisa ser AbstractGestureRecognizer
-class KinectGestures : public AbstractGestureRecognizer, public FlexedMember {
+class KinectGestures : public FlexedMember {
 private:
 
 	//nao pode usar o mesmo headHeight para detectTopChange porque se nao ele so ira detectar mudancas bruscas

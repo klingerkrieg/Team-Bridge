@@ -1,10 +1,4 @@
 #pragma once
-
-
-//Caso queira desativar o modulo de terapia comente a constante
-#define THERAPY_MODULE
-
-
 #include <stdio.h>  // for printf, fprintf, NULL, etc
 #include <stdlib.h> // for exit, atoi
 
@@ -33,6 +27,8 @@
 #include "InputConverter.h"
 #include "KeyPressAction.h"
 #include "View.h"
+
+#include "VariabilitiesConfig.h"
 
 #ifdef THERAPY_MODULE
 #include "Storage.h"
