@@ -71,6 +71,15 @@ $(function(){
 
 
     $('[data-toggle="tooltip"]').tooltip({placement:"bottom"});
+
+
+    //Ao fechar modal do ned ou leapmotion
+    $('#nedGloveModal').on('hide.bs.modal', function () {
+        clearInterval(nedGloveInterval);
+    });
+    $('#leapMotionModal').on('hide.bs.modal', function () {
+        clearInterval(leapInterval);
+    });
 });
 
 function addCommands(){
@@ -313,7 +322,6 @@ var nedGloveMode;
 
 function closeNedGloveModal(){
     $('#nedGloveModal').modal("hide");
-    clearInterval(nedGloveInterval);
 }
 
 function openNedGloveModal(btn, mode){
@@ -397,4 +405,78 @@ function loadNedGlovesValuesFromSerial(){
         $('#nedGloveModal #btnSaveStrDiv .btn-secondary').find('span').html(strength);
         
     });
+}
+
+
+
+/* LEAP MOTION */
+var leapMotionMode;
+var leapInterval;
+var leapMotionDivSelected;
+function openLeapMotionModal(btn, mode){
+    leapMotionMode = mode;
+
+    $('#leapMotionModal').modal("show");
+    if (leapMotionMode == 'pinch'){
+        $('#leapPinch').show();
+        $('#leapCloseHand').hide();
+    } else {
+        $('#leapPinch').hide();
+        $('#leapCloseHand').show();
+    }
+    
+    leapMotionDivSelected = $(btn).parent();
+    leapInterval = setInterval(loadLeapValues, 1000);
+    $('#leapMotionModal #btnSaveLeap button').removeClass('btn-primary').addClass('btn-secondary').val(0);
+}
+
+
+function loadLeapValues(){
+    exec.exec("LeapToString.exe", function(error, stdout, stderr) {
+        if (error) {
+          console.log('exec error: '+error);
+          return;
+        }
+        console.log('stdout: '+stdout);
+        eval('var json = '+stdout);
+        
+        if (json.msg != undefined){
+
+        } else
+        if (leapMotionMode == 'pinch'){
+            $('#leapMotionModal #leapPinchDistance').html(json.pinch);
+        } else {
+            $('#leapMotionModal #leapCloseHandAngle').html(json.close);
+        }
+        
+    });
+}
+
+function closeLeapMotionModal(){
+    $('#leapMotionModal').modal("hide");
+}
+
+function saveLeapMotionValues(){
+    //Caso nenhum valor tenha sido escolhido o valor padrão é 0
+    var minStr = $('#leapMotionModal #btnSaveLeap #min').val();
+    var maxStr = $('#leapMotionModal #btnSaveLeap #max').val();
+    leapMotionDivSelected.find("#angleMin").val(minStr);
+    leapMotionDivSelected.find("#angleMax").val(maxStr);
+    leapMotionDivSelected.find("#distanceMin").val(minStr);
+    leapMotionDivSelected.find("#distanceMax").val(maxStr);
+    closeLeapMotionModal();
+}
+
+function saveLeapValuesToButton(btn){
+    //Quando o botão for  clicado a classe secundaria é removida
+    //A classe primária é adicionada
+    //O valor da força fica fixo
+    btn = $(btn);
+    btn.addClass('btn-primary').removeClass('btn-secondary');
+    if (leapMotionMode == 'pinch'){
+        btn.find('span').html($('#leapMotionModal #leapPinchDistance').html());
+    } else {
+        btn.find('span').html($('#leapMotionModal #leapCloseHandAngle').html());
+    }
+    btn.val(btn.find('span').html());
 }

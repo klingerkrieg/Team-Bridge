@@ -7,8 +7,14 @@
             <option value="LEAP_LEFT_CLOSED">Esquerda</option>
             <option value="LEAP_RIGHT_CLOSED">Direita</option>
         </select>
-
-        <label><input type="checkbox" id="saveData" value="closeStrength" checked="checked"> Salvar dados </label>
+        Ângulo ao fechar
+        de:
+        <input type="number" id="angleMin" value="60" class="form-control toJSON">
+        Até:
+        <input type="number" id="angleMax" value="0" class="form-control toJSON">
+        <button onclick="openLeapMotionModal(this, 'close')" type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="Requer que o LeapMotion esteja conectado.">
+                Testar ângulo</button>
+        <label><input type="checkbox" id="saveData" value="closeStrength" > Salvar dados </label>
     </div>
     
     <div class="leapPinch">
@@ -19,8 +25,14 @@
             <option value="LEAP_LEFT_PINCH">Esquerda</option>
             <option value="LEAP_RIGHT_PINCH">Direita</option>
         </select>
-
-        <label><input type="checkbox" id="saveData" value="pinchStrength" checked="checked"> Salvar dados </label>
+        Distância entre o indicador e o polegar
+        de:
+        <input type="number" id="distanceMin" value="2.5" class="form-control toJSON">
+        Até:
+        <input type="number" id="distanceMax" value="0" class="form-control toJSON">
+        <button onclick="openLeapMotionModal(this, 'pinch')" type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="Requer que o LeapMotion esteja conectado.">
+            Testar distância</button>
+        <label><input type="checkbox" id="saveData" value="pinchStrength" > Salvar dados </label>
     </div>
 
     <div class="leapWrist">
@@ -40,7 +52,7 @@
         </select>
         <input type="number" id="angle" value="35" class="form-control toJSON">°
 
-        <label><input type="checkbox" id="saveData" value="wristFlexAngle" checked="checked"> Salvar dados </label>
+        <label><input type="checkbox" id="saveData" value="wristFlexAngle" > Salvar dados </label>
     </div>
     
 </div>

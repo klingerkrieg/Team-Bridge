@@ -32,7 +32,6 @@ int NEDGloveGestures::closed(void * data, KeyMap *keyMap) {
 	int maxStr = keyMap->getStrengthMax() == 0 ? strengthNormal : keyMap->getStrengthMax();
 	int minStr = keyMap->getStrengthMin() == 0 ? 0 : keyMap->getStrengthMin();
 
-	//printf("%d %d %d\n", minStr, str, maxStr);
 	if ( minStr <= str && str < maxStr ) {
 
 #ifdef THERAPY_MODULE

@@ -11,8 +11,9 @@
 class LeapMotionGestures : public FlexedMember  {
 private:
 
-	float closeAngle = 2.5;
-	float pinchAngle = 60;
+	//As medidas de angulo são diferentes para mão e pinça
+	float handAngleMax = 20.0;
+	float pinchAngleMax = 200.0;
 
 	static std::map<int, std::vector<double>> lastPositions[10];
 

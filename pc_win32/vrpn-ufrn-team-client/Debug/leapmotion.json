@@ -1,0 +1,48 @@
+{
+  "common": {
+    "devs": {
+      "nedglove": [
+        "Analog0@localhost"
+      ],
+      "leapMotion": [
+        "LeapMotion0@localhost"
+      ],
+      "kinect": [
+        "Tracker0@localhost"
+      ],
+      "keyboard": [
+        "Keyboard0@localhost"
+      ],
+      "mouse": [
+        "Mouse0@localhost"
+      ]
+    },
+    "patientName": "",
+    "saveDir": "./SAVES/",
+    "host": "",
+    "database": "",
+    "user": "",
+    "passwd": "",
+    "KINECT_X_INTERVAL": 0.35
+  },
+  "keys": [
+    {
+      "divClass": "leapCloseHand",
+      "dev": "LeapMotion0@localhost",
+      "key": "LEAP_LEFT_CLOSED",
+      "angleMin": 2.76,
+      "angleMax": 0,
+      "toKeyDown": "A",
+      "toKeyUp": "A"
+    },
+    {
+      "divClass": "leapPinch",
+      "dev": "LeapMotion0@localhost",
+      "key": "LEAP_RIGHT_PINCH",
+      "distanceMin": 0,
+      "distanceMax": 40.48,
+      "toKeyDown": "P",
+      "toKeyUp": "P"
+    }
+  ]
+}

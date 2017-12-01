@@ -137,6 +137,18 @@ KeyMap::KeyMap(json js) {
 	if ( !js["strengthMin"].is_null() ) {
 		this->strengthMin = js["strengthMin"].get<int>();
 	}
+	if ( !js["angleMax"].is_null() ) {
+		this->angleMax = js["angleMax"].get<float>();
+	}
+	if ( !js["angleMin"].is_null() ) {
+		this->angleMin = js["angleMin"].get<float>();
+	}
+	if ( !js["distanceMax"].is_null() ) {
+		this->distanceMax = js["distanceMax"].get<float>();
+	}
+	if ( !js["distanceMin"].is_null() ) {
+		this->distanceMin = js["distanceMin"].get<float>();
+	}
 	if ( !js["thumb"].is_null() ) {
 		this->thumb = js["thumb"].get<int>();
 	}

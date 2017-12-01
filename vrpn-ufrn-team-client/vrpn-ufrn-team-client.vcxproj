@@ -216,6 +216,7 @@
     <None Include="nedglove.json" />
     <None Include="performance.json" />
     <None Include="runner.json" />
+    <None Include="twoplayers.json" />
     <None Include="vrpn-client-mb.cfg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

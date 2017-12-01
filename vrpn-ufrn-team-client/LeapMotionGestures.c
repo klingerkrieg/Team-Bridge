@@ -94,7 +94,10 @@ int LeapMotionGestures::handClosed(float angle, KeyMap * keyMap) {
 		return -1;
 	}
 	
-	if ( angle > closeAngle ) {
+	float maxStr = keyMap->getAngleMax() == 0 ? handAngleMax : keyMap->getAngleMax();
+	float minStr = keyMap->getAngleMin() == 0 ? 0 : keyMap->getAngleMin();
+
+	if ( minStr <= angle && angle < maxStr ) {
 
 #ifdef THERAPY_MODULE
 	if ( keyMap->getSaveData().compare("") ) {
@@ -122,7 +125,10 @@ int LeapMotionGestures::pinch(float angle, KeyMap * keyMap) {
 		return -1;
 	}
 	
-	if ( angle < pinchAngle ) {
+	float maxStr = keyMap->getDistanceMax() == 0 ? pinchAngleMax : keyMap->getDistanceMax();
+	float minStr = keyMap->getDistanceMin() == 0 ? 0 : keyMap->getDistanceMin();
+
+	if ( minStr <= angle && angle < maxStr ) {
 
 #ifdef THERAPY_MODULE
 	if ( keyMap->getSaveData().compare("") ) {

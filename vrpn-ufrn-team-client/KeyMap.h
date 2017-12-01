@@ -136,9 +136,14 @@ private:
 	int angle = -1;
 	//Como o angulo será comparado
 	int angleMod = 0;// 0 =, 1 >, -1 <
-	
+	//strength é pra NEDGLOVE
 	int strengthMin = 0;
 	int strengthMax = 0;
+	//Angle e distance min e max é para leapmotion
+	float angleMin = 0;
+	float angleMax = 0;
+	float distanceMin = 0;
+	float distanceMax = 0;
 	int thumb = -1;
 	int index = -1;
 	
@@ -326,6 +331,22 @@ public:
 
 	int getStrengthMin() {
 		return strengthMin;
+	}
+
+	float getAngleMax() {
+		return angleMax;
+	}
+
+	float getAngleMin() {
+		return angleMin;
+	}
+
+	float getDistanceMax() {
+		return distanceMax;
+	}
+
+	float getDistanceMin() {
+		return distanceMin;
 	}
 
 

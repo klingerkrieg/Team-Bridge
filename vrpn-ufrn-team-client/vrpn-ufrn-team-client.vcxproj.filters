@@ -186,5 +186,6 @@
     <None Include="nedglove.json" />
     <None Include="kayak.json" />
     <None Include="mouse.json" />
+    <None Include="twoplayers.json" />
   </ItemGroup>
 </Project>

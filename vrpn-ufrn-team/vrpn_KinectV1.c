@@ -51,9 +51,9 @@ bool vrpn_KinectV1::connect() {
 
 		iSensorCount = 0;
 		hr = NuiGetSensorCount(&iSensorCount);
-		if ( FAILED(hr) ) {
+		if ( FAILED(hr) || iSensorCount == 0 ) {
 			printf("Nenhum Kinect encontrado.\n");
-			Sleep(1000);
+			Sleep(3000);
 			continue;
 		}
 
@@ -93,8 +93,8 @@ bool vrpn_KinectV1::connect() {
 		}
 
 		if ( NULL == m_pNuiSensor || FAILED(hr) ) {
-			printf("Nenhum Kinect encontrado.\n");
-			Sleep(1000);
+			printf("Falha ao se conectar ao Kinect.\n");
+			Sleep(3000);
 			continue;
 		}
 

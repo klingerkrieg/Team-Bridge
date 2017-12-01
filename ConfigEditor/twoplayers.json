@@ -19,7 +19,6 @@
     },
     "patientName": "",
     "saveDir": "./SAVES/",
-    "appName": "",
     "host": "",
     "database": "",
     "user": "",
@@ -28,13 +27,26 @@
   },
   "keys": [
     {
-      "divClass": "kinectWalking",
+      "divClass": "handTop",
       "dev": "Tracker0@localhost",
-      "key": "KINECT_WALK",
-      "delay": 1000,
-      "sensivity": 0.1,
+      "key": "KINECT_RIGHT_HAND_TOP",
+      "x": 0,
+      "coordinateMod": ">=",
+      "y": 3,
       "toKeyDown": "A",
-      "toKeyUp": "A"
+      "toKeyUp": "A",
+      "saveData": "handPos"
+    },
+    {
+      "divClass": "handTop",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_RIGHT_HAND_TOP",
+      "x": 0,
+      "coordinateMod": ">=",
+      "y": 3,
+      "toKeyDown": "B",
+      "toKeyUp": "B",
+      "saveData": "handPos"
     }
   ]
 }

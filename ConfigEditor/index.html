@@ -177,45 +177,77 @@
 
 	<!-- NEDGloveModal -->
 <div class="modal fade" id="nedGloveModal" tabindex="-1" role="dialog" aria-labelledby="nedGloveModalLabel" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="nedGloveModalLabel">NEDGlove calibração</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-				<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<div class="modal-body">
-						Configurações, porta: <input id="port" class="form-control" type="number" value="3"> bauds: <input id="bauds" class="form-control" type="number" value="115200">
-						<div id='pinchModeDiv'>
-							<label>Somente pinça: 
-							polegar: </label><input type="number" class="form-control" id="thumb" value="0" onchange="changeFingersSensors()">
-							indicador: <input type="number" class="form-control" id="index" value="4" onchange="changeFingersSensors()">
-						</div>
-						<div>
-							Sensores:
-							<span id="sensores">
-									<span id="sens0"></span>
-									<span id="sens1"></span>
-									<span id="sens2"></span>
-									<span id="sens3"></span>
-									<span id="sens4"></span>
-							</span>
-						</div>
-							<div style='font-weight:bold;'>Força:<span id="nedStr"></span></div>
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+		<div class="modal-header">
+			<h5 class="modal-title" id="nedGloveModalLabel">NEDGlove calibração</h5>
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<div class="modal-body">
+					Configurações, porta: <input id="port" class="form-control" type="number" value="3"> bauds: <input id="bauds" class="form-control" type="number" value="115200">
+					<div id='pinchModeDiv'>
+						<label>Somente pinça: 
+						polegar: </label><input type="number" class="form-control" id="thumb" value="0" onchange="changeFingersSensors()">
+						indicador: <input type="number" class="form-control" id="index" value="4" onchange="changeFingersSensors()">
+					</div>
+					<div>
+						Sensores:
+						<span id="sensores">
+								<span id="sens0"></span>
+								<span id="sens1"></span>
+								<span id="sens2"></span>
+								<span id="sens3"></span>
+								<span id="sens4"></span>
+						</span>
+					</div>
+						<div style='font-weight:bold;'>Força:<span id="nedStr"></span></div>
 
-							<div id='btnSaveStrDiv'>
-									<button id='min' type="button" class="btn btn-secondary" onclick="saveStrToButton(this)">De:<span></span></button>
-									<button id='max' type="button" class="btn btn-secondary" onclick="saveStrToButton(this)">Até:<span></span></button>
-							</div>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" onclick="closeNedGloveModal()">Fechar</button>
-				<button type="button" class="btn btn-primary" onclick="saveNedGloveStr()" data-toggle="tooltip" data-placement="bottom" title="Usa esse valor nas configurações.">Usar essa força</button>
-			</div>
-			</div>
+						<div id='btnSaveStrDiv'>
+								<button id='min' type="button" class="btn btn-secondary" onclick="saveStrToButton(this)">De:<span></span></button>
+								<button id='max' type="button" class="btn btn-secondary" onclick="saveStrToButton(this)">Até:<span></span></button>
+						</div>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-secondary" onclick="closeNedGloveModal()">Fechar</button>
+			<button type="button" class="btn btn-primary" onclick="saveNedGloveStr()" data-toggle="tooltip" data-placement="bottom" title="Usa esses valores nas configurações.">
+				Usar essa força</button>
 		</div>
 		</div>
+	</div>
+	</div>
+
+	<!-- LeapMotionModal -->
+<div class="modal fade" id="leapMotionModal" tabindex="-1" role="dialog" aria-labelledby="LeapMotionModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+		<div class="modal-header">
+			<h5 class="modal-title" id="LeapMotionModalLabel">LeapMotion preview</h5>
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<div class="modal-body">
+					
+			<div style='font-weight:bold;'>
+				<div id="leapCloseHand">Ângulo ao fechar mão:<span id="leapCloseHandAngle"></span></div>
+				<div id="leapPinch">Distância da pinça:<span id="leapPinchDistance"></span></div>
+			</div>
+
+			<div id='btnSaveLeap'>
+				<button id='min' type="button" class="btn btn-secondary" onclick="saveLeapValuesToButton(this)">De:<span></span></button>
+				<button id='max' type="button" class="btn btn-secondary" onclick="saveLeapValuesToButton(this)">Até:<span></span></button>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-secondary" onclick="closeLeapMotionModal()">Fechar</button>
+			<button type="button" class="btn btn-primary" onclick="saveLeapMotionValues()" data-toggle="tooltip" data-placement="bottom" title="Usa esses valores nas configurações.">
+				Usar esses valores</button>
+		</div>
+		</div>
+	</div>
+	</div>
 
 	</body>
 </html>

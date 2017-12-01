@@ -182,6 +182,7 @@ Client client;
 
 void VRPN_CALLBACK handle_tracker_pos_quat(void *userdata, const vrpn_TRACKERCB t) {
 	TrackerUserCallback *t_data = static_cast<TrackerUserCallback *>(userdata);
+
 #ifdef THERAPY_MODULE
 	client.getStorage().saveToFile(t_data, t);
 #endif

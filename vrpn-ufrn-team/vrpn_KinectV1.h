@@ -29,11 +29,6 @@ class VRPN_API vrpn_KinectV1 : public  vrpn_Tracker {
 	
 	int lastSkeletonCount = 0;
 	bool connected = false;
-/*
-#ifdef PERFORMANCE_TEST
-	struct timeval tp;
-	std::ofstream fileOutput;
-#endif*/
 	
 	public:
 
