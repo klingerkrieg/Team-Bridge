@@ -46,6 +46,12 @@
 <div>
 	<label>Diretório para salvar <red>*</red>: </label><input type="text" class="form-control toJSON" id="saveDir" value="./SAVES/" data-toggle="tooltip" data-placement="bottom" title="Diretório onde os dados da terapia serão salvos.">
 </div>
+<div class='title'>
+	KINECT
+</div>
+<div>
+	<label>Intervalo para posição x das mãos <red>*</red>: </label><input type="number" class="form-control toJSON" id="KINECT_X_INTERVAL" divideby="100" value="35" data-toggle="tooltip" data-html="true" data-placement="bottom" title="<img class='tooltipImg' src='./img/humanTopHandXInterval.png'>">cm
+</div>
 </fieldset>
 	<fieldset>
 		<legend>Banco de dados</legend>
@@ -63,28 +69,6 @@
 	</div>
 	</fieldset>
 
-	<fieldset>
-		<legend>Endereço dos dispositivos</legend>
-		<label>Kinect <red>*</red>:</label>
-		<input type="text" class="form-control" id="KINECT" value="Tracker0@localhost">
-
-		<label>LeapMotion <red>*</red>:</label>
-		<input type="text" class="form-control" id="LEAPMOTION" value="LeapMotion0@localhost">
-
-		<label>Teclado <red>*</red>:</label>
-		<input type="text" class="form-control" id="KEYBOARD" value="Keyboard0@localhost">
-
-		<label>Mouse <red>*</red>:</label>
-		<input type="text" class="form-control" id="MOUSE" value="Mouse0@localhost">
-
-		<label>NEDGlove <red>*</red>:</label>
-		<input type="text" class="form-control" id="NEDGLOVE" value="Analog0@localhost">
-	</fieldset>
-
-	<fieldset>
-		<legend>KINECT</legend>
-		<label>Intervalo para posição x das mãos <red>*</red>: </label><input type="number" class="form-control toJSON" id="KINECT_X_INTERVAL" divideby="100" value="35" data-toggle="tooltip" data-html="true" data-placement="bottom" title="<img class='tooltipImg' src='./img/humanTopHandXInterval.png'>">cm
-	</fieldset>
 
 </form><!-- commonInfo -->
 	<div class="clear"></div>
@@ -231,13 +215,19 @@
 		<div class="modal-body">
 					
 			<div style='font-weight:bold;'>
-				<div id="leapCloseHand">Ângulo ao fechar mão:<span id="leapCloseHandAngle"></span></div>
-				<div id="leapPinch">Distância da pinça:<span id="leapPinchDistance"></span></div>
+				<div class="leapCloseHand">Ângulo ao fechar mão:<span id="leapCloseHandAngle"></span></div>
+				<div class="leapPinch">Distância da pinça:<span id="leapPinchDistance"></span></div>
+				<div class="leapWrist">Ângulo do punho:<span id="leapWristAngle"></span></div>
 			</div>
 
 			<div id='btnSaveLeap'>
-				<button id='min' type="button" class="btn btn-secondary" onclick="saveLeapValuesToButton(this)">De:<span></span></button>
-				<button id='max' type="button" class="btn btn-secondary" onclick="saveLeapValuesToButton(this)">Até:<span></span></button>
+				<div class="leapCloseAndPinch">
+					<button id='min' type="button" class="btn btn-secondary" onclick="saveLeapValuesToButton(this)">De:<span></span></button>
+					<button id='max' type="button" class="btn btn-secondary" onclick="saveLeapValuesToButton(this)">Até:<span></span></button>
+				</div>
+				<div class="leapWrist">
+					<button id='val' type="button" class="btn btn-secondary" onclick="saveLeapValuesToButton(this)">Usar:<span></span></button>
+				</div>
 			</div>
 		</div>
 		<div class="modal-footer">

@@ -4973,10 +4973,10 @@ int vrpn_Generic_Server_Object::setup_NEDGlove(char *&pch, char *line, FILE *) {
 
 int vrpn_Generic_Server_Object::setup_LeapMotion(char *&pch, char *line, FILE *) {
 	char name[LINESIZE];
-
+	int hand;
 	VRPN_CONFIG_NEXT();
-	int ret = sscanf(pch, "%511s", name);
-	if ( ret != 1 ) {
+	int ret = sscanf(pch, "%511s\t%d", name, &hand);
+	if ( ret != 2 ) {
 		fprintf(stderr, "Bad LeapMotion line: %s\n", line);
 		return -1;
 	}
@@ -4987,7 +4987,7 @@ int vrpn_Generic_Server_Object::setup_LeapMotion(char *&pch, char *line, FILE *)
 	}
 
 	// Open the tracker
-	_devices->add(new vrpn_LeapMotion(name, connection));
+	_devices->add(new vrpn_LeapMotion(name, hand, connection));
 	
 	return 0; // successful completion
 }

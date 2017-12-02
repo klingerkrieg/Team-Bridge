@@ -1,48 +1,53 @@
 {
   "common": {
-    "devs": {
-      "nedglove": [
-        "Analog0@localhost"
-      ],
-      "leapMotion": [
-        "LeapMotion0@localhost"
-      ],
-      "kinect": [
-        "Tracker0@localhost"
-      ],
-      "keyboard": [
-        "Keyboard0@localhost"
-      ],
-      "mouse": [
-        "Mouse0@localhost"
-      ]
-    },
     "patientName": "",
     "saveDir": "./SAVES/",
+    "KINECT_X_INTERVAL": 0.35,
     "host": "",
     "database": "",
     "user": "",
-    "passwd": "",
-    "KINECT_X_INTERVAL": 0.35
+    "passwd": ""
   },
   "keys": [
     {
       "divClass": "leapCloseHand",
+      "devType": "leapMotion",
+      "key": "LEAP_CLOSED",
       "dev": "LeapMotion0@localhost",
-      "key": "LEAP_LEFT_CLOSED",
-      "angleMin": 2.76,
+      "angleMin": 2.5,
       "angleMax": 0,
       "toKeyDown": "A",
       "toKeyUp": "A"
     },
     {
       "divClass": "leapPinch",
-      "dev": "LeapMotion0@localhost",
-      "key": "LEAP_RIGHT_PINCH",
+      "devType": "leapMotion",
+      "key": "LEAP_PINCH",
+      "dev": "LeapMotion1@localhost",
       "distanceMin": 0,
-      "distanceMax": 40.48,
-      "toKeyDown": "P",
-      "toKeyUp": "P"
+      "distanceMax": 30,
+      "toKeyDown": "B",
+      "toKeyUp": "B"
+    },
+    {
+      "divClass": "leapWrist",
+      "devType": "leapMotion",
+      "dev": "LeapMotion0@localhost",
+      "key": "LEAP_WRIST_UP",
+      "angleMod": "<",
+      "angle": 130,
+      "toKeyDown": "C",
+      "toKeyUp": "C"
+    },
+    {
+      "divClass": "leapWrist",
+      "devType": "leapMotion",
+      "dev": "LeapMotion1@localhost",
+      "key": "LEAP_WRIST_DOWN",
+      "angleMod": "<",
+      "angle": 130,
+      "toKeyDown": "D",
+      "toKeyUp": "D"
     }
   ]
 }

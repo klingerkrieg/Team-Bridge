@@ -2,6 +2,11 @@
     
     <div class="nedGloveGrab">
         <img class="deviceLogo" src="./img/nedglove.png" alt="(NEDGlove)">
+        <input type="hidden" id="devType" value="nedGlove" class="toJSON">
+        
+        Endereço: <input type="text" id="dev" value="Analog0@localhost" class="form-control toJSON" data-toggle="tooltip" data-placement="bottom" title="0 é a primeira luva, 1 é a segunda, 2 a terceira, etc.">
+        <span class="help">(Caso queira mudar a mão altere o número no final do endereço)</span>
+        <br/>
         <input type="hidden" id="dev" value="NEDGLOVE" class="form-control toJSON">
         <input type="hidden" id="key" value="NEDGLOVE_GRAB" class="toJSON">
         Força ao fechar mão
@@ -18,6 +23,10 @@
 
     <div class="nedGlovePinch">
         <img class="deviceLogo" src="./img/nedglove.png" alt="(NEDGlove)">
+        <input type="hidden" id="devType" value="nedGlove" class="toJSON">
+
+        Endereço: <input type="text" id="dev" value="Analog0@localhost" class="form-control toJSON" data-toggle="tooltip" data-placement="bottom" title="0 é a primeira luva, 1 é a segunda, 2 a terceira, etc.">
+        <span class="help">(Caso queira mudar a mão altere o número no final do endereço)</span>
         <input type="hidden" id="dev" value="NEDGLOVE" class="form-control toJSON">
         <input type="hidden" id="key" value="NEDGLOVE_PINCH" class="toJSON">
         <input type="hidden" id="thumb" value="0" class="toJSON">

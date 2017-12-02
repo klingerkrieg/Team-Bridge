@@ -1,6 +1,10 @@
 <div style="display:none;">
     <div class="keyboard">
         <img class="deviceLogo" src="./img/keyboard.png" alt="(Teclado)">
+        <input type="hidden" id="devType" value="keyboard" class="toJSON">
+        Endereço: <input type="text" id="dev" value="Keyboard0@localhost" class="form-control toJSON">
+        <br/>
+        
         <input type="hidden" id="dev" value="KEYBOARD" class="form-control toJSON">
         Tecla:
         <select id="key" class="form-control toJSON"></select>
@@ -8,6 +12,10 @@
 
     <div class="mouse">
         <img class="deviceLogo" src="./img/mouse.png" alt="(Mouse)">
+        <input type="hidden" id="devType" value="mouse" class="toJSON">
+        Endereço: <input type="text" id="dev" value="Mouse0@localhost" class="form-control toJSON">
+        <br/>
+        
         <input type="hidden" id="dev" value="MOUSE" class="form-control toJSON">
         Botão:
         <select id="key" class="form-control toJSON">

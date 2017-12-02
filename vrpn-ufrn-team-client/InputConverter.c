@@ -89,15 +89,11 @@ bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKE
 
 	//De acordo com cada dispositivo um esqueleto diferente sera utilizado
 	if ( devType == DEVTYPE_KINECT ) {
-		vrpnToSkeleton(gr.skeleton, gr.skeletonMap1, t, skelPart);
+		vrpnToSkeleton(gr.KinectGestures::skeleton[(std::string)userdata->name], gr.skeletonMap1, t, skelPart, (std::string)userdata->name);
 	} else
 		if ( devType == DEVTYPE_LEAPMOTION ) {
 		//LeapMotion
-		if ( t.sensor <= 22 ) {
-			vrpnToSkeleton(gr.skeleton, gr.handSkeletonMap1, t, skelPart);
-		} else {
-			vrpnToSkeleton(gr.skeleton, gr.handSkeletonMap1, t, skelPart);
-		}
+		vrpnToSkeleton(gr.LeapMotionGestures::skeleton[(std::string)userdata->name], gr.handSkeletonMap1, t, skelPart, (std::string)userdata->name);
 	} else {
 		printf("Dispositivo desconhecido:%s", userdata->name);
 		return false;

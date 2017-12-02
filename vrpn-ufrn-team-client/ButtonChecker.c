@@ -4,9 +4,8 @@ void ButtonChecker::assignChecker(std::vector<KeyMap> &map) {
 		for ( size_t keyMapId = 0; keyMapId < map.size(); keyMapId++ ) {
 			KeyMap *keyMap = &map.at(keyMapId);
 
-			//Qualquer key que nao tenha metodo checker definido será considerada um botão
-			//Caso não seja um botão outro assigner irá sobrescrever
-			if ( !keyMap->getGestureCheckerDefined() ) {
+			//Caso seja mouse ou teclado
+			if ( keyMap->getIdDevtype() == DEVTYPE_KEYBOARD || keyMap->getIdDevtype() == DEVTYPE_MOUSE ) {
 				keyMap->assignGestureChecker(BUTTON_TYPE, (KeyMap::gestureCheckerMethod)&ButtonChecker::pressed, this);
 			}
 		}

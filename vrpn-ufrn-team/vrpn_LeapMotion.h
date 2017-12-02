@@ -12,14 +12,16 @@
 #include <string>
 
 class VRPN_API vrpn_LeapMotion : public Leap::Listener, public vrpn_Analog, public  vrpn_Tracker {
+private:
+	int handId;
 public:
 	
-	vrpn_LeapMotion(const char *name, vrpn_Connection *c = NULL);
+	vrpn_LeapMotion(const char *name, int hand, vrpn_Connection *c = NULL);
 	virtual ~vrpn_LeapMotion();
 	virtual void mainloop();
 
 	struct timeval _timestamp;
-	Leap::Controller controller;
+	static Leap::Controller controller;
 
 
 protected:

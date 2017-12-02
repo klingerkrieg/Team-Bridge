@@ -212,6 +212,7 @@
     <None Include="config.json" />
     <None Include="drunkbug.json" />
     <None Include="kayak.json" />
+    <None Include="leapmotion.json" />
     <None Include="mouse.json" />
     <None Include="nedglove.json" />
     <None Include="performance.json" />

@@ -34,7 +34,7 @@ std::string KeyMap::toString() {
 		if ( getThumb() != -1 ) {
 			ret += " Thumb:" + std::to_string(getThumb());
 		}
-		if ( getStrengthMin() != -1 ) {
+		if ( getIndex() != -1 ) {
 			ret += " Index:" + std::to_string(getIndex());
 		}
 
@@ -102,6 +102,9 @@ KeyMap::KeyMap(json js) {
 
 	if ( !js["dev"].is_null() ) {
 		this->dev = js["dev"].get<std::string>();
+	}
+	if ( !js["idDevType"].is_null() ) {
+		this->idDevType = js["idDevType"].get<int>();
 	}
 	
 	if ( !js["x"].is_null() ) {

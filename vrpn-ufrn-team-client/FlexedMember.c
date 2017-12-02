@@ -78,6 +78,20 @@ int FlexedMember::flexed3d(std::map<int, std::vector<double>> points, KeyMap * k
 }
 
 
+std::map<int, std::vector<double>> FlexedMember::getPoints(SkeletonPart skelPart0, SkeletonPart skelPart1, SkeletonPart skelPart2) {
+
+	std::map<int, std::vector<double>> points;
+
+	if ( skelPart0.defined )
+		points.insert_or_assign(0, std::vector<double>({ skelPart0.x, skelPart0.y, skelPart0.z }));
+	if ( skelPart1.defined )
+		points.insert_or_assign(1, std::vector<double>({ skelPart1.x, skelPart1.y, skelPart1.z }));
+	if ( skelPart2.defined )
+		points.insert_or_assign(2, std::vector<double>({ skelPart2.x, skelPart2.y, skelPart2.z }));
+
+	return points;
+}
+
 std::map<int, std::vector<double>> FlexedMember::getPoints(SkeletonPart skelPart, int constant1, int constant2, int constant3, std::map<int, std::vector<double>> &positions) {
 
 	std::map<int, std::vector<double>> points;

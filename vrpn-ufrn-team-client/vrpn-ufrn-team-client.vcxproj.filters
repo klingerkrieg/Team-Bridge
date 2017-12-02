@@ -187,5 +187,6 @@
     <None Include="kayak.json" />
     <None Include="mouse.json" />
     <None Include="twoplayers.json" />
+    <None Include="leapmotion.json" />
   </ItemGroup>
 </Project>

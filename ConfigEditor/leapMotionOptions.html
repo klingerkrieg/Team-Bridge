@@ -1,15 +1,13 @@
 <div style="display:none;">
     <div class="leapCloseHand">
         <img class="deviceLogo" src="./img/leapMotion.png" alt="(LeapMotion)">
-        <input type="hidden" id="dev" value="LEAPMOTION" class="form-control toJSON">
-        Fechar mão:
-        <select id="key" class="form-control toJSON">
-            <option value="LEAP_LEFT_CLOSED">Esquerda</option>
-            <option value="LEAP_RIGHT_CLOSED">Direita</option>
-        </select>
-        Ângulo ao fechar
-        de:
-        <input type="number" id="angleMin" value="60" class="form-control toJSON">
+        <input type="hidden" id="devType" value="leapMotion" class="toJSON">
+        <input type="hidden" id="key" value="LEAP_CLOSED" class="form-control toJSON">
+        Endereço: <input type="text" id="dev" value="LeapMotion0@localhost" class="form-control toJSON" data-toggle="tooltip" data-placement="bottom" title="0 é a primeira mão que o sensor captar, 1 é a segunda, 2 a terceira, etc.">
+        <span class="help">(Caso queira mudar a mão altere o número no final do endereço)</span>
+        <br/>
+        Fechar a mão com ângulo de:
+        <input type="number" id="angleMin" value="2.5" class="form-control toJSON">
         Até:
         <input type="number" id="angleMax" value="0" class="form-control toJSON">
         <button onclick="openLeapMotionModal(this, 'close')" type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="Requer que o LeapMotion esteja conectado.">
@@ -19,17 +17,16 @@
     
     <div class="leapPinch">
         <img class="deviceLogo" src="./img/leapMotion.png" alt="(LeapMotion)">
-        <input type="hidden" id="dev" value="LEAPMOTION" class="form-control toJSON">
-        Pinça com a mão:
-        <select id="key" class="form-control toJSON">
-            <option value="LEAP_LEFT_PINCH">Esquerda</option>
-            <option value="LEAP_RIGHT_PINCH">Direita</option>
-        </select>
-        Distância entre o indicador e o polegar
+        <input type="hidden" id="devType" value="leapMotion" class="toJSON">
+        <input type="hidden" id="key" value="LEAP_PINCH" class="form-control toJSON">
+        Endereço: <input type="text" id="dev" value="LeapMotion0@localhost" class="form-control toJSON" data-toggle="tooltip" data-placement="bottom" title="0 é a primeira mão que o sensor captar, 1 é a segunda, 2 a terceira, etc.">
+        <span class="help">(Caso queira mudar a mão altere o número no final do endereço)</span>
+        <br/>
+        Pinça com distância entre o indicador e o polegar
         de:
-        <input type="number" id="distanceMin" value="2.5" class="form-control toJSON">
+        <input type="number" id="distanceMin" value="0" class="form-control toJSON">
         Até:
-        <input type="number" id="distanceMax" value="0" class="form-control toJSON">
+        <input type="number" id="distanceMax" value="30" class="form-control toJSON">
         <button onclick="openLeapMotionModal(this, 'pinch')" type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="Requer que o LeapMotion esteja conectado.">
             Testar distância</button>
         <label><input type="checkbox" id="saveData" value="pinchStrength" > Salvar dados </label>
@@ -37,20 +34,24 @@
 
     <div class="leapWrist">
         <img class="deviceLogo" src="./img/leapMotion.png" alt="(LeapMotion)">
-        <input type="hidden" id="dev" value="LEAPMOTION" class="form-control toJSON">
+        <input type="hidden" id="devType" value="leapMotion" class="toJSON">
+        
+        Endereço: <input type="text" id="dev" value="LeapMotion0@localhost" class="form-control toJSON" data-toggle="tooltip" data-placement="bottom" title="0 é a primeira mão que o sensor captar, 1 é a segunda, 2 a terceira, etc.">
+        <span class="help">(Caso queira mudar a mão altere o número no final do endereço)</span>
+        <br/>
         Flexionar punho:
         <select id="key" class="form-control toJSON">
-            <option value="LEAP_LEFT_WRIST_UP">Esquerdo para cima</option>
-            <option value="LEAP_LEFT_WRIST_DOWN">Esquerdo para baixo</option>
-            <option value="LEAP_RIGHT_WRIST_UP">Direito para cima</option>
-            <option value="LEAP_RIGHT_WRIST_DOWN">Direito para baixo</option>
+            <option value="LEAP_WRIST_UP">Para cima</option>
+            <option value="LEAP_WRIST_DOWN">Para baixo</option>
         </select>
         <select id="angleMod" class="form-control toJSON">
-            <option>></option>
-            <option>=</option>
             <option><</option>
+            <option>=</option>
+            <option>></option>
         </select>
-        <input type="number" id="angle" value="35" class="form-control toJSON">°
+        <input type="number" id="angle" value="130" class="form-control toJSON">°
+        <button onclick="openLeapMotionModal(this, 'wrist')" type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="Requer que o LeapMotion esteja conectado.">
+            Testar ângulo</button>
 
         <label><input type="checkbox" id="saveData" value="wristFlexAngle" > Salvar dados </label>
     </div>

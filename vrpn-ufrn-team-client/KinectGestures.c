@@ -4,7 +4,7 @@
 double KinectGestures::handXPosInterval = 0.40;
 
 
-Skeleton KinectGestures::skeleton;
+std::map<std::string, Skeleton> KinectGestures::skeleton;
 KinectDetection KinectGestures::kinectDetection;
 
 
@@ -182,10 +182,10 @@ bool KinectGestures::detectMemberFast(SkeletonPart skelPart, KeyMap * keyMap) {
 
 int KinectGestures::detectHandTop(SkeletonPart skelPart, KeyMap * keyMap) {
 	
-	if ( skeleton.head.defined == false ) {
+	if ( skeleton[skelPart.skeletonName].head.defined == false ) {
 		return -1;
 	}
-
+	double headY = skeleton[skelPart.skeletonName].head.y;
 	//
 	//...  - 5
 	//1.20 - 4
@@ -199,30 +199,30 @@ int KinectGestures::detectHandTop(SkeletonPart skelPart, KeyMap * keyMap) {
 	bool ret = false;
 
 	if ( keyMap->getY() == 5 &&
-		(skelPart.y > skeleton.head.y + (handTopInterval * 2) || keyMap->getCoordinateMod() == -1) ) {
+		(skelPart.y > headY + (handTopInterval * 2) || keyMap->getCoordinateMod() == -1) ) {
 		ret = true;
 	} else
 	if ( keyMap->getY() == 4 && (
-		(skelPart.y <= skeleton.head.y + (handTopInterval * 2) && skelPart.y > skeleton.head.y + handTopInterval && keyMap->getCoordinateMod() == 0)
-		|| (skelPart.y > skeleton.head.y + handTopInterval && keyMap->getCoordinateMod() == 1)
-		|| (skelPart.y <= skeleton.head.y + (handTopInterval * 2) && keyMap->getCoordinateMod() == -1) )) {
+		(skelPart.y <= headY + (handTopInterval * 2) && skelPart.y > headY + handTopInterval && keyMap->getCoordinateMod() == 0)
+		|| (skelPart.y > headY + handTopInterval && keyMap->getCoordinateMod() == 1)
+		|| (skelPart.y <= headY + (handTopInterval * 2) && keyMap->getCoordinateMod() == -1) )) {
 		ret = true;
 	} else
 	if ( keyMap->getY() == 3 && (
-		(skelPart.y <= skeleton.head.y + handTopInterval && skelPart.y > skeleton.head.y - (handTopInterval * 2) && keyMap->getCoordinateMod() == 0)
-		|| (skelPart.y > skeleton.head.y - (handTopInterval * 2) && keyMap->getCoordinateMod() == 1)
-		|| (skelPart.y <= skeleton.head.y + handTopInterval && keyMap->getCoordinateMod() == -1) )) {
+		(skelPart.y <= headY + handTopInterval && skelPart.y > headY - (handTopInterval * 2) && keyMap->getCoordinateMod() == 0)
+		|| (skelPart.y > headY - (handTopInterval * 2) && keyMap->getCoordinateMod() == 1)
+		|| (skelPart.y <= headY + handTopInterval && keyMap->getCoordinateMod() == -1) )) {
 		ret = true;
 	} else
 	if ( keyMap->getY() == 2 && (
-		(skelPart.y <= skeleton.head.y - (handTopInterval * 2) && skelPart.y > skeleton.head.y - (handTopInterval * 5) && keyMap->getCoordinateMod() == 0)
-		|| (skelPart.y > skeleton.head.y - (handTopInterval * 5)  && keyMap->getCoordinateMod() == 1)
-		|| (skelPart.y <= skeleton.head.y - (handTopInterval * 2) && keyMap->getCoordinateMod() == -1) )) {
+		(skelPart.y <= headY - (handTopInterval * 2) && skelPart.y > headY - (handTopInterval * 5) && keyMap->getCoordinateMod() == 0)
+		|| (skelPart.y > headY - (handTopInterval * 5)  && keyMap->getCoordinateMod() == 1)
+		|| (skelPart.y <= headY - (handTopInterval * 2) && keyMap->getCoordinateMod() == -1) )) {
 
 		ret = true;
 	} else
 	if ( keyMap->getY() == 1 &&
-		(skelPart.y <= skeleton.head.y - (handTopInterval * 5) || keyMap->getCoordinateMod() == 1) ) {
+		(skelPart.y <= headY - (handTopInterval * 5) || keyMap->getCoordinateMod() == 1) ) {
 		ret = true;
 	}
 
@@ -292,9 +292,10 @@ int KinectGestures::detectRightHandXPos(void * data, KeyMap * keyMap) {
 */
 int KinectGestures::detectHandXPos(SkeletonPart skelPart, KeyMap * keyMap) {
 	
-	if ( skeleton.hipCenter.defined == false ) {
+	if ( skeleton[skelPart.skeletonName].hipCenter.defined == false ) {
 		return -1;
 	}
+	double hipCenterX = skeleton[skelPart.skeletonName].hipCenter.x;
 	//Verifica se está na altura correta
 	if ( detectHandTop(skelPart, keyMap) == false) {
 		return false;
@@ -304,22 +305,22 @@ int KinectGestures::detectHandXPos(SkeletonPart skelPart, KeyMap * keyMap) {
 
 	//printf("%.2f > %.2f + %.2f | %d\n", t.pos[0], lastHeadXPos, (handXPosInterval * 2), xPos);
 	//Depois de verificar a altura verifica o eixo X
-	if ( keyMap->getX() == 2 && skelPart.x >= skeleton.hipCenter.x + (handXPosInterval*2) ) {
+	if ( keyMap->getX() == 2 && skelPart.x >= hipCenterX + (handXPosInterval*2) ) {
 		ret = true;
 	} else
-	if ( keyMap->getX() == 1 && skelPart.x >= skeleton.hipCenter.x + handXPosInterval &&
-		skelPart.x < skeleton.hipCenter.x + (handXPosInterval * 2) ) {
+	if ( keyMap->getX() == 1 && skelPart.x >= hipCenterX + handXPosInterval &&
+		skelPart.x < hipCenterX + (handXPosInterval * 2) ) {
 		ret = true;
 	} else
-	if ( keyMap->getX() == 0 && skelPart.x <= skeleton.hipCenter.x + handXPosInterval &&
-		skelPart.x > skeleton.hipCenter.x - handXPosInterval ) {
+	if ( keyMap->getX() == 0 && skelPart.x <= hipCenterX + handXPosInterval &&
+		skelPart.x > hipCenterX - handXPosInterval ) {
 		ret = true;
 	} else
-	if ( keyMap->getX() == -1 && skelPart.x <= skeleton.hipCenter.x - handXPosInterval &&
-		skelPart.x > skeleton.hipCenter.x - (handXPosInterval * 2)  ) {
+	if ( keyMap->getX() == -1 && skelPart.x <= hipCenterX - handXPosInterval &&
+		skelPart.x > hipCenterX - (handXPosInterval * 2)  ) {
 		ret = true;
 	} else
-	if ( keyMap->getX() == -2 && skelPart.x <= skeleton.hipCenter.x - (handXPosInterval*2)  ) {
+	if ( keyMap->getX() == -2 && skelPart.x <= hipCenterX - (handXPosInterval*2)  ) {
 		ret = true;
 	}
 
@@ -420,7 +421,7 @@ int KinectGestures::detectTopChange(SkeletonPart skelPart, KeyMap * keyMap, int 
 int KinectGestures::setCenterPos(void * data, KeyMap * keyMap) {
 	SkeletonPart skelPart = *(SkeletonPart*)data;
 	//Salvao o estado atual do hipcenter
-	kinectDetection.hipCenter = skeleton.hipCenter;
+	kinectDetection.hipCenter = skeleton[skelPart.skeletonName].hipCenter;
 	kinectDetection.centerPosDefined = true;
 	return true;
 	

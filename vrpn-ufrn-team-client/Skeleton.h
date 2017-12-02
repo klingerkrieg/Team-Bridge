@@ -39,9 +39,12 @@ struct SkeletonPart {
 	double quat_y;
 	double quat_z;
 	double quat_w;
+	std::string skeletonName;
 };
 
+
 struct Skeleton {
+	std::string name;
 	SkeletonPart head;
 	SkeletonPart shoulderCenter;
 	SkeletonPart shoulderR;
@@ -67,8 +70,6 @@ struct Skeleton {
 };
 
 
-SkeletonPart assignSkeletonPart(SkeletonPart &skelPart, const vrpn_TRACKERCB t, int skelConstant);
+SkeletonPart assignSkeletonPart(SkeletonPart &skelPart, const vrpn_TRACKERCB t, int skelConstant, std::string skeletonName);
 
-bool vrpnToSkeleton(Skeleton &skeleton, std::map<int, int> &skeletonMap, const vrpn_TRACKERCB t, SkeletonPart &skelPart);
-
-bool vrpnToSkeleton(Skeleton &skeleton, std::map<int, int> &skeletonMap, const vrpn_TRACKERCB t);
+bool vrpnToSkeleton(Skeleton &skeleton, std::map<int, int> &skeletonMap, const vrpn_TRACKERCB t, SkeletonPart &skelPart, std::string skeletonName);

@@ -16,22 +16,22 @@
 
 VRPN_SUPPRESS_EMPTY_OBJECT_WARNING()
 
-
-
 //faz os dedos ficarem relativos a posicao da mao
 bool relative_to_hand = 0;
-double hand_pos[2][3];
+double hand_pos[3];
 
- 
+Leap::Controller vrpn_LeapMotion::controller;
 
-vrpn_LeapMotion::vrpn_LeapMotion(const char *name, vrpn_Connection *c)
+vrpn_LeapMotion::vrpn_LeapMotion(const char *name, int hand, vrpn_Connection *c)
 	: vrpn_Analog(name, c),
 	  vrpn_Tracker(name, c) {
-
+	
+	this->handId = hand;
+	
 	controller.addListener(*this);
 	
-	vrpn_Analog::num_channel = 4;
-	vrpn_Tracker::num_sensors = 46;
+	vrpn_Analog::num_channel = 2;
+	vrpn_Tracker::num_sensors = 23;
 
 	memset(channel, 0, sizeof(channel));
 	memset(last, 0, sizeof(last));
@@ -50,7 +50,7 @@ vrpn_LeapMotion::~vrpn_LeapMotion() {
 
 
 void vrpn_LeapMotion::onConnect(const Leap::Controller& controller) {
-	std::cout << "Connected" << std::endl;
+	std::cout << this->d_servicename << " connected." << std::endl;
 }
 
 void vrpn_LeapMotion::reportPose(int sensor, timeval t, Leap::Vector position) {
@@ -61,25 +61,15 @@ void vrpn_LeapMotion::reportPose(int sensor, timeval t, Leap::Vector position) {
 
 
 	if ( relative_to_hand ) {
-
-		if ( sensor == 0 || sensor == 23 ) {
-			int i = 0;
-			if ( sensor == 23 ) {
-				i = 1;
-			}
-			hand_pos[i][0] = pos1;
-			hand_pos[i][1] = pos2;
-			hand_pos[i][2] = pos3;
+		if ( sensor == 0) {
+			hand_pos[0] = pos1;
+			hand_pos[1] = pos2;
+			hand_pos[2] = pos3;
 		} else {
-
-			//conversao para manter as juntas relativas a palma 0 e 23
-			int i = 0;
-			if ( sensor >= 23 ) {
-				i = 1;
-			}
-			pos1 = pos1 - hand_pos[i][0];
-			pos2 = pos2 - hand_pos[i][1];
-			pos3 = pos3 - hand_pos[i][2];
+			//conversao para manter as juntas relativas a palma 0
+			pos1 = pos1 - hand_pos[0];
+			pos2 = pos2 - hand_pos[1];
+			pos3 = pos3 - hand_pos[2];
 		}
 	}
 
@@ -117,41 +107,17 @@ void vrpn_LeapMotion::onFrame(const Leap::Controller& controller) {
 	Leap::HandList hands = frame.hands();
 
 	int handCount = hands.count();
-	if ( handCount == 0 ) {
+	//Se a mão desejada não estiver presente
+	if ( handCount < handId+1 ) {
 		return;
 	}
-	//limita para pegar somente 2 maos
-	if ( handCount > 2 ) {
-		handCount = 2;
-	}
+
 	
-	channel[0] = -1;
-	channel[1] = -1;
-	//mao direita
-	channel[2] = -1;
-	channel[3] = -1;
-	bool left = false;
-	bool right = false;
-
-	for ( int i = 0; i < handCount; i++ ) {
-
-		if ( hands[i].isLeft() && left == false ) {
-			//mao esquerda
-			channel[0] = hands[i].grabAngle();
-			channel[1] = hands[i].pinchDistance();
-			left = true;
-		}
-		if ( hands[i].isRight() && right == false ) {
-			//mao direita
-			channel[2] = hands[i].grabAngle();
-			channel[3] = hands[i].pinchDistance();
-			right = true;
-		}
-	}
+	channel[0] = hands[handId].grabAngle();
+	channel[1] = hands[handId].pinchDistance();
 
 	vrpn_Analog::report();
-	//vrpn_Analog::report_changes();
-
+	
 
 	//Tracker Code
 	Leap::FingerList fingers;
@@ -159,56 +125,36 @@ void vrpn_LeapMotion::onFrame(const Leap::Controller& controller) {
 	Leap::Vector position;
 	Leap::Vector quaternion;
 
+	//Não importa qual é a mão, sempre será sensor 0 na palma
 	int sensor = 0;
 
+	//0 sao as palmas
+	position = hands[handId].palmPosition();
+	reportPose(sensor++, t, position);
 
-	
+	//1 sao os cotovelos
+	position = hands[handId].arm().elbowPosition();
+	reportPose(sensor++, t, position);
 
-	for ( int i = 0; i < handCount; i++ ) {
+	//wrist(punho) da mao tem o mesmo valor que o do braco
+	position = hands[handId].arm().wristPosition();
+	reportPose(sensor++, t, position);
 
-		//Se estiver somente com a mao esquerda a direita nao sera enviada
-		if ( hands[i].isLeft() ) {
-			sensor = 23;
+	fingers = hands[handId].fingers();
+	for ( Leap::FingerList::const_iterator fl = fingers.begin(); fl != fingers.end(); fl++ ) {
+		Leap::Bone bone;
+		Leap::Bone::Type boneType;
+
+		for ( int b = 0; b < 4; b++ ) {
+			boneType = static_cast<Leap::Bone::Type>(b);
+			bone = (*fl).bone(boneType);
+
+			position = bone.nextJoint();
+			reportPose(sensor++, t, position);
+
+			// Sleep for 1ms so we don't eat the CPU
+			vrpn_SleepMsecs(1);
 		}
-		//So permitira duas maos diferentes, uma esquerda e uma direita
-		if ( hands[i].isRight() ) {
-			sensor = 0;
-		}
-
-		//0 e 23 sao as palmas
-		position = hands[i].palmPosition();
-		reportPose(sensor++, t, position);
-
-		//1 e 24 sao os cotovelos
-		position = hands[i].arm().elbowPosition();
-		reportPose(sensor++, t, position);
-
-
-		//wrist(punho) da mao tem o mesmo valor que o do braco
-		position = hands[i].arm().wristPosition();
-		reportPose(sensor++, t, position);
-
-
-
-		fingers = hands[i].fingers();
-		for ( Leap::FingerList::const_iterator fl = fingers.begin(); fl != fingers.end(); fl++ ) {
-			Leap::Bone bone;
-			Leap::Bone::Type boneType;
-
-			for ( int b = 0; b < 4; b++ ) {
-				boneType = static_cast<Leap::Bone::Type>(b);
-				bone = (*fl).bone(boneType);
-
-				position = bone.nextJoint();
-				reportPose(sensor++, t, position);
-
-
-				// Sleep for 1ms so we don't eat the CPU
-				vrpn_SleepMsecs(1);
-
-			}
-		}
-
 	}
 
 }

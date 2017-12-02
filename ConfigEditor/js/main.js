@@ -42,11 +42,7 @@ actions = actions.concat(teamActions);
 
 
 
-var devicesFormToJSON = [{"jsonName":"nedglove","inputId":"NEDGLOVE"},
-                        {"jsonName":"leapMotion","inputId":"LEAPMOTION"},
-                        {"jsonName":"kinect","inputId":"KINECT"},
-                        {"jsonName":"keyboard","inputId":"KEYBOARD"},
-                        {"jsonName":"mouse","inputId":"MOUSE"}];
+var devicesFormClasses = ["leapMotion","kinect","keyboard","mouse","nedGlove"];
 
 
 
@@ -75,9 +71,11 @@ $(function(){
 
     //Ao fechar modal do ned ou leapmotion
     $('#nedGloveModal').on('hide.bs.modal', function () {
+        nedGloveReturnOk = true;
         clearInterval(nedGloveInterval);
     });
     $('#leapMotionModal').on('hide.bs.modal', function () {
+        leapReturnOk = true;
         clearInterval(leapInterval);
     });
 });
@@ -172,9 +170,6 @@ function formToJSON(el){
 
     delete json.toKey;
     
-    //Adiciona o endereço do dispositivo
-    json.dev = $('#'+json.dev).val();
-
     return json;
 }
 
@@ -197,12 +192,7 @@ function jsonToForm(json){
         div = addCommandToMapView(option.divClass);
         div.find(".toJSON").each(function(y, el){
             el = $(el);
-            //Quando encontrar o campo dev ele nao pode fazer a substituição direta
-            //Ele tem que atualizar no dev principal
-            if (el.attr('id') == "dev"){
-                ("#"+div.find("#dev").val()).valueOf(option[el.attr('id')]);
-                return;
-            }
+            
             //Para todos os outros campos, preenche normalmente
             el.val(option[el.attr('id')]);
             divBy = el.attr("divideby");
@@ -319,7 +309,7 @@ var nedGloveInterval;
 var nedGloveThumb;
 var nedGloveIndex;
 var nedGloveMode;
-
+var nedGloveReturnOk = true;
 function closeNedGloveModal(){
     $('#nedGloveModal').modal("hide");
 }
@@ -336,6 +326,7 @@ function openNedGloveModal(btn, mode){
     nedGloveDivSelected = $(btn).parent();
     nedGloveInterval = setInterval(loadNedGlovesValuesFromSerial, 1000);
     $('#nedGloveModal #btnSaveStrDiv button').removeClass('btn-primary').addClass('btn-secondary').val(0);
+    $('#nedGloveModal #btnSaveLeap button span').html("");
 }
 
 function saveStrToButton(btn){
@@ -374,7 +365,13 @@ function changeFingersSensors(){
 }
 
 function loadNedGlovesValuesFromSerial(){
+    //Evita várias chamadas ao software externo
+    if (nedGloveReturnOk == false){
+        return;
+    }
+    nedGloveReturnOk = false;
     exec.exec("SerialPortToString.exe -p "+$("#nedGloveModal #port").val()+" -b "+$("#nedGloveModal #bauds").val()+"", function(error, stdout, stderr) {
+        nedGloveReturnOk = true;
         if (error) {
           console.log('exec error: '+error);
           return;
@@ -413,26 +410,43 @@ function loadNedGlovesValuesFromSerial(){
 var leapMotionMode;
 var leapInterval;
 var leapMotionDivSelected;
+var leapReturnOk = true;
 function openLeapMotionModal(btn, mode){
     leapMotionMode = mode;
 
     $('#leapMotionModal').modal("show");
+    if (leapMotionMode == 'wrist'){
+        $('#leapMotionModal .leapWrist').show();
+        $('#leapMotionModal .leapPinch').hide();
+        $('#leapMotionModal .leapCloseHand').hide();
+        $('#leapMotionModal .leapCloseAndPinch').hide();
+    } else
     if (leapMotionMode == 'pinch'){
-        $('#leapPinch').show();
-        $('#leapCloseHand').hide();
+        $('#leapMotionModal .leapWrist').hide();
+        $('#leapMotionModal .leapPinch').show();
+        $('#leapMotionModal .leapCloseHand').hide();
+        $('#leapMotionModal .leapCloseAndPinch').show();
     } else {
-        $('#leapPinch').hide();
-        $('#leapCloseHand').show();
+        $('#leapMotionModal .leapWrist').hide();
+        $('#leapMotionModal .leapPinch').hide();
+        $('#leapMotionModal .leapCloseHand').show();
+        $('#leapMotionModal .leapCloseAndPinch').show();
     }
     
     leapMotionDivSelected = $(btn).parent();
     leapInterval = setInterval(loadLeapValues, 1000);
     $('#leapMotionModal #btnSaveLeap button').removeClass('btn-primary').addClass('btn-secondary').val(0);
+    $('#leapMotionModal #btnSaveLeap button span').html("");
 }
 
 
 function loadLeapValues(){
+    if (leapReturnOk == false){
+        return;
+    }
+    leapReturnOk = false;
     exec.exec("LeapToString.exe", function(error, stdout, stderr) {
+        leapReturnOk = true;
         if (error) {
           console.log('exec error: '+error);
           return;
@@ -442,6 +456,9 @@ function loadLeapValues(){
         
         if (json.msg != undefined){
 
+        } else
+        if (leapMotionMode == 'wrist'){
+            $('#leapMotionModal #leapWristAngle').html(json.wrist);
         } else
         if (leapMotionMode == 'pinch'){
             $('#leapMotionModal #leapPinchDistance').html(json.pinch);
@@ -464,6 +481,9 @@ function saveLeapMotionValues(){
     leapMotionDivSelected.find("#angleMax").val(maxStr);
     leapMotionDivSelected.find("#distanceMin").val(minStr);
     leapMotionDivSelected.find("#distanceMax").val(maxStr);
+
+    var val = $('#leapMotionModal #btnSaveLeap #val').val();
+    leapMotionDivSelected.find("#angle").val(val);
     closeLeapMotionModal();
 }
 
@@ -473,6 +493,9 @@ function saveLeapValuesToButton(btn){
     //O valor da força fica fixo
     btn = $(btn);
     btn.addClass('btn-primary').removeClass('btn-secondary');
+    if (leapMotionMode == 'wrist'){
+        btn.find('span').html($('#leapMotionModal #leapWristAngle').html());
+    } else
     if (leapMotionMode == 'pinch'){
         btn.find('span').html($('#leapMotionModal #leapPinchDistance').html());
     } else {

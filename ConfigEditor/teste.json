@@ -1,0 +1,23 @@
+{
+  "common": {
+    "patientName": "",
+    "saveDir": "./SAVES/",
+    "KINECT_X_INTERVAL": 0.35,
+    "host": "",
+    "database": "",
+    "user": "",
+    "passwd": ""
+  },
+  "keys": [
+    {
+      "divClass": "leapPinch",
+      "devType": "leapMotion",
+      "key": "LEAP_PINCH",
+      "dev": "localhost@LeapMotion0",
+      "distanceMin": 0,
+      "distanceMax": 3,
+      "toKeyDown": "A",
+      "toKeyUp": "A"
+    }
+  ]
+}

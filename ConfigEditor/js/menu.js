@@ -67,13 +67,8 @@ function clear(){
 function saveFile(){
     var jsonConfig = {};
     jsonConfig.common = {};
-    jsonConfig.common.devs = {};
     jsonConfig.keys = [];
 
-    for (var i = 0; i < devicesFormToJSON.length; i++){
-        jsonConfig.common.devs[devicesFormToJSON[i].jsonName] = [$("#"+devicesFormToJSON[i].inputId).val()];
-    }
-    
 
     $('#commonInfo .toJSON').each(function(i,el){
         el = $(el);
@@ -156,6 +151,7 @@ function addCommandToMapView(modelClass){
     clone.find("#toKey option:eq(1)").attr("selected","");
     $('#mapView').append(clone);
     $('[data-toggle="tooltip"]').tooltip({animated: 'fade',html: true});
+    
     
     return clone;
 }

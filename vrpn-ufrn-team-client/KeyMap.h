@@ -55,15 +55,10 @@ const int KINECT_LEFT_WRIST_DOWN = 5017;
 const int KINECT_BALANCE = 5018;
 const int KINECT_SET_CENTER_POS = 5020;
 
-const int LEAP_LEFT_CLOSED = 7000;
-const int LEAP_RIGHT_CLOSED = 7001;
-const int LEAP_LEFT_PINCH = 7002;
-const int LEAP_RIGHT_PINCH = 7003;
-
-const int LEAP_LEFT_WRIST_UP = 7004;
-const int LEAP_RIGHT_WRIST_UP = 7005;
-const int LEAP_LEFT_WRIST_DOWN = 7006;
-const int LEAP_RIGHT_WRIST_DOWN = 7007;
+const int LEAP_CLOSED = 7001;
+const int LEAP_PINCH = 7002;
+const int LEAP_WRIST_UP = 7003;
+const int LEAP_WRIST_DOWN = 7004;
 
 
 const int NEDGLOVE_GRAB = 7500;
@@ -78,11 +73,20 @@ const int BUTTON_TYPE = 2;
 const int ANALOG_TYPE = 3;
 
 
+const int DEVTYPE_KINECT = 0;
+const int DEVTYPE_LEAPMOTION = 1;
+const int DEVTYPE_KEYBOARD = 2;
+const int DEVTYPE_MOUSE = 3;
+const int DEVTYPE_NEDGLOVE = 4;
+
+const std::vector<std::string> DEVTYPE_STR = { "KINECT", "LEAP MOTION", "TECLADO", "MOUSE", "NEDGLOVE" };
+
 
 class KeyMap {
 private:
 	//Dispositivo que será lido
 	std::string dev;
+	int idDevType;
 	//Representação visual
 	std::string keyRepr;
 	std::string toKeyRepr;
@@ -207,6 +211,10 @@ public:
 	}
 
 	//////////////////
+
+	int getIdDevtype() {
+		return idDevType;
+	}
 
 	std::string getSaveData() {
 		return saveData;
@@ -479,16 +487,11 @@ public:
 		m["KINECT_SET_CENTER_POS"] = KINECT_SET_CENTER_POS;
 		
 
-
 		//Leap Motion
-		m["LEAP_LEFT_CLOSED"] = LEAP_LEFT_CLOSED;
-		m["LEAP_RIGHT_CLOSED"] = LEAP_RIGHT_CLOSED;
-		m["LEAP_LEFT_PINCH"] = LEAP_LEFT_PINCH;
-		m["LEAP_RIGHT_PINCH"] = LEAP_RIGHT_PINCH;
-		m["LEAP_LEFT_WRIST_UP"] = LEAP_LEFT_WRIST_UP;
-		m["LEAP_RIGHT_WRIST_UP"] = LEAP_RIGHT_WRIST_UP;
-		m["LEAP_LEFT_WRIST_DOWN"] = LEAP_LEFT_WRIST_DOWN;
-		m["LEAP_RIGHT_WRIST_DOWN"] = LEAP_RIGHT_WRIST_DOWN;
+		m["LEAP_CLOSED"] = LEAP_CLOSED;
+		m["LEAP_PINCH"] = LEAP_PINCH;
+		m["LEAP_WRIST_UP"] = LEAP_WRIST_UP;
+		m["LEAP_WRIST_DOWN"] = LEAP_WRIST_DOWN;
 
 		//NEDGlove
 		m["NEDGLOVE_GRAB"] = NEDGLOVE_GRAB;

@@ -52,17 +52,22 @@ bool ConfigFileReader::readConfigFile(char * fileName,
 	for ( json::iterator it = js["keys"].begin(); it != js["keys"].end(); ++it ) {
 
 		json js2 = (json)*it;
-		KeyMap km = KeyMap(js2);
-		map.push_back(km);
+		
 
 		dt.name = js2["dev"].get<std::string>();
 		//Cada novo dispositivo é adicionado em um vetor separado
 		std::vector<DeviceType>::iterator check = std::find(devs.begin(), devs.end(), dt);
 		if ( check == devs.end() ) {
 			//Se não existir
-			identifyDevType(js,dt);
+			
+			setDevType(js2["devType"].get<std::string>(), dt);
+			js2["idDevType"] = dt.type;
 			devs.push_back(dt);
 		}
+
+		//espera o idDevType
+		KeyMap km = KeyMap(js2);
+		map.push_back(km);
 		
 	}
 
@@ -73,42 +78,27 @@ bool ConfigFileReader::readConfigFile(char * fileName,
 }
 
 
-int ConfigFileReader::identifyDevType(json js, DeviceType &dev) {
-	//Identifica o tipo de cada dispositivo
-	if ( setDevType(js, "kinect", DEVTYPE_KINECT, dev) ) {
-		return DEVTYPE_KINECT;
+void ConfigFileReader::setDevType(std::string devType, DeviceType &dt) {
+	if ( !devType.compare("mouse") ) {
+		dt.type = DEVTYPE_MOUSE;
+		dt.type_str = DEVTYPE_STR[dt.type];
+	} else
+	if ( !devType.compare("keyboard") ) {
+		dt.type = DEVTYPE_KEYBOARD;
+		dt.type_str = DEVTYPE_STR[dt.type];
+	} else 
+	if ( !devType.compare("leapMotion") ) {
+		dt.type = DEVTYPE_LEAPMOTION;
+		dt.type_str = DEVTYPE_STR[dt.type];
+	} else
+	if ( !devType.compare("kinect") ) {
+		dt.type = DEVTYPE_KINECT;
+		dt.type_str = DEVTYPE_STR[dt.type];
+	} else 
+	if ( !devType.compare("nedglove") ) {
+		dt.type = DEVTYPE_NEDGLOVE;
+		dt.type_str = DEVTYPE_STR[dt.type];
 	}
-
-	if ( setDevType(js, "leapMotion", DEVTYPE_LEAPMOTION, dev) ) {
-		return DEVTYPE_LEAPMOTION;
-	}
-
-	if ( setDevType(js, "keyboard", DEVTYPE_KEYBOARD, dev) ) {
-		return DEVTYPE_KEYBOARD;
-	}
-
-	if ( setDevType(js, "mouse", DEVTYPE_MOUSE, dev) ) {
-		return DEVTYPE_MOUSE;
-	}
-
-	if ( setDevType(js, "nedglove", DEVTYPE_NEDGLOVE, dev) ) {
-		return DEVTYPE_NEDGLOVE;
-	}
-	return -1;
-}
-
-bool ConfigFileReader::setDevType(json js,std::string textDev, int devConstant, DeviceType &devT) {
-	for ( json::iterator it = js["common"]["devs"][textDev].begin(); it != js["common"]["devs"][textDev].end(); ++it ) {
-		json js2 = (json)*it;
-		//Percorre os arrays de dispositivos para setar o tipo
-		//Atualmente isso so e necessario para dispositivos de tracking
-		if ( !devT.name.compare(js2) ) {
-			devT.type = devConstant;
-			devT.type_str = DEVTYPE_STR[devConstant];
-			return true;
-		}
-	}
-	return false;
 }
 
 

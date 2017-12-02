@@ -14,6 +14,7 @@ const int KINECT_RIGHT = 2;
 const int KINECT_FRONT = 3;
 const int KINECT_BACK = 4;
 
+
 struct KinectDetection {
 	bool centerPosDefined = false;
 	SkeletonPart hipCenter;
@@ -66,7 +67,8 @@ protected:
 
 public:
 
-	static Skeleton skeleton;
+	static std::map<std::string, Skeleton> skeleton;
+
 	KinectDetection getKinectDetection() {
 		return kinectDetection;
 	}

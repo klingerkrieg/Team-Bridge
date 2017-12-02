@@ -20,9 +20,12 @@ body{
 	width:300px;
 }
 
+.hidden{
+	display:none;
+}
 
 
-#models div, #mapView div {
+#models div, #mapView > div {
 	border:1px solid #ccc;
 	position: relative;
 	border-radius: 5px;
@@ -62,7 +65,7 @@ fieldset{
 	float: left;
 }
 
-legend{
+legend, .title{
 	text-align: center;
 }
 
