@@ -47,7 +47,6 @@ private:
 							   std::vector<KeyMap> &map,
 							   Config &config);
 
-	void setDevType(std::string devType, DeviceType &dt);
 
 };
 

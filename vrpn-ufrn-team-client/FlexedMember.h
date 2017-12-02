@@ -19,6 +19,4 @@ class FlexedMember : public AbstractGestureRecognizer {
 	int flexed3d(std::map<int, std::vector<double>> points, KeyMap * keyMap, int direction);
 
 	std::map<int, std::vector<double>> getPoints(SkeletonPart skelPart0, SkeletonPart skelPart1, SkeletonPart skelPart2);
-	std::map<int, std::vector<double>> getPoints(SkeletonPart skelPart, int sensor1, int sensor2, int sensor3, std::map<int, std::vector<double>> &positions);
-	std::map<int, std::vector<double>> getPoints(const vrpn_TRACKERCB t, int sensor1, int sensor2, int sensor3, std::map<int, std::vector<double>> &positions);
 };

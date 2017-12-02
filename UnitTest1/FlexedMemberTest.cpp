@@ -27,29 +27,11 @@ TEST_CLASS(FlexedMemberTest) {
 
 	TEST_METHOD(FlexedMember_getPoints) {
 
-		strncpy(tc1->name, "Tracker0@localhost", sizeof(tc1->name));
+		SkeletonPart skelPart1 = getSkeletonPart();
+		SkeletonPart skelPart2 = getSkeletonPart();
+		SkeletonPart skelPart3 = getSkeletonPart();
 
-		t = getTrackerCB();
-		//Nao captura
-		t.sensor = 5;
-		flex.getPoints(t, 6, 7, 8, positions);
-		
-		Assert::AreEqual(0, (int)positions.size());
-		
-		t.sensor = 6;
-		double pos1[] = { 0, 0, 0 };
-		std::copy(pos1, pos1 + 3, t.pos);
-		flex.getPoints(t, 6, 7, 8, positions);
-		
-		t.sensor = 7;
-		double pos2[] = { 10, 0, 0 };
-		std::copy(pos2, pos2 + 3, t.pos);
-		flex.getPoints(t, 6, 7, 8, positions);
-
-		t.sensor = 8;
-		double pos3[] = { 12, 5, 0 };
-		std::copy(pos3, pos3 + 3, t.pos);
-		flex.getPoints(t, 6, 7, 8, positions);
+		positions = flex.getPoints(skelPart1, skelPart2, skelPart3);
 
 		Assert::AreEqual(3, (int)positions.size() );
 
@@ -67,8 +49,20 @@ TEST_CLASS(FlexedMemberTest) {
 		positionsWithValues.insert_or_assign(1, p2);
 		positionsWithValues.insert_or_assign(2, p3);
 
-		Assert::AreEqual(1, flex.flexed3d(positionsWithValues, 110, 1, UP));//maior que 110
-		Assert::AreEqual(1, flex.flexed3d(positionsWithValues, 115, -1, UP));//menor que 115
+		json js = {
+			{ "divClass", "leapWrist" },
+			{ "devType" , "leapMotion" },
+			{ "dev" , "LeapMotion0@localhost" },
+			{ "key" , "LEAP_WRIST_UP" },
+			{ "angleMod" , "<" },
+			{ "angle" , 115 },
+			{ "toKeyDown" , "C" },
+			{ "toKeyUp" , "C" }
+		};
+		KeyMap * km = new KeyMap(js);
+		
+		Assert::AreEqual(1, flex.flexed3d(positionsWithValues, km, UP));//maior que 110
+		Assert::AreEqual(1, flex.flexed3d(positionsWithValues, km, UP));//menor que 115
 
 	}
 };

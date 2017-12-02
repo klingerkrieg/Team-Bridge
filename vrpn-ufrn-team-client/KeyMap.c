@@ -97,14 +97,39 @@ std::string KeyMap::toString() {
 	return ret;
 }
 
+void KeyMap::setDevType(std::string devType) {
+	if ( !devType.compare("mouse") ) {
+		this->idDevType = DEVTYPE_MOUSE;
+		this->devTypeStr = DEVTYPE_STR[this->idDevType];
+	} else
+	if ( !devType.compare("keyboard") ) {
+		this->idDevType = DEVTYPE_KEYBOARD;
+		this->devTypeStr = DEVTYPE_STR[this->idDevType];
+	} else
+	if ( !devType.compare("leapMotion") ) {
+		this->idDevType = DEVTYPE_LEAPMOTION;
+		this->devTypeStr = DEVTYPE_STR[this->idDevType];
+	} else
+	if ( !devType.compare("kinect") ) {
+		this->idDevType = DEVTYPE_KINECT;
+		this->devTypeStr = DEVTYPE_STR[this->idDevType];
+	} else
+	if ( !devType.compare("nedglove") ) {
+		this->idDevType = DEVTYPE_NEDGLOVE;
+		this->devTypeStr = DEVTYPE_STR[this->idDevType];
+	}
+}
+
 
 KeyMap::KeyMap(json js) {
 
 	if ( !js["dev"].is_null() ) {
 		this->dev = js["dev"].get<std::string>();
 	}
-	if ( !js["idDevType"].is_null() ) {
-		this->idDevType = js["idDevType"].get<int>();
+
+
+	if ( !js["devType"].is_null() ) {
+		setDevType(js["devType"].get<std::string>());
 	}
 	
 	if ( !js["x"].is_null() ) {

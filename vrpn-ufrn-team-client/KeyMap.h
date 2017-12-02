@@ -85,8 +85,9 @@ const std::vector<std::string> DEVTYPE_STR = { "KINECT", "LEAP MOTION", "TECLADO
 class KeyMap {
 private:
 	//Dispositivo que será lido
-	std::string dev;
-	int idDevType;
+	std::string dev;//endereco
+	int idDevType;//id
+	std::string devTypeStr;//nome do dispositivo
 	//Representação visual
 	std::string keyRepr;
 	std::string toKeyRepr;
@@ -162,6 +163,10 @@ private:
 
 	std::string saveData = "";
 	//Aqui foi aplicado algo semelhante ao padrão Observer
+
+	void setDevType(std::string devType);
+
+
 public:
 	typedef int (AbstractGestureRecognizer::*gestureCheckerMethod)(void * data, KeyMap *key);
 
@@ -211,8 +216,11 @@ public:
 	}
 
 	//////////////////
+	std::string getDevTypeStr() {
+		return devTypeStr;
+	}
 
-	int getIdDevtype() {
+	int getIdDevType() {
 		return idDevType;
 	}
 

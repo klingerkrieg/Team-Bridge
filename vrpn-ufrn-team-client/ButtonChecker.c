@@ -5,7 +5,7 @@ void ButtonChecker::assignChecker(std::vector<KeyMap> &map) {
 			KeyMap *keyMap = &map.at(keyMapId);
 
 			//Caso seja mouse ou teclado
-			if ( keyMap->getIdDevtype() == DEVTYPE_KEYBOARD || keyMap->getIdDevtype() == DEVTYPE_MOUSE ) {
+			if ( keyMap->getIdDevType() == DEVTYPE_KEYBOARD || keyMap->getIdDevType() == DEVTYPE_MOUSE ) {
 				keyMap->assignGestureChecker(BUTTON_TYPE, (KeyMap::gestureCheckerMethod)&ButtonChecker::pressed, this);
 			}
 		}

@@ -1,22 +1,5 @@
 {
   "common": {
-    "devs": {
-      "nedglove": [
-        "Analog0@localhost"
-      ],
-      "leapMotion": [
-        "LeapMotion0@localhost"
-      ],
-      "kinect": [
-        "Tracker0@localhost"
-      ],
-      "keyboard": [
-        "Keyboard0@localhost"
-      ],
-      "mouse": [
-        "Mouse0@localhost"
-      ]
-    },
     "patientName": "Paulo Júnior",
     "saveDir": "./SAVES/",
     "appName": "app",
@@ -30,6 +13,7 @@
     {
       "divClass": "handTop",
       "dev": "Tracker0@localhost",
+      "devType": "kinect",
       "key": "KINECT_LEFT_HAND_TOP",
       "x": -2,
       "coordinateMod": "<=",
@@ -40,6 +24,7 @@
     {
       "divClass": "kinectWalking",
       "dev": "Tracker0@localhost",
+      "devType": "kinect",
       "key": "KINECT_WALK",
       "delay": 1000,
       "sensivity": 0.1,
@@ -48,6 +33,7 @@
     {
       "divClass": "kinectStep",
       "dev": "Tracker0@localhost",
+      "devType": "kinect",
       "key": "KINECT_STEP_UP",
       "sensivity": 0.1,
       "toKeyDown": "KINECT_DETERMINE_CENTER_POS",
@@ -56,6 +42,7 @@
     {
       "divClass": "kinectBalance",
       "dev": "Tracker0@localhost",
+      "devType": "kinect",
       "key": "KINECT_BALANCE",
       "angleMod": ">",
       "angle": 35,
@@ -66,6 +53,7 @@
     {
       "divClass": "kinectFastHand",
       "dev": "Tracker0@localhost",
+      "devType": "kinect",
       "key": "KINECT_LEFT_HAND_FAST",
       "maxVelocityMs": 4,
       "msg": "Mensagem",
@@ -75,6 +63,7 @@
     {
       "divClass": "kinectFist",
       "dev": "Tracker0@localhost",
+      "devType": "kinect",
       "key": "KINECT_LEFT_WRIST_DOWN",
       "angleMod": ">",
       "angle": 35,
@@ -84,6 +73,7 @@
     {
       "divClass": "kinectTurn",
       "dev": "Tracker0@localhost",
+      "devType": "kinect",
       "key": "KINECT_TURN_LEFT",
       "toKeyDown": "A",
       "toKeyUp": "A"
@@ -91,6 +81,7 @@
     {
       "divClass": "kinectBody",
       "dev": "Tracker0@localhost",
+      "devType": "kinect",
       "key": "KINECT_BODY_FRONT",
       "toKeyDown": "A",
       "toKeyUp": "A"
@@ -98,21 +89,24 @@
     {
       "divClass": "leapCloseHand",
       "dev": "LeapMotion0@localhost",
-      "key": "LEAP_LEFT_CLOSED",
+      "devType": "leapMotion",
+      "key": "LEAP_CLOSED",
       "toKeyDown": "A",
       "toKeyUp": "A"
     },
     {
       "divClass": "leapPinch",
       "dev": "LeapMotion0@localhost",
-      "key": "LEAP_LEFT_PINCH",
+      "devType": "leapMotion",
+      "key": "LEAP_PINCH",
       "toKeyDown": "A",
       "toKeyUp": "A"
     },
     {
       "divClass": "leapFist",
       "dev": "LeapMotion0@localhost",
-      "key": "LEAP_LEFT_WRIST_UP",
+      "devType": "leapMotion",
+      "key": "LEAP_WRIST_UP",
       "angleMod": ">",
       "angle": 35,
       "toKeyDown": "A",
@@ -121,6 +115,7 @@
     {
       "divClass": "keyboard",
       "dev": "Keyboard0@localhost",
+      "devType": "keyboard",
       "key": "A",
       "toKeyDown": "A",
       "toKeyUp": "A"
@@ -128,6 +123,7 @@
     {
       "divClass": "mouse",
       "dev": "Mouse0@localhost",
+      "devType": "mouse",
       "key": "VK_LBUTTON",
       "toKeyDown": "A",
       "toKeyUp": "A"
@@ -135,6 +131,7 @@
     {
       "divClass": "nedGlovePinch",
       "dev": "Analog0@localhost",
+      "devType": "nedglove",
       "key": "NEDGLOVE_PINCH",
       "thumb": 0,
       "index": 4,

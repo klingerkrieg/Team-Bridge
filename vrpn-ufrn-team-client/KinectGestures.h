@@ -40,7 +40,7 @@ private:
 	double handTopInterval = 0.10;
 
 	static double handXPosInterval;
-	static KinectDetection kinectDetection;
+	static std::map<std::string,KinectDetection> kinectDetection;
 
 	//usado para detectBody
 	static std::map<int, std::vector<double>> bodyDirectionPoints;
@@ -51,13 +51,13 @@ private:
 
 	double turnFactor = 0.07;
 
-	bool detectWalkHeight(SkeletonPart skelPart, KeyMap * keyMap, double &kneeLastHeight);
-	int detectBody(SkeletonPart skelPart, KeyMap * keyMap ,int direction);
-	bool detectMemberFast(SkeletonPart skelPart, KeyMap * keyMap);
+	bool detectWalkHeight(SkeletonPart * skelPart, KeyMap * keyMap, double &kneeLastHeight);
+	int detectBody(SkeletonPart * skelPart, KeyMap * keyMap ,int direction);
+	bool detectMemberFast(SkeletonPart * skelPart, KeyMap * keyMap);
 
-	int detectHandTop(SkeletonPart skelPart, KeyMap * keyMap);
-	int detectTopChange(SkeletonPart skelPart, KeyMap * keyMap, int direction);
-	int detectHandXPos(SkeletonPart skelPart, KeyMap * keyMap);
+	int detectHandTop(SkeletonPart * skelPart, KeyMap * keyMap);
+	int detectTopChange(SkeletonPart * skelPart, KeyMap * keyMap, int direction);
+	int detectHandXPos(SkeletonPart * skelPart, KeyMap * keyMap);
 
 	//Flexao
 	static std::map<int, std::vector<double>> lastPositions[20];
@@ -69,7 +69,7 @@ public:
 
 	static std::map<std::string, Skeleton> skeleton;
 
-	KinectDetection getKinectDetection() {
+	std::map<std::string, KinectDetection> getKinectDetection() {
 		return kinectDetection;
 	}
 
@@ -85,8 +85,8 @@ public:
 	int rightWristFlexedUp(void * data, KeyMap * keyMap);
 	int rightWristFlexedDown(void * data, KeyMap * keyMap);
 
-	std::vector<double> getLastMemberPos(int sensor);
-	int getLastMemberTime(int sensor);
+	std::vector<double> getLastMemberPos(SkeletonPart * skelPart);
+	int getLastMemberTime(SkeletonPart * skelPart);
 
 	double euclidianDistance(std::vector<double> pos1, std::vector<double> pos2);
 

@@ -93,7 +93,7 @@ public:
 		SkeletonPart skelPart;
 		//Define a posicao da cabeca
 		trackData.sensor = 0;
-		vrpnToSkeleton(gr.skeleton, gr.skeletonMap1, trackData, skelPart);
+		vrpnToSkeleton(gr.skeleton["Tracker0"], gr.skeletonMap1, trackData, skelPart, "Tracker0");
 
 		json js = {
 			{ "divClass", "handTop" },
@@ -169,9 +169,9 @@ public:
 		SkeletonPart skelPart;
 		//Define a posicao da cabeca e da bacia
 		trackData.sensor = 0;
-		vrpnToSkeleton(gr.skeleton, gr.skeletonMap1, trackData, skelPart);
+		vrpnToSkeleton(gr.skeleton["Tracker0"], gr.skeletonMap1, trackData, skelPart, "Tracker0");
 		trackData.sensor = 3;
-		vrpnToSkeleton(gr.skeleton, gr.skeletonMap1, trackData, skelPart);
+		vrpnToSkeleton(gr.skeleton["Tracker0"], gr.skeletonMap1, trackData, skelPart, "Tracker0");
 
 
 		json js = {
@@ -323,10 +323,10 @@ public:
 		SkeletonPart skelPart;
 		//Define a posicao da cabeca e da bacia
 		trackData.sensor = 3;
-		vrpnToSkeleton(gr.skeleton, gr.skeletonMap1, trackData, skelPart);
+		vrpnToSkeleton(gr.skeleton["Tracker0"], gr.skeletonMap1, trackData, skelPart, "Tracker0");
 
 		SkeletonPart t = getSkeletonPart();
-		t.skelConstant = SKELETON_HAND_R;
+		t.skeletonName = "Tracker0";
 		//Esses métodos não requerem nenhuma informação do KeyMap
 		json js = {};
 		KeyMap *m1 = new KeyMap(js);
@@ -334,14 +334,14 @@ public:
 		Assert::IsTrue(gr.setCenterPos((void *)&t, m1));
 
 
-		Assert::IsTrue(gr.getKinectDetection().centerPosDefined);
-		Assert::AreEqual(skelPart.x, gr.getKinectDetection().hipCenter.x);
-		Assert::AreEqual(skelPart.y, gr.getKinectDetection().hipCenter.y);
-		Assert::AreEqual(skelPart.z, gr.getKinectDetection().hipCenter.z);
-		Assert::AreEqual(skelPart.quat_x, gr.getKinectDetection().hipCenter.quat_x);
-		Assert::AreEqual(skelPart.quat_y, gr.getKinectDetection().hipCenter.quat_y);
-		Assert::AreEqual(skelPart.quat_z, gr.getKinectDetection().hipCenter.quat_z);
-		Assert::AreEqual(skelPart.quat_w, gr.getKinectDetection().hipCenter.quat_w);
+		Assert::IsTrue(gr.getKinectDetection()["Tracker0"].centerPosDefined);
+		Assert::AreEqual(skelPart.x, gr.getKinectDetection()["Tracker0"].hipCenter.x);
+		Assert::AreEqual(skelPart.y, gr.getKinectDetection()["Tracker0"].hipCenter.y);
+		Assert::AreEqual(skelPart.z, gr.getKinectDetection()["Tracker0"].hipCenter.z);
+		Assert::AreEqual(skelPart.quat_x, gr.getKinectDetection()["Tracker0"].hipCenter.quat_x);
+		Assert::AreEqual(skelPart.quat_y, gr.getKinectDetection()["Tracker0"].hipCenter.quat_y);
+		Assert::AreEqual(skelPart.quat_z, gr.getKinectDetection()["Tracker0"].hipCenter.quat_z);
+		Assert::AreEqual(skelPart.quat_w, gr.getKinectDetection()["Tracker0"].hipCenter.quat_w);
 		
 
 	}

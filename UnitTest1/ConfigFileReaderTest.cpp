@@ -56,7 +56,8 @@ public:
 		int i = 0;
 		json js = {
 			{"divClass", "handTop"},
-			{"dev" , "Tracker0@localhost"},
+			{ "dev" , "Tracker0@localhost" },
+			{ "devType" , "kinect" },
 			{"key" , "KINECT_LEFT_HAND_TOP"},
 			{"x" , -2},
 			{"coordinateMod" , "<="},
@@ -70,6 +71,7 @@ public:
 		js = {
 			{"divClass", "kinectWalking"},
 			{"dev" , "Tracker0@localhost"},
+			{ "devType" , "kinect" },
 			{"key" , "KINECT_WALK"},
 			{"delay" , 1000},
 			{"sensivity" , 0.1},
@@ -81,6 +83,7 @@ public:
 		js = {
 			{"divClass","kinectStep"},
 			{"dev" ,"Tracker0@localhost"},
+			{ "devType" , "kinect" },
 			{"key" ,"KINECT_STEP_UP"},
 			{"sensivity" ,0.1},
 			{"toKeyDown" ,"KINECT_DETERMINE_CENTER_POS"},
@@ -92,6 +95,7 @@ public:
 		js = {
 			{"divClass","kinectBalance"},
 			{"dev" ,"Tracker0@localhost"},
+			{ "devType" , "kinect" },
 			{"key" ,"KINECT_BALANCE"},
 			{"angleMod" ,">"},
 			{"angle" ,35},
@@ -106,6 +110,7 @@ public:
 		js = {
 			{ "divClass","nedGlove" },
 			{ "dev" ,"Analog0@localhost" },
+			{ "devType" , "nedglove" },
 			{ "key" ,"NEDGLOVE_PINCH" },
 			{ "thumb" , 0 },
 			{ "index" , 4 },

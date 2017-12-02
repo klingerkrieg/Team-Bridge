@@ -52,22 +52,22 @@ bool ConfigFileReader::readConfigFile(char * fileName,
 	for ( json::iterator it = js["keys"].begin(); it != js["keys"].end(); ++it ) {
 
 		json js2 = (json)*it;
-		
+		//espera o idDevType
+		KeyMap km = KeyMap(js2);
+		map.push_back(km);
 
 		dt.name = js2["dev"].get<std::string>();
 		//Cada novo dispositivo é adicionado em um vetor separado
 		std::vector<DeviceType>::iterator check = std::find(devs.begin(), devs.end(), dt);
 		if ( check == devs.end() ) {
 			//Se não existir
-			
-			setDevType(js2["devType"].get<std::string>(), dt);
-			js2["idDevType"] = dt.type;
+			//std::string n = js2["key"].get<std::string>();
+			dt.type = km.getIdDevType();
+			dt.type_str = km.getDevTypeStr();
 			devs.push_back(dt);
 		}
 
-		//espera o idDevType
-		KeyMap km = KeyMap(js2);
-		map.push_back(km);
+		
 		
 	}
 
@@ -78,27 +78,6 @@ bool ConfigFileReader::readConfigFile(char * fileName,
 }
 
 
-void ConfigFileReader::setDevType(std::string devType, DeviceType &dt) {
-	if ( !devType.compare("mouse") ) {
-		dt.type = DEVTYPE_MOUSE;
-		dt.type_str = DEVTYPE_STR[dt.type];
-	} else
-	if ( !devType.compare("keyboard") ) {
-		dt.type = DEVTYPE_KEYBOARD;
-		dt.type_str = DEVTYPE_STR[dt.type];
-	} else 
-	if ( !devType.compare("leapMotion") ) {
-		dt.type = DEVTYPE_LEAPMOTION;
-		dt.type_str = DEVTYPE_STR[dt.type];
-	} else
-	if ( !devType.compare("kinect") ) {
-		dt.type = DEVTYPE_KINECT;
-		dt.type_str = DEVTYPE_STR[dt.type];
-	} else 
-	if ( !devType.compare("nedglove") ) {
-		dt.type = DEVTYPE_NEDGLOVE;
-		dt.type_str = DEVTYPE_STR[dt.type];
-	}
-}
+
 
 

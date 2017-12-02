@@ -39,6 +39,7 @@ namespace InputConverterTest {
 		json js = {
 			{"divClass", "kinectStep"},
 			{"dev" , "Tracker0@localhost"},
+			{ "devType" ,"kinect" },
 			{"key" , "KINECT_STEP_UP"},
 			{"sensivity" , 0.15},
 			{"toKeyDown" , "A"},
@@ -48,6 +49,7 @@ namespace InputConverterTest {
 		js = {
 			{ "divClass", "kinectStep" },
 			{ "dev" , "Tracker0@localhost" },
+			{ "devType" ,"kinect" },
 			{ "key" , "KINECT_STEP_NORMAL" },
 			{ "sensivity" , 0.15 },
 			{ "toKeyDown" , "A" },
@@ -57,6 +59,7 @@ namespace InputConverterTest {
 		js = {
 			{ "divClass", "kinectStep" },
 			{ "dev" , "Tracker0@localhost" },
+			{ "devType" ,"kinect" },
 			{ "key" , "KINECT_STEP_DOWN" },
 			{ "sensivity" , 0.15 },
 			{ "toKeyDown" , "A" },
@@ -66,6 +69,7 @@ namespace InputConverterTest {
 
 		js = {
 			{ "divClass", "keyboard" },
+			{ "devType" ,"keyboard" },
 			{ "dev" , "Keyboard0@localhost" },
 			{ "key" , "A" },
 			{ "toKeyDown" , "B" },
@@ -75,6 +79,7 @@ namespace InputConverterTest {
 		js = {
 			{ "divClass","nedGlove" },
 			{ "dev" ,"Analog0@localhost" },
+			{ "devType" ,"nedglove" },
 			{ "key" ,"NEDGLOVE_PINCH" },
 			{ "thumb" , 0 },
 			{ "index" , 4 },
