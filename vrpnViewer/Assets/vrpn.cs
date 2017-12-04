@@ -10,6 +10,9 @@ public class VRPN : MonoBehaviour {
 	public bool kinect;//caso leapmotion setar false;
 	public bool guideON;
 	public bool guide3D;
+	public bool oculusON = false;
+
+	private String oculusName = "Oculus0@localhost";
 
 	String trackerName;
 	int channels;
@@ -46,6 +49,14 @@ public class VRPN : MonoBehaviour {
 			(float) vrpnTrackerExtern(address, channel, 0, Time.frameCount),
 			(float) vrpnTrackerExtern(address, channel, 1, Time.frameCount),
 			(float) vrpnTrackerExtern(address, channel, 2, Time.frameCount));
+	}
+
+	public static Quaternion vrpnTrackerQuat(string address, int channel){
+		return new Quaternion(
+			(float) vrpnTrackerExtern(address, channel, 3, Time.frameCount),
+			(float) vrpnTrackerExtern(address, channel, 4, Time.frameCount),
+			(float) vrpnTrackerExtern(address, channel, 5, Time.frameCount),
+			(float) vrpnTrackerExtern(address, channel, 6, Time.frameCount));
 	}
 
 	GameObject CreateCylinderBetweenPoints(Vector3 start, Vector3 end, float width) {
@@ -407,10 +418,18 @@ public class VRPN : MonoBehaviour {
 		}
 
 
-
-		if (freezed == false) {
-			if (central != null)
-				Camera.main.transform.LookAt (central.transform);
+		if (oculusON == false) {
+			if (freezed == false) {
+				if (central != null)
+					Camera.main.transform.LookAt (central.transform);
+			}
+		} else {
+			Vector3 pos = vrpnTrackerPos (oculusName, 0);
+			Quaternion quat = vrpnTrackerQuat (oculusName, 0);
+			print (quat);
+			Camera.main.transform.position = pos;
+			//Camera.main.transform.rotation = quat;
+			Camera.main.transform.localRotation = quat;
 		}
 
 

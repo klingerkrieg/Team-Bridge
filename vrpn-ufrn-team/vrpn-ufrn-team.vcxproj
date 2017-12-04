@@ -49,8 +49,8 @@
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(KINECTSDK10_DIR)\inc;$(VC_IncludePath);$(WindowsSDK_IncludePath);..\..\vrpn-master-2017-up;..\..\vrpn-master-2017-up\quat;C:\Program Files (x86)\Leap Motion\LeapSDK\include;</IncludePath>
-    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;C:\Program Files (x86)\Leap Motion\LeapSDK\lib\x86;</LibraryPath>
+    <IncludePath>E:\ufrn\ovr_sdk_win_0.8.0.0\OculusSDK\LibOVR\Include;$(KINECTSDK10_DIR)\inc;$(VC_IncludePath);$(WindowsSDK_IncludePath);..\..\vrpn-master-2017-up;..\..\vrpn-master-2017-up\quat;C:\Program Files (x86)\Leap Motion\LeapSDK\include;</IncludePath>
+    <LibraryPath>E:\ufrn\ovr_sdk_win_0.8.0.0\OculusSDK\LibOVR\Lib\Windows\Win32\Debug\VS2015;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;C:\Program Files (x86)\Leap Motion\LeapSDK\lib\x86;</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>$(KINECTSDK10_DIR)\inc;$(VC_IncludePath);$(WindowsSDK_IncludePath);..\..\vrpn-master-2017-up;..\..\vrpn-master-2017-up\quat;C:\Program Files (x86)\Leap Motion\LeapSDK\include;</IncludePath>
@@ -94,7 +94,7 @@
       <DataExecutionPrevention>
       </DataExecutionPrevention>
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalDependencies>Kinect10.lib;gpsnmealib.lib;quat.lib;vrpn.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);Leap.lib;</AdditionalDependencies>
+      <AdditionalDependencies>LibOVR.lib;Kinect10.lib;gpsnmealib.lib;quat.lib;vrpn.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);Leap.lib;</AdditionalDependencies>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -162,12 +162,14 @@
     <ClCompile Include="vrpn_KinectV1.c" />
     <ClCompile Include="vrpn_LeapMotion.c" />
     <ClCompile Include="vrpn_NEDGlove.c" />
+    <ClCompile Include="vrpn_OculusDK1.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="vrpn_Generic_server_object.h" />
     <ClInclude Include="vrpn_KinectV1.h" />
     <ClInclude Include="vrpn_LeapMotion.h" />
     <ClInclude Include="vrpn_NEDGlove.h" />
+    <ClInclude Include="vrpn_OculusDK1.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="vrpn.cfg" />

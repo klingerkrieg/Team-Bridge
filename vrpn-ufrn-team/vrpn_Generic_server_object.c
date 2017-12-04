@@ -53,6 +53,7 @@
 //TEAM
 #include "vrpn_NEDGlove.h"
 #include "vrpn_LeapMotion.h"                 
+#include "vrpn_OculusDK1.h"                 
 #include "vrpn_KinectV1.h"              
 //
 #include "vrpn_LUDL.h"                    // for vrpn_LUDL_USBMAC6000
@@ -4971,6 +4972,30 @@ int vrpn_Generic_Server_Object::setup_NEDGlove(char *&pch, char *line, FILE *) {
 }
 
 
+
+int vrpn_Generic_Server_Object::setup_OculusDK1(char *&pch, char *line, FILE *) {
+	char name[LINESIZE];
+
+	VRPN_CONFIG_NEXT();
+	int ret = sscanf(pch, "%511s", name);
+	if ( ret != 1 ) {
+		fprintf(stderr, "Bad OculusDK1 line: %s\n", line);
+		return -1;
+	}
+
+	// Open the Laputa
+	if ( verbose ) {
+		printf("Opening vrpn_OculusDK1\n");
+	}
+
+	// Open the tracker
+	_devices->add(new vrpn_OculusDK1(name, connection));
+
+	return 0; // successful completion
+}
+
+
+
 int vrpn_Generic_Server_Object::setup_LeapMotion(char *&pch, char *line, FILE *) {
 	char name[LINESIZE];
 	int hand;
@@ -5464,6 +5489,8 @@ vrpn_Generic_Server_Object::vrpn_Generic_Server_Object(
 					VRPN_CHECK(setup_LeapMotion);
 				} else if ( VRPN_ISIT("vrpn_KinectV1") ) {
 					VRPN_CHECK(setup_KinectV1);
+				} else if ( VRPN_ISIT("vrpn_OculusDK1") ) {
+					VRPN_CHECK(setup_OculusDK1);
 				} else {                         // Never heard of it
 					sscanf(line, "%511s", s1); // Find out the class name
 					fprintf(stderr, "vrpn_server: Unknown Device: %s\n", s1);
