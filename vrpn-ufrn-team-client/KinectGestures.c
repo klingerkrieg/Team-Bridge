@@ -74,9 +74,6 @@ void KinectGestures::assignChecker(std::vector<KeyMap> &map) {
 			case KINECT_STEP_NORMAL:
 				keyMap->assignGestureChecker(TRACK_TYPE, (KeyMap::gestureCheckerMethod)&KinectGestures::detectTopChangeNormal, this);//criar um metodo pra cada
 				break;
-			case KINECT_SET_CENTER_POS:
-				keyMap->assignGestureChecker(TRACK_TYPE, (KeyMap::gestureCheckerMethod)&KinectGestures::setCenterPos, this);//criar um metodo pra cada
-				break;
 		}
 	}
 }
@@ -238,35 +235,16 @@ int KinectGestures::detectHandTop(SkeletonPart * skelPart, KeyMap * keyMap) {
 }
 
 
-int KinectGestures::detectLeftHandTop(void * data, KeyMap * keyMap) {
-	SkeletonPart * skelPart = (SkeletonPart*)data;
-	
-	if ( skelPart->skelConstant == SKELETON_HAND_L ) {
-		return detectHandTop(skelPart, keyMap);
-	}
-	return -1;
-}
-
-int KinectGestures::detectRightHandTop(void * data, KeyMap * keyMap) {
-	SkeletonPart * skelPart = (SkeletonPart*)data;
-	
-	if ( skelPart->skelConstant == SKELETON_HAND_R ) {
-		return detectHandTop(skelPart, keyMap);
-	}
-	return -1;
-}
-
-
 
 /*
-	Posição das mãos eixo X
+	Posição das mãos eixo X e Y
 */
 
 
 /**
 * Esse metodo depende do detectHandTop, ele deve ser chamado primeiro para captura da posicao central
 */
-int KinectGestures::detectLeftHandXPos(void * data, KeyMap * keyMap) {
+int KinectGestures::detectLeftHandTop(void * data, KeyMap * keyMap) {
 	SkeletonPart * skelPart = (SkeletonPart*)data;
 
 	if ( skelPart->skelConstant == SKELETON_HAND_L ) {
@@ -278,7 +256,7 @@ int KinectGestures::detectLeftHandXPos(void * data, KeyMap * keyMap) {
 /**
 * Esse metodo depende do detectHandTop, ele deve ser chamado primeiro para captura da posicao central
 */
-int KinectGestures::detectRightHandXPos(void * data, KeyMap * keyMap) {
+int KinectGestures::detectRightHandTop(void * data, KeyMap * keyMap) {
 	SkeletonPart * skelPart = (SkeletonPart*)data;
 
 	if ( skelPart->skelConstant == SKELETON_HAND_R ) {
@@ -296,9 +274,14 @@ int KinectGestures::detectHandXPos(SkeletonPart * skelPart, KeyMap * keyMap) {
 		return -1;
 	}
 	double hipCenterX = skeleton[skelPart->skeletonName].hipCenter.x;
-	//Verifica se está na altura correta
+	//Verifica eixo Y
 	if ( detectHandTop(skelPart, keyMap) == false) {
 		return false;
+	}
+
+	//Se nao possui X já retorna
+	if ( keyMap->getX() == -100 ) {
+		return true;
 	}
 
 	bool ret = false;
@@ -417,15 +400,6 @@ int KinectGestures::detectTopChange(SkeletonPart * skelPart, KeyMap * keyMap, in
 
 
 
-
-int KinectGestures::setCenterPos(void * data, KeyMap * keyMap) {
-	SkeletonPart * skelPart = (SkeletonPart*)data;
-	//Salvao o estado atual do hipcenter
-	kinectDetection[skelPart->skeletonName].hipCenter = skeleton[skelPart->skeletonName].hipCenter;
-	kinectDetection[skelPart->skeletonName].centerPosDefined = true;
-	return true;
-	
-}
 
 
 
@@ -580,40 +554,86 @@ int KinectGestures::detectWalk(void * data, KeyMap * keyMap) {
 */
 
 
+int KinectGestures::setCenterPos(void * data, KeyMap * keyMap) {
+	SkeletonPart * skelPart = (SkeletonPart*)data;
+	//Salvao o estado atual do hipcenter
+	kinectDetection[skelPart->skeletonName].spine = skeleton[skelPart->skeletonName].spine;
+	kinectDetection[skelPart->skeletonName].centerPosDefined = true;
+	return true;
+
+}
+
+
+
+
+
+int KinectGestures::detectTurnBody(SkeletonPart * skelPart, KeyMap * keyMap, int direction) {
+	turnFactor = 20;
+	if ( kinectDetection[skelPart->skeletonName].centerPosDefined == false ) {
+		return -1;
+	}
+
+	double x = skeleton[skelPart->skeletonName].spine.quat_x;
+	double y = skeleton[skelPart->skeletonName].spine.quat_y;
+	double z = skeleton[skelPart->skeletonName].spine.quat_z;
+	double w = skeleton[skelPart->skeletonName].spine.quat_w;
+
+	double newYaw = yaw(x, y, z, w);
+
+	x = kinectDetection[skelPart->skeletonName].spine.quat_x;
+	y = kinectDetection[skelPart->skeletonName].spine.quat_y;
+	z = kinectDetection[skelPart->skeletonName].spine.quat_z;
+	w = kinectDetection[skelPart->skeletonName].spine.quat_w;
+
+	double oldYaw = yaw(x, y, z, w);
+
+	if ( direction == KINECT_LEFT ) {
+		if ( newYaw < oldYaw - turnFactor ) {
+
+	#ifdef THERAPY_MODULE
+			if ( keyMap->getSaveData().compare("") ) {
+				storage->saveToFile(keyMap->getDev().c_str(), keyMap->getSaveData(), newYaw);
+			}
+	#endif
+
+			return 1;
+		}
+	} else 
+	if ( direction == KINECT_RIGHT ) {
+		if ( newYaw > oldYaw + turnFactor ) {
+
+	#ifdef THERAPY_MODULE
+			if ( keyMap->getSaveData().compare("") ) {
+				storage->saveToFile(keyMap->getDev().c_str(), keyMap->getSaveData(), newYaw);
+			}
+	#endif
+
+			return 1;
+		}
+
+	} else {
+		return -1;
+	}
+
+	return 0;
+
+}
+
+
+
 //Z Axis
 int KinectGestures::detectTurnLeft(void * data, KeyMap * keyMap) {
 	SkeletonPart * skelPart = (SkeletonPart*)data;
-	
-	if ( skelPart->skelConstant == SKELETON_HIP_CENTER ) {
-		if ( skelPart->quat_z < kinectDetection[skelPart->skeletonName].hipCenter.quat_z - turnFactor ) {
-
-		#ifdef THERAPY_MODULE
-			if ( keyMap->getSaveData().compare("") ) {
-				storage->saveToFile(keyMap->getDev().c_str(), keyMap->getSaveData(), skelPart->quat_z);
-			}
-		#endif
-			return 1;
-		} else {
-			return 0;
-		}
+	if ( skelPart->skelConstant == SKELETON_SHOULDER_CENTER ) {
+		return detectTurnBody(skelPart, keyMap, KINECT_LEFT);
 	}
 	return -1;
 }
 
 int KinectGestures::detectTurnRight(void * data, KeyMap * keyMap) {
 	SkeletonPart * skelPart = (SkeletonPart*)data;
-	
-	if ( skelPart->skelConstant == SKELETON_HIP_CENTER ) {
-		if ( skelPart->quat_z > kinectDetection[skelPart->skeletonName].hipCenter.quat_z + turnFactor ) {
-		#ifdef THERAPY_MODULE
-			if ( keyMap->getSaveData().compare("") ) {
-				storage->saveToFile(keyMap->getDev().c_str(), keyMap->getSaveData(), skelPart->quat_z);
-			}
-		#endif
-			return 1;
-		} else {
-			return 0;
-		}
+	if ( skelPart->skelConstant == SKELETON_SHOULDER_CENTER ) {
+		return detectTurnBody(skelPart, keyMap, KINECT_RIGHT);
 	}
 	return -1;
 }

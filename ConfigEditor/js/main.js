@@ -199,6 +199,7 @@ function jsonToForm(json){
             if (divBy != undefined){
                 el.val(parseFloat(option[el.attr('id')])*parseInt(divBy));
             }
+
         });
 
         if (option.toKeyWhile != undefined){
@@ -224,6 +225,17 @@ function jsonToForm(json){
             div.find("#saveData").prop("checked",true);
         } else {
             div.find("#saveData").prop("checked",false);
+        }
+
+
+        showExtraActions(div.find('#toKey'));
+        
+        if ( option.mouseX != undefined){
+            div.find("#moveMouseSpace #x").val(option.mouseX);
+            div.find("#moveMouseSpace #y").val(option.mouseY);
+        } else 
+        if ( option.msg != undefined ){
+            div.find("#msg").val(option.msg);
         }
     }
 

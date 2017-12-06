@@ -3,6 +3,7 @@
 
 char GestureCheckerNotDefined::err[500];
 
+std::map<std::string, int> KeyMap::configToCreatedConstants = KeyMap::create_configToCreatedConstants();
 std::map<std::string, int> KeyMap::configToAscii = KeyMap::create_configToAscii();
 std::map<std::string, int> KeyMap::configToScanCode = KeyMap::create_configToScanCode();
 
@@ -61,14 +62,10 @@ std::string KeyMap::toString() {
 		if ( getBtnDown() && getBtnUp() ) {
 			ret += "[AUTO] ";
 		} else
-			if ( getBtnDown() ) {
-				ret += "[DOWN]";
-			} else {
-				ret += "[UP]";
-			}
-
-		if ( getHasOnLeave() ) {
-			ret += "|" + getOnLeave()->toString() + " ";
+		if ( getBtnDown() ) {
+			ret += "[DOWN]";
+		} else {
+			ret += "[UP]";
 		}
 	}
 
@@ -91,6 +88,10 @@ std::string KeyMap::toString() {
 		} else  {
 			ret += " YPOS:=" + std::to_string(getY());
 		}
+	}
+
+	if ( getHasOnLeave() ) {
+		ret += "\nAo sair:" + getOnLeave()->toString() + " ";
 	}
 	
 	ret += "\n";
@@ -224,6 +225,9 @@ KeyMap::KeyMap(json js) {
 	}
 
 
+	std::string finalKey;
+
+
 	if ( !js["msg"].is_null() ) {
 		this->msg = js["msg"].get<std::string>();
 		
@@ -242,24 +246,29 @@ KeyMap::KeyMap(json js) {
 		} else {
 			this->toKey = MESSAGE;
 		}
-
+		finalKey = this->toKeyRepr;
 		this->toKeyRepr = "[" + this->toKeyRepr + "]";
 	} else {
 
 		if ( !js["toKeyWhile"].is_null() ) {
 			setToKey(js["toKeyWhile"].get<std::string>());
+			finalKey = js["toKeyWhile"].get<std::string>();
 		} else {
 
-			this->hasOnLeave = true;
+			this->hasOnLeave = false;
 			this->btnDown = true;
 			this->btnUp = false;
 			
-			if ( !js["toKeyDown"].is_null() )
+			if ( !js["toKeyDown"].is_null() ) {
 				setToKey(js["toKeyDown"].get<std::string>());
+				finalKey = js["toKeyDown"].get<std::string>();
+			}
+				
 
 			if ( !js["toKeyUp"].is_null() ) {
 				onLeave = new KeyMap(this->dev, js["toKeyUp"].get<std::string>());
 				this->hasOnLeave = true;
+				finalKey = js["toKeyUp"].get<std::string>();
 			}
 
 		}
@@ -268,6 +277,17 @@ KeyMap::KeyMap(json js) {
 
 	if ( !js["key"].is_null() )
 		setKey(js["key"].get<std::string>());
+
+	//Checagem para verificar se o que está no json foi realmente aplicado
+	if ( finalKey.compare(toKeyRepr) && this->hasOnLeave == false ) {
+
+		if ( this->hasOnLeave ) {
+			std::string onLeavKeyRepr = this->onLeave->getToKeyRepr();
+			if ( onLeavKeyRepr.compare(toKeyRepr) != 0 ) {
+				printf("Falha na leitura do mapeamento %s -> %s.\n", finalKey.c_str(), toKeyRepr.c_str());
+			}
+		}
+	}
 
 }
 
@@ -306,13 +326,24 @@ void KeyMap::setToKey(std::string toKeyFind) {
 	isBtn = true;
 
 	
-	if ( !toKeyFind.compare("VK_MOUSEMOVE") ) {
+	/*if ( !toKeyFind.compare("VK_MOUSEMOVE") ) {
 		this->toKeyRepr = "VK_MOUSEMOVE";
 		this->toKey = VK_MOUSEMOVE;
-	}
+	}*/
 	
 
 	std::map<std::string, int>::iterator find;
+
+
+	find = KeyMap::configToCreatedConstants.find(toKeyFind);
+
+	if ( find != KeyMap::configToCreatedConstants.end() ) {
+		this->toKey = find->second;
+		this->toKeyIsConstant = true;
+		this->toKeyRepr = find->first;
+		return;
+	}
+
 
 	//Tenta localizar a constante para toKey
 	find = KeyMap::configToAscii.find(toKeyFind);

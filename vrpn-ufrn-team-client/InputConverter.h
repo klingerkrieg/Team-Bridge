@@ -37,6 +37,8 @@ class InputConverter {
 private:
 	 static std::vector<KeyMap> map;
 	 static std::vector<DeviceType> devs;
+
+	 static SkeletonPart skelPart;
 	 GestureRecognizer gr;
  #ifdef THERAPY_MODULE
 	 Storage *storage;

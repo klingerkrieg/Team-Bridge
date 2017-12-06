@@ -11,9 +11,12 @@ void KeyPressAction::run(KeyMap key) {
 
 	if ( key.getToKey() == VK_RBUTTON || key.getToKey() == VK_LBUTTON || key.getToKey() == VK_MBUTTON
 		|| key.getToKey() == VK_MOUSEMOVE
-		|| key.getToKey() == VK_RBUTTON_DOWN || key.getToKey() == VK_LBUTTON_DOWN
-		|| key.getToKey() == VK_RBUTTON_UP || key.getToKey() == VK_LBUTTON_UP
-		|| key.getToKey() == VK_MBUTTON_UP || key.getToKey() == VK_MBUTTON_UP ) {
+		|| key.getToKey() == VK_RBUTTON_DOWN
+		|| key.getToKey() == VK_LBUTTON_DOWN
+		|| key.getToKey() == VK_RBUTTON_UP
+		|| key.getToKey() == VK_LBUTTON_UP
+		|| key.getToKey() == VK_MBUTTON_UP
+		|| key.getToKey() == VK_MBUTTON_UP ) {
 
 
 		INPUT input, inputUp;
@@ -24,88 +27,90 @@ void KeyPressAction::run(KeyMap key) {
 		input.mi.time = 0;
 		inputUp.mi.mouseData = 0;
 		inputUp.mi.time = 0;
+		bool mouseMove = false;
 
 		if ( key.getToKey() == VK_MOUSEMOVE ) {
 			input.mi.dwFlags = MOUSEEVENTF_MOVE;
 			input.mi.dx = key.getMouseX();
 			input.mi.dy = key.getMouseY();
 			//std::cout << "move to x:" << input.mi.dx << "y:" << input.mi.dy << "\n";
+			mouseMove = true;
 		} else
-			if ( key.getToKey() == VK_RBUTTON || key.getToKey() == VK_RBUTTON_DOWN ) {
-				input.mi.dwFlags = MOUSEEVENTF_RIGHTDOWN;
-				inputUp.mi.dwFlags = MOUSEEVENTF_RIGHTUP;
-				//Se o botao ja esta pressionado nao pressiona de novo
-				if ( mouseRightPressed ) {
-					return;
-				}
-				mouseRightPressed = true;
+		if ( key.getToKey() == VK_RBUTTON || key.getToKey() == VK_RBUTTON_DOWN ) {
+			input.mi.dwFlags = MOUSEEVENTF_RIGHTDOWN;
+			inputUp.mi.dwFlags = MOUSEEVENTF_RIGHTUP;
+			//Se o botao ja esta pressionado nao pressiona de novo
+			if ( mouseRightPressed ) {
+				return;
+			}
+			mouseRightPressed = true;
+		} else
+		if ( key.getToKey() == VK_LBUTTON || key.getToKey() == VK_LBUTTON_DOWN ) {
+			input.mi.dwFlags = MOUSEEVENTF_LEFTDOWN;
+			inputUp.mi.dwFlags = MOUSEEVENTF_LEFTUP;
+			//Se o botao ja esta pressionado nao pressiona de novo
+			if ( mouseLeftPressed ) {
+				return;
+			}
+			mouseLeftPressed = true;
+		} else
+		if ( key.getToKey() == VK_MBUTTON || key.getToKey() == VK_MBUTTON_DOWN ) {
+			input.mi.dwFlags = MOUSEEVENTF_MIDDLEDOWN;
+			inputUp.mi.dwFlags = MOUSEEVENTF_MIDDLEUP;
+			if ( mouseMiddlePressed ) {
+				return;
+			}
+			mouseMiddlePressed = true;
+		} else
+		if ( key.getToKey() == VK_RBUTTON_UP ) {
+			input.mi.dwFlags = MOUSEEVENTF_RIGHTUP;
+			//Se o botao nao esta pressionado, nao tem nada pra despressionar
+			if ( mouseRightPressed == false ) {
+				return;
+			}
+			mouseRightPressed = false;
+		} else
+		if ( key.getToKey() == VK_LBUTTON_UP ) {
+			input.mi.dwFlags = MOUSEEVENTF_LEFTUP;
+			if ( mouseLeftPressed == false ) {
+				return;
+			}
+			mouseLeftPressed = false;
+		} else
+		if ( key.getToKey() == VK_MBUTTON_UP ) {
+			input.mi.dwFlags = MOUSEEVENTF_MIDDLEUP;
+			if ( mouseMiddlePressed == false ) {
+				return;
+			}
+			mouseMiddlePressed = false;
+		}
+
+		/*input.mi.mouseData = 0;
+		input.mi.dwExtraInfo = NULL;
+		input.mi.time = 0;*/
+		if ( print && (mouseMiddlePressed || mouseLeftPressed || mouseRightPressed || mouseMove) )
+			printf("Press: %s on windows.\n", key.getToKeyRepr().c_str());
+		else if ( print && (!mouseMiddlePressed && !mouseLeftPressed && !mouseRightPressed && !mouseMove) )
+			printf("Unpress: %s on windows.\n", key.getToKeyRepr().c_str());
+
+		SendInput(1, &input, sizeof(INPUT));
+		ZeroMemory(&input, sizeof(INPUT));
+		//So vai pressionar o soltar se for o evento normal
+		if ( key.getToKey() == VK_RBUTTON || key.getToKey() == VK_LBUTTON || key.getToKey() == VK_MBUTTON ) {
+			//SendInput(1, &inputUp, sizeof(INPUT));
+			ZeroMemory(&inputUp, sizeof(INPUT));
+
+			//Caso tenha sido os dois eventos em um só
+			if ( key.getToKey() == VK_LBUTTON ) {
+				mouseLeftPressed = false;
 			} else
-				if ( key.getToKey() == VK_LBUTTON || key.getToKey() == VK_LBUTTON_DOWN ) {
-					input.mi.dwFlags = MOUSEEVENTF_LEFTDOWN;
-					inputUp.mi.dwFlags = MOUSEEVENTF_LEFTUP;
-					//Se o botao ja esta pressionado nao pressiona de novo
-					if ( mouseLeftPressed ) {
-						return;
-					}
-					mouseLeftPressed = true;
-				} else
-					if ( key.getToKey() == VK_MBUTTON || key.getToKey() == VK_MBUTTON_DOWN ) {
-						input.mi.dwFlags = MOUSEEVENTF_MIDDLEDOWN;
-						inputUp.mi.dwFlags = MOUSEEVENTF_MIDDLEUP;
-						if ( mouseMiddlePressed ) {
-							return;
-						}
-						mouseMiddlePressed = true;
-					} else
-						if ( key.getToKey() == VK_RBUTTON_UP ) {
-							input.mi.dwFlags = MOUSEEVENTF_RIGHTUP;
-							//Se o botao nao esta pressionado, nao tem nada pra despressionar
-							if ( mouseRightPressed == false ) {
-								return;
-							}
-							mouseRightPressed = false;
-						} else
-							if ( key.getToKey() == VK_LBUTTON_UP ) {
-								input.mi.dwFlags = MOUSEEVENTF_LEFTUP;
-								if ( mouseLeftPressed == false ) {
-									return;
-								}
-								mouseLeftPressed = false;
-							} else
-								if ( key.getToKey() == VK_MBUTTON_UP ) {
-									input.mi.dwFlags = MOUSEEVENTF_MIDDLEUP;
-									if ( mouseMiddlePressed == false ) {
-										return;
-									}
-									mouseMiddlePressed = false;
-								}
-
-							/*input.mi.mouseData = 0;
-							input.mi.dwExtraInfo = NULL;
-							input.mi.time = 0;*/
-							if ( print && mouseMiddlePressed )
-								printf("Press: %s on windows.\n", key.getToKeyRepr().c_str());
-							else if ( print && !mouseMiddlePressed )
-								printf("Unpress: %s on windows.\n", key.getToKeyRepr().c_str());
-
-							SendInput(1, &input, sizeof(INPUT));
-							ZeroMemory(&input, sizeof(INPUT));
-							//So vai pressionar o soltar se for o evento normal
-							if ( key.getToKey() == VK_RBUTTON || key.getToKey() == VK_LBUTTON || key.getToKey() == VK_MBUTTON ) {
-								SendInput(1, &inputUp, sizeof(INPUT));
-								ZeroMemory(&inputUp, sizeof(INPUT));
-
-								//Caso tenha sido os dois eventos em um só
-								if ( key.getToKey() == VK_LBUTTON ) {
-									mouseLeftPressed = false;
-								} else
-									if ( key.getToKey() == VK_RBUTTON ) {
-										mouseRightPressed = false;
-									} else
-										if ( key.getToKey() == VK_MBUTTON ) {
-											mouseMiddlePressed = false;
-										}
-							}
+			if ( key.getToKey() == VK_RBUTTON ) {
+				mouseRightPressed = false;
+			} else
+			if ( key.getToKey() == VK_MBUTTON ) {
+				mouseMiddlePressed = false;
+			}
+		}
 
 	} else {
 

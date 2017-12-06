@@ -33,6 +33,7 @@ vrpn_ANALOGCB getAnalogCB() {
 
 SkeletonPart getSkeletonPart() {
 	SkeletonPart skelPart;
+	skelPart.skeletonName = "Tracker0@localhost";
 	skelPart.defined = true;
 	skelPart.x = 1;
 	skelPart.y = 1;

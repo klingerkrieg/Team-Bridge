@@ -19,6 +19,7 @@ public:
 		json js = {
 			{ "divClass", "handTop" },
 			{ "dev" , "Tracker0@localhost" },
+			{ "devType" ,"kinect" },
 			{ "key" , "KINECT_LEFT_HAND_TOP" },
 			{ "x" , -2 },
 			{ "coordinateMod" , "<=" },
@@ -38,6 +39,7 @@ public:
 		js = {
 			{ "divClass", "kinectWalking" },
 			{ "dev" , "Tracker0@localhost" },
+			{ "devType" ,"kinect" },
 			{ "key" , "KINECT_WALK" },
 			{ "delay" , 1000 },
 			{ "sensivity" , 0.1 },
@@ -51,6 +53,7 @@ public:
 		js = {
 			{ "divClass","kinectBalance" },
 			{ "dev" ,"Tracker0@localhost" },
+			{ "devType" ,"kinect" },
 			{ "key" ,"KINECT_BALANCE" },
 			{ "angleMod" ,">" },
 			{ "angle" ,35 },
@@ -67,6 +70,7 @@ public:
 		js = {
 			{ "divClass", "kinectFastHand" },
 			{ "dev" , "Tracker0@localhost" },
+			{ "devType" ,"kinect" },
 			{ "key" , "KINECT_LEFT_HAND_FAST" },
 			{ "maxVelocityMs" , 4 },
 			{ "msg" ,"Mensagem" },

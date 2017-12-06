@@ -53,3 +53,14 @@ std::string utf8to16(std::string text) {
 	}
 	return utf16line;
 }
+
+
+double yaw(double x, double y, double z, double w) {
+	double value = 2.0 * (w * y - z * x);
+	value = value > 1.0 ? 1.0 : value;
+	value = value < -1.0 ? -1.0 : value;
+
+	double yaw = std::asin(value);
+
+	return yaw * (180.0 / 3.14);
+}

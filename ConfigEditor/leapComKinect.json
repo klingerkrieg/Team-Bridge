@@ -1,0 +1,23 @@
+{
+  "common": {
+    "patientName": "",
+    "saveDir": "./SAVES/",
+    "KINECT_X_INTERVAL": 0.35,
+    "host": "",
+    "database": "",
+    "user": "",
+    "passwd": ""
+  },
+  "keys": [
+    {
+      "divClass": "leapCloseHand",
+      "devType": "leapMotion",
+      "key": "LEAP_CLOSED",
+      "dev": "LeapMotion0@localhost",
+      "angleMin": 2.5,
+      "angleMax": 0,
+      "toKeyDown": "D",
+      "toKeyUp": "D"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "common": {
+    "patientName": "",
+    "saveDir": "./SAVES/",
+    "KINECT_X_INTERVAL": 0.35,
+    "host": "",
+    "database": "",
+    "user": "",
+    "passwd": ""
+  },
+  "keys": [
+    {
+      "divClass": "handTop",
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_RIGHT_HAND_TOP",
+      "x": 1,
+      "coordinateMod": "=",
+      "y": 2,
+      "mouseX": 1,
+      "mouseY": 0,
+      "toKeyDown": "VK_MOUSEMOVE"
+    }
+  ]
+}

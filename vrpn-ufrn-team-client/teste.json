@@ -16,8 +16,7 @@
       "key": "KINECT_TURN_LEFT",
       "mouseX": -1,
       "mouseY": 0,
-      "toKeyDown": "VK_MOUSEMOVE",
-      "toKeyUp": "VK_MOUSEMOVE"
+      "toKeyWhile": "VK_MOUSEMOVE"
     },
     {
       "divClass": "kinectTurn",
@@ -26,8 +25,7 @@
       "key": "KINECT_TURN_RIGHT",
       "mouseX": 1,
       "mouseY": 0,
-      "toKeyDown": "VK_MOUSEMOVE",
-      "toKeyUp": "VK_MOUSEMOVE"
+      "toKeyWhile": "VK_MOUSEMOVE"
     },
     {
       "divClass": "handTop",
@@ -36,7 +34,7 @@
       "key": "KINECT_LEFT_HAND_TOP",
       "x": 0,
       "coordinateMod": "=",
-      "y": 5,
+      "y": 3,
       "toKeyDown": "KINECT_SET_CENTER_POS",
       "toKeyUp": "KINECT_SET_CENTER_POS"
     }

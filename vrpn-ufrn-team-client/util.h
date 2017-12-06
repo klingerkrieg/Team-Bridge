@@ -25,3 +25,5 @@ double mag(std::vector<double> a);
 double det(std::vector<double> a, std::vector<double> b);
 
 std::string utf8to16(std::string text);
+
+double yaw(double x, double y, double z, double w);

@@ -213,10 +213,13 @@
     <None Include="drunkbug.json" />
     <None Include="kayak.json" />
     <None Include="leapmotion.json" />
+    <None Include="mountAndBlade.json" />
     <None Include="mouse.json" />
+    <None Include="mousemove.json" />
     <None Include="nedglove.json" />
     <None Include="performance.json" />
     <None Include="runner.json" />
+    <None Include="teste.json" />
     <None Include="twoplayers.json" />
     <None Include="vrpn-client-mb.cfg" />
   </ItemGroup>

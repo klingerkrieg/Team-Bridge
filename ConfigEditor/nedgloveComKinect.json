@@ -1,0 +1,23 @@
+{
+  "common": {
+    "patientName": "",
+    "saveDir": "./SAVES/",
+    "KINECT_X_INTERVAL": 0.35,
+    "host": "",
+    "database": "",
+    "user": "",
+    "passwd": ""
+  },
+  "keys": [
+    {
+      "divClass": "nedGloveGrab",
+      "devType": "nedGlove",
+      "dev": "NEDGLOVE",
+      "key": "NEDGLOVE_GRAB",
+      "strengthMin": 40,
+      "strengthMax": 0,
+      "toKeyDown": "D",
+      "toKeyUp": "D"
+    }
+  ]
+}

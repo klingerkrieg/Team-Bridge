@@ -188,5 +188,8 @@
     <None Include="mouse.json" />
     <None Include="twoplayers.json" />
     <None Include="leapmotion.json" />
+    <None Include="mountAndBlade.json" />
+    <None Include="mousemove.json" />
+    <None Include="teste.json" />
   </ItemGroup>
 </Project>

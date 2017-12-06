@@ -13,6 +13,7 @@
 
 #include "vrpn_BaseClass.h" // for ::vrpn_TEXT_NORMAL, etc
 
+#include <math.h>
 
 VRPN_SUPPRESS_EMPTY_OBJECT_WARNING()
 
@@ -89,6 +90,8 @@ bool vrpn_KinectV1::connect() {
 
 				// Open a skeleton stream to receive skeleton data
 				hr = m_pNuiSensor->NuiSkeletonTrackingEnable(m_hNextSkeletonEvent, 0);
+				//Sentado
+				//hr = m_pNuiSensor->NuiSkeletonTrackingEnable(m_hNextSkeletonEvent, NUI_SKELETON_TRACKING_FLAG_ENABLE_SEATED_SUPPORT);
 			}
 		}
 
@@ -98,6 +101,7 @@ bool vrpn_KinectV1::connect() {
 			continue;
 		}
 
+		
 		connected = true;
 		printf("Kinect conectado.\n");
 	}
@@ -149,20 +153,22 @@ bool vrpn_KinectV1::onFrame() {
 	vrpn_gettimeofday(&t, NULL);
 
 	// smooth out the skeleton data
-	m_pNuiSensor->NuiTransformSmooth(&skeletonFrame, NULL);
+	//m_pNuiSensor->NuiTransformSmooth(&skeletonFrame, NULL);
+	
 	
 	NUI_SKELETON_BONE_ORIENTATION boneOrientations[NUI_SKELETON_POSITION_COUNT];
 	int countSkeletons = 0;
 	for ( int i = 0; i < NUI_SKELETON_COUNT; ++i ) {
 		NUI_SKELETON_TRACKING_STATE trackingState = skeletonFrame.SkeletonData[i].eTrackingState;
 		NuiSkeletonCalculateBoneOrientations(&skeletonFrame.SkeletonData[i], boneOrientations);
+		
 
 		int sensor = 0;
 		if ( NUI_SKELETON_TRACKED == trackingState ) {
 			countSkeletons++;
-			for ( int y = 0; y < 20; y++ ) {
+			for ( int h = 0; h < 20; h++ ) {
 				//Essa adaptação é necessária para enviar os mesmos pontos do FAAST
-				switch ( y ) {
+				switch ( h ) {
 					case 3:
 						sensor = 0;
 						break;
@@ -176,13 +182,33 @@ bool vrpn_KinectV1::onFrame() {
 						sensor = 3;
 						break;
 					default:
-						sensor = y;
+						sensor = h;
 					break;
 				}
 
-				NUI_SKELETON_BONE_ORIENTATION & orientation = boneOrientations[y];
+				NUI_SKELETON_BONE_ORIENTATION & orientation = boneOrientations[h];
+
+				if ( sensor == 1 ) {
+
+					double x = orientation.absoluteRotation.rotationQuaternion.x;
+					double y = orientation.absoluteRotation.rotationQuaternion.y;
+					double z = orientation.absoluteRotation.rotationQuaternion.z;
+					double w = orientation.absoluteRotation.rotationQuaternion.w;
+
+
+					double value = 2.0 * (w * y - z * x);
+					value = value > 1.0 ? 1.0 : value;
+					value = value < -1.0 ? -1.0 : value;
+
+					double pitch = std::asin(value);
+
+					//printf("%.2f\n", pitch * (180.0 / 3.14));
+
+					printf("%.2f %.2f %.2f %.2f\n", x, y ,z, w);
+
+				}
 				
-				reportPose(sensor, t, skeletonFrame.SkeletonData[i].SkeletonPositions[y],
+				reportPose(sensor, t, skeletonFrame.SkeletonData[i].SkeletonPositions[h],
 						   orientation.absoluteRotation.rotationQuaternion);
 			}
 		}

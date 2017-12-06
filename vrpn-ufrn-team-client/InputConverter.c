@@ -8,6 +8,7 @@ std::vector<KeyMap> InputConverter::map;
 std::vector<DeviceType> InputConverter::devs;
 
 
+SkeletonPart InputConverter::skelPart;
 
 std::map<std::string, DeviceSensorCount> InputConverter::devicesSensorsCount;
 
@@ -21,6 +22,12 @@ double InputConverter::secMed = 0;
 
 void InputConverter::interpretKeyMap(KeyMap &keyMap) {
 	
+	if ( keyMap.getToKey() == KINECT_SET_CENTER_POS ) {
+		gr.setCenterPos(&skelPart, &keyMap);
+		printf("Center pos defined.");
+		if ( viewOn )
+			view->showMsg("Posição definida.");
+	} else
 	if ( keyMap.getToKey() == ALERT ) {
 		if ( viewOn )
 			view->showAlert(keyMap.getMsg());
@@ -38,23 +45,35 @@ void InputConverter::interpretKeyMap(KeyMap &keyMap) {
 bool InputConverter::interpretOnLeave(bool active, KeyMap &keyMap) {
 
 	//Se esta esperando para soltar a tecla e a tecla foi solta
-	if ( keyMap.getWaitingLeave() && !active ) {
-		interpretKeyMap((*keyMap.getOnLeave()));
-		keyMap.setWaitingLeave(false);
+	if ( keyMap.getActive() && !active ) {
+		printf("sai\n");
+		if ( keyMap.getHasOnLeave() ) {
+			interpretKeyMap((*keyMap.getOnLeave()));
+		}
+		keyMap.setActive(false);
 		return true;
 	} else
 	if ( active ) {
 		//Se foi ativada
 		if ( keyMap.getHasOnLeave() ) {
 			//Verifica se tem evento de saida
-			if ( !keyMap.getWaitingLeave() ) {
+			if ( !keyMap.getActive() ) {
 				//Se tiver so aciona o comando novamente se ele nao estiver esperando evento de saida
 				interpretKeyMap(keyMap);
 			}
-			keyMap.setWaitingLeave(true);
+			keyMap.setActive(true);
 		} else {
-			//Se nao tiver evento de saida aciona normalmente
-			interpretKeyMap(keyMap);
+
+			if ( keyMap.getActive() == false ) {
+				//Se nao tiver evento de saida aciona normalmente
+				interpretKeyMap(keyMap);
+			}
+
+			//se não tem hasOnLeave
+			if ( keyMap.getBtnUp() == false ) {
+				keyMap.setActive(true);
+			}
+
 		}
 		return true;
 	}
@@ -67,7 +86,7 @@ InputConverter::~InputConverter() {
 	for ( size_t keyMapId = 0; keyMapId < map.size(); keyMapId++ ) {
 		keyMap = &map.at(keyMapId);
 
-		if (keyMap->getWaitingLeave()) {
+		if (keyMap->getActive()) {
 			interpretOnLeave(0, (*keyMap));
 		}
 	}
@@ -76,7 +95,7 @@ InputConverter::~InputConverter() {
 
 bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKERCB t) {
 
-	SkeletonPart skelPart;
+	skelPart;
 
 	//Identifica qual dispositivo esta sendo usado
 	int devType = -1;
@@ -114,6 +133,7 @@ bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKE
 	//int activeSecondary;
 	bool pressed = false;
 	KeyMap *keyMap;
+	int z = 0;
 
 
 	for ( size_t keyMapId = 0; keyMapId < map.size(); keyMapId++){
@@ -121,6 +141,9 @@ bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKE
 
 		if ( !strcmp(userdata->name, keyMap->getDev().c_str()) ) {
 			if ( keyMap->getGestureCheckerDefined() ) {
+
+
+				
 				try {
 					active = keyMap->callGestureChecker(skelPart);
 				} catch ( ... ) {
@@ -128,8 +151,16 @@ bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKE
 					active = -1;
 				}
 
+				
+				z++;
+
 				//será -1 quando não for o sensor responsável pelo gesto
 				if ( active != -1 ) {
+
+					/*if ( keyMap->getToKeyRepr().compare("VK_LBUTTON_DOWN") ) {
+						printf("%d\n", active);
+					}*/
+					
 					//Se pelo menos uma foi pressionada
 					//nao pode retornar aqui porque podem ter outros comandos
 					if ( interpretOnLeave(active, (*keyMap)) ) {
@@ -189,7 +220,7 @@ bool InputConverter::checkAnalog(const char *name, const vrpn_ANALOGCB a) {
 	bool pressed = false;
 	int active;
 	KeyMap *keyMap;
-
+	
 	for ( size_t keyMapId = 0; keyMapId < map.size(); keyMapId++ ) {
 		keyMap = &map.at(keyMapId);
 

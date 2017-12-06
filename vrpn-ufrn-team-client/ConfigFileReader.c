@@ -8,7 +8,7 @@ void ConfigFileReader::printConfig(std::vector<DeviceType> &devs,
 
 	printf("\n*******************\n");
 
-	printf("\nKinect");
+	printf("\nKinect\n");
 
 	printf("KINECT_X_INTERVAL=%.2f\n", KinectGestures::getKinectXInterval());
 
@@ -40,6 +40,10 @@ bool ConfigFileReader::readConfigFile(char * fileName,
 	std::ifstream inputFile;
 	
 	inputFile.open(fileName);
+	if ( !inputFile.is_open() ) {
+		printf("Falha ao abrir o arquivo %s", fileName);
+		return false;
+	}
 	json js;
 	inputFile >> js;
 

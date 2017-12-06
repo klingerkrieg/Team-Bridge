@@ -5,6 +5,7 @@
 #include <time.h>
 #include "FlexedMember.h"
 #include "KeyMap.h"
+#include "util.h"
 
 const int KINECT_UP = 1;
 const int KINECT_DOWN = 2;
@@ -17,7 +18,7 @@ const int KINECT_BACK = 4;
 
 struct KinectDetection {
 	bool centerPosDefined = false;
-	SkeletonPart hipCenter;
+	SkeletonPart spine;
 	
 	std::map<int, std::vector<double>> lastMemberPos;
 	std::map<long, long> lastMemberTime;
@@ -49,7 +50,7 @@ private:
 	//Garanto que ele ira calcular a distancia em intervalo de tempo de 250 a 300ms
 	double fastMemberDelay = 250;
 
-	double turnFactor = 0.07;
+	double turnFactor = 0.06;
 
 	bool detectWalkHeight(SkeletonPart * skelPart, KeyMap * keyMap, double &kneeLastHeight);
 	int detectBody(SkeletonPart * skelPart, KeyMap * keyMap ,int direction);
@@ -90,10 +91,6 @@ public:
 
 	double euclidianDistance(std::vector<double> pos1, std::vector<double> pos2);
 
-	int detectLeftHandTop(void * data, KeyMap * keyMap);
-
-	int detectRightHandTop(void * data, KeyMap * keyMap);
-
 
 
 	int detectLeftHandFast(void * data, KeyMap * keyMap);
@@ -112,14 +109,14 @@ public:
 
 	int detectWalk(void * data, KeyMap * keyMap);
 
-
+	int detectTurnBody(SkeletonPart * skelPart, KeyMap * keyMap, int direction);
 	int detectTurnLeft(void * data, KeyMap * keyMap);
 	int detectTurnRight(void * data, KeyMap * keyMap);
 
 
 
-	int detectLeftHandXPos(void * data, KeyMap * keyMap);
-	int detectRightHandXPos(void * data, KeyMap * keyMap);
+	int detectLeftHandTop(void * data, KeyMap * keyMap);
+	int detectRightHandTop(void * data, KeyMap * keyMap);
 	
 	int bodyBalance(void * data, KeyMap * keyMap);
 

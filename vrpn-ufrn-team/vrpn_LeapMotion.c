@@ -97,8 +97,9 @@ void vrpn_LeapMotion::reportPose(int sensor, timeval t, Leap::Vector position) {
 
 
 void vrpn_LeapMotion::onFrame(const Leap::Controller& controller) {
+
 	const Leap::Frame frame = controller.frame();
-	
+
 
 	timeval t;
 	vrpn_gettimeofday(&t, NULL);
@@ -108,16 +109,15 @@ void vrpn_LeapMotion::onFrame(const Leap::Controller& controller) {
 
 	int handCount = hands.count();
 	//Se a mão desejada não estiver presente
-	if ( handCount < handId+1 ) {
+	if ( handCount < handId + 1 ) {
 		return;
 	}
 
-	
 	channel[0] = hands[handId].grabAngle();
 	channel[1] = hands[handId].pinchDistance();
 
 	vrpn_Analog::report();
-	
+
 
 	//Tracker Code
 	Leap::FingerList fingers;
@@ -156,5 +156,7 @@ void vrpn_LeapMotion::onFrame(const Leap::Controller& controller) {
 			vrpn_SleepMsecs(1);
 		}
 	}
+
+	
 
 }

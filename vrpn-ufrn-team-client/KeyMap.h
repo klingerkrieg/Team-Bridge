@@ -113,7 +113,7 @@ private:
 	bool verified = false;
 
 	//Sera verdadeiro caso a tecla esteja acionada e esperando o desacionamento
-	bool waitingLeave = false;
+	bool active = false;
 
 	
 	//Caso possua um evento para desacionar uma tecla
@@ -305,12 +305,12 @@ public:
 		return onLeave;
 	}
 
-	bool getWaitingLeave() {
-		return waitingLeave;
+	bool getActive() {
+		return active;
 	}
 
-	void setWaitingLeave(bool wait) {
-		waitingLeave = wait;
+	void setActive(bool wait) {
+		active = wait;
 	}
 
 	int getCoordinateMod() {
@@ -383,8 +383,32 @@ public:
 	void KeyMap::setKey(std::string key);
 
 
+	static  std::map<std::string, int> configToCreatedConstants;
 	static  std::map<std::string, int> configToAscii;
 	static  std::map<std::string, int> configToScanCode;
+
+
+	static std::map<std::string, int> create_configToCreatedConstants() {
+		//Caso o mapa ja tenha sido criado, nao cria novamente
+		if ( configToCreatedConstants.size() > 0 ) {
+			return configToCreatedConstants;
+		}
+
+		std::map < std::string, int > m;
+
+		m["VK_LBUTTON_DOWN"] = VK_LBUTTON_DOWN;
+		m["VK_LBUTTON_UP"] = VK_LBUTTON_UP;
+		m["VK_RBUTTON_DOWN"] = VK_RBUTTON_DOWN;
+		m["VK_RBUTTON_UP"] = VK_RBUTTON_UP;
+		m["VK_MBUTTON_DOWN"] = VK_MBUTTON_DOWN;
+		m["VK_MBUTTON_UP"] = VK_MBUTTON_UP;
+		m["VK_MOUSEMOVE"] = VK_MOUSEMOVE;
+		m["KINECT_SET_CENTER_POS"] = KINECT_SET_CENTER_POS;
+		
+
+		return m;
+	}
+
 	
 	static std::map<std::string, int> create_configToAscii() {
 		//Caso o mapa ja tenha sido criado, nao cria novamente
@@ -445,13 +469,7 @@ public:
 		m["VK_LBUTTON"] = VK_LBUTTON;
 		m["VK_MBUTTON"] = VK_MBUTTON;
 		m["VK_RBUTTON"] = VK_RBUTTON;
-		m["VK_LBUTTON_DOWN"] = VK_LBUTTON_DOWN;
-		m["VK_LBUTTON_UP"] = VK_LBUTTON_UP;
-		m["VK_RBUTTON_DOWN"] = VK_RBUTTON_DOWN;
-		m["VK_RBUTTON_UP"] = VK_RBUTTON_UP;
-		m["VK_MBUTTON_DOWN"] = VK_MBUTTON_DOWN;
-		m["VK_MBUTTON_UP"] = VK_MBUTTON_UP;
-
+		
 		
 		return m;
 	}

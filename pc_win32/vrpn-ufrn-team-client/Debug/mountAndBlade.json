@@ -11,7 +11,7 @@
   "keys": [
     {
       "divClass": "handTop",
-      "devType": "",
+      "devType": "kinect",
       "dev": "Tracker0@localhost",
       "key": "KINECT_LEFT_HAND_TOP",
       "x": 0,
@@ -21,7 +21,7 @@
     },
     {
       "divClass": "handTop",
-      "devType": "",
+      "devType": "kinect",
       "dev": "Tracker0@localhost",
       "key": "KINECT_LEFT_HAND_TOP",
       "x": 0,
@@ -31,7 +31,17 @@
     },
     {
       "divClass": "handTop",
-      "devType": "",
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_RIGHT_HAND_TOP",
+      "x": 0,
+      "coordinateMod": "=",
+      "y": 2,
+      "toKeyDown": "VK_LBUTTON_UP"
+    },
+    {
+      "divClass": "handTop",
+      "devType": "kinect",
       "dev": "Tracker0@localhost",
       "key": "KINECT_RIGHT_HAND_TOP",
       "x": 1,
@@ -41,41 +51,41 @@
     },
     {
       "divClass": "handTop",
-      "devType": "",
+      "devType": "kinect",
       "dev": "Tracker0@localhost",
       "key": "KINECT_RIGHT_HAND_TOP",
       "x": 1,
       "coordinateMod": "=",
       "y": 2,
-      "mouseX": 0,
+      "mouseX": 1,
       "mouseY": 0,
       "toKeyDown": "VK_MOUSEMOVE"
     },
     {
       "divClass": "handTop",
-      "devType": "",
+      "devType": "kinect",
       "dev": "Tracker0@localhost",
       "key": "KINECT_RIGHT_HAND_TOP",
       "x": 0,
-      "coordinateMod": "<=",
+      "coordinateMod": ">=",
       "y": 3,
       "toKeyDown": "VK_LBUTTON_DOWN"
     },
     {
       "divClass": "handTop",
-      "devType": "",
+      "devType": "kinect",
       "dev": "Tracker0@localhost",
       "key": "KINECT_RIGHT_HAND_TOP",
       "x": 0,
       "coordinateMod": ">=",
       "y": 3,
       "mouseX": 0,
-      "mouseY": 0,
+      "mouseY": 1,
       "toKeyDown": "VK_MOUSEMOVE"
     },
     {
       "divClass": "handTop",
-      "devType": "",
+      "devType": "kinect",
       "dev": "Tracker0@localhost",
       "key": "KINECT_RIGHT_HAND_TOP",
       "x": -1,
@@ -86,20 +96,19 @@
     {
       "divClass": "handTop",
       "devType": "kinect",
-      "dev": "KINECT",
+      "dev": "Tracker0@localhost",
       "key": "KINECT_RIGHT_HAND_TOP",
       "x": -1,
       "coordinateMod": "=",
       "y": 2,
-      "mouseX": 0,
+      "mouseX": -1,
       "mouseY": 0,
-      "toKeyDown": "VK_MOUSEMOVE",
-      "toKeyUp": "VK_MOUSEMOVE"
+      "toKeyDown": "VK_MOUSEMOVE"
     },
     {
       "divClass": "kinectWalking",
       "devType": "kinect",
-      "dev": "KINECT",
+      "dev": "Tracker0@localhost",
       "key": "KINECT_WALK",
       "delay": 1000,
       "sensivity": 0.1,
@@ -109,9 +118,9 @@
     {
       "divClass": "kinectTurn",
       "devType": "kinect",
-      "dev": "KINECT",
+      "dev": "Tracker0@localhost",
       "key": "KINECT_TURN_LEFT",
-      "mouseX": 0,
+      "mouseX": -1,
       "mouseY": 0,
       "toKeyDown": "VK_MOUSEMOVE",
       "toKeyUp": "VK_MOUSEMOVE"
@@ -119,9 +128,9 @@
     {
       "divClass": "kinectTurn",
       "devType": "kinect",
-      "dev": "KINECT",
+      "dev": "Tracker0@localhost",
       "key": "KINECT_TURN_RIGHT",
-      "mouseX": 0,
+      "mouseX": 1,
       "mouseY": 0,
       "toKeyDown": "VK_MOUSEMOVE",
       "toKeyUp": "VK_MOUSEMOVE"
@@ -129,13 +138,23 @@
     {
       "divClass": "handTop",
       "devType": "kinect",
-      "dev": "KINECT",
+      "dev": "Tracker0@localhost",
       "key": "KINECT_LEFT_HAND_TOP",
       "x": 0,
       "coordinateMod": "=",
       "y": 5,
       "toKeyDown": "KINECT_SET_CENTER_POS",
       "toKeyUp": "KINECT_SET_CENTER_POS"
+    },
+    {
+      "divClass": "kinectStep",
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_STEP_DOWN",
+      "sensivity": 0.1,
+      "mouseX": 0,
+      "mouseY": 5,
+      "toKeyWhile": "VK_MOUSEMOVE"
     }
   ]
 }
