@@ -46,7 +46,7 @@ bool InputConverter::interpretOnLeave(bool active, KeyMap &keyMap) {
 
 	//Se esta esperando para soltar a tecla e a tecla foi solta
 	if ( keyMap.getActive() && !active ) {
-		printf("sai\n");
+		
 		if ( keyMap.getHasOnLeave() ) {
 			interpretKeyMap((*keyMap.getOnLeave()));
 		}

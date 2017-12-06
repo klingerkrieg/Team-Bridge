@@ -188,7 +188,7 @@ bool vrpn_KinectV1::onFrame() {
 
 				NUI_SKELETON_BONE_ORIENTATION & orientation = boneOrientations[h];
 
-				if ( sensor == 1 ) {
+				/*if ( sensor == 1 ) {
 
 					double x = orientation.absoluteRotation.rotationQuaternion.x;
 					double y = orientation.absoluteRotation.rotationQuaternion.y;
@@ -206,7 +206,7 @@ bool vrpn_KinectV1::onFrame() {
 
 					printf("%.2f %.2f %.2f %.2f\n", x, y ,z, w);
 
-				}
+				}*/
 				
 				reportPose(sensor, t, skeletonFrame.SkeletonData[i].SkeletonPositions[h],
 						   orientation.absoluteRotation.rotationQuaternion);

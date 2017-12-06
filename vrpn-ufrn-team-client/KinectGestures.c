@@ -568,7 +568,7 @@ int KinectGestures::setCenterPos(void * data, KeyMap * keyMap) {
 
 
 int KinectGestures::detectTurnBody(SkeletonPart * skelPart, KeyMap * keyMap, int direction) {
-	turnFactor = 20;
+	
 	if ( kinectDetection[skelPart->skeletonName].centerPosDefined == false ) {
 		return -1;
 	}
@@ -600,7 +600,8 @@ int KinectGestures::detectTurnBody(SkeletonPart * skelPart, KeyMap * keyMap, int
 		}
 	} else 
 	if ( direction == KINECT_RIGHT ) {
-		if ( newYaw > oldYaw + turnFactor ) {
+		//Por algum motivo o giro pra direita é menos sensível com o KinectV1
+		if ( newYaw > oldYaw + (turnFactor-30) ) {
 
 	#ifdef THERAPY_MODULE
 			if ( keyMap->getSaveData().compare("") ) {

@@ -120,20 +120,18 @@
       "devType": "kinect",
       "dev": "Tracker0@localhost",
       "key": "KINECT_TURN_LEFT",
-      "mouseX": -1,
+      "mouseX": -15,
       "mouseY": 0,
-      "toKeyDown": "VK_MOUSEMOVE",
-      "toKeyUp": "VK_MOUSEMOVE"
+      "toKeyWhile": "VK_MOUSEMOVE"
     },
     {
       "divClass": "kinectTurn",
       "devType": "kinect",
       "dev": "Tracker0@localhost",
       "key": "KINECT_TURN_RIGHT",
-      "mouseX": 1,
+      "mouseX": 15,
       "mouseY": 0,
-      "toKeyDown": "VK_MOUSEMOVE",
-      "toKeyUp": "VK_MOUSEMOVE"
+      "toKeyWhile": "VK_MOUSEMOVE"
     },
     {
       "divClass": "handTop",

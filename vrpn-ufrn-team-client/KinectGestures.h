@@ -50,7 +50,7 @@ private:
 	//Garanto que ele ira calcular a distancia em intervalo de tempo de 250 a 300ms
 	double fastMemberDelay = 250;
 
-	double turnFactor = 0.06;
+	double turnFactor = 60;
 
 	bool detectWalkHeight(SkeletonPart * skelPart, KeyMap * keyMap, double &kneeLastHeight);
 	int detectBody(SkeletonPart * skelPart, KeyMap * keyMap ,int direction);
