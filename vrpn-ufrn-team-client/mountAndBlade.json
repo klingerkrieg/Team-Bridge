@@ -120,7 +120,8 @@
       "devType": "kinect",
       "dev": "Tracker0@localhost",
       "key": "KINECT_TURN_LEFT",
-      "mouseX": -15,
+      "angle": 40,
+      "mouseX": -20,
       "mouseY": 0,
       "toKeyWhile": "VK_MOUSEMOVE"
     },
@@ -129,7 +130,8 @@
       "devType": "kinect",
       "dev": "Tracker0@localhost",
       "key": "KINECT_TURN_RIGHT",
-      "mouseX": 15,
+      "angle": 40,
+      "mouseX": 20,
       "mouseY": 0,
       "toKeyWhile": "VK_MOUSEMOVE"
     },

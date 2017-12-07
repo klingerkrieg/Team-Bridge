@@ -16,8 +16,8 @@
       "dev": "LeapMotion0@localhost",
       "angleMin": 2.5,
       "angleMax": 0,
-      "toKeyDown": "A",
-      "toKeyUp": "A"
+      "toKeyDown": "D",
+      "toKeyUp": "D"
     }
   ]
 }

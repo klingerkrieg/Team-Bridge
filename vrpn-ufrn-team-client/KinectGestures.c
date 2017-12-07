@@ -588,7 +588,7 @@ int KinectGestures::detectTurnBody(SkeletonPart * skelPart, KeyMap * keyMap, int
 	double oldYaw = yaw(x, y, z, w);
 
 	if ( direction == KINECT_LEFT ) {
-		if ( newYaw < oldYaw - turnFactor ) {
+		if ( newYaw < oldYaw - keyMap->getAngle() ) {
 
 	#ifdef THERAPY_MODULE
 			if ( keyMap->getSaveData().compare("") ) {
@@ -601,7 +601,7 @@ int KinectGestures::detectTurnBody(SkeletonPart * skelPart, KeyMap * keyMap, int
 	} else 
 	if ( direction == KINECT_RIGHT ) {
 		//Por algum motivo o giro pra direita é menos sensível com o KinectV1
-		if ( newYaw > oldYaw + (turnFactor-30) ) {
+		if ( newYaw > oldYaw + keyMap->getAngle()) {
 
 	#ifdef THERAPY_MODULE
 			if ( keyMap->getSaveData().compare("") ) {

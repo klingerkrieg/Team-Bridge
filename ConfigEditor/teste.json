@@ -14,31 +14,20 @@
       "devType": "kinect",
       "dev": "Tracker0@localhost",
       "key": "KINECT_TURN_LEFT",
+      "angle": 40,
       "mouseX": -1,
       "mouseY": 0,
-      "toKeyDown": "VK_MOUSEMOVE",
-      "toKeyUp": "VK_MOUSEMOVE"
+      "toKeyWhile": "VK_MOUSEMOVE"
     },
     {
       "divClass": "kinectTurn",
       "devType": "kinect",
       "dev": "Tracker0@localhost",
       "key": "KINECT_TURN_RIGHT",
+      "angle": 40,
       "mouseX": 1,
       "mouseY": 0,
-      "toKeyDown": "VK_MOUSEMOVE",
-      "toKeyUp": "VK_MOUSEMOVE"
-    },
-    {
-      "divClass": "handTop",
-      "devType": "kinect",
-      "dev": "Tracker0@localhost",
-      "key": "KINECT_LEFT_HAND_TOP",
-      "x": 0,
-      "coordinateMod": "=",
-      "y": 5,
-      "toKeyDown": "KINECT_SET_CENTER_POS",
-      "toKeyUp": "KINECT_SET_CENTER_POS"
+      "toKeyWhile": "VK_MOUSEMOVE"
     }
   ]
 }

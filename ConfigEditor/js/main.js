@@ -140,11 +140,12 @@ function formToJSON(el){
 
 
     if ( json.toKey == "VK_MOUSEMOVE"){
-        json.mouseX = parseInt(parent.find("#moveMouseSpace #x").val());
-        json.mouseY = parseInt(parent.find("#moveMouseSpace #y").val());
+        json.mouseX = parseInt(el.find("#moveMouseSpace #x").val());
+        console.log(json.mouseX);
+        json.mouseY = parseInt(el.find("#moveMouseSpace #y").val());
     } else 
     if ( json.toKey == "ALERT" || json.toKey == "MESSAGE"){
-        json.msg = parent.find("#msg").val();
+        json.msg = el.find("#msg").val();
     }
 
     if (el.find("#toKeyWhile").prop("checked")){
