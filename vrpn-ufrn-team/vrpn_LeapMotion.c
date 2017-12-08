@@ -14,6 +14,8 @@
 
 #include "vrpn_BaseClass.h" // for ::vrpn_TEXT_NORMAL, etc
 
+#include <exception>
+
 VRPN_SUPPRESS_EMPTY_OBJECT_WARNING()
 
 //faz os dedos ficarem relativos a posicao da mao
@@ -48,6 +50,12 @@ vrpn_LeapMotion::~vrpn_LeapMotion() {
 	controller.removeListener(*this);
 }
 
+int seh_filter(unsigned int code, struct _EXCEPTION_POINTERS* ep) {
+	printf("!!!!!!!!!!!Ex Code %d\n", code);
+	// Generate error report
+	// Execute exception handler
+	return EXCEPTION_EXECUTE_HANDLER;
+}
 
 void vrpn_LeapMotion::onConnect(const Leap::Controller& controller) {
 	std::cout << this->d_servicename << " connected." << std::endl;
@@ -88,10 +96,20 @@ void vrpn_LeapMotion::reportPose(int sensor, timeval t, Leap::Vector position) {
 
 	char msgbuf[512];
 	int len = vrpn_Tracker::encode_to(msgbuf);
-	if ( d_connection->pack_message(len, _timestamp, position_m_id, d_sender_id, msgbuf,
-									vrpn_CONNECTION_LOW_LATENCY) ) {
+	//__try {
+		
+	if ( d_connection->pack_message(len, _timestamp, position_m_id, d_sender_id, msgbuf, vrpn_CONNECTION_LOW_LATENCY) ) {
 		fprintf(stderr, "vrpn_LeapMotion: cannot write message: tossing\n");
 	}
+		
+	/*}
+	__except ( seh_filter(GetExceptionCode(), GetExceptionInformation()) ) {
+		// SEH handling 
+		printf("!!!!!!!!WIN!!!!!!!\n");
+	}
+	/*__finally {
+		
+	}*/
 }
 
 
