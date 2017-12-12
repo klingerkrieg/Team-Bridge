@@ -1,0 +1,22 @@
+{
+  "common": {
+    "patientName": "",
+    "saveDir": "./SAVES/",
+    "KINECT_X_INTERVAL": 0.35,
+    "host": "",
+    "database": "",
+    "user": "",
+    "passwd": ""
+  },
+  "keys": [
+    {
+      "divClass": "leapWrist",
+      "devType": "leapMotion",
+      "dev": "LeapMotion0@localhost",
+      "key": "LEAP_WRIST_UP",
+      "angleMod": "<",
+      "angle": 130,
+      "toKeyWhile": "A"
+    }
+  ]
+}

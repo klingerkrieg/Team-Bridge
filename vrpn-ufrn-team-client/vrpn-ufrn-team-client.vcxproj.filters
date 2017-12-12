@@ -191,5 +191,6 @@
     <None Include="mountAndBlade.json" />
     <None Include="mousemove.json" />
     <None Include="teste.json" />
+    <None Include="remoteKeyboard.json" />
   </ItemGroup>
 </Project>

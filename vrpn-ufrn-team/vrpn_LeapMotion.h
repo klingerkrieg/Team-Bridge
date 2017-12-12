@@ -27,7 +27,7 @@ public:
 protected:
 	virtual void onConnect(const Leap::Controller&);
 	virtual void onFrame(const Leap::Controller&);
-	virtual void reportPose(int sensor, timeval t, Leap::Vector position);
+	virtual void reportPose(int sensor, Leap::Vector position);
 
 };
 

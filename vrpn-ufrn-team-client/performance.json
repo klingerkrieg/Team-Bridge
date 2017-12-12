@@ -30,6 +30,7 @@
     {
       "divClass": "handTop",
       "dev": "Tracker0@localhost",
+      "devType": "kinect",
       "key": "KINECT_RIGHT_HAND_TOP",
       "x": 0,
       "coordinateMod": ">=",

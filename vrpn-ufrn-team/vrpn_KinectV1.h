@@ -41,7 +41,7 @@ class VRPN_API vrpn_KinectV1 : public  vrpn_Tracker {
 	protected:
 	bool connect();
 	bool onFrame();
-	void reportPose(int sensor, timeval t, Vector4 position, Vector4 quat);
+	void reportPose(int sensor, Vector4 position, Vector4 quat);
 
 };
 

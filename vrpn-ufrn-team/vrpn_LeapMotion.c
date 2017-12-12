@@ -6,7 +6,6 @@
 @license Standard VRPN license.
 */
 
-// Based on the vrpn_Oculus driver
 
 #include "vrpn_Tracker.h"               // for vrpn_Tracker
 #include "vrpn_LeapMotion.h"
@@ -14,7 +13,6 @@
 
 #include "vrpn_BaseClass.h" // for ::vrpn_TEXT_NORMAL, etc
 
-#include <exception>
 
 VRPN_SUPPRESS_EMPTY_OBJECT_WARNING()
 
@@ -50,18 +48,12 @@ vrpn_LeapMotion::~vrpn_LeapMotion() {
 	controller.removeListener(*this);
 }
 
-int seh_filter(unsigned int code, struct _EXCEPTION_POINTERS* ep) {
-	printf("!!!!!!!!!!!Ex Code %d\n", code);
-	// Generate error report
-	// Execute exception handler
-	return EXCEPTION_EXECUTE_HANDLER;
-}
 
 void vrpn_LeapMotion::onConnect(const Leap::Controller& controller) {
 	std::cout << this->d_servicename << " connected." << std::endl;
 }
 
-void vrpn_LeapMotion::reportPose(int sensor, timeval t, Leap::Vector position) {
+void vrpn_LeapMotion::reportPose(int sensor, Leap::Vector position) {
 	double pos1 = (double)position[0];
 	double pos2 = (double)position[1];
 	double pos3 = (double)position[2];
@@ -94,22 +86,16 @@ void vrpn_LeapMotion::reportPose(int sensor, timeval t, Leap::Vector position) {
 	d_quat[3] = 0;
 
 
+	timeval t;
+	vrpn_gettimeofday(&t, NULL);
+
 	char msgbuf[512];
 	int len = vrpn_Tracker::encode_to(msgbuf);
-	//__try {
 		
-	if ( d_connection->pack_message(len, _timestamp, position_m_id, d_sender_id, msgbuf, vrpn_CONNECTION_LOW_LATENCY) ) {
+	if ( d_connection->pack_message(len, t, position_m_id, d_sender_id, msgbuf, vrpn_CONNECTION_LOW_LATENCY) ) {
 		fprintf(stderr, "vrpn_LeapMotion: cannot write message: tossing\n");
 	}
 		
-	/*}
-	__except ( seh_filter(GetExceptionCode(), GetExceptionInformation()) ) {
-		// SEH handling 
-		printf("!!!!!!!!WIN!!!!!!!\n");
-	}
-	/*__finally {
-		
-	}*/
 }
 
 
@@ -117,11 +103,6 @@ void vrpn_LeapMotion::reportPose(int sensor, timeval t, Leap::Vector position) {
 void vrpn_LeapMotion::onFrame(const Leap::Controller& controller) {
 
 	const Leap::Frame frame = controller.frame();
-
-
-	timeval t;
-	vrpn_gettimeofday(&t, NULL);
-
 
 	Leap::HandList hands = frame.hands();
 
@@ -148,15 +129,15 @@ void vrpn_LeapMotion::onFrame(const Leap::Controller& controller) {
 
 	//0 sao as palmas
 	position = hands[handId].palmPosition();
-	reportPose(sensor++, t, position);
+	reportPose(sensor++, position);
 
 	//1 sao os cotovelos
 	position = hands[handId].arm().elbowPosition();
-	reportPose(sensor++, t, position);
+	reportPose(sensor++, position);
 
 	//wrist(punho) da mao tem o mesmo valor que o do braco
 	position = hands[handId].arm().wristPosition();
-	reportPose(sensor++, t, position);
+	reportPose(sensor++, position);
 
 	fingers = hands[handId].fingers();
 	for ( Leap::FingerList::const_iterator fl = fingers.begin(); fl != fingers.end(); fl++ ) {
@@ -168,7 +149,7 @@ void vrpn_LeapMotion::onFrame(const Leap::Controller& controller) {
 			bone = (*fl).bone(boneType);
 
 			position = bone.nextJoint();
-			reportPose(sensor++, t, position);
+			reportPose(sensor++, position);
 
 			// Sleep for 1ms so we don't eat the CPU
 			vrpn_SleepMsecs(1);

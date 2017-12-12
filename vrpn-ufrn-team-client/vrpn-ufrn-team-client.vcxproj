@@ -218,6 +218,7 @@
     <None Include="mousemove.json" />
     <None Include="nedglove.json" />
     <None Include="performance.json" />
+    <None Include="remoteKeyboard.json" />
     <None Include="runner.json" />
     <None Include="teste.json" />
     <None Include="twoplayers.json" />

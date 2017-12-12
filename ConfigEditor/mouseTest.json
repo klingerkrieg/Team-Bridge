@@ -1,0 +1,21 @@
+{
+  "common": {
+    "patientName": "",
+    "saveDir": "./SAVES/",
+    "KINECT_X_INTERVAL": 0.35,
+    "host": "",
+    "database": "",
+    "user": "",
+    "passwd": ""
+  },
+  "keys": [
+    {
+      "divClass": "mouse",
+      "devType": "mouse",
+      "dev": "Mouse0@localhost",
+      "key": "VK_LBUTTON",
+      "toKeyDown": "A",
+      "toKeyUp": "A"
+    }
+  ]
+}

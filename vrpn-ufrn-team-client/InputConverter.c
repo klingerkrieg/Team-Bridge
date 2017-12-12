@@ -114,7 +114,7 @@ bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKE
 		//LeapMotion
 		vrpnToSkeleton(gr.LeapMotionGestures::skeleton[(std::string)userdata->name], gr.handSkeletonMap1, t, skelPart, (std::string)userdata->name);
 	} else {
-		printf("Dispositivo desconhecido:%s", userdata->name);
+		printf("Dispositivo desconhecido:%s\n", userdata->name);
 		return false;
 	}
 
@@ -201,12 +201,21 @@ bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKE
 
 bool InputConverter::checkButton(const char * name, const vrpn_BUTTONCB b) {
 	bool pressed = false;
-	
+	int active;
+
 	for ( std::vector<KeyMap>::iterator keyMap = map.begin(); keyMap != map.end(); ++keyMap ) {
 
 		if ( !strcmp(name, keyMap->getDev().c_str()) ) {
-			if ( keyMap->callGestureChecker(b) == 1 ) {
-				pressed = interpretOnLeave(b.state, (*keyMap));
+			if ( keyMap->getGestureCheckerDefined() ) {
+				try {
+					active = keyMap->callGestureChecker(b);
+				} catch ( ... ) {
+					printf("Falha ao checar:%s", keyMap->toString().c_str());
+				}
+
+				if ( active != -1 ) {
+					pressed = interpretOnLeave(b.state, (*keyMap));
+				}
 			}
 		}
 	}
@@ -233,7 +242,7 @@ bool InputConverter::checkAnalog(const char *name, const vrpn_ANALOGCB a) {
 				} catch ( ... ) {
 					printf("Falha ao checar:%s", keyMap->toString().c_str());
 				}
-
+				
 				if ( active != -1 ) {
 					pressed = interpretOnLeave(active, (*keyMap));
 				}

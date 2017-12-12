@@ -1,12 +1,11 @@
 /** @file	vrpn_KinectV1.C
-@brief	Drivers for LeapMotion VR devices.
+@brief	Drivers for KinectV1 VR devices.
 
 @date 2017
 @author Alan Klinger klingerkrieg@gmail.com
 @license Standard VRPN license.
 */
 
-// Based on the vrpn_Oculus driver
 
 #include "vrpn_Tracker.h"               // for vrpn_Tracker
 #include "vrpn_KinectV1.h"
@@ -109,7 +108,7 @@ bool vrpn_KinectV1::connect() {
 	return true;
 }
 
-void vrpn_KinectV1::reportPose(int sensor, timeval t,Vector4 position, Vector4 quat) {
+void vrpn_KinectV1::reportPose(int sensor, Vector4 position, Vector4 quat) {
 	//Seta dados para envio
 	d_sensor = sensor;
 	pos[0] = position.x;
@@ -121,6 +120,9 @@ void vrpn_KinectV1::reportPose(int sensor, timeval t,Vector4 position, Vector4 q
 	d_quat[2] = quat.z;
 	d_quat[3] = quat.w;
 
+
+	timeval t;
+	vrpn_gettimeofday(&t, NULL);
 	
 	char msgbuf[512];
 	int len = vrpn_Tracker::encode_to(msgbuf);
@@ -149,11 +151,10 @@ bool vrpn_KinectV1::onFrame() {
 		return true;//Mesmo tendo essa falha ainda pode estar conectado
 	}
 
-	timeval t;
-	vrpn_gettimeofday(&t, NULL);
+	
 
 	// smooth out the skeleton data
-	//m_pNuiSensor->NuiTransformSmooth(&skeletonFrame, NULL);
+	m_pNuiSensor->NuiTransformSmooth(&skeletonFrame, NULL);
 	
 	
 	NUI_SKELETON_BONE_ORIENTATION boneOrientations[NUI_SKELETON_POSITION_COUNT];
@@ -188,27 +189,8 @@ bool vrpn_KinectV1::onFrame() {
 
 				NUI_SKELETON_BONE_ORIENTATION & orientation = boneOrientations[h];
 
-				/*if ( sensor == 1 ) {
-
-					double x = orientation.absoluteRotation.rotationQuaternion.x;
-					double y = orientation.absoluteRotation.rotationQuaternion.y;
-					double z = orientation.absoluteRotation.rotationQuaternion.z;
-					double w = orientation.absoluteRotation.rotationQuaternion.w;
-
-
-					double value = 2.0 * (w * y - z * x);
-					value = value > 1.0 ? 1.0 : value;
-					value = value < -1.0 ? -1.0 : value;
-
-					double pitch = std::asin(value);
-
-					//printf("%.2f\n", pitch * (180.0 / 3.14));
-
-					printf("%.2f %.2f %.2f %.2f\n", x, y ,z, w);
-
-				}*/
 				
-				reportPose(sensor, t, skeletonFrame.SkeletonData[i].SkeletonPositions[h],
+				reportPose(sensor, skeletonFrame.SkeletonData[i].SkeletonPositions[h],
 						   orientation.absoluteRotation.rotationQuaternion);
 			}
 		}

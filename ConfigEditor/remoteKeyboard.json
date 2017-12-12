@@ -1,0 +1,20 @@
+{
+  "common": {
+    "patientName": "",
+    "saveDir": "./SAVES/",
+    "KINECT_X_INTERVAL": 0.35,
+    "host": "",
+    "database": "",
+    "user": "",
+    "passwd": ""
+  },
+  "keys": [
+    {
+      "divClass": "keyboard",
+      "devType": "keyboard",
+      "dev": "Keyboard0@localhost",
+      "key": "A",
+      "toKeyWhile": "A"
+    }
+  ]
+}
