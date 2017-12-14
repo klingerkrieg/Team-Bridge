@@ -81,7 +81,7 @@
     <Link>
       <OutputFile>.\../pc_win32/kinect_client/Debug/kinect_client.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>../gpsnmealib/Debug;../../vrpn-master-2017-up/pc_win32/Debug/;..\..\vrpn-master-2017-up\quat\pc_win32\Debug;$(SYSTEMDRIVE)\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib;%(AdditionalLibraryDirectories);../gpsnmealib/Debug;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\vrpn-master-2017-up\gpsnmealib/Debug;../../vrpn-master-2017-up/pc_win32/Debug/;..\..\vrpn-master-2017-up\quat\pc_win32\Debug;$(SYSTEMDRIVE)\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib;%(AdditionalLibraryDirectories);../gpsnmealib/Debug;</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>.\../pc_win32/kinect_client/Debug/kinect_client.pdb</ProgramDatabaseFile>
       <SubSystem>Console</SubSystem>

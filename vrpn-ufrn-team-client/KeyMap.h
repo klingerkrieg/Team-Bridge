@@ -162,12 +162,11 @@ private:
 	int delay = 400; //ms;
 
 	std::string saveData = "";
-	//Aqui foi aplicado algo semelhante ao padrão Observer
-
+	
 	void setDevType(std::string devType);
 
-
 public:
+	//Aqui foi aplicado algo semelhante ao padrão Observer
 	typedef int (AbstractGestureRecognizer::*gestureCheckerMethod)(void * data, KeyMap *key);
 
 	//Guardo o método responsável por tratar aquele keyMap

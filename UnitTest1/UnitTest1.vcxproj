@@ -106,7 +106,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <AdditionalLibraryDirectories>$(VCInstallDir)UnitTest\lib;%(AdditionalLibraryDirectories);$(SYSTEMDRIVE)\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib;%(AdditionalLibraryDirectories);C:\Program Files (x86)\MySQL\MySQL Connector C++ 1.1.9\lib\opt;../pc_win32/vrpn-ufrn-team-client/Debug;../pc_win32/Debug;../gpsnmealib/Debug;..\..\vrpn-master-2017-up\quat\pc_win32\Debug;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Program Files (x86)\MySQL\MySQL Connector C++ 1.1.9\lib\opt;../pc_win32/vrpn-ufrn-team-client/Debug;../pc_win32/Debug;..\..\vrpn-master-2017-up\gpsnmealib/Debug;..\..\vrpn-master-2017-up\quat\pc_win32\Debug;$(VCInstallDir)UnitTest\lib;%(AdditionalLibraryDirectories);$(SYSTEMDRIVE)\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib;%(AdditionalLibraryDirectories);</AdditionalLibraryDirectories>
       <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);mysqlcppconn.lib;../pc_win32/vrpn-ufrn-team-client/Debug/*.obj;../pc_win32/Debug/vrpn.lib;quat.lib;</AdditionalDependencies>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention />

@@ -214,7 +214,7 @@ bool InputConverter::checkButton(const char * name, const vrpn_BUTTONCB b) {
 				}
 
 				if ( active != -1 ) {
-					pressed = interpretOnLeave(b.state, (*keyMap));
+					pressed = interpretOnLeave(active, (*keyMap));
 				}
 			}
 		}

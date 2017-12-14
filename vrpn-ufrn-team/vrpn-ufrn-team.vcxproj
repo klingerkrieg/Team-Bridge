@@ -86,7 +86,7 @@
     <Link>
       <OutputFile>.\../pc_win32/vrpn-ufrn-team/Debug/vrpn-ufrn-team.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>$(KINECTSDK10_DIR)Lib\x86\;../gpsnmealib/Debug;..\..\vrpn-master-2017-up\pc_win32\Debug\;..\..\vrpn-master-2017-up\quat\pc_win32\Debug;$(SYSTEMDRIVE)\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib;%(AdditionalLibraryDirectories);C:\Program Files (x86)\Leap Motion\LeapSDK\lib\x86</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(KINECTSDK10_DIR)Lib\x86\;..\..\vrpn-master-2017-up\Debug;..\..\vrpn-master-2017-up\pc_win32\Debug\;..\..\vrpn-master-2017-up\quat\pc_win32\Debug;$(SYSTEMDRIVE)\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib;%(AdditionalLibraryDirectories);C:\Program Files (x86)\Leap Motion\LeapSDK\lib\x86</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>.\../pc_win32/vrpn-ufrn-team/Debug/vrpn-ufrn-team.pdb</ProgramDatabaseFile>
       <SubSystem>Console</SubSystem>
@@ -138,7 +138,7 @@
     <Link>
       <OutputFile>.\../pc_win32/vrpn-ufrn-team/Release/vrpn-ufrn-team.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>$(KINECTSDK10_DIR)Lib\x86\;../gpsnmealib/Release;..\..\vrpn-master-2017-up\pc_win32\Release\;..\..\vrpn-master-2017-up\quat\pc_win32\Release;$(SYSTEMDRIVE)\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib;%(AdditionalLibraryDirectories);C:\Program Files (x86)\Leap Motion\LeapSDK\lib\x86</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(KINECTSDK10_DIR)Lib\x86\;..\..\vrpn-master-2017-up\Release;..\..\vrpn-master-2017-up\pc_win32\Release\;..\..\vrpn-master-2017-up\quat\pc_win32\Release;$(SYSTEMDRIVE)\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib;%(AdditionalLibraryDirectories);C:\Program Files (x86)\Leap Motion\LeapSDK\lib\x86</AdditionalLibraryDirectories>
       <ProgramDatabaseFile>.\../pc_win32/vrpn-ufrn-team/Release/vrpn-ufrn-team.pdb</ProgramDatabaseFile>
       <SubSystem>Console</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>

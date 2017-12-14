@@ -84,7 +84,7 @@
     <Link>
       <OutputFile>.\../pc_win32/vrpn-ufrn-team-client/Debug/vrpn-ufrn-team-client.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>../gpsnmealib/Debug/;..\..\vrpn-master-2017-up\pc_win32\Debug\;..\..\vrpn-master-2017-up\quat\pc_win32\Debug;$(SYSTEMDRIVE)\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib;%(AdditionalLibraryDirectories);C:\Program Files (x86)\MySQL\MySQL Connector C++ 1.1.9\lib\opt;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\vrpn-master-2017-up\Debug/;..\..\vrpn-master-2017-up\pc_win32\Debug\;..\..\vrpn-master-2017-up\quat\pc_win32\Debug;$(SYSTEMDRIVE)\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib;%(AdditionalLibraryDirectories);C:\Program Files (x86)\MySQL\MySQL Connector C++ 1.1.9\lib\opt;</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>.\../pc_win32/vrpn-ufrn-team-client/Debug/vrpn-ufrn-team-client.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
@@ -142,7 +142,7 @@
     <Link>
       <OutputFile>.\../pc_win32/vrpn-ufrn-team-client/Release/vrpn-ufrn-team-client.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>../gpsnmealib/Release/;..\..\vrpn-master-2017-up\pc_win32\Release\;..\..\vrpn-master-2017-up\quat\pc_win32\Release;$(SYSTEMDRIVE)\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib;%(AdditionalLibraryDirectories);C:\Program Files (x86)\MySQL\MySQL Connector C++ 1.1.9\lib\opt;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\vrpn-master-2017-up\Release/;..\..\vrpn-master-2017-up\pc_win32\Release\;..\..\vrpn-master-2017-up\quat\pc_win32\Release;$(SYSTEMDRIVE)\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib;%(AdditionalLibraryDirectories);C:\Program Files (x86)\MySQL\MySQL Connector C++ 1.1.9\lib\opt;</AdditionalLibraryDirectories>
       <ProgramDatabaseFile>.\../pc_win32/vrpn-ufrn-team-client/Release/vrpn-ufrn-team-client.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>

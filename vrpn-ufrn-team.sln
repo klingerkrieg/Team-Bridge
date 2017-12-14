@@ -5,8 +5,6 @@ VisualStudioVersion = 15.0.26730.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "vrpn-ufrn-team", "vrpn-ufrn-team\vrpn-ufrn-team.vcxproj", "{1021AC8D-3623-4248-BC7A-1794BEA6FEF2}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "vrpn_interface", "vrpn_interface\vrpn_interface.vcxproj", "{5DD0568E-3F5A-4E81-903D-B49F31A20326}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "leapmotion_server", "leapmotion_server\leapmotion_server.vcxproj", "{C366A760-A65B-4D44-B7BE-B2BD9DE48860}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "kinect_simulation", "kinect_simulation\kinect_simulation.vcxproj", "{6388D266-2021-4286-BB56-D0274AC2775A}"
@@ -40,12 +38,6 @@ Global
 		{1021AC8D-3623-4248-BC7A-1794BEA6FEF2}.Release|x64.ActiveCfg = Release|Win32
 		{1021AC8D-3623-4248-BC7A-1794BEA6FEF2}.Release|x86.ActiveCfg = Release|Win32
 		{1021AC8D-3623-4248-BC7A-1794BEA6FEF2}.Release|x86.Build.0 = Release|Win32
-		{5DD0568E-3F5A-4E81-903D-B49F31A20326}.Debug|x64.ActiveCfg = Debug|Win32
-		{5DD0568E-3F5A-4E81-903D-B49F31A20326}.Debug|x86.ActiveCfg = Debug|Win32
-		{5DD0568E-3F5A-4E81-903D-B49F31A20326}.Debug|x86.Build.0 = Debug|Win32
-		{5DD0568E-3F5A-4E81-903D-B49F31A20326}.Release|x64.ActiveCfg = Release|Win32
-		{5DD0568E-3F5A-4E81-903D-B49F31A20326}.Release|x86.ActiveCfg = Release|Win32
-		{5DD0568E-3F5A-4E81-903D-B49F31A20326}.Release|x86.Build.0 = Release|Win32
 		{C366A760-A65B-4D44-B7BE-B2BD9DE48860}.Debug|x64.ActiveCfg = Debug|Win32
 		{C366A760-A65B-4D44-B7BE-B2BD9DE48860}.Debug|x86.ActiveCfg = Debug|Win32
 		{C366A760-A65B-4D44-B7BE-B2BD9DE48860}.Debug|x86.Build.0 = Debug|Win32
