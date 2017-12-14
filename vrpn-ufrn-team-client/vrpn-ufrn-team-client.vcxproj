@@ -13,6 +13,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{D93B529A-61B0-4C81-AFCA-C8E481A40DA6}</ProjectGuid>
     <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <ProjectName>team-bridge-client</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -49,10 +50,10 @@
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);..\..\vrpn-master-2017-up;C:\Program Files (x86)\MySQL\MySQL Connector C++ 1.1.9\include;</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(VRPN);$(MYSQL_CONNECTORCPP)\include;</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);..\..\vrpn-master-2017-up;C:\Program Files (x86)\MySQL\MySQL Connector C++ 1.1.9\include;</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(VRPN);$(MYSQL_CONNECTORCPP)\include;</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Midl>
@@ -84,7 +85,7 @@
     <Link>
       <OutputFile>.\../pc_win32/vrpn-ufrn-team-client/Debug/vrpn-ufrn-team-client.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>..\..\vrpn-master-2017-up\Debug/;..\..\vrpn-master-2017-up\pc_win32\Debug\;..\..\vrpn-master-2017-up\quat\pc_win32\Debug;$(SYSTEMDRIVE)\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib;%(AdditionalLibraryDirectories);C:\Program Files (x86)\MySQL\MySQL Connector C++ 1.1.9\lib\opt;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(VRPN)\Debug/;$(VRPN)\pc_win32\Debug\;$(VRPN)\quat\pc_win32\Debug;$(SYSTEMDRIVE)\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib;%(AdditionalLibraryDirectories);$(MYSQL_CONNECTORCPP)\lib\opt;</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>.\../pc_win32/vrpn-ufrn-team-client/Debug/vrpn-ufrn-team-client.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
@@ -142,7 +143,7 @@
     <Link>
       <OutputFile>.\../pc_win32/vrpn-ufrn-team-client/Release/vrpn-ufrn-team-client.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>..\..\vrpn-master-2017-up\Release/;..\..\vrpn-master-2017-up\pc_win32\Release\;..\..\vrpn-master-2017-up\quat\pc_win32\Release;$(SYSTEMDRIVE)\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib;%(AdditionalLibraryDirectories);C:\Program Files (x86)\MySQL\MySQL Connector C++ 1.1.9\lib\opt;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(VRPN)\Release/;$(VRPN)\pc_win32\Release\;$(VRPN)\quat\pc_win32\Release;$(SYSTEMDRIVE)\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib;%(AdditionalLibraryDirectories);$(MYSQL_CONNECTORCPP)\lib\opt;</AdditionalLibraryDirectories>
       <ProgramDatabaseFile>.\../pc_win32/vrpn-ufrn-team-client/Release/vrpn-ufrn-team-client.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>

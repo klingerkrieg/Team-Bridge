@@ -11,7 +11,7 @@
 #include <vrpn_Tracker.h>
 #include "utilTest.h"
 #include "json.hpp"
-
+#include "dbConfig.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -27,10 +27,10 @@ namespace StorageTest {
 			{ "patientName", "Paulo Júnior" },
 			{ "saveDir", "./SAVES/" },
 			{ "appName", "app" },
-			{ "host", "127.0.0.1:3306" },
-			{ "database", "vrpn2" },
-			{ "user", "root" },
-			{ "passwd", "" },
+			{ "host", HOST },
+			{ "database", DATABASE },
+			{ "user", USER },
+			{ "passwd", PASSWD },
 			{ "KINECT_X_INTERVAL", 0.35 }
 		};
 		

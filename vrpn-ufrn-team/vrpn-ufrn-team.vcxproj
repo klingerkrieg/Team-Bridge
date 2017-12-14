@@ -13,6 +13,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{1021AC8D-3623-4248-BC7A-1794BEA6FEF2}</ProjectGuid>
     <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <ProjectName>team-bridge-server</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -49,12 +50,12 @@
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(KINECTSDK10_DIR)\inc;$(VC_IncludePath);$(WindowsSDK_IncludePath);..\..\vrpn-master-2017-up;..\..\vrpn-master-2017-up\quat;C:\Program Files (x86)\Leap Motion\LeapSDK\include;</IncludePath>
-    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;C:\Program Files (x86)\Leap Motion\LeapSDK\lib\x86;</LibraryPath>
+    <IncludePath>$(KINECTSDK10_DIR)\inc;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(VRPN);$(VRPN)\quat;$(LEAP_SDK)\include;</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;$(LEAP_SDK)\lib\x86;</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(KINECTSDK10_DIR)\inc;$(VC_IncludePath);$(WindowsSDK_IncludePath);..\..\vrpn-master-2017-up;..\..\vrpn-master-2017-up\quat;C:\Program Files (x86)\Leap Motion\LeapSDK\include;</IncludePath>
-    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;C:\Program Files (x86)\Leap Motion\LeapSDK\lib\x86;</LibraryPath>
+    <IncludePath>$(KINECTSDK10_DIR)\inc;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(VRPN);$(VRPN)\quat;$(LEAP_SDK)\include;</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;$(LEAP_SDK)\lib\x86;</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Midl>
@@ -86,7 +87,7 @@
     <Link>
       <OutputFile>.\../pc_win32/vrpn-ufrn-team/Debug/vrpn-ufrn-team.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>$(KINECTSDK10_DIR)Lib\x86\;..\..\vrpn-master-2017-up\Debug;..\..\vrpn-master-2017-up\pc_win32\Debug\;..\..\vrpn-master-2017-up\quat\pc_win32\Debug;$(SYSTEMDRIVE)\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib;%(AdditionalLibraryDirectories);C:\Program Files (x86)\Leap Motion\LeapSDK\lib\x86</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(KINECTSDK10_DIR)Lib\x86\;$(VRPN)\Debug;$(VRPN)\pc_win32\Debug\;$(VRPN)\quat\pc_win32\Debug;$(SYSTEMDRIVE)\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib;%(AdditionalLibraryDirectories);$(LEAP_SDK)\lib\x86</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>.\../pc_win32/vrpn-ufrn-team/Debug/vrpn-ufrn-team.pdb</ProgramDatabaseFile>
       <SubSystem>Console</SubSystem>
@@ -138,7 +139,7 @@
     <Link>
       <OutputFile>.\../pc_win32/vrpn-ufrn-team/Release/vrpn-ufrn-team.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>$(KINECTSDK10_DIR)Lib\x86\;..\..\vrpn-master-2017-up\Release;..\..\vrpn-master-2017-up\pc_win32\Release\;..\..\vrpn-master-2017-up\quat\pc_win32\Release;$(SYSTEMDRIVE)\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib;%(AdditionalLibraryDirectories);C:\Program Files (x86)\Leap Motion\LeapSDK\lib\x86</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(KINECTSDK10_DIR)Lib\x86\;$(VRPN)\Release;$(VRPN)\pc_win32\Release\;$(VRPN)\quat\pc_win32\Release;$(SYSTEMDRIVE)\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib;%(AdditionalLibraryDirectories);$(LEAP_SDK)\lib\x86</AdditionalLibraryDirectories>
       <ProgramDatabaseFile>.\../pc_win32/vrpn-ufrn-team/Release/vrpn-ufrn-team.pdb</ProgramDatabaseFile>
       <SubSystem>Console</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>

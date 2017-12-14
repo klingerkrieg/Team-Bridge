@@ -13,3 +13,5 @@
 *SAVES*
 *_log.txt
 *.TMP
+*.obj
+*.lib

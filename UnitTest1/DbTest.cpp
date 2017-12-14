@@ -4,13 +4,14 @@
 #include <map>
 #include "Db.h"
 #include <iostream>
+#include "dbConfig.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-std::string host = "127.0.0.1:3306";
-std::string dbName = "test";
-std::string user = "root";
-std::string passwd = "";
+std::string host = HOST;
+std::string dbName = DATABASE;
+std::string user = USER;
+std::string passwd = PASSWD;
 std::string tempTable = "CREATE TEMPORARY TABLE IF NOT EXISTS test (id INT NOT NULL, txttest VARCHAR(45) NULL, PRIMARY KEY(id))";
 
 
