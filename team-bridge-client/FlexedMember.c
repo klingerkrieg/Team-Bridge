@@ -16,8 +16,10 @@ int FlexedMember::flexed2d(std::map<int, std::vector<double>> points, int paramA
 
 int FlexedMember::flexed3d(std::map<int, std::vector<double>> points, KeyMap * keyMap) {
 	
+	if ( points.size() < 3 ) {
+		return -1;
+	}
 	
-
 	std::vector<double> v1 = { points.at(0)[0] - points.at(1)[0], points.at(0)[1] - points.at(1)[1], points.at(0)[2] - points.at(1)[2] };
 	std::vector<double> v2 = { points.at(2)[0] - points.at(1)[0], points.at(2)[1] - points.at(1)[1], points.at(2)[2] - points.at(1)[2] };
 
@@ -58,8 +60,13 @@ int FlexedMember::flexed3d(std::map<int, std::vector<double>> points, KeyMap * k
 
 int FlexedMember::flexed3d(std::map<int, std::vector<double>> points, KeyMap * keyMap, int direction) {
 
-	bool comp = flexed3d(points, keyMap);
-	if ( comp ) {
+	
+
+	int comp = flexed3d(points, keyMap);
+	if ( comp == -1 ) {
+		return -1;
+	} else
+	if ( comp == 1 ) {
 
 		std::vector<double> p1 = points.at(1);
 		std::vector<double> p2 = points.at(2);
