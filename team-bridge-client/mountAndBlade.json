@@ -1,0 +1,160 @@
+{
+  "common": {
+    "patientName": "",
+    "saveDir": "./SAVES/",
+    "KINECT_X_INTERVAL": 0.35,
+    "host": "",
+    "database": "",
+    "user": "",
+    "passwd": ""
+  },
+  "keys": [
+    {
+      "divClass": "handTop",
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_LEFT_HAND_TOP",
+      "x": 0,
+      "coordinateMod": "=",
+      "y": 2,
+      "toKeyDown": "VK_RBUTTON_DOWN"
+    },
+    {
+      "divClass": "handTop",
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_LEFT_HAND_TOP",
+      "x": 0,
+      "coordinateMod": "=",
+      "y": 2,
+      "toKeyUp": "VK_RBUTTON_UP"
+    },
+    {
+      "divClass": "handTop",
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_RIGHT_HAND_TOP",
+      "x": 0,
+      "coordinateMod": "=",
+      "y": 2,
+      "toKeyDown": "VK_LBUTTON_UP"
+    },
+    {
+      "divClass": "handTop",
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_RIGHT_HAND_TOP",
+      "x": 1,
+      "coordinateMod": "=",
+      "y": 2,
+      "toKeyDown": "VK_LBUTTON_DOWN"
+    },
+    {
+      "divClass": "handTop",
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_RIGHT_HAND_TOP",
+      "x": 1,
+      "coordinateMod": "=",
+      "y": 2,
+      "mouseX": 1,
+      "mouseY": 0,
+      "toKeyDown": "VK_MOUSEMOVE"
+    },
+    {
+      "divClass": "handTop",
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_RIGHT_HAND_TOP",
+      "x": 0,
+      "coordinateMod": ">=",
+      "y": 3,
+      "toKeyDown": "VK_LBUTTON_DOWN"
+    },
+    {
+      "divClass": "handTop",
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_RIGHT_HAND_TOP",
+      "x": 0,
+      "coordinateMod": ">=",
+      "y": 3,
+      "mouseX": 0,
+      "mouseY": 1,
+      "toKeyDown": "VK_MOUSEMOVE"
+    },
+    {
+      "divClass": "handTop",
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_RIGHT_HAND_TOP",
+      "x": -1,
+      "coordinateMod": "=",
+      "y": 2,
+      "toKeyDown": "VK_LBUTTON_DOWN"
+    },
+    {
+      "divClass": "handTop",
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_RIGHT_HAND_TOP",
+      "x": -1,
+      "coordinateMod": "=",
+      "y": 2,
+      "mouseX": -1,
+      "mouseY": 0,
+      "toKeyDown": "VK_MOUSEMOVE"
+    },
+    {
+      "divClass": "kinectWalking",
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_WALK",
+      "delay": 1000,
+      "sensivity": 0.1,
+      "toKeyDown": "W",
+      "toKeyUp": "W"
+    },
+    {
+      "divClass": "kinectTurn",
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_TURN_LEFT",
+      "angle": 40,
+      "mouseX": -20,
+      "mouseY": 0,
+      "toKeyWhile": "VK_MOUSEMOVE"
+    },
+    {
+      "divClass": "kinectTurn",
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_TURN_RIGHT",
+      "angle": 40,
+      "mouseX": 20,
+      "mouseY": 0,
+      "toKeyWhile": "VK_MOUSEMOVE"
+    },
+    {
+      "divClass": "handTop",
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_LEFT_HAND_TOP",
+      "x": 0,
+      "coordinateMod": "=",
+      "y": 5,
+      "toKeyDown": "KINECT_SET_CENTER_POS",
+      "toKeyUp": "KINECT_SET_CENTER_POS"
+    },
+    {
+      "divClass": "kinectStep",
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_STEP_DOWN",
+      "sensivity": 0.1,
+      "mouseX": 0,
+      "mouseY": 5,
+      "toKeyWhile": "VK_MOUSEMOVE"
+    }
+  ]
+}

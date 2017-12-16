@@ -78,10 +78,10 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(VRPN);$(MYSQL_CONNECTORCPP)\include;../vrpn-ufrn-team-client;</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(VRPN);$(MYSQL_CONNECTORCPP)\include;../team-bridge-client;</IncludePath>
     <OutDir>.\../pc_win32/ClientUnitTest/Debug\</OutDir>
     <IntDir>.\../pc_win32/ClientUnitTest/Debug\</IntDir>
-    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;..\vrpn-ufrn-team\pc_win32\vrpn-ufrn-team-client\Debug</LibraryPath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -97,7 +97,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(VCInstallDir)UnitTest\include;%(AdditionalIncludeDirectories);..\..\boost_1_65_1\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(VCInstallDir)UnitTest\include;%(AdditionalIncludeDirectories);$(BOOST)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <UseFullPaths>true</UseFullPaths>
       <CompileAs>CompileAsCpp</CompileAs>
@@ -106,8 +106,8 @@
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <AdditionalLibraryDirectories>$(MYSQL_CONNECTORCPP)\lib\opt;../pc_win32/vrpn-ufrn-team-client/Debug;../pc_win32/Debug;$(VRPN)/Debug;$(VRPN)\quat\pc_win32\Debug;$(VCInstallDir)UnitTest\lib;%(AdditionalLibraryDirectories);$(SYSTEMDRIVE)\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib;%(AdditionalLibraryDirectories);</AdditionalLibraryDirectories>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);mysqlcppconn.lib;../pc_win32/vrpn-ufrn-team-client/Debug/*.obj;../pc_win32/Debug/vrpn.lib;quat.lib;</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(MYSQL_CONNECTORCPP)\lib\opt;$(VRPN)/Debug;$(VRPN)\quat\pc_win32\Debug;$(VCInstallDir)UnitTest\lib;%(AdditionalLibraryDirectories);$(SYSTEMDRIVE)\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib;%(AdditionalLibraryDirectories);</AdditionalLibraryDirectories>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);mysqlcppconn.lib;../pc_win32/team-bridge-client/Debug/*.obj;$(VRPN)/pc_win32/Debug/vrpn.lib;quat.lib;</AdditionalDependencies>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention />
       <ImportLibrary />

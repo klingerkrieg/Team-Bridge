@@ -1,16 +1,7 @@
-## Dependências
+# Projeto de mestrado de Alan Klinger - UFRN - IMD - Instituto Metrópole Digital
 
-[Gesture Recognition Toolkit (GRT)](https://github.com/nickgillian/grt)
+## Team Bridge
 
-[Virtual Reality Peripheral Network - Official Repo (VRPN)](https://github.com/vrpn/vrpn/wiki)
+O TeamBridge é um middleware que utiliza o VRPN para facilitar a utilização de jogos terapêuticos com joysticks desenvolvidos pela UFRN.
 
-## Instalação
-
-1. Compilar o GRT utilizando o cmake (Somente com VS 2017)
-2. Compilar o VRPN (Testado com VS 2008/2010/2017)
-3. Linkar as bibliotecas.
-* O caminho utilizado foi E:\grt-master E:\vrpn-master-2017-up modifique para o caminho na sua máquina
-
-## Outros
-
-O vrpnViewer não faz parte do projeto do VS, foi feito em Unity utilizando a biblioteca fornecida por: [UnityVRPN](https://github.com/Laremere/unityVRPN)
+A Wiki deste repositório conta com instruções para sua utilização.

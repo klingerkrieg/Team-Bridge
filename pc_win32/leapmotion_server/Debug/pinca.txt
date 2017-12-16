@@ -1,3 +1,0 @@
-default port: 3883 
-Press Enter to quit...
-Connected
