@@ -1,0 +1,23 @@
+{
+  "common": {
+    "patientName": "",
+    "saveDir": "./SAVES/",
+    "KINECT_X_INTERVAL": 0.35,
+    "host": "",
+    "database": "",
+    "user": "",
+    "passwd": ""
+  },
+  "keys": [
+    {
+      "divClass": "kinectWrist",
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_LEFT_WRIST_UP",
+      "angleMod": ">",
+      "angle": 35,
+      "toKeyDown": "VK_LBUTTON",
+      "toKeyUp": "VK_LBUTTON"
+    }
+  ]
+}

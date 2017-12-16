@@ -1,0 +1,35 @@
+{
+  "common": {
+    "patientName": "",
+    "saveDir": "./SAVES/",
+    "host": "",
+    "database": "",
+    "user": "",
+    "passwd": "",
+    "KINECT_X_INTERVAL": 0.35
+  },
+  "keys": [
+    {
+      "divClass": "handTop",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_RIGHT_HAND_TOP",
+      "x": 0,
+      "coordinateMod": ">=",
+      "y": 3,
+      "toKeyDown": "A",
+      "toKeyUp": "A",
+      "saveData": "handPos"
+    },
+    {
+      "divClass": "handTop",
+      "dev": "Tracker1@localhost",
+      "key": "KINECT_RIGHT_HAND_TOP",
+      "x": 0,
+      "coordinateMod": ">=",
+      "y": 3,
+      "toKeyDown": "B",
+      "toKeyUp": "B",
+      "saveData": "handPos"
+    }
+  ]
+}

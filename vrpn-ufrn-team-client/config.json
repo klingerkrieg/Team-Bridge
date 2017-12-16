@@ -1,22 +1,5 @@
 {
   "common": {
-    "devs": {
-      "nedglove": [
-        "Analog0@localhost"
-      ],
-      "leapMotion": [
-        "LeapMotion0@localhost"
-      ],
-      "kinect": [
-        "Tracker0@localhost"
-      ],
-      "keyboard": [
-        "Keyboard0@localhost"
-      ],
-      "mouse": [
-        "Mouse0@localhost"
-      ]
-    },
     "patientName": "",
     "saveDir": "./SAVES/",
     "appName": "",

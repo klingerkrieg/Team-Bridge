@@ -1,0 +1,26 @@
+{
+  "common": {
+    "patientName": "",
+    "saveDir": "./SAVES/",
+    "appName": "",
+    "host": "127.0.0.1:3306",
+    "database": "vrpn2",
+    "user": "root",
+    "passwd": "",
+    "KINECT_X_INTERVAL": 0.35
+  },
+  "keys": [
+    {
+      "divClass": "nedGlovePinch",
+      "dev": "Analog0@localhost",
+      "key": "NEDGLOVE_PINCH",
+      "thumb": 0,
+      "index": 4,
+      "strengthMin": 25,
+      "strengthMax": 0,
+      "toKeyDown": "A",
+      "toKeyUp": "A",
+      "saveData": "strength"
+    }
+  ]
+}

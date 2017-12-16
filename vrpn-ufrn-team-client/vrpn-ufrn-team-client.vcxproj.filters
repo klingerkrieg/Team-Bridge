@@ -178,7 +178,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="vrpn-client-mb.cfg" />
     <None Include="config.json" />
     <None Include="drunkbug.json" />
     <None Include="runner.json" />

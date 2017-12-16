@@ -31,9 +31,9 @@ int NEDGloveGestures::closed(void * data, KeyMap *keyMap) {
 
 	int maxStr = keyMap->getStrengthMax() == 0 ? strengthNormal : keyMap->getStrengthMax();
 	int minStr = keyMap->getStrengthMin() == 0 ? 0 : keyMap->getStrengthMin();
-
+	
 	if ( minStr <= str && str < maxStr ) {
-
+		
 #ifdef THERAPY_MODULE
 		if ( keyMap->getSaveData().compare("") ) {
 			storage->saveToFile(keyMap->getDev().c_str(), keyMap->getSaveData(), str);
@@ -49,7 +49,6 @@ int NEDGloveGestures::closed(void * data, KeyMap *keyMap) {
 int NEDGloveGestures::pinch(void *data, KeyMap *keyMap) {
 	vrpn_ANALOGCB * a = (vrpn_ANALOGCB*)data;
 	int str = strengthNormal - (((int)a->channel[keyMap->getThumb()] + (int)a->channel[keyMap->getIndex()]) / 2);
-
 
 
 	int maxStr = keyMap->getStrengthMax() == 0 ? strengthNormal : keyMap->getStrengthMax();

@@ -10,13 +10,13 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-namespace GestureRecognizerTest {
+namespace KinectRecognizerTest {
 
 
 	TEST_CLASS(KinectGesturesTest) {
 public:
 
-	TEST_METHOD(GestureRecognizer_detectTopChange) {
+	TEST_METHOD(KinectRecognizer_detectTopChange) {
 
 		SkeletonPart t = getSkeletonPart();
 		
@@ -85,7 +85,7 @@ public:
 		Assert::AreEqual(1, gr.detectTopChangeDown((void *)&t, mDown));
 	}
 
-	TEST_METHOD(GestureRecognizer_detectHandTop) {
+	TEST_METHOD(KinectRecognizer_detectHandTop) {
 		SkeletonPart t = getSkeletonPart();
 		KinectGestures gr = KinectGestures();
 
@@ -161,7 +161,7 @@ public:
 	}
 
 
-	TEST_METHOD(GestureRecognizer_detectHandXPos) {
+	TEST_METHOD(KinectRecognizer_detectHandXPos) {
 		SkeletonPart t = getSkeletonPart();
 		KinectGestures gr = KinectGestures();
 
@@ -215,7 +215,7 @@ public:
 
 
 
-	TEST_METHOD(GestureRecognizer_detectWalk) {
+	TEST_METHOD(KinectRecognizer_detectWalk) {
 		SkeletonPart t = getSkeletonPart();
 
 		json js = {
@@ -255,7 +255,7 @@ public:
 
 
 
-	TEST_METHOD(GestureRecognizer_detectBody) {
+	TEST_METHOD(KinectRecognizer_detectBody) {
 		SkeletonPart t = getSkeletonPart();
 
 		json js = {
@@ -294,7 +294,7 @@ public:
 
 	}
 
-	TEST_METHOD(GestureRecognizer_detectTurn) {
+	TEST_METHOD(KinectRecognizer_detectTurn) {
 
 		KinectGestures gr = KinectGestures();
 		SkeletonPart t = getSkeletonPart();
@@ -330,8 +330,8 @@ public:
 
 	}
 
-	TEST_METHOD(GestureRecognizer_setCenterPos) {
-		
+	TEST_METHOD(KinectRecognizer_setCenterPos) {
+
 		std::string skeletonName = "Tracker0@localhost";
 		KinectGestures gr = KinectGestures();
 		vrpn_TRACKERCB trackData = getTrackerCB();
@@ -357,7 +357,142 @@ public:
 		Assert::AreEqual(skelPart.quat_y, gr.getKinectDetection()[skeletonName].spine.quat_y);
 		Assert::AreEqual(skelPart.quat_z, gr.getKinectDetection()[skeletonName].spine.quat_z);
 		Assert::AreEqual(skelPart.quat_w, gr.getKinectDetection()[skeletonName].spine.quat_w);
-		
+
+
+	}
+
+	TEST_METHOD(KinectRecognizer_wristFlex) {
+
+		std::string skeletonName = "Tracker0@localhost";
+		KinectGestures gr = KinectGestures();
+		vrpn_TRACKERCB trackData = getTrackerCB();
+		SkeletonPart skelPart;
+
+		//Esse método requer pelo menos o angulo de flexão
+		json js = {
+			{ "angle" , 35 }
+		};
+		KeyMap *m1 = new KeyMap(js);
+
+		//punho esquerdo
+
+		trackData.sensor = 5;//elbow
+		vrpnToSkeleton(gr.skeleton[skeletonName], gr.skeletonMap1, trackData, skelPart, skeletonName);
+		trackData.sensor = 6;//wrist
+		vrpnToSkeleton(gr.skeleton[skeletonName], gr.skeletonMap1, trackData, skelPart, skeletonName);
+		trackData.sensor = 7;//hand
+		vrpnToSkeleton(gr.skeleton[skeletonName], gr.skeletonMap1, trackData, skelPart, skeletonName);
+
+		Assert::IsFalse(gr.leftWristFlexedUp((void *)&skelPart, m1));
+
+
+
+		trackData.sensor = 5;//elbow
+		vrpnToSkeleton(gr.skeleton[skeletonName], gr.skeletonMap1, trackData, skelPart, skeletonName);
+
+		trackData.sensor = 6;//wrist
+		trackData.pos[0] += 10;
+		vrpnToSkeleton(gr.skeleton[skeletonName], gr.skeletonMap1, trackData, skelPart, skeletonName);
+
+
+		trackData.sensor = 7;//hand
+		trackData.pos[0] += 2;
+		trackData.pos[1] += 5;
+		vrpnToSkeleton(gr.skeleton[skeletonName], gr.skeletonMap1, trackData, skelPart, skeletonName);
+
+		Assert::IsTrue(gr.leftWristFlexedUp((void *)&skelPart, m1));
+
+		/* Flexão esquerda para baixo */
+
+
+		trackData = getTrackerCB();
+		trackData.sensor = 5;//elbow
+		vrpnToSkeleton(gr.skeleton[skeletonName], gr.skeletonMap1, trackData, skelPart, skeletonName);
+
+		trackData.sensor = 6;//wrist
+		vrpnToSkeleton(gr.skeleton[skeletonName], gr.skeletonMap1, trackData, skelPart, skeletonName);
+
+		trackData.sensor = 7;//hand
+		vrpnToSkeleton(gr.skeleton[skeletonName], gr.skeletonMap1, trackData, skelPart, skeletonName);
+		//Flexionado para baixo
+		Assert::IsFalse(gr.leftWristFlexedDown((void *)&skelPart, m1));
+
+
+
+		trackData = getTrackerCB();
+		trackData.sensor = 5;//elbow
+		vrpnToSkeleton(gr.skeleton[skeletonName], gr.skeletonMap1, trackData, skelPart, skeletonName);
+
+		trackData.sensor = 6;//wrist
+		trackData.pos[0] += 10;
+		vrpnToSkeleton(gr.skeleton[skeletonName], gr.skeletonMap1, trackData, skelPart, skeletonName);
+
+		trackData.sensor = 7;//hand
+		trackData.pos[0] += 2;
+		trackData.pos[1] -= 5;
+		vrpnToSkeleton(gr.skeleton[skeletonName], gr.skeletonMap1, trackData, skelPart, skeletonName);
+		//Flexionado para baixo
+		Assert::IsTrue(gr.leftWristFlexedDown((void *)&skelPart, m1));
+
+
+		//punho direito
+		trackData = getTrackerCB();
+		trackData.sensor = 9;//elbow
+		vrpnToSkeleton(gr.skeleton[skeletonName], gr.skeletonMap1, trackData, skelPart, skeletonName);
+		trackData.sensor = 10;//wrist
+		vrpnToSkeleton(gr.skeleton[skeletonName], gr.skeletonMap1, trackData, skelPart, skeletonName);
+		trackData.sensor = 11;//hand
+		vrpnToSkeleton(gr.skeleton[skeletonName], gr.skeletonMap1, trackData, skelPart, skeletonName);
+
+		Assert::IsFalse(gr.rightWristFlexedUp((void *)&skelPart, m1));
+
+
+
+
+		trackData = getTrackerCB();
+		trackData.sensor = 9;//elbow
+		vrpnToSkeleton(gr.skeleton[skeletonName], gr.skeletonMap1, trackData, skelPart, skeletonName);
+
+		trackData.sensor = 10;//wrist
+		trackData.pos[0] += 10;
+		vrpnToSkeleton(gr.skeleton[skeletonName], gr.skeletonMap1, trackData, skelPart, skeletonName);
+
+
+		trackData.sensor = 11;//hand
+		trackData.pos[0] += 2;
+		trackData.pos[1] += 5;
+		vrpnToSkeleton(gr.skeleton[skeletonName], gr.skeletonMap1, trackData, skelPart, skeletonName);
+
+		Assert::IsTrue(gr.rightWristFlexedUp((void *)&skelPart, m1));
+
+
+		/* Flexão direito para baixo */
+
+		trackData = getTrackerCB();
+		trackData.sensor = 9;//elbow
+		vrpnToSkeleton(gr.skeleton[skeletonName], gr.skeletonMap1, trackData, skelPart, skeletonName);
+		trackData.sensor = 10;//wrist
+		vrpnToSkeleton(gr.skeleton[skeletonName], gr.skeletonMap1, trackData, skelPart, skeletonName);
+		trackData.sensor = 11;//hand
+		vrpnToSkeleton(gr.skeleton[skeletonName], gr.skeletonMap1, trackData, skelPart, skeletonName);
+		//Flexionado para baixo
+		Assert::IsFalse(gr.rightWristFlexedDown((void *)&skelPart, m1));
+
+
+		trackData = getTrackerCB();
+		trackData.sensor = 9;//elbow
+		vrpnToSkeleton(gr.skeleton[skeletonName], gr.skeletonMap1, trackData, skelPart, skeletonName);
+
+		trackData.sensor = 10;//wrist
+		trackData.pos[0] += 10;
+		vrpnToSkeleton(gr.skeleton[skeletonName], gr.skeletonMap1, trackData, skelPart, skeletonName);
+
+		trackData.sensor = 11;//hand
+		trackData.pos[0] += 2;
+		trackData.pos[1] -= 5;
+		vrpnToSkeleton(gr.skeleton[skeletonName], gr.skeletonMap1, trackData, skelPart, skeletonName);
+		//Flexionado para baixo
+		Assert::IsTrue(gr.rightWristFlexedDown((void *)&skelPart, m1));
 
 	}
 

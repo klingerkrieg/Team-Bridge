@@ -105,14 +105,20 @@ bool vrpn_NEDGlove::frame() {
 	
 	
 	std::string data = ((char *)Byte);
-	data = data.substr(0, data.find("\n"));
-	std::cout << data << "\r";
+	
+	data = data.substr(0, data.find("\r"));
 	char * pch;
+	data += ";";
+
+	//std::cout << data << "\n";
 
 	pch = strtok((char *)data.c_str(), ";");
 	for (int i = 0; i < 5; i++){
-		channel[i] = atoi(pch);
-		pch = strtok(NULL, ";");
+		if ( strlen(pch) > 0 ) {
+			channel[i] = atoi(pch);//err
+			pch = strtok(NULL, ";");
+		}
+		
 	}
 
 	vrpn_Analog::report();

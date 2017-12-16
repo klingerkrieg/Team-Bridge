@@ -97,7 +97,7 @@ void KeyPressAction::run(KeyMap key) {
 		ZeroMemory(&input, sizeof(INPUT));
 		//So vai pressionar o soltar se for o evento normal
 		if ( key.getToKey() == VK_RBUTTON || key.getToKey() == VK_LBUTTON || key.getToKey() == VK_MBUTTON ) {
-			//SendInput(1, &inputUp, sizeof(INPUT));
+			SendInput(1, &inputUp, sizeof(INPUT));
 			ZeroMemory(&inputUp, sizeof(INPUT));
 
 			//Caso tenha sido os dois eventos em um só

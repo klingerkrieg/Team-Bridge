@@ -142,8 +142,6 @@ bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKE
 		if ( !strcmp(userdata->name, keyMap->getDev().c_str()) ) {
 			if ( keyMap->getGestureCheckerDefined() ) {
 
-
-				
 				try {
 					active = keyMap->callGestureChecker(skelPart);
 				} catch ( ... ) {
@@ -242,7 +240,7 @@ bool InputConverter::checkAnalog(const char *name, const vrpn_ANALOGCB a) {
 				} catch ( ... ) {
 					printf("Falha ao checar:%s", keyMap->toString().c_str());
 				}
-				
+				//printf("%d\n", active);
 				if ( active != -1 ) {
 					pressed = interpretOnLeave(active, (*keyMap));
 				}

@@ -106,6 +106,19 @@ public:
 		m1 = KeyMap(js);
 		Assert::AreEqual(m1.toString(), map.at(i++).toString());
 
+		js = {
+			{ "divClass","kinectFist" },
+			{ "dev" ,"Tracker0@localhost" },
+			{ "devType" , "kinect" },
+			{ "key" ,"KINECT_LEFT_WRIST_DOWN" },
+			{ "angleMod" , ">" },
+			{ "angle" , 35 },
+			{ "toKeyDown" ,"A" },
+			{ "toKeyUp" ,"A" }
+		};
+		m1 = KeyMap(js);
+		Assert::AreEqual(m1.toString(), map.at(i + 1).toString());
+
 
 		js = {
 			{ "divClass","nedGlove" },
@@ -121,6 +134,9 @@ public:
 		};
 		m1 = KeyMap(js);
 		Assert::AreEqual(m1.toString(), map.at(i+9).toString());
+
+		
+
 
 		
 	}
