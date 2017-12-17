@@ -1,2 +1,1 @@
-team-bridge-client.exe -f mountandblade.json
-pause
+team-bridge-client.exe -f mountAndBlade.json

@@ -10,10 +10,12 @@
   },
   "keys": [
     {
-      "divClass": "keyboard",
-      "devType": "keyboard",
-      "dev": "Keyboard0@localhost",
-      "key": "A",
+      "divClass": "nedGloveGrab",
+      "devType": "nedGlove",
+      "dev": "Analog0@localhost",
+      "key": "NEDGLOVE_GRAB",
+      "strengthMin": 30,
+      "strengthMax": 0,
       "toKeyDown": "VK_LBUTTON"
     }
   ]

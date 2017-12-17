@@ -14,8 +14,7 @@
       "devType": "keyboard",
       "dev": "Keyboard0@localhost",
       "key": "A",
-      "toKeyDown": "H",
-      "toKeyUp": "H"
+      "toKeyDown": "VK_LBUTTON"
     }
   ]
 }

@@ -92,10 +92,15 @@ function addActions(){
     act = $('#actionModel #toKey');
 
     keys = getKeyboardKeys();
+
+    keys.push({t:"Mouse Botão esquerdo (Apertar e soltar)",code:"VK_LBUTTON"});
+    keys.push({t:"Mouse Botão do meio (Apertar e soltar)",code:"VK_MBUTTON"});
+    keys.push({t:"Mouse Botão direito (Apertar e soltar)",code:"VK_RBUTTON"});
     keys.push({t:"Definir posição",code:"KINECT_SET_CENTER_POS"});
     keys.push({t:"Mover mouse",code:"VK_MOUSEMOVE"});
     keys.push({t:"Alerta (Vermelho)",code:"ALERT"});
     keys.push({t:"Mensagem (Verde)",code:"MESSAGE"});
+    
 
     for(var i = 0; i < keys.length ;i++){
         act.append("<option value='"+keys[i].code+"'>"+keys[i].t+"</option>");

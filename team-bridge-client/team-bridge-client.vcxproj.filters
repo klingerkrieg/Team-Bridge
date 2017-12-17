@@ -37,6 +37,9 @@
     <Filter Include="Source Files\Actions">
       <UniqueIdentifier>{c9229489-4108-4653-8757-e16cb1908444}</UniqueIdentifier>
     </Filter>
+    <Filter Include="flappyBirdTest">
+      <UniqueIdentifier>{e4676678-61ed-422d-b683-98b585db6f7b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Config.c">
@@ -191,5 +194,11 @@
     <None Include="mousemove.json" />
     <None Include="teste.json" />
     <None Include="remoteKeyboard.json" />
+    <None Include="FlappyBirdTest\kinectBird.json">
+      <Filter>flappyBirdTest</Filter>
+    </None>
+    <None Include="FlappyBirdTest\physiohappy.json">
+      <Filter>flappyBirdTest</Filter>
+    </None>
   </ItemGroup>
 </Project>

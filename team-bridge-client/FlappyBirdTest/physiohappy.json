@@ -14,8 +14,7 @@
       "devType": "mouse",
       "dev": "Mouse0@localhost",
       "key": "VK_LBUTTON",
-      "toKeyDown": "VK_LBUTTON_DOWN",
-      "toKeyUp": "VK_LBUTTON_DOWN"
+      "toKeyDown": "VK_LBUTTON"
     }
   ]
 }

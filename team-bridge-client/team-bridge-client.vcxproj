@@ -42,11 +42,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\build_files\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\build_files\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\build_files\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\build_files\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -68,10 +68,10 @@
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <PrecompiledHeaderOutputFile>$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\$(ProjectName).pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\</AssemblerListingLocation>
-      <ObjectFileName>$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\</ObjectFileName>
-      <ProgramDataBaseFileName>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
+      <PrecompiledHeaderOutputFile>$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\build_files\$(ProjectName).pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\build_files\</AssemblerListingLocation>
+      <ObjectFileName>$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\build_files\</ObjectFileName>
+      <ProgramDataBaseFileName>$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\build_files\</ProgramDataBaseFileName>
       <BrowseInformation>true</BrowseInformation>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -87,7 +87,7 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(VRPN)\Debug/;$(VRPN)\pc_win32\Debug\;$(VRPN)\quat\pc_win32\Debug;$(SYSTEMDRIVE)\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib;%(AdditionalLibraryDirectories);$(MYSQL_CONNECTORCPP)\lib\opt;</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\$(ProjectName).pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\build_files\$(ProjectName).pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
@@ -97,7 +97,7 @@
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\$(ProjectName).bsc</OutputFile>
+      <OutputFile>$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\build_files\$(ProjectName).bsc</OutputFile>
     </Bscmake>
     <PostBuildEvent>
       <Command>
@@ -124,9 +124,9 @@
       <FunctionLevelLinking>
       </FunctionLevelLinking>
       <PrecompiledHeaderOutputFile>$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\$(ProjectName).pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\</AssemblerListingLocation>
-      <ObjectFileName>$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\</ObjectFileName>
-      <ProgramDataBaseFileName>$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\</ProgramDataBaseFileName>
+      <AssemblerListingLocation>$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\build_files\</AssemblerListingLocation>
+      <ObjectFileName>$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\build_files\</ObjectFileName>
+      <ProgramDataBaseFileName>$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\build_files\</ProgramDataBaseFileName>
       <BrowseInformation>true</BrowseInformation>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -144,7 +144,7 @@
       <OutputFile>$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)/$(ProjectName).exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(VRPN)\$(Configuration)/;$(VRPN)\pc_win32\$(Configuration)\;$(VRPN)\quat\pc_win32\$(Configuration);$(SYSTEMDRIVE)\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib;%(AdditionalLibraryDirectories);$(MYSQL_CONNECTORCPP)\lib\opt;</AdditionalLibraryDirectories>
-      <ProgramDatabaseFile>$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\$(ProjectName).pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\build_files\$(ProjectName).pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
@@ -154,10 +154,10 @@
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\$(ProjectName).bsc</OutputFile>
+      <OutputFile>$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\build_files\$(ProjectName).bsc</OutputFile>
     </Bscmake>
     <PreBuildEvent>
-      <Command>copy "*.json" "$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\" &amp; copy "*.dll" "$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\"</Command>
+      <Command>copy "*.json" "$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\" &amp; copy "*.bat" "$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\" &amp; copy "*.dll" "$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -212,6 +212,8 @@
   <ItemGroup>
     <None Include="config.json" />
     <None Include="drunkbug.json" />
+    <None Include="FlappyBirdTest\kinectBird.json" />
+    <None Include="FlappyBirdTest\physiohappy.json" />
     <None Include="kayak.json" />
     <None Include="leapmotion.json" />
     <None Include="mountAndBlade.json" />
