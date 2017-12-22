@@ -146,26 +146,24 @@ public:
 
 		vrpn_ANALOGCB a = getAnalogCB();
 
-		NEDGloveGestures gr = NEDGloveGestures();
+		//NEDGloveGestures gr = NEDGloveGestures();
 		int closedCalib = 205;
-
+		//Fechada
 		int val = 205;
 		a.channel[0] = val;
 		a.channel[1] = val;
 		a.channel[2] = val;
 		a.channel[3] = val;
 		a.channel[4] = val;
-		//Mapeada
 		Assert::IsTrue(iC.checkAnalog(analog, a));
-
+		//Aberta
 		val = 240;
 		a.channel[0] = val;
 		a.channel[1] = val;
 		a.channel[2] = val;
 		a.channel[3] = val;
 		a.channel[4] = val;
-		//Nao mapeada
-		Assert::IsTrue(iC.checkAnalog(analog, a));
+		Assert::IsFalse(iC.checkAnalog(analog, a));
 
 	}
 

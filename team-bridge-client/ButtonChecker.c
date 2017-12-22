@@ -1,21 +1,20 @@
 #include "ButtonChecker.h"
 
-void ButtonChecker::assignChecker(std::vector<KeyMap> &map) {
-		for ( size_t keyMapId = 0; keyMapId < map.size(); keyMapId++ ) {
-			KeyMap *keyMap = &map.at(keyMapId);
-
-			//Caso seja mouse ou teclado
-			if ( keyMap->getIdDevType() == DEVTYPE_KEYBOARD || keyMap->getIdDevType() == DEVTYPE_MOUSE ) {
-				keyMap->assignGestureChecker(BUTTON_TYPE, (KeyMap::gestureCheckerMethod)&ButtonChecker::pressed, this);
-			}
+bool ButtonChecker::assignChecker(CheckerSubject *checker, KeyMap *keyMap) {
+		
+		//Caso seja mouse ou teclado
+		if ( keyMap->getIdDevType() == DEVTYPE_KEYBOARD || keyMap->getIdDevType() == DEVTYPE_MOUSE ) {
+			checker->attach((ButtonCheckerMethod)&ButtonChecker::pressed, keyMap, this);
+			//keyMap->assignGestureChecker(BUTTON_TYPE, (KeyMap::gestureCheckerMethod)&ButtonChecker::pressed, this);
+			return true;
 		}
+		return false;
 	}
 
 
 
-int ButtonChecker::pressed(void * data, KeyMap * keyMap) {
-	vrpn_BUTTONCB * b = (vrpn_BUTTONCB*)data;
-	if ( keyMap->getKey() == b->button && b->state == 1 ) {
+int ButtonChecker::pressed(vrpn_BUTTONCB b, KeyMap * keyMap) {
+	if ( keyMap->getKey() == b.button && b.state == 1 ) {
 		return 1;
 	} else {
 		return 0;

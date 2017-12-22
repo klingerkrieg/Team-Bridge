@@ -4,6 +4,8 @@
 
 using namespace std;
 
+bool debug = false;
+
 string ReadByte(int port, int bauds) {
 	const int length = 32;
 	DCB       dcb;
@@ -24,14 +26,16 @@ string ReadByte(int port, int bauds) {
 		0,
 		NULL
 	);
-	if ( !GetCommState(hPort, &dcb) ) return "Erro1"; //ERROR
+	if ( !GetCommState(hPort, &dcb) ) {
+		return "\nFalha ao conectar na COM" + port; //ERROR
+	}
 
 	dcb.BaudRate = bauds;          //9600 Baud 
 	dcb.ByteSize = 8;                 //8 data bits 
 	dcb.Parity = NOPARITY;            //no parity 
 	dcb.StopBits = ONESTOPBIT;        //1 stop
 
-	if ( !SetCommState(hPort, &dcb) ) return "Erro2"; //ERROR
+	if ( !SetCommState(hPort, &dcb) ) return "Falha ao configurar bauds"; //ERROR
 	
 	SetCommMask(hPort, EV_RXCHAR | EV_TXEMPTY);       //receive character event  
 
@@ -52,8 +56,9 @@ string ReadByte(int port, int bauds) {
 
 int main(int argc, char **argv ) {
 
-	if ( argc < 5 || argc > 5 ) {
-		cout << "Usage:\n -p - Port: 3\n -p - Bauds: 115200";
+	if ( argc < 5 ) {
+		cout << "Usage:\n -p - Port: 3\n -b - Bauds: 115200\n -d - Debug\n";
+		return 0;
 	}
 	
 	int port;
@@ -64,9 +69,15 @@ int main(int argc, char **argv ) {
 		} else
 		if ( !strcmp(argv[i], "-b") ) {
 			bauds = atoi(argv[++i]);
+		} else
+		if ( !strcmp(argv[i], "-d") ) {
+			debug = true;
 		}
 	}
 
 	cout << ReadByte(port,bauds);
+	if ( debug ) {
+		Sleep(5000);
+	}
 	return 0;
 }

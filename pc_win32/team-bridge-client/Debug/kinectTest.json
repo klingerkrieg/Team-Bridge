@@ -1,0 +1,112 @@
+{
+  "common": {
+    "patientName": "",
+    "saveDir": "./SAVES/",
+    "KINECT_X_INTERVAL": 0.35,
+    "host": "",
+    "database": "",
+    "user": "",
+    "passwd": ""
+  },
+  "keys": [
+    {
+      "divClass": "handTop",
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_LEFT_HAND_TOP",
+      "x": -2,
+      "coordinateMod": "=",
+      "y": 3,
+      "toKeyDown": "1",
+      "toKeyUp": "1"
+    },
+    {
+      "divClass": "handTop",
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_RIGHT_HAND_TOP",
+      "x": -2,
+      "coordinateMod": "<=",
+      "y": 5,
+      "toKeyDown": "2",
+      "toKeyUp": "2"
+    },
+    {
+      "divClass": "kinectWalking",
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_WALK",
+      "delay": 1000,
+      "sensivity": 0.1,
+      "toKeyDown": "3",
+      "toKeyUp": "3"
+    },
+    {
+      "divClass": "kinectStep",
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_STEP_DOWN",
+      "sensivity": 0.1,
+      "toKeyDown": "4",
+      "toKeyUp": "4"
+    },
+    {
+      "divClass": "kinectBalance",
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_BALANCE",
+      "angleMod": ">",
+      "angle": 35,
+      "toKeyDown": "5",
+      "toKeyUp": "5"
+    },
+    {
+      "divClass": "kinectFastHand",
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_RIGHT_HAND_FAST",
+      "maxVelocityMs": 4,
+      "toKeyDown": "6",
+      "toKeyUp": "6"
+    },
+    {
+      "divClass": "kinectWrist",
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_RIGHT_WRIST_DOWN",
+      "angleMod": ">",
+      "angle": 35,
+      "toKeyDown": "7",
+      "toKeyUp": "7"
+    },
+    {
+      "divClass": "kinectTurn",
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_TURN_RIGHT",
+      "angle": 40,
+      "toKeyDown": "8",
+      "toKeyUp": "8"
+    },
+    {
+      "divClass": "kinectBody",
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_BODY_FRONT",
+      "angle": 20,
+      "toKeyDown": "9",
+      "toKeyUp": "9"
+    },
+    {
+      "divClass": "handTop",
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_LEFT_HAND_TOP",
+      "x": -2,
+      "coordinateMod": "<=",
+      "y": 5,
+      "toKeyDown": "KINECT_SET_CENTER_POS",
+      "toKeyUp": "KINECT_SET_CENTER_POS"
+    }
+  ]
+}

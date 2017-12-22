@@ -193,17 +193,17 @@ void VRPN_CALLBACK handle_tracker_pos_quat(void *userdata, const vrpn_TRACKERCB 
 
 void VRPN_CALLBACK handle_button(void *userdata, const vrpn_BUTTONCB b) {
 	const char *name = (const char *)userdata;
-	printf("Button: %d\n", b.button);
+	
 #ifdef THERAPY_MODULE
 	client.getStorage().saveToFile(name, b);
 #endif
 
 	//Teste para identificar se o mapeamento esta correto
-	for ( std::map<string,int>::iterator it = KeyMap::configToScanCode.begin(); it != KeyMap::configToScanCode.end(); ++it ) {
+	/*for ( std::map<string,int>::iterator it = KeyMap::configToScanCode.begin(); it != KeyMap::configToScanCode.end(); ++it ) {
 		if ( it->second == b.button ) {
 			printf("%s\n", it->first.c_str());
 		}
-	}
+	}*/
 
 
 	client.getInputConverter()->checkButton(name, b);

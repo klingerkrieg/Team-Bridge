@@ -6,6 +6,7 @@
 #include "FlexedMember.h"
 #include "KeyMap.h"
 #include "util.h"
+#include "CheckerSubject.h"
 
 const int KINECT_UP = 1;
 const int KINECT_DOWN = 2;
@@ -51,19 +52,19 @@ private:
 	double fastMemberDelay = 250;
 
 
-	bool detectWalkHeight(SkeletonPart * skelPart, KeyMap * keyMap, double &kneeLastHeight);
-	int detectBody(SkeletonPart * skelPart, KeyMap * keyMap ,int direction);
-	bool detectMemberFast(SkeletonPart * skelPart, KeyMap * keyMap);
+	bool detectWalkHeight(SkeletonPart skelPart, KeyMap * keyMap, double &kneeLastHeight);
+	int detectBody(SkeletonPart skelPart, KeyMap * keyMap ,int direction);
+	bool detectMemberFast(SkeletonPart skelPart, KeyMap * keyMap);
 
-	int detectHandTop(SkeletonPart * skelPart, KeyMap * keyMap);
-	int detectTopChange(SkeletonPart * skelPart, KeyMap * keyMap, int direction);
-	int detectHandXPos(SkeletonPart * skelPart, KeyMap * keyMap);
+	int detectHandTop(SkeletonPart skelPart, KeyMap * keyMap);
+	int detectTopChange(SkeletonPart skelPart, KeyMap * keyMap, int direction);
+	int detectHandXPos(SkeletonPart skelPart, KeyMap * keyMap);
 
 	//Flexao
 	static std::map<int, std::vector<double>> lastPositions[20];
 
 protected:
-	void assignChecker(std::vector<KeyMap> &map);
+	bool assignChecker( CheckerSubject *checker, KeyMap *keyMap);
 
 public:
 
@@ -74,50 +75,50 @@ public:
 	}
 
 	//step
-	int detectTopChangeUp(void * data, KeyMap * keyMap);
-	int detectTopChangeDown(void * data, KeyMap * keyMap);
-	int detectTopChangeNormal(void * data, KeyMap * keyMap);
+	int detectTopChangeUp(SkeletonPart skelPart, KeyMap * keyMap);
+	int detectTopChangeDown(SkeletonPart skelPart, KeyMap * keyMap);
+	int detectTopChangeNormal(SkeletonPart skelPart, KeyMap * keyMap);
 
 
 	//flexao
-	int leftWristFlexedUp(void * data, KeyMap * keyMap);
-	int leftWristFlexedDown(void * data, KeyMap * keyMap);
-	int rightWristFlexedUp(void * data, KeyMap * keyMap);
-	int rightWristFlexedDown(void * data, KeyMap * keyMap);
+	int leftWristFlexedUp(SkeletonPart skelPart, KeyMap * keyMap);
+	int leftWristFlexedDown(SkeletonPart skelPart, KeyMap * keyMap);
+	int rightWristFlexedUp(SkeletonPart skelPart, KeyMap * keyMap);
+	int rightWristFlexedDown(SkeletonPart skelPart, KeyMap * keyMap);
 
-	std::vector<double> getLastMemberPos(SkeletonPart * skelPart);
-	int getLastMemberTime(SkeletonPart * skelPart);
+	std::vector<double> getLastMemberPos(SkeletonPart skelPart);
+	int getLastMemberTime(SkeletonPart skelPart);
 
 	double euclidianDistance(std::vector<double> pos1, std::vector<double> pos2);
 
 
 
-	int detectLeftHandFast(void * data, KeyMap * keyMap);
-	int detectRightHandFast(void * data, KeyMap * keyMap);
+	int detectLeftHandFast(SkeletonPart skelPart, KeyMap * keyMap);
+	int detectRightHandFast(SkeletonPart skelPart, KeyMap * keyMap);
 
 	
 
 
-	int detectBodyFront(void * data, KeyMap * keyMap);
-	int detectBodyRight(void * data, KeyMap * keyMap);
-	int detectBodyLeft(void * data, KeyMap * keyMap);
-	int detectBodyBack(void * data, KeyMap * keyMap);
+	int detectBodyFront(SkeletonPart skelPart, KeyMap * keyMap);
+	int detectBodyRight(SkeletonPart skelPart, KeyMap * keyMap);
+	int detectBodyLeft(SkeletonPart skelPart, KeyMap * keyMap);
+	int detectBodyBack(SkeletonPart skelPart, KeyMap * keyMap);
 
-	int setCenterPos(void * data, KeyMap * keyMap);
-
-
-	int detectWalk(void * data, KeyMap * keyMap);
-
-	int detectTurnBody(SkeletonPart * skelPart, KeyMap * keyMap, int direction);
-	int detectTurnLeft(void * data, KeyMap * keyMap);
-	int detectTurnRight(void * data, KeyMap * keyMap);
+	int setCenterPos(SkeletonPart skelPart, KeyMap * keyMap);
 
 
+	int detectWalk(SkeletonPart skelPart, KeyMap * keyMap);
 
-	int detectLeftHandTop(void * data, KeyMap * keyMap);
-	int detectRightHandTop(void * data, KeyMap * keyMap);
+	int detectTurnBody(SkeletonPart skelPart, KeyMap * keyMap, int direction);
+	int detectTurnLeft(SkeletonPart skelPart, KeyMap * keyMap);
+	int detectTurnRight(SkeletonPart skelPart, KeyMap * keyMap);
+
+
+
+	int detectLeftHandTop(SkeletonPart skelPart, KeyMap * keyMap);
+	int detectRightHandTop(SkeletonPart skelPart, KeyMap * keyMap);
 	
-	int bodyBalance(void * data, KeyMap * keyMap);
+	int bodyBalance(SkeletonPart skelPart, KeyMap * keyMap);
 
 	static void setKinectXInterval(double interval) {
 		handXPosInterval = interval;

@@ -12,6 +12,9 @@ const int UP = 1;
 const int DOWN = 2;
 
 class FlexedMember : public AbstractGestureRecognizer {
+	private:
+	bool assignChecker(CheckerSubject *checker, KeyMap *keyMap);
+
 	public:
 	int flexed2d(std::map<int, std::vector<double>> points, int angle);
 

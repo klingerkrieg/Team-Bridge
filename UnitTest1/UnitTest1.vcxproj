@@ -107,7 +107,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <AdditionalLibraryDirectories>$(MYSQL_CONNECTORCPP)\lib\opt;$(VRPN)/Debug;$(VRPN)\quat\pc_win32\Debug;$(VCInstallDir)UnitTest\lib;%(AdditionalLibraryDirectories);$(SYSTEMDRIVE)\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib;%(AdditionalLibraryDirectories);</AdditionalLibraryDirectories>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);mysqlcppconn.lib;../pc_win32/team-bridge-client/Debug/*.obj;$(VRPN)/pc_win32/Debug/vrpn.lib;quat.lib;</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);mysqlcppconn.lib;../pc_win32/team-bridge-client/Debug/build_files/*.obj;$(VRPN)/pc_win32/Debug/vrpn.lib;quat.lib;</AdditionalDependencies>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention />
       <ImportLibrary />

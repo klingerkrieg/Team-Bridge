@@ -5,6 +5,8 @@
 #include "ButtonChecker.h"
 #include "KeyMap.h"
 #include "AbstractGestureRecognizer.h"
+#include "CheckerSubject.h"
+#include <map>
 
 class GestureRecognizer
 	: public KinectGestures
@@ -12,7 +14,10 @@ class GestureRecognizer
 	, public NEDGloveGestures
 	, public ButtonChecker {
 
+	private:
+	bool assignChecker(CheckerSubject *checker, KeyMap *keyMap);
+
 	public:
-	void assignChecker(std::vector<KeyMap> &map);
+	void assignCheckers(std::map<std::string, CheckerSubject> &checkers, std::vector<KeyMap> &map);
 
 };

@@ -1,5 +1,8 @@
 #include "FlexedMember.h"
 
+bool FlexedMember::assignChecker(CheckerSubject *checker, KeyMap *keyMap) {
+	return false;
+}
 
 
 int FlexedMember::flexed2d(std::map<int, std::vector<double>> points, int paramAngle) {

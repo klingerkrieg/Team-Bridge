@@ -1,7 +1,7 @@
 #include "KeyMap.h"
 
 
-char GestureCheckerNotDefined::err[500];
+//char GestureCheckerNotDefined::err[500];
 
 std::map<std::string, int> KeyMap::configToCreatedConstants = KeyMap::create_configToCreatedConstants();
 std::map<std::string, int> KeyMap::configToAscii = KeyMap::create_configToAscii();

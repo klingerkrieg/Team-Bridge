@@ -40,6 +40,9 @@
     <Filter Include="flappyBirdTest">
       <UniqueIdentifier>{e4676678-61ed-422d-b683-98b585db6f7b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="jsons">
+      <UniqueIdentifier>{b0dae89d-ef2f-4246-a11d-11bd8b5a9975}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Config.c">
@@ -95,6 +98,12 @@
     </ClCompile>
     <ClCompile Include="AbstractGestureRecognizer.c">
       <Filter>Source Files\GestureRecognizer</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyMapInterpreter.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CheckerSubject.c">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -179,26 +188,61 @@
     <ClInclude Include="VariabilitiesConfig.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="KeyMapInterpreter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CheckerSubject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="config.json" />
-    <None Include="drunkbug.json" />
-    <None Include="runner.json" />
-    <None Include="performance.json" />
-    <None Include="nedglove.json" />
-    <None Include="kayak.json" />
-    <None Include="mouse.json" />
-    <None Include="twoplayers.json" />
-    <None Include="leapmotion.json" />
-    <None Include="mountAndBlade.json" />
-    <None Include="mousemove.json" />
-    <None Include="teste.json" />
-    <None Include="remoteKeyboard.json" />
     <None Include="FlappyBirdTest\kinectBird.json">
       <Filter>flappyBirdTest</Filter>
     </None>
     <None Include="FlappyBirdTest\physiohappy.json">
       <Filter>flappyBirdTest</Filter>
+    </None>
+    <None Include="config.json">
+      <Filter>jsons</Filter>
+    </None>
+    <None Include="drunkbug.json">
+      <Filter>jsons</Filter>
+    </None>
+    <None Include="kayak.json">
+      <Filter>jsons</Filter>
+    </None>
+    <None Include="kinectTest.json">
+      <Filter>jsons</Filter>
+    </None>
+    <None Include="leapmotion.json">
+      <Filter>jsons</Filter>
+    </None>
+    <None Include="mountAndBlade.json">
+      <Filter>jsons</Filter>
+    </None>
+    <None Include="mouse.json">
+      <Filter>jsons</Filter>
+    </None>
+    <None Include="mousemove.json">
+      <Filter>jsons</Filter>
+    </None>
+    <None Include="nedglove.json">
+      <Filter>jsons</Filter>
+    </None>
+    <None Include="performance.json">
+      <Filter>jsons</Filter>
+    </None>
+    <None Include="remoteKeyboard.json">
+      <Filter>jsons</Filter>
+    </None>
+    <None Include="runner.json">
+      <Filter>jsons</Filter>
+    </None>
+    <None Include="teste.json">
+      <Filter>jsons</Filter>
+    </None>
+    <None Include="twoplayers.json">
+      <Filter>jsons</Filter>
     </None>
   </ItemGroup>
 </Project>

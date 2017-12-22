@@ -1,0 +1,46 @@
+{
+  "common": {
+    "patientName": "",
+    "saveDir": "./SAVES/",
+    "appName": "",
+    "host": "",
+    "database": "",
+    "user": "",
+    "passwd": "",
+    "KINECT_X_INTERVAL": 0.35
+  },
+  "keys": [
+    {
+      "divClass": "kinectBody",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_BODY_FRONT",
+      "angle": 35,
+      "toKeyDown": "W",
+      "toKeyUp": "W"
+    },
+    {
+      "divClass": "kinectBody",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_BODY_LEFT",
+      "angle": 35,
+      "toKeyDown": "A",
+      "toKeyUp": "A"
+    },
+    {
+      "divClass": "kinectBody",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_BODY_RIGHT",
+      "angle": 35,
+      "toKeyDown": "D",
+      "toKeyUp": "D"
+    },
+    {
+      "divClass": "kinectBody",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_BODY_BACK",
+      "angle": 35,
+      "toKeyDown": "S",
+      "toKeyUp": "S"
+    }
+  ]
+}

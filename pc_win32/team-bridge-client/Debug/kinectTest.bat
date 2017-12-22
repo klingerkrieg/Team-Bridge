@@ -1,0 +1,1 @@
+team-bridge-client.exe -f kinectTest.json

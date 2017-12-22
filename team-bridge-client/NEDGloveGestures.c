@@ -1,28 +1,25 @@
 #include "NEDGloveGestures.h"
 
-void NEDGloveGestures::assignChecker(std::vector<KeyMap> &map) {
-	for ( size_t keyMapId = 0; keyMapId < map.size(); keyMapId++ ) {
-		KeyMap *keyMap = &map.at(keyMapId);
-
-		//cada metodo que será utilizado é alocado em seus respecitvos keyMaps
-
-		switch ( keyMap->getKey() ) {
-			case NEDGLOVE_GRAB:
-				keyMap->assignGestureChecker(ANALOG_TYPE, (KeyMap::gestureCheckerMethod)&NEDGloveGestures::closed, this);
-				break;
-			case NEDGLOVE_PINCH:
-				keyMap->assignGestureChecker(ANALOG_TYPE, (KeyMap::gestureCheckerMethod)&NEDGloveGestures::pinch, this);
-				break;
-		}
+bool NEDGloveGestures::assignChecker(CheckerSubject *checker, KeyMap * keyMap) {
+	switch ( keyMap->getKey() ) {
+		case NEDGLOVE_GRAB:
+			checker->attach((AnalogCheckerMethod)&NEDGloveGestures::closed, keyMap, this);
+			break;
+		case NEDGLOVE_PINCH:
+			checker->attach((AnalogCheckerMethod)&NEDGloveGestures::pinch, keyMap, this);
+			break;
+		default:
+			return false;
+			break;
 	}
+	return true;
 }
 
 
-int NEDGloveGestures::closed(void * data, KeyMap *keyMap) {
-	vrpn_ANALOGCB * a = (vrpn_ANALOGCB*)data;
+int NEDGloveGestures::closed(vrpn_ANALOGCB a, KeyMap *keyMap) {
 	int sum = 0;
 	for ( int i = 0; i < 5; i++ ) {
-		sum += (int)a->channel[i];
+		sum += (int)a.channel[i];
 	}
 	sum /= 5;
 
@@ -46,9 +43,8 @@ int NEDGloveGestures::closed(void * data, KeyMap *keyMap) {
 }
 
 
-int NEDGloveGestures::pinch(void *data, KeyMap *keyMap) {
-	vrpn_ANALOGCB * a = (vrpn_ANALOGCB*)data;
-	int str = strengthNormal - (((int)a->channel[keyMap->getThumb()] + (int)a->channel[keyMap->getIndex()]) / 2);
+int NEDGloveGestures::pinch(vrpn_ANALOGCB a, KeyMap *keyMap) {
+	int str = strengthNormal - (((int)a.channel[keyMap->getThumb()] + (int)a.channel[keyMap->getIndex()]) / 2);
 
 
 	int maxStr = keyMap->getStrengthMax() == 0 ? strengthNormal : keyMap->getStrengthMax();

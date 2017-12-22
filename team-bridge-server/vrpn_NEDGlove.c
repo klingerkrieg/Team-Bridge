@@ -110,7 +110,7 @@ bool vrpn_NEDGlove::frame() {
 	char * pch;
 	data += ";";
 
-	//std::cout << data << "\n";
+	std::cout << data << "\n";
 
 	pch = strtok((char *)data.c_str(), ";");
 	for (int i = 0; i < 5; i++){

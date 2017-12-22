@@ -164,57 +164,9 @@ private:
 	std::string saveData = "";
 	
 	void setDevType(std::string devType);
-
-public:
-	//Aqui foi aplicado algo semelhante ao padrão Observer
-	typedef int (AbstractGestureRecognizer::*gestureCheckerMethod)(void * data, KeyMap *key);
-
-	//Guardo o método responsável por tratar aquele keyMap
-private:
-	AbstractGestureRecognizer *context;
-	gestureCheckerMethod gestureChecker;
-	bool gestureCheckerDefined = false;
-	int checkerType = 0;
-
-public:
 	
 
-	void assignGestureChecker(int type, gestureCheckerMethod method, AbstractGestureRecognizer *ofClass) {
-		gestureChecker = method;
-		context = ofClass;
-		gestureCheckerDefined = true;
-		checkerType = type;
-	}
-
-	//Sempre que chegar um dado novo o método é chamado para verificar
-	//Essa sobrecarga é para garantir que uma função não seja chamada com um tipo de dado não suportado
-	int callGestureChecker(SkeletonPart data) {
-		if ( checkerType == TRACK_TYPE ) {
-			return (context->*gestureChecker)((void *)&data, this);
-		}
-		return -1;
-	}
-
-	int callGestureChecker(vrpn_BUTTONCB data) {
-		if ( checkerType == BUTTON_TYPE ) {
-			return (context->*gestureChecker)((void *)&data, this);
-		}
-		return -1;
-	}
-
-	int callGestureChecker(vrpn_ANALOGCB data) {
-		if ( checkerType == ANALOG_TYPE ) {
-			return (context->*gestureChecker)((void *)&data, this);
-		}
-		return -1;
-	}
-	
-
-	bool getGestureCheckerDefined() {
-		return gestureCheckerDefined;
-	}
-
-	//////////////////
+	public:
 	std::string getDevTypeStr() {
 		return devTypeStr;
 	}
@@ -635,20 +587,3 @@ public:
 
 };
 
-
-class GestureCheckerNotDefined : public std::runtime_error {
-	private:
-		KeyMap * key;
-		static char err[500];
-	public:
-
-	GestureCheckerNotDefined(KeyMap * keyMap) : std::runtime_error("O metodo de checagem desse evento nao esta definido, esqueceu de chamar o GestureRecognizer::assignChecker?\n") {
-		key = keyMap;
-	}
-
-	virtual const char* what() const noexcept {
-		strcpy(err, runtime_error::what());
-		strcat(err, key->toString().c_str());
-		return err;
-	}
-};

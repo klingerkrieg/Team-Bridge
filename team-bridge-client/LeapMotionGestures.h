@@ -6,7 +6,7 @@
 #include "util.h"
 #include "FlexedMember.h"
 #include "KeyMap.h"
-
+#include "CheckerSubject.h"
 
 //A primeira classe obrigatoriamente precisa ser AbstractGestureRecognizer
 class LeapMotionGestures : public FlexedMember  {
@@ -18,16 +18,16 @@ private:
 
 
 protected:
-	void assignChecker(std::vector<KeyMap> &map);
+	bool assignChecker(CheckerSubject *checker, KeyMap *map);
 
 public:
 
 	static std::map<std::string, Skeleton> skeleton;
 
-	int wristFlexedUp(void * data, KeyMap * keyMap);
-	int wristFlexedDown(void * data, KeyMap * keyMap);
-	int closed(void * data, KeyMap * keyMap);
-	int pinch(void * data, KeyMap * keyMap);
+	int wristFlexedUp(SkeletonPart skelPart, KeyMap * keyMap);
+	int wristFlexedDown(SkeletonPart skelPart, KeyMap * keyMap);
+	int closed(vrpn_ANALOGCB a, KeyMap * keyMap);
+	int pinch(vrpn_ANALOGCB a, KeyMap * keyMap);
 
 	static std::map<int, int> handSkeletonMap1;
 	static std::map<int, int> create_handSkeletonMap1() {

@@ -154,13 +154,13 @@ function formToJSON(el){
     }
 
     if (el.find("#toKeyWhile").prop("checked")){
-        json.toKeyWhile = json.toKey;
+        json.toKeyWhile = json.toKey+"";
     }
     if (el.find("#toKeyDown").prop("checked")){
-        json.toKeyDown = json.toKey;
+        json.toKeyDown = json.toKey+"";
     }
     if (el.find("#toKeyUp").prop("checked")){
-        json.toKeyUp = json.toKey;
+        json.toKeyUp = json.toKey+"";
     }
 
     if (el.find("#saveData").prop("checked")){
@@ -307,7 +307,6 @@ function getKeyboardKeys(){
 function loadKeyboardOptions(){
     act = $('.keyboard #key');
     keys = getKeyboardKeys();
-    console.log(act);
     for(var i = 0; i < keys.length ;i++){
         act.append("<option value='"+keys[i].code+"'>"+keys[i].t+"</option>");
     }

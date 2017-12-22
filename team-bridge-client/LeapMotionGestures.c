@@ -6,32 +6,31 @@ std::map<int, int> LeapMotionGestures::handSkeletonMap1 = LeapMotionGestures::cr
 
 
 
-void LeapMotionGestures::assignChecker(std::vector<KeyMap> &map) {
-	for ( size_t keyMapId = 0; keyMapId < map.size(); keyMapId++ ) {
-		KeyMap *keyMap = &map.at(keyMapId);
-		//cada metodo que será utilizado é alocado em seus respecitvos keyMaps
-
-
-		switch ( keyMap->getKey() ) {
-			case LEAP_CLOSED:
-				keyMap->assignGestureChecker(ANALOG_TYPE, (KeyMap::gestureCheckerMethod)&LeapMotionGestures::closed, this);
-				break;
-			case LEAP_PINCH:
-				keyMap->assignGestureChecker(ANALOG_TYPE, (KeyMap::gestureCheckerMethod)&LeapMotionGestures::pinch, this);
-				break;
-			case LEAP_WRIST_UP:
-				keyMap->assignGestureChecker(TRACK_TYPE, (KeyMap::gestureCheckerMethod)&LeapMotionGestures::wristFlexedUp, this);
-				break;
-			case LEAP_WRIST_DOWN:
-				keyMap->assignGestureChecker(TRACK_TYPE, (KeyMap::gestureCheckerMethod)&LeapMotionGestures::wristFlexedDown, this);
-				break;
-		}
+bool LeapMotionGestures::assignChecker(CheckerSubject *checker, KeyMap *keyMap) {
+	
+	switch ( keyMap->getKey() ) {
+		case LEAP_CLOSED:
+			checker->attach((AnalogCheckerMethod)&LeapMotionGestures::closed, keyMap, this);
+			return true;
+			break;
+		case LEAP_PINCH:
+			checker->attach((AnalogCheckerMethod)&LeapMotionGestures::pinch, keyMap, this);
+			return true;
+			break;
+		case LEAP_WRIST_UP:
+			checker->attach(SKELETON_HAND_L, (TrackerCheckerMethod)&LeapMotionGestures::wristFlexedUp, keyMap, this);
+			return true;
+			break;
+		case LEAP_WRIST_DOWN:
+			checker->attach(SKELETON_HAND_L, (TrackerCheckerMethod)&LeapMotionGestures::wristFlexedDown, keyMap, this);
+			return true;
+			break;
 	}
+	return false;
 }
 
 
-int LeapMotionGestures::wristFlexedUp(void * data, KeyMap * keyMap) {
-	SkeletonPart skelPart = *(SkeletonPart*)data;
+int LeapMotionGestures::wristFlexedUp(SkeletonPart skelPart, KeyMap * keyMap) {
 	//O nome do skeleton é salvo somente para poder capturar dentro desses metodos
 	//o nome do skeleton é o nome do dispostivo = Tracker0 Tracker1 etc
 	Skeleton skel = skeleton[skelPart.skeletonName];
@@ -40,11 +39,11 @@ int LeapMotionGestures::wristFlexedUp(void * data, KeyMap * keyMap) {
 	if ( points.size() < 3 ) {
 		return -1;
 	}
+	
 	return flexed3d(points, keyMap, UP);
 }
 
-int LeapMotionGestures::wristFlexedDown(void * data, KeyMap * keyMap) {
-	SkeletonPart skelPart = *(SkeletonPart*)data;
+int LeapMotionGestures::wristFlexedDown(SkeletonPart skelPart, KeyMap * keyMap) {
 	Skeleton skel = skeleton[skelPart.skeletonName];
 
 	std::map<int, std::vector<double>> points = getPoints(skel.elbowL, skel.wristL, skel.handL);
@@ -57,8 +56,7 @@ int LeapMotionGestures::wristFlexedDown(void * data, KeyMap * keyMap) {
 
 
 // Mao fechada
-int LeapMotionGestures::closed(void * data, KeyMap * keyMap) {
-	vrpn_ANALOGCB a = *(vrpn_ANALOGCB *)data;
+int LeapMotionGestures::closed(vrpn_ANALOGCB a, KeyMap * keyMap) {
 	float angle = (float)a.channel[0];
 	if ( angle == -1 ) {
 		return -1;
@@ -81,8 +79,7 @@ int LeapMotionGestures::closed(void * data, KeyMap * keyMap) {
 }
 
 //Pinça
-int LeapMotionGestures::pinch(void * data, KeyMap * keyMap) {
-	vrpn_ANALOGCB a = *(vrpn_ANALOGCB *)data;
+int LeapMotionGestures::pinch(vrpn_ANALOGCB a, KeyMap * keyMap) {
 
 	float dist = (float)a.channel[1];
 	if ( dist == -1 ) {

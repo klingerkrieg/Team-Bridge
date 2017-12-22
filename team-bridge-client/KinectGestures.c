@@ -1,6 +1,5 @@
 #include "KinectGestures.h"
 
-
 double KinectGestures::handXPosInterval = 0.40;
 
 
@@ -10,72 +9,77 @@ std::map<std::string, KinectDetection> KinectGestures::kinectDetection;
 
 std::map<int, int> KinectGestures::skeletonMap1 = KinectGestures::create_SkeletonMap1();
 
-void KinectGestures::assignChecker(std::vector<KeyMap> &map) {
-	for ( size_t keyMapId = 0; keyMapId < map.size(); keyMapId++ ) {
-		KeyMap *keyMap = &map.at(keyMapId);
+bool KinectGestures::assignChecker( CheckerSubject *checker, KeyMap *keyMap) {
+	
 
 		//cada metodo que será utilizado é alocado em seus respecitvos keyMaps
 
 		switch ( keyMap->getKey() ) {
 			case KINECT_LEFT_HAND_FAST:
-				keyMap->assignGestureChecker(TRACK_TYPE, (KeyMap::gestureCheckerMethod)&KinectGestures::detectLeftHandFast, this);
+				checker->attach(SKELETON_HAND_L, (TrackerCheckerMethod)&KinectGestures::detectLeftHandFast, keyMap, this);
 				break;
 			case KINECT_RIGHT_HAND_FAST:
-				keyMap->assignGestureChecker(TRACK_TYPE, (KeyMap::gestureCheckerMethod)&KinectGestures::detectRightHandFast, this);
+				checker->attach(SKELETON_HAND_R, (TrackerCheckerMethod)&KinectGestures::detectRightHandFast, keyMap, this);
 				break;
 			case KINECT_BODY_FRONT:
-				keyMap->assignGestureChecker(TRACK_TYPE, (KeyMap::gestureCheckerMethod)&KinectGestures::detectBodyFront, this);
+				checker->attach(SKELETON_HIP_CENTER, (TrackerCheckerMethod)&KinectGestures::detectBodyFront, keyMap, this);
 				break;
 			case KINECT_BODY_RIGHT:
-				keyMap->assignGestureChecker(TRACK_TYPE, (KeyMap::gestureCheckerMethod)&KinectGestures::detectBodyRight, this);
+				checker->attach(SKELETON_HIP_CENTER, (TrackerCheckerMethod)&KinectGestures::detectBodyRight, keyMap, this);
 				break;
 			case KINECT_BODY_LEFT:
-				keyMap->assignGestureChecker(TRACK_TYPE, (KeyMap::gestureCheckerMethod)&KinectGestures::detectBodyLeft, this);
+				checker->attach(SKELETON_HIP_CENTER, (TrackerCheckerMethod)&KinectGestures::detectBodyLeft, keyMap, this);
 				break;
 			case KINECT_BODY_BACK:
-				keyMap->assignGestureChecker(TRACK_TYPE, (KeyMap::gestureCheckerMethod)&KinectGestures::detectBodyBack, this);
+				checker->attach(SKELETON_HIP_CENTER, (TrackerCheckerMethod)&KinectGestures::detectBodyBack, keyMap, this);
 				break;
 			case KINECT_WALK:
-				keyMap->assignGestureChecker(TRACK_TYPE, (KeyMap::gestureCheckerMethod)&KinectGestures::detectWalk, this);
+				checker->attach(SKELETON_KNEE_R, (TrackerCheckerMethod)&KinectGestures::detectWalk, keyMap, this);
+				checker->attach(SKELETON_KNEE_L, (TrackerCheckerMethod)&KinectGestures::detectWalk, keyMap, this);
 				break;
 			case KINECT_TURN_LEFT:
-				keyMap->assignGestureChecker(TRACK_TYPE, (KeyMap::gestureCheckerMethod)&KinectGestures::detectTurnLeft, this);
+				checker->attach(SKELETON_SHOULDER_CENTER, (TrackerCheckerMethod)&KinectGestures::detectTurnLeft, keyMap, this);
 				break;
 			case KINECT_TURN_RIGHT:
-				keyMap->assignGestureChecker(TRACK_TYPE, (KeyMap::gestureCheckerMethod)&KinectGestures::detectTurnRight, this);
+				checker->attach(SKELETON_SHOULDER_CENTER, (TrackerCheckerMethod)&KinectGestures::detectTurnRight, keyMap, this);
 				break;
 			case KINECT_BALANCE:
-				keyMap->assignGestureChecker(TRACK_TYPE, (KeyMap::gestureCheckerMethod)&KinectGestures::bodyBalance, this);
+				checker->attach(SKELETON_HIP_CENTER, (TrackerCheckerMethod)&KinectGestures::bodyBalance, keyMap, this);
 				break;
 			case KINECT_LEFT_WRIST_UP:
-				keyMap->assignGestureChecker(TRACK_TYPE, (KeyMap::gestureCheckerMethod)&KinectGestures::leftWristFlexedUp, this);
+				checker->attach(SKELETON_HAND_L, (TrackerCheckerMethod)&KinectGestures::leftWristFlexedUp, keyMap, this);
 				break;
 			case KINECT_LEFT_WRIST_DOWN:
-				keyMap->assignGestureChecker(TRACK_TYPE, (KeyMap::gestureCheckerMethod)&KinectGestures::leftWristFlexedDown, this);
+				checker->attach(SKELETON_HAND_L, (TrackerCheckerMethod)&KinectGestures::leftWristFlexedDown, keyMap, this);
 				break;
 			case KINECT_RIGHT_WRIST_UP:
-				keyMap->assignGestureChecker(TRACK_TYPE, (KeyMap::gestureCheckerMethod)&KinectGestures::leftWristFlexedDown, this);
+				checker->attach(SKELETON_HAND_R, (TrackerCheckerMethod)&KinectGestures::leftWristFlexedDown, keyMap, this);
 				break;
 			case KINECT_RIGHT_WRIST_DOWN:
-				keyMap->assignGestureChecker(TRACK_TYPE, (KeyMap::gestureCheckerMethod)&KinectGestures::rightWristFlexedDown, this);
+				checker->attach(SKELETON_HAND_R, (TrackerCheckerMethod)&KinectGestures::rightWristFlexedDown, keyMap, this);
 				break;
 			case KINECT_RIGHT_HAND_TOP:
-				keyMap->assignGestureChecker(TRACK_TYPE, (KeyMap::gestureCheckerMethod)&KinectGestures::detectRightHandTop, this);//trazer pra cá o conteudo externo
+				checker->attach(SKELETON_HAND_R, (TrackerCheckerMethod)&KinectGestures::detectRightHandTop, keyMap, this);
 				break;
 			case KINECT_LEFT_HAND_TOP:
-				keyMap->assignGestureChecker(TRACK_TYPE, (KeyMap::gestureCheckerMethod)&KinectGestures::detectLeftHandTop, this);//trazer pra cá o conteudo externo
+				checker->attach(SKELETON_HAND_L, (TrackerCheckerMethod)&KinectGestures::detectLeftHandTop, keyMap, this);
 				break;
 			case KINECT_STEP_UP:
-				keyMap->assignGestureChecker(TRACK_TYPE, (KeyMap::gestureCheckerMethod)&KinectGestures::detectTopChangeUp, this);//criar um metodo pra cada
+				checker->attach(SKELETON_HEAD, (TrackerCheckerMethod)&KinectGestures::detectTopChangeUp, keyMap, this);
 				break;
 			case KINECT_STEP_DOWN:
-				keyMap->assignGestureChecker(TRACK_TYPE, (KeyMap::gestureCheckerMethod)&KinectGestures::detectTopChangeDown, this);//criar um metodo pra cada
+				checker->attach(SKELETON_HEAD, (TrackerCheckerMethod)&KinectGestures::detectTopChangeDown, keyMap, this);
 				break;
 			case KINECT_STEP_NORMAL:
-				keyMap->assignGestureChecker(TRACK_TYPE, (KeyMap::gestureCheckerMethod)&KinectGestures::detectTopChangeNormal, this);//criar um metodo pra cada
+				checker->attach(SKELETON_HEAD, (TrackerCheckerMethod)&KinectGestures::detectTopChangeNormal, keyMap, this);
+				break;
+			default:
+				return false;
 				break;
 		}
-	}
+
+		return true;
+	
 }
 
 
@@ -85,34 +89,32 @@ void KinectGestures::assignChecker(std::vector<KeyMap> &map) {
 		Velocidade das mãos
 */
 
-int KinectGestures::detectLeftHandFast(void * data, KeyMap * keyMap) {
-	SkeletonPart * skelPart = (SkeletonPart*)data;
+int KinectGestures::detectLeftHandFast(SkeletonPart skelPart, KeyMap * keyMap) {
 
-	if ( skelPart->skelConstant == SKELETON_HAND_L ) {
+	if ( skelPart.skelConstant == SKELETON_HAND_L ) {
 		return detectMemberFast(skelPart, keyMap);
 	}
 	return -1;
 }
 
-int KinectGestures::detectRightHandFast(void * data, KeyMap * keyMap) {
-	SkeletonPart * skelPart = (SkeletonPart*)data;
+int KinectGestures::detectRightHandFast(SkeletonPart skelPart, KeyMap * keyMap) {
 
-	if ( skelPart->skelConstant == SKELETON_HAND_R ) {
+	if ( skelPart.skelConstant == SKELETON_HAND_R ) {
 		return detectMemberFast(skelPart, keyMap);
 	}
 	return -1;
 }
 
-std::vector<double> KinectGestures::getLastMemberPos(SkeletonPart * skelPart) {
-	if ( kinectDetection[skelPart->skeletonName].lastMemberPos[skelPart->sensor].empty() ) {
+std::vector<double> KinectGestures::getLastMemberPos(SkeletonPart skelPart) {
+	if ( kinectDetection[skelPart.skeletonName].lastMemberPos[skelPart.sensor].empty() ) {
 		return { 0,0,0 };
 	} else {
-		return kinectDetection[skelPart->skeletonName].lastMemberPos[skelPart->sensor];
+		return kinectDetection[skelPart.skeletonName].lastMemberPos[skelPart.sensor];
 	}
 }
 
-int KinectGestures::getLastMemberTime(SkeletonPart * skelPart) {
-	return kinectDetection[skelPart->skeletonName].lastMemberTime[skelPart->sensor];
+int KinectGestures::getLastMemberTime(SkeletonPart skelPart) {
+	return kinectDetection[skelPart.skeletonName].lastMemberTime[skelPart.sensor];
 }
 
 double KinectGestures::euclidianDistance(std::vector<double> pos1, std::vector<double> pos2) {
@@ -121,10 +123,10 @@ double KinectGestures::euclidianDistance(std::vector<double> pos1, std::vector<d
 
 struct timeval tp;
 
-bool KinectGestures::detectMemberFast(SkeletonPart * skelPart, KeyMap * keyMap) {
+bool KinectGestures::detectMemberFast(SkeletonPart skelPart, KeyMap * keyMap) {
 	
 	std::vector<double> pos = getLastMemberPos(skelPart);
-	std::vector<double> actPos = { skelPart->x, skelPart->y, skelPart->z };
+	std::vector<double> actPos = { skelPart.x, skelPart.y, skelPart.z };
 	
 
 	gettimeofday(&tp, NULL);
@@ -132,27 +134,27 @@ bool KinectGestures::detectMemberFast(SkeletonPart * skelPart, KeyMap * keyMap) 
 
 
 	//Primeira execucao
-	if ( kinectDetection[skelPart->skeletonName].lastMemberTime[skelPart->sensor] == 0 ) {
-		kinectDetection[skelPart->skeletonName].lastMemberPos[skelPart->sensor] = actPos;
-		kinectDetection[skelPart->skeletonName].lastMemberTime[skelPart->sensor] = now;
+	if ( kinectDetection[skelPart.skeletonName].lastMemberTime[skelPart.sensor] == 0 ) {
+		kinectDetection[skelPart.skeletonName].lastMemberPos[skelPart.sensor] = actPos;
+		kinectDetection[skelPart.skeletonName].lastMemberTime[skelPart.sensor] = now;
 		return false;
 	} else
 	//Delay para nao calcular a velocidade com espaço de tempo muito curto
-	if ( now - kinectDetection[skelPart->skeletonName].lastMemberTime[skelPart->sensor] < fastMemberDelay ) {
+	if ( now - kinectDetection[skelPart.skeletonName].lastMemberTime[skelPart.sensor] < fastMemberDelay ) {
 		return false;
 	} else
 	//Delay para nao calcular a velocidade com espaço de tempo muito superior ao esperado
-	if ( now - kinectDetection[skelPart->skeletonName].lastMemberTime[skelPart->sensor] > fastMemberDelay + 50 ) {
+	if ( now - kinectDetection[skelPart.skeletonName].lastMemberTime[skelPart.sensor] > fastMemberDelay + 50 ) {
 		//reseta a contagem
-		kinectDetection[skelPart->skeletonName].lastMemberPos[skelPart->sensor] = actPos;
-		kinectDetection[skelPart->skeletonName].lastMemberTime[skelPart->sensor] = now;
+		kinectDetection[skelPart.skeletonName].lastMemberPos[skelPart.sensor] = actPos;
+		kinectDetection[skelPart.skeletonName].lastMemberTime[skelPart.sensor] = now;
 		return false;
 	}
 	
-	long last = kinectDetection[skelPart->skeletonName].lastMemberTime[skelPart->sensor];
+	long last = kinectDetection[skelPart.skeletonName].lastMemberTime[skelPart.sensor];
 	double dst = euclidianDistance(pos, actPos);
-	kinectDetection[skelPart->skeletonName].lastMemberPos[skelPart->sensor] = actPos;
-	kinectDetection[skelPart->skeletonName].lastMemberTime[skelPart->sensor] = now;
+	kinectDetection[skelPart.skeletonName].lastMemberPos[skelPart.sensor] = actPos;
+	kinectDetection[skelPart.skeletonName].lastMemberTime[skelPart.sensor] = now;
 
 	double time = ( (double)(now - last) / 1000.0);
 	double velocityMs = (dst / time);
@@ -177,12 +179,12 @@ bool KinectGestures::detectMemberFast(SkeletonPart * skelPart, KeyMap * keyMap) 
 */
 
 
-int KinectGestures::detectHandTop(SkeletonPart * skelPart, KeyMap * keyMap) {
+int KinectGestures::detectHandTop(SkeletonPart skelPart, KeyMap * keyMap) {
 	
-	if ( skeleton[skelPart->skeletonName].head.defined == false ) {
+	if ( skeleton[skelPart.skeletonName].head.defined == false ) {
 		return -1;
 	}
-	double headY = skeleton[skelPart->skeletonName].head.y;
+	double headY = skeleton[skelPart.skeletonName].head.y;
 	//
 	//...  - 5
 	//1.20 - 4
@@ -196,37 +198,37 @@ int KinectGestures::detectHandTop(SkeletonPart * skelPart, KeyMap * keyMap) {
 	bool ret = false;
 
 	if ( keyMap->getY() == 5 &&
-		(skelPart->y > headY + (handTopInterval * 2) || keyMap->getCoordinateMod() == -1) ) {
+		(skelPart.y > headY + (handTopInterval * 2) || keyMap->getCoordinateMod() == -1) ) {
 		ret = true;
 	} else
 	if ( keyMap->getY() == 4 && (
-		(skelPart->y <= headY + (handTopInterval * 2) && skelPart->y > headY + handTopInterval && keyMap->getCoordinateMod() == 0)
-		|| (skelPart->y > headY + handTopInterval && keyMap->getCoordinateMod() == 1)
-		|| (skelPart->y <= headY + (handTopInterval * 2) && keyMap->getCoordinateMod() == -1) )) {
+		(skelPart.y <= headY + (handTopInterval * 2) && skelPart.y > headY + handTopInterval && keyMap->getCoordinateMod() == 0)
+		|| (skelPart.y > headY + handTopInterval && keyMap->getCoordinateMod() == 1)
+		|| (skelPart.y <= headY + (handTopInterval * 2) && keyMap->getCoordinateMod() == -1) )) {
 		ret = true;
 	} else
 	if ( keyMap->getY() == 3 && (
-		(skelPart->y <= headY + handTopInterval && skelPart->y > headY - (handTopInterval * 2) && keyMap->getCoordinateMod() == 0)
-		|| (skelPart->y > headY - (handTopInterval * 2) && keyMap->getCoordinateMod() == 1)
-		|| (skelPart->y <= headY + handTopInterval && keyMap->getCoordinateMod() == -1) )) {
+		(skelPart.y <= headY + handTopInterval && skelPart.y > headY - (handTopInterval * 2) && keyMap->getCoordinateMod() == 0)
+		|| (skelPart.y > headY - (handTopInterval * 2) && keyMap->getCoordinateMod() == 1)
+		|| (skelPart.y <= headY + handTopInterval && keyMap->getCoordinateMod() == -1) )) {
 		ret = true;
 	} else
 	if ( keyMap->getY() == 2 && (
-		(skelPart->y <= headY - (handTopInterval * 2) && skelPart->y > headY - (handTopInterval * 5) && keyMap->getCoordinateMod() == 0)
-		|| (skelPart->y > headY - (handTopInterval * 5)  && keyMap->getCoordinateMod() == 1)
-		|| (skelPart->y <= headY - (handTopInterval * 2) && keyMap->getCoordinateMod() == -1) )) {
+		(skelPart.y <= headY - (handTopInterval * 2) && skelPart.y > headY - (handTopInterval * 5) && keyMap->getCoordinateMod() == 0)
+		|| (skelPart.y > headY - (handTopInterval * 5)  && keyMap->getCoordinateMod() == 1)
+		|| (skelPart.y <= headY - (handTopInterval * 2) && keyMap->getCoordinateMod() == -1) )) {
 
 		ret = true;
 	} else
 	if ( keyMap->getY() == 1 &&
-		(skelPart->y <= headY - (handTopInterval * 5) || keyMap->getCoordinateMod() == 1) ) {
+		(skelPart.y <= headY - (handTopInterval * 5) || keyMap->getCoordinateMod() == 1) ) {
 		ret = true;
 	}
 
 #ifdef THERAPY_MODULE
 	if ( ret ) {
 		if ( keyMap->getSaveData().compare("") ) {
-			storage->saveToFile(keyMap->getDev().c_str(), keyMap->getSaveData() + "-Y", skelPart->y);
+			storage->saveToFile(keyMap->getDev().c_str(), keyMap->getSaveData() + "-Y", skelPart.y);
 		}
 	}
 #endif
@@ -244,10 +246,9 @@ int KinectGestures::detectHandTop(SkeletonPart * skelPart, KeyMap * keyMap) {
 /**
 * Esse metodo depende do detectHandTop, ele deve ser chamado primeiro para captura da posicao central
 */
-int KinectGestures::detectLeftHandTop(void * data, KeyMap * keyMap) {
-	SkeletonPart * skelPart = (SkeletonPart*)data;
+int KinectGestures::detectLeftHandTop(SkeletonPart skelPart, KeyMap * keyMap) {
 
-	if ( skelPart->skelConstant == SKELETON_HAND_L ) {
+	if ( skelPart.skelConstant == SKELETON_HAND_L ) {
 		return detectHandXPos(skelPart, keyMap);
 	}
 	return -1;
@@ -256,10 +257,9 @@ int KinectGestures::detectLeftHandTop(void * data, KeyMap * keyMap) {
 /**
 * Esse metodo depende do detectHandTop, ele deve ser chamado primeiro para captura da posicao central
 */
-int KinectGestures::detectRightHandTop(void * data, KeyMap * keyMap) {
-	SkeletonPart * skelPart = (SkeletonPart*)data;
+int KinectGestures::detectRightHandTop(SkeletonPart skelPart, KeyMap * keyMap) {
 
-	if ( skelPart->skelConstant == SKELETON_HAND_R ) {
+	if ( skelPart.skelConstant == SKELETON_HAND_R ) {
 		return detectHandXPos(skelPart, keyMap);
 	}
 	return -1;
@@ -268,12 +268,12 @@ int KinectGestures::detectRightHandTop(void * data, KeyMap * keyMap) {
 /**
 * Esse metodo depende do detectHandTop, ele deve ser chamado primeiro para captura da posicao central
 */
-int KinectGestures::detectHandXPos(SkeletonPart * skelPart, KeyMap * keyMap) {
+int KinectGestures::detectHandXPos(SkeletonPart skelPart, KeyMap * keyMap) {
 	
-	if ( skeleton[skelPart->skeletonName].hipCenter.defined == false ) {
+	if ( skeleton[skelPart.skeletonName].hipCenter.defined == false ) {
 		return -1;
 	}
-	double hipCenterX = skeleton[skelPart->skeletonName].hipCenter.x;
+	double hipCenterX = skeleton[skelPart.skeletonName].hipCenter.x;
 	//Verifica eixo Y
 	if ( detectHandTop(skelPart, keyMap) == false) {
 		return false;
@@ -288,29 +288,29 @@ int KinectGestures::detectHandXPos(SkeletonPart * skelPart, KeyMap * keyMap) {
 
 	//printf("%.2f > %.2f + %.2f | %d\n", t.pos[0], lastHeadXPos, (handXPosInterval * 2), xPos);
 	//Depois de verificar a altura verifica o eixo X
-	if ( keyMap->getX() == 2 && skelPart->x >= hipCenterX + (handXPosInterval*2) ) {
+	if ( keyMap->getX() == 2 && skelPart.x >= hipCenterX + (handXPosInterval*2) ) {
 		ret = true;
 	} else
-	if ( keyMap->getX() == 1 && skelPart->x >= hipCenterX + handXPosInterval &&
-		skelPart->x < hipCenterX + (handXPosInterval * 2) ) {
+	if ( keyMap->getX() == 1 && skelPart.x >= hipCenterX + handXPosInterval &&
+		skelPart.x < hipCenterX + (handXPosInterval * 2) ) {
 		ret = true;
 	} else
-	if ( keyMap->getX() == 0 && skelPart->x <= hipCenterX + handXPosInterval &&
-		skelPart->x > hipCenterX - handXPosInterval ) {
+	if ( keyMap->getX() == 0 && skelPart.x <= hipCenterX + handXPosInterval &&
+		skelPart.x > hipCenterX - handXPosInterval ) {
 		ret = true;
 	} else
-	if ( keyMap->getX() == -1 && skelPart->x <= hipCenterX - handXPosInterval &&
-		skelPart->x > hipCenterX - (handXPosInterval * 2)  ) {
+	if ( keyMap->getX() == -1 && skelPart.x <= hipCenterX - handXPosInterval &&
+		skelPart.x > hipCenterX - (handXPosInterval * 2)  ) {
 		ret = true;
 	} else
-	if ( keyMap->getX() == -2 && skelPart->x <= hipCenterX - (handXPosInterval*2)  ) {
+	if ( keyMap->getX() == -2 && skelPart.x <= hipCenterX - (handXPosInterval*2)  ) {
 		ret = true;
 	}
 
 #ifdef THERAPY_MODULE
 	if ( ret ) {
 		if ( keyMap->getSaveData().compare("") ) {
-			storage->saveToFile(keyMap->getDev().c_str(), keyMap->getSaveData() + "-X", skelPart->x);
+			storage->saveToFile(keyMap->getDev().c_str(), keyMap->getSaveData() + "-X", skelPart.x);
 		}
 	}
 #endif
@@ -326,29 +326,26 @@ int KinectGestures::detectHandXPos(SkeletonPart * skelPart, KeyMap * keyMap) {
 std::vector<double> KinectGestures::headTopPositions;
 double KinectGestures::normalStepHeight = -100;
 
-int KinectGestures::detectTopChangeUp(void * data, KeyMap * keyMap) {
-	SkeletonPart * skelPart = (SkeletonPart*)data;
+int KinectGestures::detectTopChangeUp(SkeletonPart skelPart, KeyMap * keyMap) {
 	return detectTopChange(skelPart, keyMap, KINECT_UP);
 }
 
-int KinectGestures::detectTopChangeDown(void * data, KeyMap * keyMap) {
-	SkeletonPart * skelPart = (SkeletonPart*)data;
+int KinectGestures::detectTopChangeDown(SkeletonPart skelPart, KeyMap * keyMap) {
 	return detectTopChange(skelPart, keyMap, KINECT_DOWN);
 }
 
-int KinectGestures::detectTopChangeNormal(void * data, KeyMap * keyMap) {
-	SkeletonPart * skelPart = (SkeletonPart*)data;
+int KinectGestures::detectTopChangeNormal(SkeletonPart skelPart, KeyMap * keyMap) {
 	return detectTopChange(skelPart, keyMap, KINECT_NORMAL);
 }
 
 
-int KinectGestures::detectTopChange(SkeletonPart * skelPart, KeyMap * keyMap, int direction) {
+int KinectGestures::detectTopChange(SkeletonPart skelPart, KeyMap * keyMap, int direction) {
 	
 	int ret = -1;
 
-	if ( skelPart->skelConstant == SKELETON_HEAD ) {
+	if ( skelPart.skelConstant == SKELETON_HEAD ) {
 		if ( normalStepHeight == -100 ) {
-			normalStepHeight = skelPart->y;
+			normalStepHeight = skelPart.y;
 			return -1;
 		}
 
@@ -358,7 +355,7 @@ int KinectGestures::detectTopChange(SkeletonPart * skelPart, KeyMap * keyMap, in
 		//pos  - last
 		//0.59 - 0.57 = 0.02 >= 0.02
 		if ( direction == KINECT_UP ) {
-			if ( skelPart->y - normalStepHeight >= keyMap->getSensivity() ) {
+			if ( skelPart.y - normalStepHeight >= keyMap->getSensivity() ) {
 				ret = 1;
 			} else {
 				ret = 0;
@@ -369,14 +366,14 @@ int KinectGestures::detectTopChange(SkeletonPart * skelPart, KeyMap * keyMap, in
 			//last - pos
 			//0.57 - 0.55 = 0.02 >= 0.02
 			//printf("%.2f >= %.2f\n", lastHeight - t.pos[1], heightSens);
-			if ( normalStepHeight - skelPart->y >= keyMap->getSensivity() ) {
+			if ( normalStepHeight - skelPart.y >= keyMap->getSensivity() ) {
 				ret = 1;
 			} else {
 				ret = 0;
 			}
 		} else 
 		if ( direction == KINECT_NORMAL ) {
-			if ( normalStepHeight - skelPart->y < keyMap->getSensivity() && skelPart->y - normalStepHeight < keyMap->getSensivity() ) {
+			if ( normalStepHeight - skelPart.y < keyMap->getSensivity() && skelPart.y - normalStepHeight < keyMap->getSensivity() ) {
 				ret = 1;
 			} else {
 				ret = 0;
@@ -386,7 +383,7 @@ int KinectGestures::detectTopChange(SkeletonPart * skelPart, KeyMap * keyMap, in
 	#ifdef THERAPY_MODULE
 		if ( ret == 1 ) {
 			if ( keyMap->getSaveData().compare("") ) {
-				storage->saveToFile(keyMap->getDev().c_str(), keyMap->getSaveData(), skelPart->y);
+				storage->saveToFile(keyMap->getDev().c_str(), keyMap->getSaveData(), skelPart.y);
 			}
 		}
 	#endif
@@ -409,24 +406,24 @@ int KinectGestures::detectTopChange(SkeletonPart * skelPart, KeyMap * keyMap, in
 
 std::map<int, std::vector<double>> KinectGestures::bodyDirectionPoints;
 
-int KinectGestures::detectBody(SkeletonPart * skelPart, KeyMap * keyMap, int direction) {
+int KinectGestures::detectBody(SkeletonPart skelPart, KeyMap * keyMap, int direction) {
 	 
-	if ( skelPart->skelConstant == SKELETON_HIP_CENTER || skelPart->skelConstant == SKELETON_HEAD ) {
+	if ( skelPart.skelConstant == SKELETON_HIP_CENTER || skelPart.skelConstant == SKELETON_HEAD ) {
 		//Cria vetor com pontos para formação do angulo
-		std::vector<double> vec = { skelPart->x, skelPart->y, skelPart->z };
-		if ( skelPart->skelConstant == SKELETON_HIP_CENTER ) {
-			vec = { skelPart->x, 0, skelPart->z };
-			std::vector<double> vec2 = { skelPart->x, 1, skelPart->z };
+		std::vector<double> vec = { skelPart.x, skelPart.y, skelPart.z };
+		if ( skelPart.skelConstant == SKELETON_HIP_CENTER ) {
+			vec = { skelPart.x, 0, skelPart.z };
+			std::vector<double> vec2 = { skelPart.x, 1, skelPart.z };
 			bodyDirectionPoints.insert_or_assign(2, vec2);
 		}
 		int pos = 0;
-		if ( skelPart->skelConstant == SKELETON_HIP_CENTER ) {
+		if ( skelPart.skelConstant == SKELETON_HIP_CENTER ) {
 			pos = 1;
 		}
 		bodyDirectionPoints.insert_or_assign(pos, vec);
 	}
 
-	if ( bodyDirectionPoints.size() == 3 && skelPart->skelConstant == SKELETON_HEAD ) {
+	if ( bodyDirectionPoints.size() == 3 && skelPart.skelConstant == SKELETON_HEAD ) {
 		//Está inclinado
 		if ( flexed3d(bodyDirectionPoints, keyMap) ) {
 
@@ -450,20 +447,16 @@ int KinectGestures::detectBody(SkeletonPart * skelPart, KeyMap * keyMap, int dir
 	return -1;
 }
 
-int KinectGestures::detectBodyFront(void * data, KeyMap * keyMap) {
-	SkeletonPart * skelPart = (SkeletonPart*)data;
+int KinectGestures::detectBodyFront(SkeletonPart skelPart, KeyMap * keyMap) {
 	return detectBody(skelPart, keyMap ,KINECT_FRONT);
 }
-int KinectGestures::detectBodyRight(void * data, KeyMap * keyMap) {
-	SkeletonPart * skelPart = (SkeletonPart*)data;
+int KinectGestures::detectBodyRight(SkeletonPart skelPart, KeyMap * keyMap) {
 	return detectBody(skelPart, keyMap, KINECT_RIGHT);
 }
-int KinectGestures::detectBodyLeft(void * data, KeyMap * keyMap) {
-	SkeletonPart * skelPart = (SkeletonPart*)data;
+int KinectGestures::detectBodyLeft(SkeletonPart skelPart, KeyMap * keyMap) {
 	return detectBody(skelPart, keyMap, KINECT_LEFT);
 }
-int KinectGestures::detectBodyBack(void * data, KeyMap * keyMap) {
-	SkeletonPart * skelPart = (SkeletonPart*)data;
+int KinectGestures::detectBodyBack(SkeletonPart skelPart, KeyMap * keyMap) {
 	return detectBody(skelPart, keyMap, KINECT_BACK);
 }
 
@@ -474,10 +467,9 @@ Desequilíbrio
 */
 
 
-int  KinectGestures::bodyBalance(void * data, KeyMap * keyMap) {
-	SkeletonPart * skelPart = (SkeletonPart*)data;
+int  KinectGestures::bodyBalance(SkeletonPart skelPart, KeyMap * keyMap) {
 	
-	std::map<int, std::vector<double>> points = getPoints(skeleton[skelPart->skeletonName].spine, skeleton[skelPart->skeletonName].hipCenter, skeleton[skelPart->skeletonName].shoulderCenter);
+	std::map<int, std::vector<double>> points = getPoints(skeleton[skelPart.skeletonName].spine, skeleton[skelPart.skeletonName].hipCenter, skeleton[skelPart.skeletonName].shoulderCenter);
 	if ( points.size() == 0 ) {
 		return -1;
 	}
@@ -495,10 +487,10 @@ int  KinectGestures::bodyBalance(void * data, KeyMap * keyMap) {
 	Marcha estacionária
 */
 
-bool KinectGestures::detectWalkHeight(SkeletonPart * skelPart, KeyMap * keyMap, double &kneeLastHeight) {
+bool KinectGestures::detectWalkHeight(SkeletonPart skelPart, KeyMap * keyMap, double &kneeLastHeight) {
 	
 	if ( kneeLastHeight == 0 ) {
-		kneeLastHeight = skelPart->y;
+		kneeLastHeight = skelPart.y;
 		return false;
 	}
 
@@ -507,20 +499,20 @@ bool KinectGestures::detectWalkHeight(SkeletonPart * skelPart, KeyMap * keyMap, 
 	//int actualTime = (int)time(0);
 	bool ret = false;
 
-	if ( kneeLastHeight - keyMap->getSensivity() >= skelPart->y ) {//abaixou o joelho
-		kneeLastHeight = skelPart->y;
+	if ( kneeLastHeight - keyMap->getSensivity() >= skelPart.y ) {//abaixou o joelho
+		kneeLastHeight = skelPart.y;
 		ret = true;
 	} else
-	if ( kneeLastHeight + keyMap->getSensivity() <= skelPart->y ) {//levantou o joelho
-		kneeLastHeight = skelPart->y;
+	if ( kneeLastHeight + keyMap->getSensivity() <= skelPart.y ) {//levantou o joelho
+		kneeLastHeight = skelPart.y;
 		ret = true;
 	}
 
 
 	if ( ret ) {
-		kinectDetection[skelPart->skeletonName].lastWalk = actualTime;
+		kinectDetection[skelPart.skeletonName].lastWalk = actualTime;
 	} else
-	if ( kinectDetection[skelPart->skeletonName].lastWalk != 0 && actualTime - kinectDetection[skelPart->skeletonName].lastWalk < keyMap->getDelay() ) {
+	if ( kinectDetection[skelPart.skeletonName].lastWalk != 0 && actualTime - kinectDetection[skelPart.skeletonName].lastWalk < keyMap->getDelay() ) {
 		ret = true;
 	}
 
@@ -536,13 +528,12 @@ bool KinectGestures::detectWalkHeight(SkeletonPart * skelPart, KeyMap * keyMap, 
 }
 
 
-int KinectGestures::detectWalk(void * data, KeyMap * keyMap) {
-	SkeletonPart * skelPart = (SkeletonPart*)data;
-	if ( skelPart->skelConstant == SKELETON_KNEE_R ) {
-		return detectWalkHeight(skelPart, keyMap, kinectDetection[skelPart->skeletonName].rightKneeLastHeight);
+int KinectGestures::detectWalk(SkeletonPart skelPart, KeyMap * keyMap) {
+	if ( skelPart.skelConstant == SKELETON_KNEE_R ) {
+		return detectWalkHeight(skelPart, keyMap, kinectDetection[skelPart.skeletonName].rightKneeLastHeight);
 	} else 
-	if ( skelPart->skelConstant == SKELETON_KNEE_L ) {
-		return detectWalkHeight(skelPart, keyMap, kinectDetection[skelPart->skeletonName].leftKneeLastHeight);
+	if ( skelPart.skelConstant == SKELETON_KNEE_L ) {
+		return detectWalkHeight(skelPart, keyMap, kinectDetection[skelPart.skeletonName].leftKneeLastHeight);
 	}
 	return -1;
 }
@@ -554,11 +545,10 @@ int KinectGestures::detectWalk(void * data, KeyMap * keyMap) {
 */
 
 
-int KinectGestures::setCenterPos(void * data, KeyMap * keyMap) {
-	SkeletonPart * skelPart = (SkeletonPart*)data;
+int KinectGestures::setCenterPos(SkeletonPart skelPart, KeyMap * keyMap) {
 	//Salvao o estado atual do hipcenter
-	kinectDetection[skelPart->skeletonName].spine = skeleton[skelPart->skeletonName].spine;
-	kinectDetection[skelPart->skeletonName].centerPosDefined = true;
+	kinectDetection[skelPart.skeletonName].spine = skeleton[skelPart.skeletonName].spine;
+	kinectDetection[skelPart.skeletonName].centerPosDefined = true;
 	return true;
 
 }
@@ -567,23 +557,23 @@ int KinectGestures::setCenterPos(void * data, KeyMap * keyMap) {
 
 
 
-int KinectGestures::detectTurnBody(SkeletonPart * skelPart, KeyMap * keyMap, int direction) {
+int KinectGestures::detectTurnBody(SkeletonPart skelPart, KeyMap * keyMap, int direction) {
 	
-	if ( kinectDetection[skelPart->skeletonName].centerPosDefined == false ) {
+	if ( kinectDetection[skelPart.skeletonName].centerPosDefined == false ) {
 		return -1;
 	}
 
-	double x = skeleton[skelPart->skeletonName].spine.quat_x;
-	double y = skeleton[skelPart->skeletonName].spine.quat_y;
-	double z = skeleton[skelPart->skeletonName].spine.quat_z;
-	double w = skeleton[skelPart->skeletonName].spine.quat_w;
+	double x = skeleton[skelPart.skeletonName].spine.quat_x;
+	double y = skeleton[skelPart.skeletonName].spine.quat_y;
+	double z = skeleton[skelPart.skeletonName].spine.quat_z;
+	double w = skeleton[skelPart.skeletonName].spine.quat_w;
 
 	double newYaw = yaw(x, y, z, w);
 
-	x = kinectDetection[skelPart->skeletonName].spine.quat_x;
-	y = kinectDetection[skelPart->skeletonName].spine.quat_y;
-	z = kinectDetection[skelPart->skeletonName].spine.quat_z;
-	w = kinectDetection[skelPart->skeletonName].spine.quat_w;
+	x = kinectDetection[skelPart.skeletonName].spine.quat_x;
+	y = kinectDetection[skelPart.skeletonName].spine.quat_y;
+	z = kinectDetection[skelPart.skeletonName].spine.quat_z;
+	w = kinectDetection[skelPart.skeletonName].spine.quat_w;
 
 	double oldYaw = yaw(x, y, z, w);
 
@@ -623,17 +613,15 @@ int KinectGestures::detectTurnBody(SkeletonPart * skelPart, KeyMap * keyMap, int
 
 
 //Z Axis
-int KinectGestures::detectTurnLeft(void * data, KeyMap * keyMap) {
-	SkeletonPart * skelPart = (SkeletonPart*)data;
-	if ( skelPart->skelConstant == SKELETON_SHOULDER_CENTER ) {
+int KinectGestures::detectTurnLeft(SkeletonPart skelPart, KeyMap * keyMap) {
+	if ( skelPart.skelConstant == SKELETON_SHOULDER_CENTER ) {
 		return detectTurnBody(skelPart, keyMap, KINECT_LEFT);
 	}
 	return -1;
 }
 
-int KinectGestures::detectTurnRight(void * data, KeyMap * keyMap) {
-	SkeletonPart * skelPart = (SkeletonPart*)data;
-	if ( skelPart->skelConstant == SKELETON_SHOULDER_CENTER ) {
+int KinectGestures::detectTurnRight(SkeletonPart skelPart, KeyMap * keyMap) {
+	if ( skelPart.skelConstant == SKELETON_SHOULDER_CENTER ) {
 		return detectTurnBody(skelPart, keyMap, KINECT_RIGHT);
 	}
 	return -1;
@@ -649,33 +637,29 @@ int KinectGestures::detectTurnRight(void * data, KeyMap * keyMap) {
 std::map<int, std::vector<double>> KinectGestures::lastPositions[20];
 
 
-int KinectGestures::leftWristFlexedUp(void * data, KeyMap * keyMap) {
-	SkeletonPart * skelPart = (SkeletonPart*)data;
-	std::map<int, std::vector<double>> points = getPoints(skeleton[skelPart->skeletonName].elbowL, skeleton[skelPart->skeletonName].wristL, skeleton[skelPart->skeletonName].handL);
+int KinectGestures::leftWristFlexedUp(SkeletonPart skelPart, KeyMap * keyMap) {
+	std::map<int, std::vector<double>> points = getPoints(skeleton[skelPart.skeletonName].elbowL, skeleton[skelPart.skeletonName].wristL, skeleton[skelPart.skeletonName].handL);
 	if ( points.size() == 0 ) {
 		return -1;
 	}
 	return flexed3d(points, keyMap, UP);
 }
-int KinectGestures::leftWristFlexedDown(void * data, KeyMap * keyMap) {
-	SkeletonPart * skelPart = (SkeletonPart*)data;
-	std::map<int, std::vector<double>> points = getPoints(skeleton[skelPart->skeletonName].elbowL, skeleton[skelPart->skeletonName].wristL, skeleton[skelPart->skeletonName].handL);
+int KinectGestures::leftWristFlexedDown(SkeletonPart skelPart, KeyMap * keyMap) {
+	std::map<int, std::vector<double>> points = getPoints(skeleton[skelPart.skeletonName].elbowL, skeleton[skelPart.skeletonName].wristL, skeleton[skelPart.skeletonName].handL);
 	if ( points.size() == 0 ) {
 		return -1;
 	}
 	return flexed3d(points, keyMap, DOWN);
 }
-int KinectGestures::rightWristFlexedUp(void * data, KeyMap * keyMap) {
-	SkeletonPart * skelPart = (SkeletonPart*)data;
-	std::map<int, std::vector<double>> points = getPoints(skeleton[skelPart->skeletonName].elbowR, skeleton[skelPart->skeletonName].wristR, skeleton[skelPart->skeletonName].handR);
+int KinectGestures::rightWristFlexedUp(SkeletonPart skelPart, KeyMap * keyMap) {
+	std::map<int, std::vector<double>> points = getPoints(skeleton[skelPart.skeletonName].elbowR, skeleton[skelPart.skeletonName].wristR, skeleton[skelPart.skeletonName].handR);
 	if ( points.size() == 0 ) {
 		return -1;
 	}
 	return flexed3d(points, keyMap, UP);
 }
-int KinectGestures::rightWristFlexedDown(void * data, KeyMap * keyMap) {
-	SkeletonPart * skelPart = (SkeletonPart*)data;
-	std::map<int, std::vector<double>> points = getPoints(skeleton[skelPart->skeletonName].elbowR, skeleton[skelPart->skeletonName].wristR, skeleton[skelPart->skeletonName].handR);
+int KinectGestures::rightWristFlexedDown(SkeletonPart skelPart, KeyMap * keyMap) {
+	std::map<int, std::vector<double>> points = getPoints(skeleton[skelPart.skeletonName].elbowR, skeleton[skelPart.skeletonName].wristR, skeleton[skelPart.skeletonName].handR);
 	if ( points.size() == 0 ) {
 		return -1;
 	}

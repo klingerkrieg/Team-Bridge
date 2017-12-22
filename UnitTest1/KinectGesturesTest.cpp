@@ -52,37 +52,37 @@ public:
 		KeyMap *mNormal = new KeyMap(js);
 
 		//primeira altura = 1.0 ira definir o STEP_NORMAL
-		Assert::AreEqual(-1, gr.detectTopChangeUp((void *)&t, mUp));
+		Assert::AreEqual(-1, gr.detectTopChangeUp(t, mUp));
 
 
 		//mantem
 		t.y = 1.141;
-		Assert::AreEqual(0, gr.detectTopChangeUp((void *)&t, mUp));
-		Assert::AreEqual(1, gr.detectTopChangeNormal((void *)&t, mNormal));
-		Assert::AreEqual(0, gr.detectTopChangeDown((void *)&t, mDown));
+		Assert::AreEqual(0, gr.detectTopChangeUp(t, mUp));
+		Assert::AreEqual(1, gr.detectTopChangeNormal(t, mNormal));
+		Assert::AreEqual(0, gr.detectTopChangeDown(t, mDown));
 
 		//subiu (devido a problemas com o float do vrpn ele entende como 1.4999)
 		t.y = 1.151;
-		Assert::AreEqual(1, gr.detectTopChangeUp((void *)&t, mUp));
-		Assert::AreEqual(0, gr.detectTopChangeNormal((void *)&t, mNormal));
-		Assert::AreEqual(0, gr.detectTopChangeDown((void *)&t, mDown));
+		Assert::AreEqual(1, gr.detectTopChangeUp(t, mUp));
+		Assert::AreEqual(0, gr.detectTopChangeNormal(t, mNormal));
+		Assert::AreEqual(0, gr.detectTopChangeDown(t, mDown));
 
 		//mantem
-		Assert::AreEqual(1, gr.detectTopChangeUp((void *)&t, mUp));
-		Assert::AreEqual(0, gr.detectTopChangeNormal((void *)&t, mNormal));
-		Assert::AreEqual(0, gr.detectTopChangeDown((void *)&t, mDown));
+		Assert::AreEqual(1, gr.detectTopChangeUp(t, mUp));
+		Assert::AreEqual(0, gr.detectTopChangeNormal(t, mNormal));
+		Assert::AreEqual(0, gr.detectTopChangeDown(t, mDown));
 
 		//altura normal
 		t.y = 1.0;
-		Assert::AreEqual(0, gr.detectTopChangeUp((void *)&t, mUp));
-		Assert::AreEqual(1, gr.detectTopChangeNormal((void *)&t, mNormal));
-		Assert::AreEqual(0, gr.detectTopChangeDown((void *)&t, mDown));
+		Assert::AreEqual(0, gr.detectTopChangeUp(t, mUp));
+		Assert::AreEqual(1, gr.detectTopChangeNormal(t, mNormal));
+		Assert::AreEqual(0, gr.detectTopChangeDown(t, mDown));
 
 		//dobrou os joelhos, esta um degrau abaixo do normal
 		t.y = 0.74;
-		Assert::AreEqual(0, gr.detectTopChangeUp((void *)&t, mUp));
-		Assert::AreEqual(0, gr.detectTopChangeNormal((void *)&t, mNormal));
-		Assert::AreEqual(1, gr.detectTopChangeDown((void *)&t, mDown));
+		Assert::AreEqual(0, gr.detectTopChangeUp(t, mUp));
+		Assert::AreEqual(0, gr.detectTopChangeNormal(t, mNormal));
+		Assert::AreEqual(1, gr.detectTopChangeDown(t, mDown));
 	}
 
 	TEST_METHOD(KinectRecognizer_detectHandTop) {
@@ -112,36 +112,36 @@ public:
 		t.y = 1.301;
 		js["y"] = 5;
 		m1 = new KeyMap(js);
-		Assert::IsTrue(gr.detectRightHandTop((void *)&t, m1));
+		Assert::IsTrue(gr.detectRightHandTop(t, m1));
 		t.y = 1.151;
 		js["y"] = 4;
 		m1 = new KeyMap(js);
-		Assert::IsTrue(gr.detectRightHandTop((void *)&t, m1));
+		Assert::IsTrue(gr.detectRightHandTop(t, m1));
 		t.y = 1.05;
 		js["y"] = 3;
 		m1 = new KeyMap(js);
-		Assert::IsTrue(gr.detectRightHandTop((void *)&t, m1));
+		Assert::IsTrue(gr.detectRightHandTop(t, m1));
 		t.y = 0.80;
 		js["y"] = 2;
 		m1 = new KeyMap(js);
-		Assert::IsTrue(gr.detectRightHandTop((void *)&t, m1));
+		Assert::IsTrue(gr.detectRightHandTop(t, m1));
 		t.y = 0.50;
 		js["y"] = 1;
 		m1 = new KeyMap(js);
-		Assert::IsTrue(gr.detectRightHandTop((void *)&t, m1));
+		Assert::IsTrue(gr.detectRightHandTop(t, m1));
 
 		//Acima de
 		t.y = 1.301;
 		js["y"] = 5;
 		js["coordinateMod"] = ">=";
 		m1 = new KeyMap(js);
-		Assert::IsTrue(gr.detectRightHandTop((void *)&t, m1));
+		Assert::IsTrue(gr.detectRightHandTop(t, m1));
 		//Abaixo de
 		t.y = 0.50;
 		js["y"] = 1;
 		js["coordinateMod"] = "<=";
 		m1 = new KeyMap(js);
-		Assert::IsTrue(gr.detectRightHandTop((void *)&t, m1));
+		Assert::IsTrue(gr.detectRightHandTop(t, m1));
 
 
 		//Abaixo de
@@ -149,13 +149,13 @@ public:
 		js["y"] = 5;
 		js["coordinateMod"] = "<=";
 		m1 = new KeyMap(js);
-		Assert::IsTrue(gr.detectRightHandTop((void *)&t, m1));
+		Assert::IsTrue(gr.detectRightHandTop(t, m1));
 		//Acima de
 		t.y = 0.80;
 		js["y"] = 1;
 		js["coordinateMod"] = ">=";
 		m1 = new KeyMap(js);
-		Assert::IsTrue(gr.detectRightHandTop((void *)&t, m1));
+		Assert::IsTrue(gr.detectRightHandTop(t, m1));
 
 
 	}
@@ -190,24 +190,24 @@ public:
 		
 		t.skelConstant = SKELETON_HAND_R;
 		t.x = 1.0;
-		Assert::IsTrue(gr.detectRightHandTop((void *)&t, m1));
+		Assert::IsTrue(gr.detectRightHandTop(t, m1));
 		
 
 		js["x"] = 1;
 		m1 = new KeyMap(js);
 		t.x = 1.401;
-		Assert::IsTrue(gr.detectRightHandTop((void *)&t, m1));
+		Assert::IsTrue(gr.detectRightHandTop(t, m1));
 
 		js["x"] = 0;
 		m1 = new KeyMap(js);
 		t.skelConstant = SKELETON_HAND_L;
 		t.x = 0.61;
-		Assert::IsTrue(gr.detectLeftHandTop((void *)&t, m1));
+		Assert::IsTrue(gr.detectLeftHandTop(t, m1));
 
 		js["x"] = -1;
 		m1 = new KeyMap(js);
 		t.x = 0.59;
-		Assert::IsTrue(gr.detectLeftHandTop((void *)&t, m1));
+		Assert::IsTrue(gr.detectLeftHandTop(t, m1));
 
 
 
@@ -236,21 +236,21 @@ public:
 		
 		t.skelConstant = SKELETON_KNEE_R; // usa joelho direito
 		t.y = 1.0; //inicia
-		Assert::IsFalse(gr.detectWalk((void *)&t, m1));
+		Assert::IsFalse(gr.detectWalk(t, m1));
 		t.y = 1.14; //NAO esta suficientemente levantado
-		Assert::IsFalse(gr.detectWalk((void *)&t, m1));
+		Assert::IsFalse(gr.detectWalk(t, m1));
 		t.y = 1.151;
-		Assert::IsTrue(gr.detectWalk((void *)&t, m1));
+		Assert::IsTrue(gr.detectWalk(t, m1));
 		t.y = 1.0;
-		Assert::IsTrue(gr.detectWalk((void *)&t, m1));
+		Assert::IsTrue(gr.detectWalk(t, m1));
 
 		t.skelConstant = SKELETON_KNEE_L; // usa joelho esquerdo
 		t.y = 1.0; //inicia
-		Assert::IsFalse(gr.detectWalk((void *)&t, m1));
+		Assert::IsFalse(gr.detectWalk(t, m1));
 		t.y = 1.151;
-		Assert::IsTrue(gr.detectWalk((void *)&t, m1));
+		Assert::IsTrue(gr.detectWalk(t, m1));
 		t.y = 1.0;
-		Assert::IsTrue(gr.detectWalk((void *)&t, m1));
+		Assert::IsTrue(gr.detectWalk(t, m1));
 	}
 
 
@@ -273,24 +273,24 @@ public:
 		int angle = 15;
 		//Inicia
 		t.skelConstant = SKELETON_HIP_CENTER;
-		gr.detectBodyFront( (void *)&t, m1);
+		gr.detectBodyFront( t, m1);
 		t.y = 1.4;
 		t.skelConstant = SKELETON_HEAD;
-		gr.detectBodyFront((void *)&t, m1);
+		gr.detectBodyFront(t, m1);
 		
 
 		t.z = 1; //NAO esta suficientemente inclinado para frente
-		Assert::IsFalse(gr.detectBodyFront((void *)&t, m1));
+		Assert::IsFalse(gr.detectBodyFront(t, m1));
 
 		t.z = 0; //inclinado para frente
-		Assert::IsTrue(gr.detectBodyFront((void *)&t, m1));
+		Assert::IsTrue(gr.detectBodyFront(t, m1));
 		t.z = 2; //inclinado para trás
-		Assert::IsTrue(gr.detectBodyBack((void *)&t, m1));
+		Assert::IsTrue(gr.detectBodyBack(t, m1));
 
 		t.x = 2; //inclinado para direita
-		Assert::IsTrue(gr.detectBodyRight((void *)&t, m1));
+		Assert::IsTrue(gr.detectBodyRight(t, m1));
 		t.x = 0; //inclinado para esquerda
-		Assert::IsTrue(gr.detectBodyLeft((void *)&t, m1));
+		Assert::IsTrue(gr.detectBodyLeft(t, m1));
 
 	}
 
@@ -313,20 +313,20 @@ public:
 		json js = {};
 		KeyMap *m1 = new KeyMap(js);
 		
-		gr.setCenterPos((void *)&t, m1);
+		gr.setCenterPos(t, m1);
 
 		//girou para direita
 		t.quat_y = 0.93;
 		t.quat_z = 0.00;
 		t.quat_w = 0.38;
-		Assert::IsTrue(gr.detectTurnRight((void *)&t, m1));
+		Assert::IsTrue(gr.detectTurnRight(t, m1));
 
 		//girou para esquerda
 		t.quat_x = 0.01;
 		t.quat_y = 0.95;
 		t.quat_z = 0.01;
 		t.quat_w = 0.30;
-		Assert::IsTrue(gr.detectTurnLeft((void *)&t, m1));
+		Assert::IsTrue(gr.detectTurnLeft(t, m1));
 
 	}
 
@@ -346,7 +346,7 @@ public:
 		json js = {};
 		KeyMap *m1 = new KeyMap(js);
 
-		Assert::IsTrue(gr.setCenterPos((void *)&t, m1));
+		Assert::IsTrue(gr.setCenterPos(t, m1));
 
 
 		Assert::IsTrue(gr.getKinectDetection()[skeletonName].centerPosDefined);
@@ -383,7 +383,7 @@ public:
 		trackData.sensor = 7;//hand
 		vrpnToSkeleton(gr.skeleton[skeletonName], gr.skeletonMap1, trackData, skelPart, skeletonName);
 
-		Assert::IsFalse(gr.leftWristFlexedUp((void *)&skelPart, m1));
+		Assert::IsFalse(gr.leftWristFlexedUp(skelPart, m1));
 
 
 
@@ -400,7 +400,7 @@ public:
 		trackData.pos[1] += 5;
 		vrpnToSkeleton(gr.skeleton[skeletonName], gr.skeletonMap1, trackData, skelPart, skeletonName);
 
-		Assert::IsTrue(gr.leftWristFlexedUp((void *)&skelPart, m1));
+		Assert::IsTrue(gr.leftWristFlexedUp(skelPart, m1));
 
 		/* Flexão esquerda para baixo */
 
@@ -415,7 +415,7 @@ public:
 		trackData.sensor = 7;//hand
 		vrpnToSkeleton(gr.skeleton[skeletonName], gr.skeletonMap1, trackData, skelPart, skeletonName);
 		//Flexionado para baixo
-		Assert::IsFalse(gr.leftWristFlexedDown((void *)&skelPart, m1));
+		Assert::IsFalse(gr.leftWristFlexedDown(skelPart, m1));
 
 
 
@@ -432,7 +432,7 @@ public:
 		trackData.pos[1] -= 5;
 		vrpnToSkeleton(gr.skeleton[skeletonName], gr.skeletonMap1, trackData, skelPart, skeletonName);
 		//Flexionado para baixo
-		Assert::IsTrue(gr.leftWristFlexedDown((void *)&skelPart, m1));
+		Assert::IsTrue(gr.leftWristFlexedDown(skelPart, m1));
 
 
 		//punho direito
@@ -444,7 +444,7 @@ public:
 		trackData.sensor = 11;//hand
 		vrpnToSkeleton(gr.skeleton[skeletonName], gr.skeletonMap1, trackData, skelPart, skeletonName);
 
-		Assert::IsFalse(gr.rightWristFlexedUp((void *)&skelPart, m1));
+		Assert::IsFalse(gr.rightWristFlexedUp(skelPart, m1));
 
 
 
@@ -463,7 +463,7 @@ public:
 		trackData.pos[1] += 5;
 		vrpnToSkeleton(gr.skeleton[skeletonName], gr.skeletonMap1, trackData, skelPart, skeletonName);
 
-		Assert::IsTrue(gr.rightWristFlexedUp((void *)&skelPart, m1));
+		Assert::IsTrue(gr.rightWristFlexedUp(skelPart, m1));
 
 
 		/* Flexão direito para baixo */
@@ -476,7 +476,7 @@ public:
 		trackData.sensor = 11;//hand
 		vrpnToSkeleton(gr.skeleton[skeletonName], gr.skeletonMap1, trackData, skelPart, skeletonName);
 		//Flexionado para baixo
-		Assert::IsFalse(gr.rightWristFlexedDown((void *)&skelPart, m1));
+		Assert::IsFalse(gr.rightWristFlexedDown(skelPart, m1));
 
 
 		trackData = getTrackerCB();
@@ -492,7 +492,7 @@ public:
 		trackData.pos[1] -= 5;
 		vrpnToSkeleton(gr.skeleton[skeletonName], gr.skeletonMap1, trackData, skelPart, skeletonName);
 		//Flexionado para baixo
-		Assert::IsTrue(gr.rightWristFlexedDown((void *)&skelPart, m1));
+		Assert::IsTrue(gr.rightWristFlexedDown(skelPart, m1));
 
 	}
 

@@ -37,9 +37,9 @@ TEST_CLASS(LeapMotionGesturesTest) {
 		KeyMap * km = new KeyMap(js);
 		
 		a.channel[0] = 2.6;
-		Assert::IsTrue(gr.closed((void *)&a, km));
+		Assert::IsTrue(gr.closed(a, km));
 		a.channel[0] = 2.4;
-		Assert::IsFalse(gr.closed((void *)&a, km));
+		Assert::IsFalse(gr.closed(a, km));
 
 
 		js = {
@@ -55,9 +55,9 @@ TEST_CLASS(LeapMotionGesturesTest) {
 		km = new KeyMap(js);
 
 		a.channel[1] = 29;
-		Assert::IsTrue(gr.pinch((void *)&a, km));
+		Assert::IsTrue(gr.pinch(a, km));
 		a.channel[1] = 31;
-		Assert::IsFalse(gr.pinch((void *)&a, km));
+		Assert::IsFalse(gr.pinch(a, km));
 
 		//Fazer teste de flexão
 		
@@ -100,7 +100,7 @@ TEST_CLASS(LeapMotionGesturesTest) {
 		};
 		KeyMap * km = new KeyMap(js);
 
-		gr.wristFlexedUp((void *)&skelPart,km);
+		gr.wristFlexedUp(skelPart,km);
 
 		//Fazer teste de flexão
 

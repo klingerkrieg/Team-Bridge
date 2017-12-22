@@ -42,7 +42,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\build_files\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\build_files\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\build_files\</OutDir>
@@ -161,6 +161,8 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CheckerSubject.c" />
+    <ClCompile Include="KeyMapInterpreter.c" />
     <ClCompile Include="AbstractGestureRecognizer.c" />
     <ClCompile Include="ButtonChecker.c" />
     <ClCompile Include="client.cpp" />
@@ -183,6 +185,7 @@
   <ItemGroup>
     <ClInclude Include="AbstractAction.h" />
     <ClInclude Include="AbstractGestureRecognizer.h" />
+    <ClInclude Include="CheckerSubject.h" />
     <ClInclude Include="ButtonChecker.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="Config.h" />
@@ -193,6 +196,7 @@
     <ClInclude Include="FlexedMember.h" />
     <ClInclude Include="GestureRecognizer.h" />
     <ClInclude Include="json.hpp" />
+    <ClInclude Include="KeyMapInterpreter.h" />
     <ClInclude Include="KeyPressAction.h" />
     <ClInclude Include="KinectGestures.h" />
     <ClInclude Include="LeapMotionGestures.h" />
@@ -215,6 +219,7 @@
     <None Include="FlappyBirdTest\kinectBird.json" />
     <None Include="FlappyBirdTest\physiohappy.json" />
     <None Include="kayak.json" />
+    <None Include="kinectTest.json" />
     <None Include="leapmotion.json" />
     <None Include="mountAndBlade.json" />
     <None Include="mouse.json" />
