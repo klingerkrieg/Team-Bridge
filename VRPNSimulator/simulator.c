@@ -41,7 +41,7 @@ handle_tracker_pos_quat(void *userdata, const vrpn_TRACKERCB t)
     tracker_user_callback *t_data = static_cast<tracker_user_callback *>(userdata);
 	
     // Make sure we have a count value for this sensor
-    while (t_data->t_counts.size() <= static_cast<unsigned>(t.sensor)) {
+	while (t_data->t_counts.size() <= static_cast<unsigned>(t.sensor)) {
         t_data->t_counts.push_back(0);
     }
 
@@ -125,7 +125,7 @@ int main (int argc, char * argv []) {
 			file = fopen(argv[1], "r");
 
 			while ( fgets (str , 512 , file) != NULL ){
-
+				
 				//Caso seja comentario
 				if (str[0] == '#'){
 					continue;
