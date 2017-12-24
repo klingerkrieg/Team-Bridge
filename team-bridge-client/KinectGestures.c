@@ -1,8 +1,5 @@
 #include "KinectGestures.h"
 
-double KinectGestures::handXPosInterval = 0.40;
-
-
 std::map<std::string, Skeleton> KinectGestures::skeleton;
 std::map<std::string, KinectDetection> KinectGestures::kinectDetection;
 
@@ -288,22 +285,22 @@ int KinectGestures::detectHandXPos(SkeletonPart skelPart, KeyMap * keyMap) {
 
 	//printf("%.2f > %.2f + %.2f | %d\n", t.pos[0], lastHeadXPos, (handXPosInterval * 2), xPos);
 	//Depois de verificar a altura verifica o eixo X
-	if ( keyMap->getX() == 2 && skelPart.x >= hipCenterX + (handXPosInterval*2) ) {
+	if ( keyMap->getX() == 2 && skelPart.x >= hipCenterX + (keyMap->getHandWidthInterval() *2) ) {
 		ret = true;
 	} else
-	if ( keyMap->getX() == 1 && skelPart.x >= hipCenterX + handXPosInterval &&
-		skelPart.x < hipCenterX + (handXPosInterval * 2) ) {
+	if ( keyMap->getX() == 1 && skelPart.x >= hipCenterX + keyMap->getHandWidthInterval() &&
+		skelPart.x < hipCenterX + (keyMap->getHandWidthInterval() * 2) ) {
 		ret = true;
 	} else
-	if ( keyMap->getX() == 0 && skelPart.x <= hipCenterX + handXPosInterval &&
-		skelPart.x > hipCenterX - handXPosInterval ) {
+	if ( keyMap->getX() == 0 && skelPart.x <= hipCenterX + keyMap->getHandWidthInterval() &&
+		skelPart.x > hipCenterX - keyMap->getHandWidthInterval() ) {
 		ret = true;
 	} else
-	if ( keyMap->getX() == -1 && skelPart.x <= hipCenterX - handXPosInterval &&
-		skelPart.x > hipCenterX - (handXPosInterval * 2)  ) {
+	if ( keyMap->getX() == -1 && skelPart.x <= hipCenterX - keyMap->getHandWidthInterval() &&
+		skelPart.x > hipCenterX - (keyMap->getHandWidthInterval() * 2)  ) {
 		ret = true;
 	} else
-	if ( keyMap->getX() == -2 && skelPart.x <= hipCenterX - (handXPosInterval*2)  ) {
+	if ( keyMap->getX() == -2 && skelPart.x <= hipCenterX - (keyMap->getHandWidthInterval() *2)  ) {
 		ret = true;
 	}
 

@@ -20,82 +20,89 @@ int KeyMap::scan2ascii(DWORD scancode, USHORT* result) {
 
 std::string KeyMap::toString() {
 
-	std::string ret = "";
+	std::ostringstream ret;
+
 	if ( getIsLeaving() ) {
-		ret = getToKeyRepr();
+		ret << getToKeyRepr();
 	} else {
-		ret = "[" + getDev() + "] " + getKeyRepr();
+		ret << "[" + getDev() + "] " + getKeyRepr();
 		
 		if ( getStrengthMax() != 0 ) {
-			ret += " Max:" + std::to_string(getStrengthMax());
+			ret << " Max:" + std::to_string(getStrengthMax());
 		}
 		if ( getStrengthMin() != 0 ) {
-			ret += " Min:" + std::to_string(getStrengthMin());
+			ret << " Min:" + std::to_string(getStrengthMin());
 		}
 		if ( getThumb() != -1 ) {
-			ret += " Thumb:" + std::to_string(getThumb());
+			ret << " Thumb:" + std::to_string(getThumb());
 		}
 		if ( getIndex() != -1 ) {
-			ret += " Index:" + std::to_string(getIndex());
+			ret << " Index:" + std::to_string(getIndex());
 		}
 
 
 		if ( getAngle() != -1 ) {
-			ret += "[";
+			ret << "[";
 			if ( getAngleMod() == 1 ) {
-				ret += ">";
+				ret << ">";
 			} else
 			if ( getAngleMod() == -1 ) {
-				ret += "<";
+				ret << "<";
 			} else
 			if ( getAngleMod() == 0 ) {
-				ret += "=";
+				ret << "=";
 			}
-			ret += std::to_string(getAngle()) + "]";
+			ret << std::to_string(getAngle()) + "]";
 		}
 			
-		ret += " -> " + getToKeyRepr();
+		ret << " -> " + getToKeyRepr();
 	}
 	
 
 	if ( getIsBtn() ) {
 		if ( getBtnDown() && getBtnUp() ) {
-			ret += "[AUTO] ";
+			ret << "[AUTO] ";
 		} else
 		if ( getBtnDown() ) {
-			ret += "[DOWN]";
+			ret << "[DOWN]";
 		} else {
-			ret += "[UP]";
+			ret << "[UP]";
 		}
 	}
 
 	//return dev + " " + std::to_string(key) + " " + std::to_string(toKey) + " " + std::to_string(toKeyIsConstant) + " " + std::to_string(heightSens);
 	if ( getToKey() == ALERT || getToKey() == MESSAGE ) {
-		ret += " \""+getMsg()+"\"";
+		ret << " \""+getMsg()+"\"";
 	} else
 	if ( getToKey() == VK_MOUSEMOVE ) {
-		ret += " X:" + std::to_string( getX() ) + " Y:" + std::to_string(getY());
+		ret << " X:" + std::to_string( getX() ) + " Y:" + std::to_string(getY());
 	} else
 	if ( getX() != -100 ) {
-		ret += " XPOS:" + std::to_string(getX());
+		ret << " XPOS:" + std::to_string(getX());
+		if ( getHandWidthInterval() != 0.40 ) {
+			
+			// Set Fixed -Point Notation
+			ret << " [" << std::fixed << std::setprecision(2) << getHandWidthInterval() << "]";
+			
+		}
 	}
 	if ( getY() != -100 ) {
 		if ( getCoordinateMod() == 1 ) {
-			ret += " YPOS:>=" + std::to_string(getY());
+			ret << " YPOS:>=" + std::to_string(getY());
 		} else
 		if ( getCoordinateMod() == -1 ) {
-			ret += " YPOS:<=" + std::to_string(getY());
+			ret << " YPOS:<=" + std::to_string(getY());
 		} else  {
-			ret += " YPOS:=" + std::to_string(getY());
+			ret << " YPOS:=" + std::to_string(getY());
 		}
 	}
 
 	if ( getHasOnLeave() ) {
-		ret += "\nAo sair:" + getOnLeave()->toString() + " ";
+		ret << "\nAo sair:" + getOnLeave()->toString() + " ";
 	}
 	
-	ret += "\n";
-	return ret;
+	ret << "\n";
+	return ret.str();
 }
 
 void KeyMap::setDevType(std::string devType) {
@@ -156,6 +163,10 @@ KeyMap::KeyMap(json js) {
 
 	if ( !js["sensivity"].is_null() ) {
 		this->sensivity = js["sensivity"].get<double>();
+	}
+
+	if ( !js["handWidthInterval"].is_null() ) {
+		this->handWidthInterval = js["handWidthInterval"].get<double>();
 	}
 
 	//NedGlove angulo para fechar e abrir mao, cada luva pode ter um valor diferente

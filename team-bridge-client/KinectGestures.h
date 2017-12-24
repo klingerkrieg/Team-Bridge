@@ -41,7 +41,7 @@ private:
 	static double normalStepHeight;
 	double handTopInterval = 0.10;
 
-	static double handXPosInterval;
+
 	static std::map<std::string,KinectDetection> kinectDetection;
 
 	//usado para detectBody
@@ -119,14 +119,6 @@ public:
 	int detectRightHandTop(SkeletonPart skelPart, KeyMap * keyMap);
 	
 	int bodyBalance(SkeletonPart skelPart, KeyMap * keyMap);
-
-	static void setKinectXInterval(double interval) {
-		handXPosInterval = interval;
-	}
-
-	static double getKinectXInterval() {
-		return handXPosInterval;
-	}
 
 
 	static std::map<int, int> skeletonMap1;

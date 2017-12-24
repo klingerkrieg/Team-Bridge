@@ -152,6 +152,8 @@ private:
 	int thumb = -1;
 	int index = -1;
 	
+	//intervalo das linhas verticais para posicao da mao
+	double handWidthInterval = 0.40;
 	
 
 	//sensibilidade do comando (para mudanca de altura)
@@ -206,7 +208,10 @@ private:
 	int getMouseY() {
 		return mouseY;
 	}
-
+	
+	double getHandWidthInterval() {
+		return handWidthInterval;
+	}
 
 	int getKey() {
 		return key;

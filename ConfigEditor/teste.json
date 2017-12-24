@@ -10,24 +10,16 @@
   },
   "keys": [
     {
-      "divClass": "kinectTurn",
+      "divClass": "handTop",
       "devType": "kinect",
       "dev": "Tracker0@localhost",
-      "key": "KINECT_TURN_LEFT",
-      "angle": 40,
-      "mouseX": -1,
-      "mouseY": 0,
-      "toKeyWhile": "VK_MOUSEMOVE"
-    },
-    {
-      "divClass": "kinectTurn",
-      "devType": "kinect",
-      "dev": "Tracker0@localhost",
-      "key": "KINECT_TURN_RIGHT",
-      "angle": 40,
-      "mouseX": 1,
-      "mouseY": 0,
-      "toKeyWhile": "VK_MOUSEMOVE"
+      "key": "KINECT_LEFT_HAND_TOP",
+      "x": -2,
+      "coordinateMod": "<=",
+      "y": 5,
+      "handWidthInterval": 0.4,
+      "toKeyDown": "A",
+      "toKeyUp": "A"
     }
   ]
 }

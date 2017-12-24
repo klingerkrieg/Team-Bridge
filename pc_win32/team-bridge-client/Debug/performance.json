@@ -17,6 +17,7 @@
       "key": "KINECT_RIGHT_HAND_TOP",
       "x": 0,
       "coordinateMod": ">=",
+      "handWidthInterval": 0.4,
       "y": 4,
       "toKeyWhile": "A"
     }

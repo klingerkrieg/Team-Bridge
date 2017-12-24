@@ -1,12 +1,12 @@
 <div style="display:none;">
-<div class="handTop" data-toggle="tooltip" data-placement="top" title="<img class='tooltipImg' src='./img/humanTopHandY.png'>">
+<div class="handTop">
     <img class="deviceLogo" src="./img/kinect.png" alt="(Kinect)">
     <input type="hidden" id="devType" value="kinect" class="toJSON">
     
     Endereço: <input type="text" id="dev" value="Tracker0@localhost" class="form-control toJSON" data-toggle="tooltip" data-placement="bottom" title="0 é a primeira pessoa que o Kinect captar, 1 é a segunda, 2 a terceira, etc.">
     <span class="help">(Caso queira mudar a pessoa que deve realizar a ação altere o número no final do endereço)</span>
     <br/>
-
+    <span data-toggle="tooltip" data-placement="top" title="<img class='tooltipImg' src='./img/humanTopHandY.png'>">
     Posição da mão:
     <select id="key" class="form-control toJSON" >
         <option value="KINECT_LEFT_HAND_TOP">Esquerda</option>
@@ -33,7 +33,10 @@
         <option>2</option>
         <option>1</option>
     </select>
-
+</span>
+    Intervalo entre as linhas verticais:
+    <input type="number" id="handWidthInterval" value="40" class="toJSON" divideby="100" data-toggle="tooltip" data-html="true" data-placement="bottom" title="<img class='tooltipImg' src='./img/humanTopHandXInterval.png'>">cm
+    
     <label><input type="checkbox" id="saveData" value="handPos" > Salvar dados </label>
 </div>
 

@@ -10,9 +10,6 @@ void ConfigFileReader::printConfig(std::vector<DeviceType> &devs,
 
 	printf("\nKinect\n");
 
-	printf("KINECT_X_INTERVAL=%.2f\n", KinectGestures::getKinectXInterval());
-
-
 	printf("\nDispositivos:\n");
 	for ( std::vector<DeviceType>::iterator it = devs.begin(); it != devs.end(); ++it ) {
 		printf("%s[%s]\n", it->name.c_str(), it->type_str.c_str());
