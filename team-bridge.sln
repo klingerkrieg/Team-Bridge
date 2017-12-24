@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.26730.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "team-bridge-server", "team-bridge-server\team-bridge-server.vcxproj", "{1021AC8D-3623-4248-BC7A-1794BEA6FEF2}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "kinect_simulation", "kinect_simulation\kinect_simulation.vcxproj", "{6388D266-2021-4286-BB56-D0274AC2775A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VRPNSimulator", "VRPNSimulator\VRPNSimulator.vcxproj", "{6388D266-2021-4286-BB56-D0274AC2775A}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "team-bridge-client", "team-bridge-client\team-bridge-client.vcxproj", "{D93B529A-61B0-4C81-AFCA-C8E481A40DA6}"
 EndProject

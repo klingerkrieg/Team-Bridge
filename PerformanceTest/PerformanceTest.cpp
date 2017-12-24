@@ -85,7 +85,7 @@ int main(){
 	double count = 1;
 	double med = 0;
 	int i = 0;
-	const int repMax = 100;
+	const int repMax = 300;
 	double medianaVec[repMax];
 	double min = 100;
 	double max = 0;

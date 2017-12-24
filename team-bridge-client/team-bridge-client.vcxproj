@@ -162,7 +162,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CheckerSubject.c" />
-    <ClCompile Include="KeyMapInterpreter.c" />
     <ClCompile Include="AbstractGestureRecognizer.c" />
     <ClCompile Include="ButtonChecker.c" />
     <ClCompile Include="client.cpp" />
@@ -196,7 +195,6 @@
     <ClInclude Include="FlexedMember.h" />
     <ClInclude Include="GestureRecognizer.h" />
     <ClInclude Include="json.hpp" />
-    <ClInclude Include="KeyMapInterpreter.h" />
     <ClInclude Include="KeyPressAction.h" />
     <ClInclude Include="KinectGestures.h" />
     <ClInclude Include="LeapMotionGestures.h" />
