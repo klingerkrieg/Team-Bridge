@@ -1,2 +1,0 @@
-PerformanceTest.exe
-pause

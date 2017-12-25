@@ -104,7 +104,7 @@
       </Command>
     </PostBuildEvent>
     <PreBuildEvent>
-      <Command>copy "*.json" "$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\" &amp; copy "*.dll" "$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\"</Command>
+      <Command>mkdir $(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\FlappyBirdTest &amp; copy .\FlappyBirdTest\* $(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\FlappyBirdTest\ &amp; copy "*.json" "$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\" &amp; copy "*.dll" "$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\" &amp; copy "*.bat" "$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -157,7 +157,7 @@
       <OutputFile>$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\build_files\$(ProjectName).bsc</OutputFile>
     </Bscmake>
     <PreBuildEvent>
-      <Command>copy "*.json" "$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\" &amp; copy "*.bat" "$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\" &amp; copy "*.dll" "$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\"</Command>
+      <Command>mkdir $(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\FlappyBirdTest &amp; copy .\FlappyBirdTest\* $(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\FlappyBirdTest\ &amp; copy "*.json" "$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\" &amp; copy "*.dll" "$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\" &amp; copy "*.bat" "$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

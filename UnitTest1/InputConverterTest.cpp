@@ -16,6 +16,7 @@ namespace InputConverterTest {
 	TrackerUserCallback *tc1 = new TrackerUserCallback;
 	vrpn_TRACKERCB t;
 	vrpn_BUTTONCB b;
+	std::vector<KeyMap> map;
 	InputConverter iC;
 	char keybd[] = "Keyboard0@localhost";
 	char analog[] = "Analog0@localhost";
@@ -35,57 +36,57 @@ namespace InputConverterTest {
 		b.button = 10;
 
 
-		std::vector<KeyMap> map;
+
 		json js = {
-			{"divClass", "kinectStep"},
-			{"dev" , "Tracker0@localhost"},
-			{ "devType" ,"kinect" },
-			{"key" , "KINECT_STEP_UP"},
-			{"sensivity" , 0.15},
-			{"toKeyDown" , "A"},
-			{"toKeyUp" , "A"}
+		{ "divClass", "kinectStep" },
+		{ "dev" , "Tracker0@localhost" },
+		{ "devType" ,"kinect" },
+		{ "key" , "KINECT_STEP_UP" },
+		{ "sensivity" , 0.15 },
+		{ "toKeyDown" , "A" },
+		{ "toKeyUp" , "A" }
 		};
 		KeyMap m1 = KeyMap(js);
 		js = {
-			{ "divClass", "kinectStep" },
-			{ "dev" , "Tracker0@localhost" },
-			{ "devType" ,"kinect" },
-			{ "key" , "KINECT_STEP_NORMAL" },
-			{ "sensivity" , 0.15 },
-			{ "toKeyDown" , "A" },
-			{ "toKeyUp" , "A" }
+		{ "divClass", "kinectStep" },
+		{ "dev" , "Tracker0@localhost" },
+		{ "devType" ,"kinect" },
+		{ "key" , "KINECT_STEP_NORMAL" },
+		{ "sensivity" , 0.15 },
+		{ "toKeyDown" , "A" },
+		{ "toKeyUp" , "A" }
 		};
 		KeyMap m2 = KeyMap(js);
 		js = {
-			{ "divClass", "kinectStep" },
-			{ "dev" , "Tracker0@localhost" },
-			{ "devType" ,"kinect" },
-			{ "key" , "KINECT_STEP_DOWN" },
-			{ "sensivity" , 0.15 },
-			{ "toKeyDown" , "A" },
-			{ "toKeyUp" , "A" }
+		{ "divClass", "kinectStep" },
+		{ "dev" , "Tracker0@localhost" },
+		{ "devType" ,"kinect" },
+		{ "key" , "KINECT_STEP_DOWN" },
+		{ "sensivity" , 0.15 },
+		{ "toKeyDown" , "A" },
+		{ "toKeyUp" , "A" }
 		};
 		KeyMap m3 = KeyMap(js);
 
 		js = {
-			{ "divClass", "keyboard" },
-			{ "devType" ,"keyboard" },
-			{ "dev" , "Keyboard0@localhost" },
-			{ "key" , "A" },
-			{ "toKeyDown" , "B" },
-			{ "toKeyUp" , "B" }
+		{ "divClass", "keyboard" },
+		{ "devType" ,"keyboard" },
+		{ "dev" , "Keyboard0@localhost" },
+		{ "key" , "A" },
+		{ "toKeyDown" , "B" },
+		{ "toKeyUp" , "B" }
 		};
 		KeyMap m4 = KeyMap(js);
 		js = {
-			{ "divClass","nedGlove" },
-			{ "dev" ,"Analog0@localhost" },
-			{ "devType" ,"nedglove" },
-			{ "key" ,"NEDGLOVE_PINCH" },
-			{ "thumb" , 0 },
-			{ "index" , 4 },
-			{ "strengthMin" ,40 },
-			{ "strengthMax" ,0 },
-			{ "toKeyUp" ,"A" }
+		{ "divClass","nedGlove" },
+		{ "dev" ,"Analog0@localhost" },
+		{ "devType" ,"nedglove" },
+		{ "key" ,"NEDGLOVE_PINCH" },
+		{ "thumb" , 0 },
+		{ "index" , 4 },
+		{ "strengthMin" ,40 },
+		{ "strengthMax" ,0 },
+		{ "toKeyUp" ,"A" }
 		};
 		KeyMap m5 = KeyMap(js);
 
@@ -112,6 +113,7 @@ namespace InputConverterTest {
 		KeyPressAction *keyPresser = new KeyPressAction();
 
 		iC = InputConverter(map, devs, keyPresser);
+		
 	}
 
 

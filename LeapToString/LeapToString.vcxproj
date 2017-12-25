@@ -115,7 +115,7 @@
       <AdditionalDependencies>Leap.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>copy "*.dll" "$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\"</Command>
+      <Command>copy "*.dll" "$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\" &amp; copy "*.bat" "$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

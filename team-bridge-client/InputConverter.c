@@ -9,60 +9,55 @@ SkeletonPart InputConverter::skelPart;
 
 
 
-void InputConverter::interpretKeyMap(KeyMap &keyMap) {
+void InputConverter::interpretKeyMap(KeyMap *keyMap) {
 
-	if ( keyMap.getToKey() == KINECT_SET_CENTER_POS ) {
-		gr->setCenterPos(skelPart, &keyMap);
+	if ( keyMap->getToKey() == KINECT_SET_CENTER_POS ) {
+		gr->setCenterPos(skelPart, keyMap);
 		printf("Center pos defined.\n");
 		if ( viewOn )
 			view->showMsg("Posição definida.");
 	} else
-		if ( keyMap.getToKey() == ALERT ) {
-			if ( viewOn )
-				view->showAlert(keyMap.getMsg());
-		} else
-			if ( keyMap.getToKey() == MESSAGE ) {
-				if ( viewOn )
-					view->showMsg(keyMap.getMsg());
-			} else {
-				//Executa a ação, para essa aplicação são inputs de mouse e teclado
-				act->run(keyMap);
-			}
+	if ( keyMap->getToKey() == ALERT ) {
+		if ( viewOn )
+			view->showAlert(keyMap->getMsg());
+	} else
+	if ( keyMap->getToKey() == MESSAGE ) {
+		if ( viewOn )
+			view->showMsg(keyMap->getMsg());
+	} else {
+		//Executa a ação, para essa aplicação são inputs de mouse e teclado
+		act->run((*keyMap));
+	}
 }
 
 
-bool InputConverter::interpretOnLeave(bool active, KeyMap &keyMap) {
+bool InputConverter::interpretOnLeave(bool active, KeyMap *keyMap) {
 
 	//Se esta esperando para soltar a tecla e a tecla foi solta
-	if ( keyMap.getActive() && !active ) {
-
-		if ( keyMap.getHasOnLeave() ) {
-			interpretKeyMap((*keyMap.getOnLeave()));
+	if ( keyMap->getActive() && active == false ) {
+		
+		if ( keyMap->getToKeyUp() ) {
+			interpretKeyMap(keyMap->getOnLeave());
 		}
-		keyMap.setActive(false);
+		keyMap->setActive(false);
 		return true;
 	} else
-		if ( active ) {
+		if ( active == true) {
 			//Se foi ativada
-			if ( keyMap.getHasOnLeave() ) {
-				//Verifica se tem evento de saida
-				if ( !keyMap.getActive() ) {
-					//Se tiver so aciona o comando novamente se ele nao estiver esperando evento de saida
-					interpretKeyMap(keyMap);
-				}
-				keyMap.setActive(true);
-			} else {
 
-				if ( keyMap.getActive() == false ) {
+			//se é enquanto, sempre interpreta
+			if ( keyMap->getToKeyWhile() ) {
+				interpretKeyMap(keyMap);
+				//nao muda o status de ativa, visto que a interpretacao irá apertar e soltar imediatamente
+			} else {
+				
+				//Se a tecla nao está ativada e possui toKeyDown
+				if ( keyMap->getActive() == false && keyMap->getToKeyDown() == true ) {
 					//Se nao tiver evento de saida aciona normalmente
 					interpretKeyMap(keyMap);
+					keyMap->setActive(true);
 				}
-
-				//se não tem hasOnLeave
-				if ( keyMap.getBtnUp() == false ) {
-					keyMap.setActive(true);
-				}
-
+				
 			}
 			return true;
 		}
@@ -76,7 +71,7 @@ InputConverter::~InputConverter() {
 		keyMap = &map.at(keyMapId);
 
 		if (keyMap->getActive()) {
-			interpretOnLeave(0, (*keyMap));
+			interpretOnLeave(0, keyMap);
 		}
 	}
 }

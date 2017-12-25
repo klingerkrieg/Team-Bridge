@@ -13,19 +13,19 @@ class InputConverter;
 
 struct AnalogObserver {
 	AnalogCheckerMethod method;
-	KeyMap keyMap;
+	KeyMap *keyMap;
 	AbstractGestureRecognizer *context;
 };
 
 struct TrackerObserver {
 	TrackerCheckerMethod method;
-	KeyMap keyMap;
+	KeyMap *keyMap;
 	AbstractGestureRecognizer *context;
 };
 
 struct ButtonObserver {
 	ButtonCheckerMethod method;
-	KeyMap keyMap;
+	KeyMap *keyMap;
 	AbstractGestureRecognizer *context;
 };
 

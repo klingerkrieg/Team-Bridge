@@ -22,7 +22,7 @@ std::string KeyMap::toString() {
 
 	std::ostringstream ret;
 
-	if ( getIsLeaving() ) {
+	if ( isKeyUpEvent() ) {
 		ret << getToKeyRepr();
 	} else {
 		ret << "[" + getDev() + "] " + getKeyRepr();
@@ -60,10 +60,13 @@ std::string KeyMap::toString() {
 	
 
 	if ( getIsBtn() ) {
-		if ( getBtnDown() && getBtnUp() ) {
+		if ( getToKeyWhile() ) {
+			ret << "[WHILE]";
+		} else
+		if ( getToKeyDown() && getToKeyUp() ) {
 			ret << "[AUTO] ";
 		} else
-		if ( getBtnDown() ) {
+		if ( getToKeyDown() ) {
 			ret << "[DOWN]";
 		} else {
 			ret << "[UP]";
@@ -97,7 +100,7 @@ std::string KeyMap::toString() {
 		}
 	}
 
-	if ( getHasOnLeave() ) {
+	if ( getToKeyUp() ) {
 		ret << "\nAo sair:" + getOnLeave()->toString() + " ";
 	}
 	
@@ -264,21 +267,24 @@ KeyMap::KeyMap(json js) {
 		if ( !js["toKeyWhile"].is_null() ) {
 			setToKey(js["toKeyWhile"].get<std::string>());
 			finalKey = js["toKeyWhile"].get<std::string>();
+			this->toKeyWhile = true;
 		} else {
 
-			this->hasOnLeave = false;
+			/*this->hasOnLeave = false;
 			this->btnDown = true;
-			this->btnUp = false;
+			this->btnUp = false;*/
 			
 			if ( !js["toKeyDown"].is_null() ) {
 				setToKey(js["toKeyDown"].get<std::string>());
 				finalKey = js["toKeyDown"].get<std::string>();
+				this->toKeyDown = true;
 			}
 				
 
 			if ( !js["toKeyUp"].is_null() ) {
 				onLeave = new KeyMap(this->dev, js["toKeyUp"].get<std::string>());
-				this->hasOnLeave = true;
+				//this->hasOnLeave = true;
+				this->toKeyUp = true;
 				finalKey = js["toKeyUp"].get<std::string>();
 			}
 
@@ -290,9 +296,9 @@ KeyMap::KeyMap(json js) {
 		setKey(js["key"].get<std::string>());
 
 	//Checagem para verificar se o que está no json foi realmente aplicado
-	if ( finalKey.compare(toKeyRepr) && this->hasOnLeave == false ) {
+	if ( finalKey.compare(toKeyRepr) && this->toKeyUp == false ) {
 
-		if ( this->hasOnLeave ) {
+		if ( this->toKeyUp ) {
 			std::string onLeavKeyRepr = this->onLeave->getToKeyRepr();
 			if ( onLeavKeyRepr.compare(toKeyRepr) != 0 ) {
 				printf("Falha na leitura do mapeamento %s -> %s.\n", finalKey.c_str(), toKeyRepr.c_str());
@@ -305,9 +311,10 @@ KeyMap::KeyMap(json js) {
 KeyMap::KeyMap(std::string dev, std::string toKeyUp) {
 	this->dev = dev;
 	setToKey(toKeyUp);
-	this->isLeaving = true;
-	this->btnDown = false;
-	this->btnUp = true;
+	this->keyUpEvent = true;
+	//this->toKeyUp = true;
+	/*this->btnDown = false;
+	this->btnUp = true;*/
 }
 
 

@@ -3,8 +3,11 @@
 bool KeyPressAction::mouseLeftPressed = false;
 bool KeyPressAction::mouseRightPressed = false;
 bool KeyPressAction::mouseMiddlePressed = false;
+int KeyPressAction::count = 0;
 
 void KeyPressAction::run(KeyMap key) {
+
+	printf("count:%d\n", count++);
 
 	bool print = true;
 	int actualTime = (int)time(0);
@@ -122,7 +125,7 @@ void KeyPressAction::run(KeyMap key) {
 		input.ki.dwExtraInfo = 0;
 		input.ki.wVk = vkey;
 
-		if ( key.getBtnDown() ) {
+		if ( key.getToKeyDown() ) {
 			input.ki.dwFlags = 0;// there is no KEYEVENTF_KEYDOWN
 			SendInput(1, &input, sizeof(INPUT));
 
@@ -131,7 +134,7 @@ void KeyPressAction::run(KeyMap key) {
 			if ( print )
 				printf("Press: %s on Windows [%d].\n", key.getToKeyRepr().c_str(), actualTime);
 		}
-		if ( key.getBtnUp() ) {
+		if ( key.getToKeyUp() || key.getToKeyWhile() ) {
 			input.ki.dwFlags = KEYEVENTF_KEYUP;
 			SendInput(1, &input, sizeof(INPUT));
 

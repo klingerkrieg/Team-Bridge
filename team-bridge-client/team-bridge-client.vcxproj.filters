@@ -99,9 +99,6 @@
     <ClCompile Include="AbstractGestureRecognizer.c">
       <Filter>Source Files\GestureRecognizer</Filter>
     </ClCompile>
-    <ClCompile Include="KeyMapInterpreter.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="CheckerSubject.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -186,9 +183,6 @@
       <Filter>Header Files\GestureRecognizer</Filter>
     </ClInclude>
     <ClInclude Include="VariabilitiesConfig.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="KeyMapInterpreter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CheckerSubject.h">

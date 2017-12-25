@@ -13,7 +13,7 @@
       "divClass": "kinectWrist",
       "devType": "kinect",
       "dev": "Tracker0@localhost",
-      "key": "LEAP_WRIST_DOWN",
+      "key": "KINECT_LEFT_WRIST_DOWN",
       "angleMod": "<",
       "angle": 140,
       "toKeyDown": "VK_LBUTTON"

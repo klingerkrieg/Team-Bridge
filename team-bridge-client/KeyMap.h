@@ -104,8 +104,9 @@ private:
 
 
 	//Automaticamente os botões serão acionados e desacionados imediatamente
-	bool btnDown = true;
-	bool btnUp = true;
+	/*bool btnDown = true;
+	bool btnUp = true;*/
+
 	bool isBtn = false;
 
 	//O InputConverter tenta verificar primeiro os comandos que estao acionados
@@ -115,11 +116,17 @@ private:
 	//Sera verdadeiro caso a tecla esteja acionada e esperando o desacionamento
 	bool active = false;
 
+	bool toKeyDown	= false;
+	bool toKeyUp	= false;
+	bool toKeyWhile = false;
+
 	
 	//Caso possua um evento para desacionar uma tecla
-	bool hasOnLeave = false;
+	//bool hasOnLeave = false;
+
 	//Sinaliza que esse é o evento de desacionar
-	bool isLeaving = false;
+	bool keyUpEvent = false;
+
 	//Guarda o evento para desacionar
 	KeyMap *onLeave;
 
@@ -233,12 +240,24 @@ private:
 		return isBtn;
 	}
 
-	bool getBtnDown() {
+	/*bool getBtnDown() {
 		return btnDown;
 	}
 
 	bool getBtnUp() {
 		return btnUp;
+	}*/
+
+	bool getToKeyDown() {
+		return toKeyDown;
+	}
+
+	bool getToKeyUp() {
+		return toKeyUp;
+	}
+
+	bool getToKeyWhile() {
+		return toKeyWhile;
 	}
 
 	bool getVerified() {
@@ -249,12 +268,12 @@ private:
 		verified = verif;
 	}
 
-	bool getHasOnLeave() {
+	/*bool getHasOnLeave() {
 		return hasOnLeave;
-	}
+	}*/
 
-	bool getIsLeaving() {
-		return isLeaving;
+	bool isKeyUpEvent() {
+		return keyUpEvent;
 	}
 
 	KeyMap* getOnLeave() {

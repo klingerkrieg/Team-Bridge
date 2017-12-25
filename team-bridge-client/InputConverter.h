@@ -102,9 +102,9 @@ public:
 
 	 bool checkAnalog(const char *name, const vrpn_ANALOGCB a);
 
-	 void interpretKeyMap(KeyMap &keyMap);
+	 void interpretKeyMap(KeyMap *keyMap);
 
-	 bool interpretOnLeave(bool active, KeyMap &keyMap);
+	 bool interpretOnLeave(bool active, KeyMap *keyMap);
 	
 };
 

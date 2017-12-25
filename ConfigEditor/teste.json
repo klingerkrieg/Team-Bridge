@@ -10,14 +10,12 @@
   },
   "keys": [
     {
-      "divClass": "handTop",
+      "divClass": "kinectWrist",
       "devType": "kinect",
       "dev": "Tracker0@localhost",
-      "key": "KINECT_LEFT_HAND_TOP",
-      "x": -2,
-      "coordinateMod": "<=",
-      "y": 5,
-      "handWidthInterval": 0.4,
+      "key": "KINECT_LEFT_WRIST_DOWN",
+      "angleMod": ">",
+      "angle": 35,
       "toKeyDown": "A",
       "toKeyUp": "A"
     }

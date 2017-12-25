@@ -143,6 +143,9 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <OutputFile>$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\build_files\VRPNSimulator.bsc</OutputFile>
     </Bscmake>
+    <PreBuildEvent>
+      <Command>copy "*.txt" "$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\" &amp; copy "*.bat" "$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="simulator.c" />
