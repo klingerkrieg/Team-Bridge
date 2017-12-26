@@ -1,5 +1,5 @@
-/** @file	vrpn_LeapMotion.h
-@brief	Header for LeapMotion VR devices.
+/** @file	vrpn_KinectV1.h
+@brief	Header for KinectV1 VR devices.
 @date	2017
 
 @author Alan Klinger klingerkrieg@gmail.com
@@ -8,13 +8,9 @@
 #pragma once
 #define __STRUCT__ struct
 #define interface __STRUCT__
-/*
-#include <fstream>
-#include <iostream>
-#include <time.h>*/
+
 
 #include "NuiApi.h"
-
 
 
 class VRPN_API vrpn_KinectV1 : public  vrpn_Tracker {

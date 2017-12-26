@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class VRPN : MonoBehaviour {
 
-	public bool kinect;//caso leapmotion setar false;
+	public DeviceType devType;
 	public bool guideON;
 	public bool guide3D;
 
@@ -37,6 +37,7 @@ public class VRPN : MonoBehaviour {
 	public bool kinectLimit = true;
 
 	InputField xIntervalField;
+	InputField trackerNameField;
 
 	[DllImport ("unityVrpn")]
 	private static extern double vrpnTrackerExtern(string address, int channel, int component, int frameCount);
@@ -105,10 +106,11 @@ public class VRPN : MonoBehaviour {
 	}
 
 	void Start(){
+		xIntervalField = GameObject.Find ("xIntervalField").GetComponent<InputField>();
+		trackerNameField = GameObject.Find ("trackerNameField").GetComponent<InputField>();
+
 		createView ();
 		createLines ();
-
-		xIntervalField = GameObject.Find ("xIntervalField").GetComponent<InputField>();
 	}
 
 
@@ -140,7 +142,7 @@ public class VRPN : MonoBehaviour {
 
 		destroyView ();
 
-		if (kinect) {
+		if (devType == DeviceType.KinectV1) {
 			//kinect
 			centerChannel = 2;
 			channels = 20;
@@ -152,16 +154,16 @@ public class VRPN : MonoBehaviour {
 			bones.Add (new Bone(0,1));
 			bones.Add (new Bone(1,2));
 			bones.Add (new Bone(2,3));
-			//left arm
-			bones.Add (new Bone(1,8));
-			bones.Add (new Bone(8,9));
-			bones.Add (new Bone(9,10));
-			bones.Add (new Bone(10, 11));
 			//right arm
 			bones.Add (new Bone(1,4));
 			bones.Add (new Bone(4,5));
 			bones.Add (new Bone(5,6));
 			bones.Add (new Bone(6, 7));
+			//left arm
+			bones.Add (new Bone(1,8));
+			bones.Add (new Bone(8,9));
+			bones.Add (new Bone(9,10));
+			bones.Add (new Bone(10, 11));
 			//left leg
 			bones.Add (new Bone(3,16));
 			bones.Add (new Bone(16,17));
@@ -173,7 +175,53 @@ public class VRPN : MonoBehaviour {
 			bones.Add (new Bone(13,14));
 			bones.Add (new Bone(14, 15));
 
-		} else {
+		} else
+		if (devType == DeviceType.KinectV2) {
+			//kinect
+			centerChannel = 2;
+			channels = 25;
+			size = 0.10f;
+			cyWidth = 0.06f;
+			Camera.main.transform.position = new Vector3 (0f, 0f, -0.5f);
+
+			//Kinect bones
+			bones.Add (new Bone(0,1));
+			bones.Add (new Bone(1,20));
+			bones.Add (new Bone(20,2));
+			bones.Add (new Bone(2,3));
+			//right arm
+			bones.Add (new Bone(1,4));
+			bones.Add (new Bone(4,5));
+			bones.Add (new Bone(5,6));
+			bones.Add (new Bone(6, 7));
+			bones.Add (new Bone(7, 21));
+			bones.Add (new Bone(7, 22));
+			//left arm
+			bones.Add (new Bone(1,8));
+			bones.Add (new Bone(8,9));
+			bones.Add (new Bone(9,10));
+			bones.Add (new Bone(10, 11));
+			bones.Add (new Bone(11, 23));
+			bones.Add (new Bone(11, 24));
+			//left leg
+			bones.Add (new Bone(3,16));
+			bones.Add (new Bone(16,17));
+			bones.Add (new Bone(17,18));
+			bones.Add (new Bone(18, 19));
+			//right leg
+			bones.Add (new Bone(3,12));
+			bones.Add (new Bone(12,13));
+			bones.Add (new Bone(13,14));
+			bones.Add (new Bone(14, 15));
+
+		} else
+		if (devType == DeviceType.LeapMotion){
+			//leapmotion
+			centerChannel = 0;
+			channels = 46;
+			size = 15f;
+			cyWidth = 5f;
+			Camera.main.transform.position = new Vector3 (0f, 15f, -349.2f);
 
 			//Leap bones
 			//mao 1
@@ -234,23 +282,14 @@ public class VRPN : MonoBehaviour {
 			bones.Add (new Bone(43,44));
 			bones.Add (new Bone(44,45));
 
-			//leapmotion
-			centerChannel = 0;
-			channels = 46;
-			size = 15f;
-			cyWidth = 5f;
-			Camera.main.transform.position = new Vector3 (0f, 15f, -349.2f);
+			
 		}
 
 		Material newMat = Resources.Load("esfera", typeof(Material)) as Material;
 		guideMat = Resources.Load("guide", typeof(Material)) as Material;
 
 
-		if (!kinect) {
-			trackerName = "LeapMotion0@localhost";
-		} else {
-			trackerName = "Tracker0@localhost";
-		}
+		trackerName = trackerNameField.text;
 
 		//Create bones
 		foreach (Bone bone in bones) {
@@ -285,7 +324,13 @@ public class VRPN : MonoBehaviour {
 
 
 	void OnGUI(){
+		
+
 		GUI.color = Color.red;
+
+		GUIStyle style = new GUIStyle (GUI.skin.label);
+		style.fontSize = 20;
+
 		Vector3 screenPos;
 
 		//Caso esteja montando
@@ -329,7 +374,7 @@ public class VRPN : MonoBehaviour {
 			if (i == 3) {
 				centerPos = pos;
 			}
-
+			
 
 
 			if (freezed == false) {
@@ -376,7 +421,7 @@ public class VRPN : MonoBehaviour {
 
 			screenPos = Camera.main.WorldToScreenPoint(sphere.transform.position);
 			//nao sei porque o x se comporta corretamente e o y comeca de baixo pra cima
-			GUI.Label (new Rect(screenPos.x, Camera.main.pixelHeight - screenPos.y,20,20), sphere.name);
+			GUI.Label (new Rect(screenPos.x, Camera.main.pixelHeight - screenPos.y,30,30), sphere.name, style);
 
 			if (i == centerChannel)
 				central = sphere;
@@ -415,19 +460,8 @@ public class VRPN : MonoBehaviour {
 
 
 	}
-	
-	// Update is called once per frame
-	/*void OnDrawGizmos () {
-		Debug.Log ("HERE");
-		Vector3 leftLimit = headPos;
-		leftLimit.y = 40;
-		//leftLimit.x += 0.10f;
-		Vector3 leftDown = leftLimit;
-		leftDown.y = -40;
 
-		Gizmos.color = Color.blue;
-		Gizmos.DrawLine(leftLimit, leftDown);
-	}*/
+
 
 	private LineRenderer line;
 
@@ -436,8 +470,13 @@ public class VRPN : MonoBehaviour {
 		line = GetComponent<LineRenderer> ();
 	}
 
+
+
+
 	void Update() {
-		if (kinect && kinectLimit) {
+		
+
+		if ( (devType == DeviceType.KinectV1 || devType == DeviceType.KinectV2)  && kinectLimit) {
 			float handTopInterval = 0.10f;
 			float handXInterval;
 

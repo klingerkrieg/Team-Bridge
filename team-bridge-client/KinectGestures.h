@@ -129,18 +129,18 @@ public:
 		}
 
 		std::map<int, int> map;
-		map[0] = SKELETON_HEAD;
-		map[1] = SKELETON_SHOULDER_CENTER;
-		map[8] = SKELETON_SHOULDER_R;
-		map[4] = SKELETON_SHOULDER_L;
-		map[9] = SKELETON_ELBOW_R;
-		map[5] = SKELETON_ELBOW_L;
+		map[0]	= SKELETON_HEAD;
+		map[1]	= SKELETON_SHOULDER_CENTER;
+		map[8]	= SKELETON_SHOULDER_R;
+		map[4]	= SKELETON_SHOULDER_L;
+		map[9]	= SKELETON_ELBOW_R;
+		map[5]	= SKELETON_ELBOW_L;
 		map[10] = SKELETON_WRIST_R;
-		map[6] = SKELETON_WRIST_L;
+		map[6]	= SKELETON_WRIST_L;
 		map[11] = SKELETON_HAND_R;
-		map[7] = SKELETON_HAND_L;
-		map[2] = SKELETON_SPINE;
-		map[3] = SKELETON_HIP_CENTER;
+		map[7]	= SKELETON_HAND_L;
+		map[2]	= SKELETON_SPINE;
+		map[3]	= SKELETON_HIP_CENTER;
 		map[16] = SKELETON_HIP_R;
 		map[12] = SKELETON_HIP_L;
 		map[17] = SKELETON_KNEE_R;
@@ -150,6 +150,25 @@ public:
 		map[19] = SKELETON_FOOT_R;
 		map[15] = SKELETON_FOOT_L;
 		
+		return map;
+	}
+
+	static std::map<int, int> skeletonMapV2;
+	static std::map<int, int> create_SkeletonMapV2() {
+		//Caso o mapa ja tenha sido criado, nao cria novamente
+		if ( skeletonMapV2.size() > 0 ) {
+			return skeletonMapV2;
+		}
+
+		std::map<int, int> map = skeletonMap1;
+
+		map[20] = SKELETON_NECK;
+		map[21] = SKELETON_HAND_TIP_L;
+		map[22] = SKELETON_THUMB_L;
+
+		map[23] = SKELETON_HAND_TIP_R;
+		map[24] = SKELETON_THUMB_R;
+
 		return map;
 	}
 		

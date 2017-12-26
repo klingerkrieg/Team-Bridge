@@ -30,6 +30,9 @@
     <ClCompile Include="vrpn_NEDGlove.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="vrpn_KinectV2.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="vrpn_Generic_server_object.h">
@@ -42,6 +45,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="vrpn_NEDGlove.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="vrpn_KinectV2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

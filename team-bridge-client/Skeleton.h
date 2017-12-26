@@ -5,6 +5,7 @@
 
 
 const int SKELETON_HEAD			= 1;
+const int SKELETON_NECK			= 23;
 const int SKELETON_SHOULDER_CENTER= 2;
 const int SKELETON_SHOULDER_R	= 3;
 const int SKELETON_SHOULDER_L	= 4;
@@ -14,6 +15,8 @@ const int SKELETON_WRIST_R		= 7;
 const int SKELETON_WRIST_L		= 8;
 const int SKELETON_HAND_R		= 9;
 const int SKELETON_HAND_L		= 10;
+const int SKELETON_HAND_TIP_R	= 24;
+const int SKELETON_HAND_TIP_L	= 25;
 const int SKELETON_THUMB_R		= 11;
 const int SKELETON_THUMB_L		= 12;
 const int SKELETON_SPINE		= 13;

@@ -50,7 +50,7 @@
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(KINECTSDK10_DIR)\inc;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(VRPN);$(VRPN)\quat;$(LEAP_SDK)\include;</IncludePath>
+    <IncludePath>$(KINECTSDK10_DIR)\inc;$(KINECTSDK20_DIR)\inc;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(VRPN);$(VRPN)\quat;$(LEAP_SDK)\include;</IncludePath>
     <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;$(LEAP_SDK)\lib\x86;</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -87,7 +87,7 @@
     <Link>
       <OutputFile>$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\$(ProjectName).exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>$(KINECTSDK10_DIR)Lib\x86\;$(VRPN)\$(Configuration);$(VRPN)\pc_win32\$(Configuration)\;$(VRPN)\quat\pc_win32\$(Configuration);$(SYSTEMDRIVE)\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib;%(AdditionalLibraryDirectories);$(LEAP_SDK)\lib\x86</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(KINECTSDK10_DIR)Lib\x86\;$(KINECTSDK20_DIR)Lib\x86\;$(VRPN)\$(Configuration);$(VRPN)\pc_win32\$(Configuration)\;$(VRPN)\quat\pc_win32\$(Configuration);$(SYSTEMDRIVE)\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib;%(AdditionalLibraryDirectories);$(LEAP_SDK)\lib\x86</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\build_files\$(ProjectName).pdb</ProgramDatabaseFile>
       <SubSystem>Console</SubSystem>
@@ -95,7 +95,7 @@
       <DataExecutionPrevention>
       </DataExecutionPrevention>
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalDependencies>Kinect10.lib;gpsnmealib.lib;quat.lib;vrpn.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);Leap.lib;</AdditionalDependencies>
+      <AdditionalDependencies>Kinect10.lib;kinect20.lib;gpsnmealib.lib;quat.lib;vrpn.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);Leap.lib;</AdditionalDependencies>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -161,12 +161,14 @@
     <ClCompile Include="server.c" />
     <ClCompile Include="vrpn_Generic_server_object.c" />
     <ClCompile Include="vrpn_KinectV1.c" />
+    <ClCompile Include="vrpn_KinectV2.c" />
     <ClCompile Include="vrpn_LeapMotion.c" />
     <ClCompile Include="vrpn_NEDGlove.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="vrpn_Generic_server_object.h" />
     <ClInclude Include="vrpn_KinectV1.h" />
+    <ClInclude Include="vrpn_KinectV2.h" />
     <ClInclude Include="vrpn_LeapMotion.h" />
     <ClInclude Include="vrpn_NEDGlove.h" />
   </ItemGroup>

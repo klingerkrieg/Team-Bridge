@@ -172,6 +172,7 @@ protected:
 	int setup_OzzMaker_BerryIMU(char *&pch, char *line, FILE *config_file);
 	int setup_Laputa(char *&pch, char *line, FILE *config_file);
 	int setup_KinectV1(char *&pch, char *line, FILE *config_file);
+	int setup_KinectV2(char *&pch, char *line, FILE *config_file);
 	int setup_LeapMotion(char *&pch, char *line, FILE *config_file);
 	int setup_NEDGlove(char *&pch, char *line, FILE *config_file);
 

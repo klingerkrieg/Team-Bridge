@@ -52,7 +52,7 @@ bool vrpn_KinectV1::connect() {
 		iSensorCount = 0;
 		hr = NuiGetSensorCount(&iSensorCount);
 		if ( FAILED(hr) || iSensorCount == 0 ) {
-			printf("Nenhum Kinect encontrado.\n");
+			printf("Nenhum KinectV1 encontrado.\n");
 			Sleep(3000);
 			continue;
 		}

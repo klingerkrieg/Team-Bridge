@@ -7,47 +7,56 @@ using UnityEngine.EventSystems;
 public class toggleMode : MonoBehaviour, IPointerClickHandler {
 
 	VRPN vrpn;
-	public bool isKinect;
-	public bool isLeapMotion;
+	public DeviceType type;
 	private UnityEngine.UI.Toggle toogle;
-	private UnityEngine.UI.Toggle anotherToogle;
-	public GameObject anotherCheck;
+	private UnityEngine.UI.Toggle[] anotherToogles;
 
+	public GameObject[] anotherChecks;
+	InputField trackerNameField;
 
 	// Use this for initialization
 	void Start () {
 		vrpn = GameObject.Find ("starter").GetComponent<VRPN> ();
+		trackerNameField = GameObject.Find ("trackerNameField").GetComponent<InputField>();
+
 		toogle = GetComponent<Toggle> ();
 		updateIsOn ();
 
-		anotherToogle = anotherCheck.GetComponent<Toggle> ();
+		anotherToogles = new Toggle[anotherChecks.Length];
+		for (int i = 0; i < anotherChecks.Length; i++) {
+			anotherToogles[i] = anotherChecks[i].GetComponent<Toggle> ();
+		}
 
+		updateTrackerField ();
 	}
 
 	public void OnPointerClick(PointerEventData eventData ) {
-		if (toogle.isOn) {
-			anotherToogle.isOn = false;
-		} else {
-			anotherToogle.isOn = true;
+		for (int i = 0; i < anotherToogles.Length; i++) {
+			anotherToogles[i].isOn = false;
 		}
 
-		if (isKinect) {
-			vrpn.kinect = toogle.isOn;
-		} else
-		if (isLeapMotion){
-			vrpn.kinect = !toogle.isOn;
-		}
-		
+		vrpn.devType = type;
+
 		vrpn.createView ();
+
+		updateTrackerField ();
 	}
 	
 	// Update is called once per frame
 	void updateIsOn () {
-		if (isKinect) {
-			toogle.isOn = vrpn.kinect;
-		} else
-		if (isLeapMotion){
-			toogle.isOn  = !vrpn.kinect;
+		if (vrpn.devType == type) {
+			toogle.isOn = true;
+		} else {
+			toogle.isOn  = false;
+		}
+	}
+
+	public void updateTrackerField(){
+		
+		if (vrpn.devType == DeviceType.LeapMotion) {
+			trackerNameField.text = "LeapMotion0@localhost";
+		} else {
+			trackerNameField.text = "Tracker0@localhost";
 		}
 	}
 }

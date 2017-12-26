@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Bone.cs" />
+     <Compile Include="Assets\DeviceType.cs" />
      <Compile Include="Assets\Timeout.cs" />
      <Compile Include="Assets\VRPN.cs" />
      <Compile Include="Assets\toggleMode.cs" />
