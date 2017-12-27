@@ -488,9 +488,6 @@ public class VRPN : MonoBehaviour {
 
 			float leftLimit = centerPos.x - (handXInterval*3);
 			float rightLimit = centerPos.x + (handXInterval*3);
-			float topLimit = headPos.y + 1;
-
-
 
 			float top5 = headPos.y + (handTopInterval * 5);
 			float top4 = headPos.y + (handTopInterval * 2);
