@@ -6,14 +6,11 @@
 @license Standard VRPN license.
 */
 #pragma once
-#define __STRUCT__ struct
-#define interface __STRUCT__
 
 #include "vrpn_BaseClass.h" // for ::vrpn_TEXT_NORMAL, etc
 #include "vrpn_Analog.h"
 #include "vrpn_Tracker.h"               // for vrpn_Tracker
 #include "Kinect.h"
-
 
 
 class VRPN_API vrpn_KinectV2 : public  vrpn_Tracker, public vrpn_Analog {
@@ -26,6 +23,7 @@ class VRPN_API vrpn_KinectV2 : public  vrpn_Tracker, public vrpn_Analog {
 	static bool connected;
 	static bool skeletonArr[BODY_COUNT];
 	static bool status;
+	static int skeletonIds[BODY_COUNT];
 
 
 	int skeleton;
@@ -51,5 +49,7 @@ class VRPN_API vrpn_KinectV2 : public  vrpn_Tracker, public vrpn_Analog {
 			pInterfaceToRelease = NULL;
 		}
 	}
+
+	bool setKinectSkeletonId(IBody* ppBodies[BODY_COUNT]);
 };
 

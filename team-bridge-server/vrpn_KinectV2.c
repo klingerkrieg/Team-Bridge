@@ -16,6 +16,7 @@ HRESULT					vrpn_KinectV2::hr;
 bool vrpn_KinectV2::connected = false;
 bool vrpn_KinectV2::status = false;
 bool vrpn_KinectV2::skeletonArr[BODY_COUNT];
+int vrpn_KinectV2::skeletonIds[BODY_COUNT] = { -1,-1,-1,-1,-1,-1 };
 
 VRPN_SUPPRESS_EMPTY_OBJECT_WARNING()
 
@@ -28,6 +29,7 @@ vrpn_KinectV2::vrpn_KinectV2(const char *name, int skeleton , vrpn_Connection *c
 }
 
 void vrpn_KinectV2::mainloop() {
+
 	if ( connected ) {
 		if ( !onFrame() ) {
 			printf("Perda de conexao com o Kinect.\n");
@@ -60,8 +62,8 @@ vrpn_KinectV2::~vrpn_KinectV2() {
 bool vrpn_KinectV2::connect() {
 
 	while ( connected == false ) {
-
 		hr = GetDefaultKinectSensor(&m_pKinectSensor);
+		
 		if ( FAILED(hr) ) {
 			printf("Nenhum KinectV2 encontrado.\n");
 			Sleep(3000);
@@ -71,9 +73,10 @@ bool vrpn_KinectV2::connect() {
 		if ( m_pKinectSensor ) {
 			// Initialize the Kinect and get coordinate mapper and the body reader
 			IBodyFrameSource* pBodyFrameSource = NULL;
-
+			
 			hr = m_pKinectSensor->Open();
-
+			//Espera iniciar
+			Sleep(3000);
 			if ( SUCCEEDED(hr) ) {
 				hr = m_pKinectSensor->get_CoordinateMapper(&m_pCoordinateMapper);
 			}
@@ -126,19 +129,50 @@ void vrpn_KinectV2::reportPose(int sensor, CameraSpacePoint position, int quat) 
 	timeval t;
 	vrpn_gettimeofday(&t, NULL);
 
-	//printf("sensor:%d %.2f %.2f %.2f\n", sensor, pos[0], pos[1], pos[2]);
-
 	char msgbuf[512];
 	int len = vrpn_Tracker::encode_to(msgbuf);
-	//if (sensor == 0 )
-	//	printf("sensor: %d %.2f %.2f %.2f \n", sensor, position.x, position.y, position.z);
 	if ( d_connection->pack_message(len, t, position_m_id, d_sender_id, msgbuf,
 		vrpn_CONNECTION_LOW_LATENCY) ) {
 		fprintf(stderr, "vrpn_LeapMotion: cannot write message: tossing\n");
 	}
 }
 
+
+bool vrpn_KinectV2::setKinectSkeletonId(IBody* ppBodies[BODY_COUNT]) {
+	bool inUse = false;
+	IBody* pBody;
+	//Encontra os skeletons na ordem em que aparecem, o primeiro sempre sera 0
+	for ( int y = 0; y < BODY_COUNT; y++ ) {
+
+		for ( int x = 0; x < BODY_COUNT; x++ ) {
+			if ( skeletonIds[x] == y ) {
+				inUse = true;
+				break;
+			}
+		}
+		if ( inUse ) {
+			continue;
+		}
+
+
+		pBody = ppBodies[y];
+		BOOLEAN bTrackedFound = false;
+		hr = pBody->get_IsTracked(&bTrackedFound);
+		if ( bTrackedFound == (BOOLEAN)true ) {
+			//Encontra o primeiro skeletonId livre
+			for ( int x = 0; x < BODY_COUNT; x++ ) {
+				if ( skeletonIds[x] == -1 ) {
+					skeletonIds[x] = y;//insere o kinectId correto
+					return true;
+				}
+			}
+		}
+	}
+	return false;
+}
+
 bool vrpn_KinectV2::onFrame() {
+
 
 	int countSkeletons = 0;
 
@@ -155,34 +189,52 @@ bool vrpn_KinectV2::onFrame() {
 	HRESULT hr = m_pBodyFrameReader->AcquireLatestFrame(&pBodyFrame);
 
 	if ( SUCCEEDED(hr) ) {
-		INT64 nTime = 0;
-
-		hr = pBodyFrame->get_RelativeTime(&nTime);
-
+		
 		IBody* ppBodies[BODY_COUNT] = { 0 };
 
-		if ( SUCCEEDED(hr) ) {
-			hr = pBodyFrame->GetAndRefreshBodyData(_countof(ppBodies), ppBodies);
-		}
+		hr = pBodyFrame->GetAndRefreshBodyData(_countof(ppBodies), ppBodies);
+		
 
 		if ( SUCCEEDED(hr) ) {
 			
 
 			if ( SUCCEEDED(hr) && m_pCoordinateMapper ) {
-				
-				IBody* pBody = ppBodies[skeleton];
+				IBody* pBody;
 
-				if ( pBody ) {
+				//Quero deixar aqui a minha indignação, todo esse código é porque o Kinect V2 não controla quem são seus skeletons
+				//A primeira pessoa que aparece pode receber qualquer id, depende da vontade do Kinect, 0, 2, 5 tanto faz
+				//Então tive primeiro que identificar quem é que o kinect tá vendo, pra depois seguir a vida.
+
+				int id = skeletonIds[skeleton];
+				//Caso não tenha sido encontrado, verifica se há algum sendo exibido em outra id
+				if ( id == -1 ) {
+					//ja atualiza o skeletonIds automaticamente
+					setKinectSkeletonId(ppBodies);
+				}
+
+				id = skeletonIds[skeleton];
+				//verifica se encontrou algo
+				if ( id != -1 ) {
+
+					//Confirma se ainda está ativo
 					BOOLEAN bTracked = false;
+					pBody = ppBodies[id];
 					hr = pBody->get_IsTracked(&bTracked);
-					
-					if ( SUCCEEDED(hr) && bTracked ) {
+					if ( !bTracked ) {
+						//Se não estiver ativo, libera a posição no array
+						skeletonIds[skeleton] = -1;
+
+					} else {
+						//Se estiver ativo
+
+						pBody = ppBodies[id];
+
 						countSkeletons++;
 						Joint joints[JointType_Count];
-							
+
 						HandState leftHandState = HandState_Unknown;
 						HandState rightHandState = HandState_Unknown;
-							
+
 						pBody->get_HandLeftState(&leftHandState);
 						pBody->get_HandRightState(&rightHandState);
 
@@ -194,7 +246,8 @@ bool vrpn_KinectV2::onFrame() {
 
 						hr = pBody->GetJoints(_countof(joints), joints);
 						if ( SUCCEEDED(hr) ) {
-								
+							countSkeletons++;
+
 							for ( int j = 0; j < _countof(joints); ++j ) {
 								int sensor = j;
 
@@ -216,64 +269,46 @@ bool vrpn_KinectV2::onFrame() {
 										sensor = j;
 										break;
 								}
-										
+
 								reportPose(sensor, joints[j].Position, 0);
 							}//for
 						}//if SUCCEEDED
-						
-					}//if tracked
-					
-				}// if pBody
+					}//else
+				}//id != -1
+			}//if coordinate
 				
-			} //if coordinate
+		} //if hr GetAndRefreshBodyData
 			
 
+		//Informar se esta capturando alguem
+		if ( countSkeletons > 0 ) {
+			skeletonArr[skeleton] = true;
+		} else
+		if ( countSkeletons == 0 ) {
+			skeletonArr[skeleton] = false;
+		}
 
-
-
-
-			//Informar se esta capturando alguem
-			if ( countSkeletons > 0 ) {
-				skeletonArr[skeleton] = true;
-			} else
-			if ( countSkeletons == 0 ) {
-				skeletonArr[skeleton] = false;
-			}
-
-			int has = 0;
-			for ( int i = 0; i < BODY_COUNT; i++ ) {
-				has += skeletonArr[i];
-			}
+		int has = 0;
+		for ( int i = 0; i < BODY_COUNT; i++ ) {
+			has += skeletonArr[i];
+		}
 	
-			if ( has == 0 && status == true ) {
-				printf("Kinect parado.\n");
-				status = false;
-			} else
-			if ( has > 0 && status == false ) {
-				printf("Kinect capturando.\n");
-				status = true;
-			}
-
-
-
-
-
-
+		if ( has == 0 && status == true ) {
+			printf("Kinect parado.\n");
+			status = false;
+		} else
+		if ( has > 0 && status == false ) {
+			printf("Kinect capturando.\n");
+			status = true;
 		}
 
 		for ( int i = 0; i < _countof(ppBodies); ++i ) {
 			SafeRelease(ppBodies[i]);
 		}
 
-	}
+	}//if hr AcquireLatestFrame
+	
 	SafeRelease(pBodyFrame);
 	
-
-
-
-
-	
-	
-
 	return true;
 }
