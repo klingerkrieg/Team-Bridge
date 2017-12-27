@@ -1,0 +1,12 @@
+{
+  "common": {
+    "patientName": "Teste",
+    "saveDir": "./SAVES/",
+    "host": "localhost",
+    "database": "vrpn2",
+    "user": "root",
+    "passwd": ""
+  },
+  "keys": [
+  ]
+}

@@ -1,1 +1,1 @@
-team-bridge-client.exe -export
+team-bridge-client.exe -export -f db.json
