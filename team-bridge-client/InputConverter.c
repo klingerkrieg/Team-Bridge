@@ -81,15 +81,28 @@ bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKE
 
 	//Identifica qual dispositivo esta sendo usado
 	int devType = -1;
-	for ( size_t i = 0; i < devs.size(); i++ ) {
+	size_t i;
+	for ( i = 0; i < devs.size(); i++ ) {
 		if ( !devs.at(i).name.compare(userdata->name) ) {
 			devType = devs.at(i).type;
 			break;
 		}
 	}
 
+
 	//De acordo com cada dispositivo um esqueleto diferente sera utilizado
+	if ( devType == DEVTYPE_KINECT_V2 ) {
+		vrpnToSkeleton(gr->KinectGestures::skeleton[(std::string)userdata->name], gr->skeletonMapV2, t, skelPart, (std::string)userdata->name);
+	} else
 	if ( devType == DEVTYPE_KINECT ) {
+
+		//Se ele identificar sensor 20 ele muda o tipo para KinectV2
+		if ( t.sensor == 20 ) {
+			devs.at(i).type = DEVTYPE_KINECT_V2;
+			//Na próxima atualização ele envia para o local correto
+			return false;
+		}
+
 		vrpnToSkeleton(gr->KinectGestures::skeleton[(std::string)userdata->name], gr->skeletonMap1, t, skelPart, (std::string)userdata->name);
 	} else
 	if ( devType == DEVTYPE_LEAPMOTION ) {
@@ -116,7 +129,6 @@ bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKE
 }
 
 bool InputConverter::checkButton(const char * name, const vrpn_BUTTONCB b) {
-
 	printf("Button: %d\n", b.button);
 	return checkers.at(name).changeState(b, this);
 }

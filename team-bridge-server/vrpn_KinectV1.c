@@ -6,18 +6,24 @@
 @license Standard VRPN license.
 */
 
-
-#include "vrpn_Tracker.h"               // for vrpn_Tracker
 #include "vrpn_KinectV1.h"
 
-#include "vrpn_BaseClass.h" // for ::vrpn_TEXT_NORMAL, etc
-
-#include <math.h>
 
 VRPN_SUPPRESS_EMPTY_OBJECT_WARNING()
 
+INuiSensor * vrpn_KinectV1::pNuiSensor;
+INuiSensor* vrpn_KinectV1::m_pNuiSensor;
+HANDLE      vrpn_KinectV1::m_pSkeletonStreamHandle;
+HANDLE      vrpn_KinectV1::m_hNextSkeletonEvent;
+int vrpn_KinectV1::iSensorCount;
+HRESULT vrpn_KinectV1::hr;
+bool vrpn_KinectV1::connected = false;
+bool vrpn_KinectV1::status = false;
+bool vrpn_KinectV1::skeletonArr[NUI_SKELETON_COUNT];
 
-vrpn_KinectV1::vrpn_KinectV1(const char *name, vrpn_Connection *c) : vrpn_Tracker(name, c) {
+vrpn_KinectV1::vrpn_KinectV1(const char *name, int skeleton, vrpn_Connection *c) : vrpn_Tracker(name, c) {
+	vrpn_Tracker::num_sensors = 20;
+	this->skeleton = skeleton;
 	connect();
 }
 
@@ -108,7 +114,7 @@ bool vrpn_KinectV1::connect() {
 	return true;
 }
 
-void vrpn_KinectV1::reportPose(int sensor, Vector4 position, Vector4 quat) {
+void vrpn_KinectV1::reportPose(int skeleton,int sensor, Vector4 position, Vector4 quat) {
 	//Seta dados para envio
 	d_sensor = sensor;
 	pos[0] = position.x;
@@ -119,7 +125,6 @@ void vrpn_KinectV1::reportPose(int sensor, Vector4 position, Vector4 quat) {
 	d_quat[1] = quat.y;
 	d_quat[2] = quat.z;
 	d_quat[3] = quat.w;
-
 
 	timeval t;
 	vrpn_gettimeofday(&t, NULL);
@@ -158,52 +163,70 @@ bool vrpn_KinectV1::onFrame() {
 	
 	
 	NUI_SKELETON_BONE_ORIENTATION boneOrientations[NUI_SKELETON_POSITION_COUNT];
-	int countSkeletons = 0;
-	for ( int i = 0; i < NUI_SKELETON_COUNT; ++i ) {
-		NUI_SKELETON_TRACKING_STATE trackingState = skeletonFrame.SkeletonData[i].eTrackingState;
-		NuiSkeletonCalculateBoneOrientations(&skeletonFrame.SkeletonData[i], boneOrientations);
+
+
+	if ( skeleton > NUI_SKELETON_COUNT ) {
+		printf("Skeleton id maior do que o permitido: %d\n", skeleton);
+		return true;
+	}
 		
 
-		int sensor = 0;
-		if ( NUI_SKELETON_TRACKED == trackingState ) {
-			countSkeletons++;
-			for ( int h = 0; h < 20; h++ ) {
-				//Essa adaptação é necessária para enviar os mesmos pontos do FAAST
-				switch ( h ) {
-					case 3:
-						sensor = 0;
-						break;
-					case 2:
-						sensor = 1;
-						break;
-					case 1:
-						sensor = 2;
-						break;
-					case 0:
-						sensor = 3;
-						break;
-					default:
-						sensor = h;
+
+	NUI_SKELETON_TRACKING_STATE trackingState = skeletonFrame.SkeletonData[skeleton].eTrackingState;
+	NuiSkeletonCalculateBoneOrientations(&skeletonFrame.SkeletonData[skeleton], boneOrientations);
+		
+	int countSkeletons = 0;
+	int sensor = 0;
+	if ( NUI_SKELETON_TRACKED == trackingState ) {
+		countSkeletons++;
+		for ( int h = 0; h < 20; h++ ) {
+			//Essa adaptação é necessária para enviar os mesmos pontos do FAAST
+			switch ( h ) {
+				case 3:
+					sensor = 0;
 					break;
-				}
-
-				NUI_SKELETON_BONE_ORIENTATION & orientation = boneOrientations[h];
-
-				
-				reportPose(sensor, skeletonFrame.SkeletonData[i].SkeletonPositions[h],
-						   orientation.absoluteRotation.rotationQuaternion);
+				case 2:
+					sensor = 1;
+					break;
+				case 1:
+					sensor = 2;
+					break;
+				case 0:
+					sensor = 3;
+					break;
+				default:
+					sensor = h;
+				break;
 			}
+
+			NUI_SKELETON_BONE_ORIENTATION & orientation = boneOrientations[h];
+
+			reportPose(countSkeletons, sensor, skeletonFrame.SkeletonData[skeleton].SkeletonPositions[h],
+						orientation.absoluteRotation.rotationQuaternion);
 		}
-
 	}
 
-	if ( countSkeletons > lastSkeletonCount ) {
-		printf("Kinect Capturando.\n");
-		lastSkeletonCount = countSkeletons;
-	} else if ( lastSkeletonCount != countSkeletons ){
-		printf("Kinect Parado.\n");
-		lastSkeletonCount = countSkeletons;
-	}
 	
+	if ( countSkeletons > 0) {
+		skeletonArr[skeleton] = true;
+	} else
+	if ( countSkeletons == 0 ) {
+		skeletonArr[skeleton] = false;
+	}
+
+	int has = 0;
+	for ( int i = 0; i < NUI_SKELETON_COUNT; i++ ) {
+		has += skeletonArr[i];
+	}
+
+	if ( has == 0 && status == true) {
+		printf("Kinect parado.\n");
+		status = false;
+	} else 
+	if ( has > 0 && status == false){
+		printf("Kinect capturando.\n");
+		status = true;
+	}
+
 	return true;
 }

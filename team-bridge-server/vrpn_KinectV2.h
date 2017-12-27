@@ -9,25 +9,31 @@
 #define __STRUCT__ struct
 #define interface __STRUCT__
 
-
+#include "vrpn_BaseClass.h" // for ::vrpn_TEXT_NORMAL, etc
+#include "vrpn_Analog.h"
+#include "vrpn_Tracker.h"               // for vrpn_Tracker
 #include "Kinect.h"
 
 
 
-class VRPN_API vrpn_KinectV2 : public  vrpn_Tracker {
+class VRPN_API vrpn_KinectV2 : public  vrpn_Tracker, public vrpn_Analog {
 
 	private:
-	IKinectSensor*          m_pKinectSensor;
-	ICoordinateMapper*      m_pCoordinateMapper;
-	IBodyFrameReader*       m_pBodyFrameReader;
-	int lastSkeletonCount	= -1;
-	HRESULT hr;
+	static IKinectSensor*          m_pKinectSensor;
+	static ICoordinateMapper*      m_pCoordinateMapper;
+	static IBodyFrameReader*       m_pBodyFrameReader;
+	static HRESULT hr;
+	static bool connected;
+	static bool skeletonArr[BODY_COUNT];
+	static bool status;
 
-	bool connected = false;
+
+	int skeleton;
+	
 
 	public:
 
-	vrpn_KinectV2(const char *name, vrpn_Connection *c = NULL);
+	vrpn_KinectV2(const char *name, int skeleton, vrpn_Connection *c = NULL);
 	virtual ~vrpn_KinectV2();
 	virtual void mainloop();
 

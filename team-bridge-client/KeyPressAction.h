@@ -9,8 +9,6 @@ class KeyPressAction : public AbstractAction{
 	static bool mouseRightPressed;
 	static bool mouseMiddlePressed;
 
-	static int count;
-
 	public:
 	void run(KeyMap key);
 

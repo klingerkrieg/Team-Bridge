@@ -7,9 +7,6 @@
 */
 #include "Client.h"
 
-
-
-
 using namespace std;
 
 int done = 0;                // Signals that the program should exit
@@ -17,8 +14,6 @@ int done = 0;                // Signals that the program should exit
 void handle_cntl_c(int) {
 	done = 1;
 }
-
-
 
 
 bool Client::setup(bool test = false) {

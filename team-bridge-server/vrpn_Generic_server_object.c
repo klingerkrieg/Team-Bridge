@@ -4997,32 +4997,34 @@ int vrpn_Generic_Server_Object::setup_LeapMotion(char *&pch, char *line, FILE *)
 
 int vrpn_Generic_Server_Object::setup_KinectV1(char *&pch, char *line, FILE *) {
 	char name[LINESIZE];
+	int skeleton;
 
 	VRPN_CONFIG_NEXT();
-	int ret = sscanf(pch, "%511s", name);
-	if ( ret != 1 ) {
-		fprintf(stderr, "Bad KinectV1 line: %s\n", line);
+	int ret = sscanf(pch, "%511s\t%d", name, &skeleton);
+	if ( ret != 2 ) {
+		fprintf(stderr, "Bad LeapMotion line: %s\n", line);
 		return -1;
 	}
-
+	
 	// Open the Laputa
 	if ( verbose ) {
 		printf("Opening vrpn_KinectV1\n");
 	}
 
 	// Open the tracker
-	_devices->add(new vrpn_KinectV1(name, connection));
-
+	_devices->add(new vrpn_KinectV1(name, skeleton, connection));
+	
 	return 0; // successful completion
 }
 
 int vrpn_Generic_Server_Object::setup_KinectV2(char *&pch, char *line, FILE *) {
 	char name[LINESIZE];
+	int skeleton;
 
 	VRPN_CONFIG_NEXT();
-	int ret = sscanf(pch, "%511s", name);
-	if ( ret != 1 ) {
-		fprintf(stderr, "Bad KinectV2 line: %s\n", line);
+	int ret = sscanf(pch, "%511s\t%d", name, &skeleton);
+	if ( ret != 2 ) {
+		fprintf(stderr, "Bad LeapMotion line: %s\n", line);
 		return -1;
 	}
 
@@ -5030,9 +5032,9 @@ int vrpn_Generic_Server_Object::setup_KinectV2(char *&pch, char *line, FILE *) {
 	if ( verbose ) {
 		printf("Opening vrpn_KinectV2\n");
 	}
-
+	int i = 0;
 	// Open the tracker
-	_devices->add(new vrpn_KinectV2(name, connection));
+	_devices->add(new vrpn_KinectV2(name, i, connection));
 
 	return 0; // successful completion
 }

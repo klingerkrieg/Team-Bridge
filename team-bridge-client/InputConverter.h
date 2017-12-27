@@ -78,13 +78,15 @@ public:
 
 		gr = new GestureRecognizer();
 		gr->assignCheckers(checkers, map);
+	#ifdef THERAPY_MODULE
+		gr->AbstractGestureRecognizer::setStorage(this->storage);
+	#endif
 
 	}
 
 #ifdef THERAPY_MODULE
 	InputConverter(std::vector<KeyMap> &map, std::vector<DeviceType> &devs, Storage &storage, AbstractAction *act, View &view)
 		: InputConverter(map, devs, storage, act) {
-			{
 		this->storage = &storage;
 #else
 	InputConverter(std::vector<KeyMap> &map, std::vector<DeviceType> &devs, AbstractAction *act, View &view)

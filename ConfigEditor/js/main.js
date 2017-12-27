@@ -21,7 +21,9 @@ var actions = [{class:"handTop", title:"[Kinect] Altura da mão"},
                     {class:"kinectFastHand", title:"[Kinect] Velocidade do gesto"},
                     {class:"kinectWrist", title:"[Kinect] Flexão de punho"},
                     {class:"kinectTurn", title:"[Kinect] Girar corpo"},
-                    {class:"kinectBody", title:"[Kinect] Inclinar corpo"}
+                    {class:"kinectBody", title:"[Kinect] Inclinar corpo"},
+                    {class:"kinectCloseHand", title:"[KinectV2] Fechar mão"},
+                    {class:"kinectLasso", title:"[KinectV2] Laço"}
                   ];
 
 var leapMotionActions = [{class:"leapCloseHand", title:"[LeapMotion] Fechar mão"},

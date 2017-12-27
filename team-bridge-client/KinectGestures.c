@@ -5,6 +5,7 @@ std::map<std::string, KinectDetection> KinectGestures::kinectDetection;
 
 
 std::map<int, int> KinectGestures::skeletonMap1 = KinectGestures::create_SkeletonMap1();
+std::map<int, int> KinectGestures::skeletonMapV2 = KinectGestures::create_SkeletonMapV2();
 
 bool KinectGestures::assignChecker( CheckerSubject *checker, KeyMap *keyMap) {
 	
@@ -69,6 +70,18 @@ bool KinectGestures::assignChecker( CheckerSubject *checker, KeyMap *keyMap) {
 				break;
 			case KINECT_STEP_NORMAL:
 				checker->attach(SKELETON_HEAD, (TrackerCheckerMethod)&KinectGestures::detectTopChangeNormal, keyMap, this);
+				break;
+			case KINECT_LEFT_HAND_CLOSED:
+				checker->attach((AnalogCheckerMethod)&KinectGestures::leftHandClosed, keyMap, this);
+				break;
+			case KINECT_RIGHT_HAND_CLOSED:
+				checker->attach((AnalogCheckerMethod)&KinectGestures::rightHandClosed, keyMap, this);
+				break;
+			case KINECT_LEFT_HAND_LASSO:
+				checker->attach((AnalogCheckerMethod)&KinectGestures::leftHandLasso, keyMap, this);
+				break;
+			case KINECT_RIGHT_HAND_LASSO:
+				checker->attach((AnalogCheckerMethod)&KinectGestures::rightHandLasso, keyMap, this);
 				break;
 			default:
 				return false;
@@ -664,4 +677,45 @@ int KinectGestures::rightWristFlexedDown(SkeletonPart skelPart, KeyMap * keyMap)
 }
 
 
+// 3 closed
+int KinectGestures::closedHand(int code, KeyMap * keyMap) {
+	if ( code == 3 ) {
+	#ifdef THERAPY_MODULE
+		if ( keyMap->getSaveData().compare("") ) {
+			storage->saveToFile(keyMap->getDev().c_str(), keyMap->getSaveData(), 1);
+		}
+	#endif
+		return 1;
+	} else {
+		return 0;
+	}
+}
 
+int KinectGestures::leftHandClosed(vrpn_ANALOGCB a, KeyMap * keyMap) {
+	return closedHand((int)a.channel[0], keyMap);
+}
+int KinectGestures::rightHandClosed(vrpn_ANALOGCB a, KeyMap * keyMap) {
+	return closedHand((int)a.channel[1], keyMap);
+}
+
+// 4 pinch
+int KinectGestures::lasso(int code, KeyMap * keyMap) {
+	if ( code == 4 ) {
+	#ifdef THERAPY_MODULE
+		if ( keyMap->getSaveData().compare("") ) {
+			storage->saveToFile(keyMap->getDev().c_str(), keyMap->getSaveData(), 1);
+		}
+	#endif
+		return 1;
+	} else {
+		return 0;
+	}
+}
+
+int KinectGestures::leftHandLasso(vrpn_ANALOGCB a, KeyMap * keyMap) {
+	return lasso((int)a.channel[0], keyMap);
+}
+
+int KinectGestures::rightHandLasso(vrpn_ANALOGCB a, KeyMap * keyMap) {
+	return lasso((int)a.channel[1], keyMap);
+}

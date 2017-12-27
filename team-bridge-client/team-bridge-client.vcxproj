@@ -217,6 +217,7 @@
     <None Include="FlappyBirdTest\kinectBird.json" />
     <None Include="FlappyBirdTest\physiohappy.json" />
     <None Include="kayak.json" />
+    <None Include="kinectCloseHand.json" />
     <None Include="kinectTest.json" />
     <None Include="leapmotion.json" />
     <None Include="mountAndBlade.json" />

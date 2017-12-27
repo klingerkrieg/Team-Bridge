@@ -24,7 +24,6 @@
 #include "ConfigFileReader.h"
 #include "KeyMap.h"
 #include "InputConverter.h"
-#include "InputConverter.h"
 #include "KeyPressAction.h"
 #include "View.h"
 

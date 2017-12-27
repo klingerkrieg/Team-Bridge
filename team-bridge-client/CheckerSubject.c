@@ -18,8 +18,8 @@ void CheckerSubject::attach(ButtonCheckerMethod method, KeyMap *keyMap, Abstract
 
 bool CheckerSubject::changeState(SkeletonPart skelPart, InputConverter *conv) {
 	bool pressed = false;
+	bool ret = false;
 	int active;
-
 
 	for ( size_t i = 0; i < trackerObservers[skelPart.skelConstant].size(); i++ ) {
 		TrackerObserver obs = trackerObservers[skelPart.skelConstant].at(i);
@@ -27,15 +27,17 @@ bool CheckerSubject::changeState(SkeletonPart skelPart, InputConverter *conv) {
 		active = (obs.context->*obs.method)(skelPart, obs.keyMap);
 
 		if ( active != -1 ) {
-			pressed = pressed || conv->interpretOnLeave(active, obs.keyMap);
+			pressed = conv->interpretOnLeave(active, obs.keyMap);
+			ret = ret || pressed;
 		}
 	}
 
-	return pressed;
+	return ret;
 }
 
 bool CheckerSubject::changeState(vrpn_ANALOGCB analog, InputConverter *conv) {
 	bool pressed = false;
+	bool ret = false;
 	int active;
 	
 	for ( size_t i = 0; i < analogObservers.size(); i++ ) {
@@ -44,15 +46,17 @@ bool CheckerSubject::changeState(vrpn_ANALOGCB analog, InputConverter *conv) {
 		active = (obs.context->*obs.method)(analog, obs.keyMap);
 
 		if ( active != -1 ) {
-			pressed = pressed || conv->interpretOnLeave(active, obs.keyMap);
+			pressed = conv->interpretOnLeave(active, obs.keyMap);
+			ret = ret || pressed;
 		}
 	}
 
-	return pressed;
+	return ret;
 }
 
 bool CheckerSubject::changeState(vrpn_BUTTONCB button, InputConverter *conv) {
 	bool pressed = false;
+	bool ret = false;
 	int active;
 
 	for ( size_t i = 0; i < buttonObservers.size(); i++ ) {
@@ -61,9 +65,10 @@ bool CheckerSubject::changeState(vrpn_BUTTONCB button, InputConverter *conv) {
 		active = (obs.context->*obs.method)(button, obs.keyMap);
 
 		if ( active != -1 ) {
-			pressed = pressed || conv->interpretOnLeave(active, obs.keyMap);
+			pressed = conv->interpretOnLeave(active, obs.keyMap);
+			ret = ret || pressed;
 		}
 	}
 
-	return pressed;
+	return ret;
 }

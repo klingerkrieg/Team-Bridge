@@ -63,9 +63,6 @@ std::string KeyMap::toString() {
 		if ( getToKeyWhile() ) {
 			ret << "[WHILE]";
 		} else
-		if ( getToKeyDown() && getToKeyUp() ) {
-			ret << "[AUTO] ";
-		} else
 		if ( getToKeyDown() ) {
 			ret << "[DOWN]";
 		} else {
@@ -270,10 +267,6 @@ KeyMap::KeyMap(json js) {
 			this->toKeyWhile = true;
 		} else {
 
-			/*this->hasOnLeave = false;
-			this->btnDown = true;
-			this->btnUp = false;*/
-			
 			if ( !js["toKeyDown"].is_null() ) {
 				setToKey(js["toKeyDown"].get<std::string>());
 				finalKey = js["toKeyDown"].get<std::string>();
@@ -283,7 +276,6 @@ KeyMap::KeyMap(json js) {
 
 			if ( !js["toKeyUp"].is_null() ) {
 				onLeave = new KeyMap(this->dev, js["toKeyUp"].get<std::string>());
-				//this->hasOnLeave = true;
 				this->toKeyUp = true;
 				finalKey = js["toKeyUp"].get<std::string>();
 			}
@@ -312,9 +304,6 @@ KeyMap::KeyMap(std::string dev, std::string toKeyUp) {
 	this->dev = dev;
 	setToKey(toKeyUp);
 	this->keyUpEvent = true;
-	//this->toKeyUp = true;
-	/*this->btnDown = false;
-	this->btnUp = true;*/
 }
 
 
@@ -343,12 +332,6 @@ void KeyMap::setToKey(std::string toKeyFind) {
 	//Sera um acionamento de botao
 	isBtn = true;
 
-	
-	/*if ( !toKeyFind.compare("VK_MOUSEMOVE") ) {
-		this->toKeyRepr = "VK_MOUSEMOVE";
-		this->toKey = VK_MOUSEMOVE;
-	}*/
-	
 
 	std::map<std::string, int>::iterator find;
 

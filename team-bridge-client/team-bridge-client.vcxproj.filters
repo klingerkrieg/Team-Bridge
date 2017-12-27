@@ -238,5 +238,8 @@
     <None Include="twoplayers.json">
       <Filter>jsons</Filter>
     </None>
+    <None Include="kinectCloseHand.json">
+      <Filter>jsons</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -1,0 +1,46 @@
+{
+  "common": {
+    "patientName": "",
+    "saveDir": "./SAVES/",
+    "KINECT_X_INTERVAL": 0.35,
+    "host": "",
+    "database": "",
+    "user": "",
+    "passwd": ""
+  },
+  "keys": [
+    {
+      "divClass": "kinectCloseHand",
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_LEFT_HAND_CLOSED",
+      "toKeyDown": "A",
+      "toKeyUp": "A"
+    },
+    {
+      "divClass": "kinectCloseHand",
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_RIGHT_HAND_CLOSED",
+      "toKeyDown": "B",
+      "toKeyUp": "B"
+    },
+    {
+      "divClass": "kinectPinch",
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_LEFT_HAND_PINCH",
+      "toKeyDown": "C",
+      "toKeyUp": "C"
+    },
+    {
+      "divClass": "kinectPinch",
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_RIGHT_HAND_PINCH",
+      "toKeyDown": "D",
+      "toKeyUp": "D",
+      "saveData": "kinectPinch"
+    }
+  ]
+}

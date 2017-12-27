@@ -6,18 +6,24 @@
 @license Standard VRPN license.
 */
 
-
-#include "vrpn_Tracker.h"               // for vrpn_Tracker
 #include "vrpn_KinectV2.h"
 
-#include "vrpn_BaseClass.h" // for ::vrpn_TEXT_NORMAL, etc
 
-#include <math.h>
+IKinectSensor*          vrpn_KinectV2::m_pKinectSensor;
+ICoordinateMapper*      vrpn_KinectV2::m_pCoordinateMapper;
+IBodyFrameReader*       vrpn_KinectV2::m_pBodyFrameReader;
+HRESULT					vrpn_KinectV2::hr;
+bool vrpn_KinectV2::connected = false;
+bool vrpn_KinectV2::status = false;
+bool vrpn_KinectV2::skeletonArr[BODY_COUNT];
 
 VRPN_SUPPRESS_EMPTY_OBJECT_WARNING()
 
 
-vrpn_KinectV2::vrpn_KinectV2(const char *name, vrpn_Connection *c) : vrpn_Tracker(name, c) {
+vrpn_KinectV2::vrpn_KinectV2(const char *name, int skeleton , vrpn_Connection *c) : vrpn_Tracker(name, c), vrpn_Analog(name, c) {
+	vrpn_Analog::num_channel = 2;
+	vrpn_Tracker::num_sensors = 25;
+	this->skeleton = skeleton;
 	connect();
 }
 
@@ -134,8 +140,7 @@ void vrpn_KinectV2::reportPose(int sensor, CameraSpacePoint position, int quat) 
 
 bool vrpn_KinectV2::onFrame() {
 
-	bool ret = true;
-	int countSkeletons = -1;
+	int countSkeletons = 0;
 
 	BOOLEAN available = false;
 	m_pKinectSensor->get_IsAvailable(&available);
@@ -161,63 +166,99 @@ bool vrpn_KinectV2::onFrame() {
 		}
 
 		if ( SUCCEEDED(hr) ) {
-			//ProcessBody(nTime, BODY_COUNT, ppBodies);
+			
 
 			if ( SUCCEEDED(hr) && m_pCoordinateMapper ) {
 				
-				countSkeletons = 0;
-				for ( int i = 0; i < BODY_COUNT; ++i ) {
-					IBody* pBody = ppBodies[i];
+				IBody* pBody = ppBodies[skeleton];
 
-					if ( pBody ) {
-						BOOLEAN bTracked = false;
-						hr = pBody->get_IsTracked(&bTracked);
-						
-						if ( SUCCEEDED(hr) && bTracked ) {
+				if ( pBody ) {
+					BOOLEAN bTracked = false;
+					hr = pBody->get_IsTracked(&bTracked);
+					
+					if ( SUCCEEDED(hr) && bTracked ) {
+						countSkeletons++;
+						Joint joints[JointType_Count];
 							
-							countSkeletons++;
-							Joint joints[JointType_Count];
+						HandState leftHandState = HandState_Unknown;
+						HandState rightHandState = HandState_Unknown;
 							
-							HandState leftHandState = HandState_Unknown;
-							HandState rightHandState = HandState_Unknown;
+						pBody->get_HandLeftState(&leftHandState);
+						pBody->get_HandRightState(&rightHandState);
 
-							pBody->get_HandLeftState(&leftHandState);
-							pBody->get_HandRightState(&rightHandState);
+						//Status das mãos
+						channel[0] = leftHandState;
+						channel[1] = rightHandState;
+						vrpn_Analog::report();
 
-							hr = pBody->GetJoints(_countof(joints), joints);
-							if ( SUCCEEDED(hr) ) {
+
+						hr = pBody->GetJoints(_countof(joints), joints);
+						if ( SUCCEEDED(hr) ) {
 								
-								for ( int j = 0; j < _countof(joints); ++j ) {
-									int sensor = j;
+							for ( int j = 0; j < _countof(joints); ++j ) {
+								int sensor = j;
 
-									//Adaptação para manter semelhança com os dados enviados pelo FAAST
-									switch ( j ) {
-										case 3:
-											sensor = 0;
-											break;
-										case 2:
-											sensor = 1;
-											break;
-										case 1:
-											sensor = 2;
-											break;
-										case 0:
-											sensor = 3;
-											break;
-										default:
-											sensor = j;
-											break;
-									}
+								//Adaptação para manter semelhança com os dados enviados pelo FAAST
+								switch ( j ) {
+									case 3:
+										sensor = 0;
+										break;
+									case 2:
+										sensor = 1;
+										break;
+									case 1:
+										sensor = 2;
+										break;
+									case 0:
+										sensor = 3;
+										break;
+									default:
+										sensor = j;
+										break;
+								}
 										
-									reportPose(sensor, joints[j].Position, 0);
-								}//for
-							}//if success
-						}//if tracked
-					}// if pBody
-				}// for body
-				ret = true;
+								reportPose(sensor, joints[j].Position, 0);
+							}//for
+						}//if SUCCEEDED
+						
+					}//if tracked
+					
+				}// if pBody
+				
 			} //if coordinate
 			
+
+
+
+
+
+			//Informar se esta capturando alguem
+			if ( countSkeletons > 0 ) {
+				skeletonArr[skeleton] = true;
+			} else
+			if ( countSkeletons == 0 ) {
+				skeletonArr[skeleton] = false;
+			}
+
+			int has = 0;
+			for ( int i = 0; i < BODY_COUNT; i++ ) {
+				has += skeletonArr[i];
+			}
+	
+			if ( has == 0 && status == true ) {
+				printf("Kinect parado.\n");
+				status = false;
+			} else
+			if ( has > 0 && status == false ) {
+				printf("Kinect capturando.\n");
+				status = true;
+			}
+
+
+
+
+
+
 		}
 
 		for ( int i = 0; i < _countof(ppBodies); ++i ) {
@@ -228,92 +269,11 @@ bool vrpn_KinectV2::onFrame() {
 	SafeRelease(pBodyFrame);
 	
 
-	//printf("%d %d\n", countSkeletons, lastSkeletonCount);
-	if ( countSkeletons != -1 ) {
-		if ( countSkeletons > 0 && lastSkeletonCount != countSkeletons ) {
-			printf("Kinect Capturando.\n");
-			lastSkeletonCount = countSkeletons;
-		} else if ( countSkeletons == 0 && lastSkeletonCount != 0 ) {
-			printf("Kinect Parado.\n");
-			lastSkeletonCount = 0;
-		}
-	}
+
+
+
+	
 	
 
-	return ret;
-	
-
-
-	//Verifica conexao
-	/*hr = m_pNuiSensor->NuiStatus();
-	if ( S_OK != hr ) {
-	return false;
-	}*/
-
-
-
-	/*
-	NUI_SKELETON_FRAME skeletonFrame = { 0 };
-
-	HRESULT hr = m_pNuiSensor->NuiSkeletonGetNextFrame(0, &skeletonFrame);
-	if ( FAILED(hr) ) {
-		//printf("Falha ao capturar frame.\n");
-		return true;//Mesmo tendo essa falha ainda pode estar conectado
-	}
-
-
-
-	// smooth out the skeleton data
-	m_pNuiSensor->NuiTransformSmooth(&skeletonFrame, NULL);
-
-
-	NUI_SKELETON_BONE_ORIENTATION boneOrientations[NUI_SKELETON_POSITION_COUNT];
-	int countSkeletons = 0;
-	for ( int i = 0; i < NUI_SKELETON_COUNT; ++i ) {
-		NUI_SKELETON_TRACKING_STATE trackingState = skeletonFrame.SkeletonData[i].eTrackingState;
-		NuiSkeletonCalculateBoneOrientations(&skeletonFrame.SkeletonData[i], boneOrientations);
-
-
-		int sensor = 0;
-		if ( NUI_SKELETON_TRACKED == trackingState ) {
-			countSkeletons++;
-			for ( int h = 0; h < 20; h++ ) {
-				//Essa adaptação é necessária para enviar os mesmos pontos do FAAST
-				switch ( h ) {
-					case 3:
-						sensor = 0;
-						break;
-					case 2:
-						sensor = 1;
-						break;
-					case 1:
-						sensor = 2;
-						break;
-					case 0:
-						sensor = 3;
-						break;
-					default:
-						sensor = h;
-						break;
-				}
-
-				NUI_SKELETON_BONE_ORIENTATION & orientation = boneOrientations[h];
-
-
-				reportPose(sensor, skeletonFrame.SkeletonData[i].SkeletonPositions[h],
-						   orientation.absoluteRotation.rotationQuaternion);
-			}
-		}
-
-	}
-
-	if ( countSkeletons > lastSkeletonCount ) {
-		printf("Kinect Capturando.\n");
-		lastSkeletonCount = countSkeletons;
-	} else if ( lastSkeletonCount != countSkeletons ) {
-		printf("Kinect Parado.\n");
-		lastSkeletonCount = countSkeletons;
-	}
-
-	return true;*/
+	return true;
 }

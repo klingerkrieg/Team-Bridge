@@ -183,4 +183,38 @@
     <label><input type="checkbox" id="saveData" value="bodyAngle" > Salvar dados </label>
 </div>
 
+<div class="kinectCloseHand">
+    <img class="deviceLogo" src="./img/kinect.png" alt="(Kinect)">
+    <input type="hidden" id="devType" value="kinect" class="toJSON">
+
+    Endereço: <input type="text" id="dev" value="Tracker0@localhost" class="form-control toJSON" data-toggle="tooltip" data-placement="bottom" title="0 é a primeira pessoa que o Kinect captar, 1 é a segunda, 2 a terceira, etc.">
+    <span class="help">(Caso queira mudar a pessoa que deve realizar a ação altere o número no final do endereço)</span>
+    <br/>
+
+    Fechar mão:    
+    <select id="key" class="form-control toJSON">
+        <option value="KINECT_LEFT_HAND_CLOSED">Esquerda</option>
+        <option value="KINECT_RIGHT_HAND_CLOSED">Direita</option>
+    </select>
+    
+    <label><input type="checkbox" id="saveData" value="kinectClosed" > Salvar dados </label>
+</div>
+
+<div class="kinectLasso">
+    <img class="deviceLogo" src="./img/kinect.png" alt="(Kinect)">
+    <input type="hidden" id="devType" value="kinect" class="toJSON">
+
+    Endereço: <input type="text" id="dev" value="Tracker0@localhost" class="form-control toJSON" data-toggle="tooltip" data-placement="bottom" title="0 é a primeira pessoa que o Kinect captar, 1 é a segunda, 2 a terceira, etc.">
+    <span class="help">(Caso queira mudar a pessoa que deve realizar a ação altere o número no final do endereço)</span>
+    <br/>
+
+    Fechar mão:    
+    <select id="key" class="form-control toJSON">
+        <option value="KINECT_LEFT_HAND_LASSO">Esquerda</option>
+        <option value="KINECT_RIGHT_HAND_LASSO">Direita</option>
+    </select>
+    
+    <label><input type="checkbox" id="saveData" value="kinectLasso" > Salvar dados </label>
+</div>
+
 </div>

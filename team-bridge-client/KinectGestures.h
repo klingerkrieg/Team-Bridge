@@ -120,6 +120,14 @@ public:
 	
 	int bodyBalance(SkeletonPart skelPart, KeyMap * keyMap);
 
+	int closedHand(int code, KeyMap * keyMap);
+	int leftHandClosed(vrpn_ANALOGCB a, KeyMap * keyMap);
+	int rightHandClosed(vrpn_ANALOGCB a, KeyMap * keyMap);
+
+	int lasso(int code, KeyMap * keyMap);
+	int leftHandLasso(vrpn_ANALOGCB a, KeyMap * keyMap);
+	int rightHandLasso(vrpn_ANALOGCB a, KeyMap * keyMap);
+
 
 	static std::map<int, int> skeletonMap1;
 	static std::map<int, int> create_SkeletonMap1() {

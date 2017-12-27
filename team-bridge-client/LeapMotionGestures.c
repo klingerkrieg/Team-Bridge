@@ -93,7 +93,7 @@ int LeapMotionGestures::pinch(vrpn_ANALOGCB a, KeyMap * keyMap) {
 
 	#ifdef THERAPY_MODULE
 		if ( keyMap->getSaveData().compare("") ) {
-			storage->saveToFile(keyMap->getDev().c_str(), keyMap->getSaveData(), angle);
+			storage->saveToFile(keyMap->getDev().c_str(), keyMap->getSaveData(), dist);
 		}
 	#endif
 

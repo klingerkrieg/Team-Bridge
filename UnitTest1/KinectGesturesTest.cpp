@@ -497,6 +497,45 @@ public:
 	}
 
 
+	TEST_METHOD(KinectRecognizer_CloseAndLasso) {
+
+		std::string skeletonName = "Tracker0@localhost";
+		KinectGestures gr = KinectGestures();
+		vrpn_ANALOGCB a = getAnalogCB();
+		
+		//Esses métodos não requerem nenhuma informação do KeyMap
+		json js = {};
+		KeyMap *m1 = new KeyMap(js);
+
+		//esquerda e direita fechada
+		a.channel[0] = 3;
+		a.channel[1] = 3;
+
+		Assert::IsTrue(gr.leftHandClosed(a, m1));
+		Assert::IsTrue(gr.rightHandClosed(a, m1));
+		Assert::IsFalse(gr.leftHandLasso(a, m1));
+		Assert::IsFalse(gr.rightHandLasso(a, m1));
+
+		//esquerda e direita lasso
+		a.channel[0] = 4;
+		a.channel[1] = 4;
+
+		Assert::IsFalse(gr.leftHandClosed(a, m1));
+		Assert::IsFalse(gr.rightHandClosed(a, m1));
+		Assert::IsTrue(gr.leftHandLasso(a, m1));
+		Assert::IsTrue(gr.rightHandLasso(a, m1));
+
+		//esquerda e direita aberta
+		a.channel[0] = 2;
+		a.channel[1] = 2;
+
+		Assert::IsFalse(gr.leftHandClosed(a, m1));
+		Assert::IsFalse(gr.rightHandClosed(a, m1));
+		Assert::IsFalse(gr.leftHandLasso(a, m1));
+		Assert::IsFalse(gr.rightHandLasso(a, m1));
+
+
+	}
 
 	};
 }
