@@ -11,6 +11,7 @@ public class VRPN : MonoBehaviour {
 	public bool guideON;
 	public bool guide3D;
 
+	public bool cameraAuto = true;
 	String trackerName;
 	int channels;
 	int centerChannel;
@@ -288,7 +289,7 @@ public class VRPN : MonoBehaviour {
 		Material newMat = Resources.Load("esfera", typeof(Material)) as Material;
 		guideMat = Resources.Load("guide", typeof(Material)) as Material;
 
-
+		cameraAuto = true;
 		trackerName = trackerNameField.text;
 
 		//Create bones
@@ -325,6 +326,7 @@ public class VRPN : MonoBehaviour {
 
 	void OnGUI(){
 		
+		trackerName = trackerNameField.text;
 
 		GUI.color = Color.red;
 
@@ -454,8 +456,9 @@ public class VRPN : MonoBehaviour {
 
 
 		if (freezed == false) {
-			if (central != null)
+			if (central != null && cameraAuto){
 				Camera.main.transform.LookAt (central.transform);
+			}
 		}
 
 
