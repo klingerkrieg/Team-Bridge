@@ -12,6 +12,9 @@ using namespace std;
 
 
 
+const int repMax = 300;
+
+
 // fonte: https://www.vivaolinux.com.br/script/Estatistica-Moda-e-mediana-de-um-vetor
 /* Sub-rotina para ordenar elementos de um
 vetor de forma crescente */
@@ -52,7 +55,16 @@ double MEDIANA(double vet[], int faixa) {
 	}
 }
 
+double DESVIOP(double vet[], int faixa, double media) {
+	double variancia = 0;
 
+	for ( int i = 0; i < repMax; i++ ) {
+		variancia += pow(media - vet[i],2);
+	}
+
+	variancia = variancia / (faixa - 1);
+	return sqrt(variancia);
+}
 
 
 
@@ -78,18 +90,35 @@ int gettimeofday(struct timeval * tp, struct timezone * tzp) {
 
 
 
-int main(){
+int main() {
 	struct timeval tp;
 	std::cout.precision(14);
 	double ant = 0;
 	double count = 1;
 	double med = 0;
 	int i = 0;
-	const int repMax = 300;
 	double medianaVec[repMax];
 	double min = 100;
 	double max = 0;
 	double atual;
+	double desvioP;
+	int countDentroDesvioP = 0;
+
+	/*double arr[] = { 10, 8, 10, 8, 8, 4 };
+	for ( i = 0; i < repMax; i++ ) {
+		med += arr[i];
+	}
+	med /= repMax;
+	desvioP = DESVIOP(arr, 6, med);
+	cout << desvioP << "\n";
+	for ( i = 0; i < repMax; i++ ) {
+		if ( arr[i] > med - desvioP && arr[i] < med + desvioP ) {
+			countDentroDesvioP++;
+		}
+	}
+	cout << countDentroDesvioP * 100 / repMax << "% das amostras dentro do desvio padrao.\n";*/
+
+
 
 	cout << ("Inicie o teste:\n");
 	while ( i-3 < repMax ) {
@@ -119,8 +148,19 @@ int main(){
 	}
 
 
+
 	if ( i - 3 == repMax ) {
 		printf("Mediana: %.4f\n", MEDIANA(medianaVec, repMax));
+		desvioP = DESVIOP(medianaVec, repMax, med);
+		printf("Desvio padrao: %.4f\n", desvioP);
+		for ( i = 0; i < repMax; i++ ) {
+			if ( medianaVec[i] > med - desvioP && medianaVec[i] < med + desvioP ) {
+				countDentroDesvioP++;
+			}
+		}
+		cout << countDentroDesvioP * 100 / repMax << "% das amostras dentro do desvio padrao.\n";
+
+
 		printf("Min: %.4f\n", min);
 		printf("Max: %.4f\n", max);
 		Sleep(10000);
