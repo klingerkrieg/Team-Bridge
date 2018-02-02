@@ -14,8 +14,7 @@
       "devType": "leapMotion",
       "dev": "LeapMotion0@localhost",
       "key": "LEAP_WRIST_DOWN",
-      "angleMod": "<",
-      "angle": 130,
+      "angleMin": 130,
       "toKeyDown": "VK_LBUTTON"
     }
   ]

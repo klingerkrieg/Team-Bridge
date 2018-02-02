@@ -39,15 +39,16 @@ int FlexedMember::flexed3d(std::map<int, std::vector<double>> points, KeyMap * k
 
 
 	//printf("%.2f\n", angle);
-	bool comp;
-	if ( keyMap->getAngleMod() == -1 ) {
-		comp = keyMap->getAngle() > angle;
+	bool comp = false;
+	//Se ambos os angulos forem diferenets do int padrao
+	if ( keyMap->getAngleMax() != 0 && keyMap->getAngleMin() != 0 ) {
+		comp = keyMap->getAngleMax() >= angle && keyMap->getAngleMin() <= angle;
 	} else
-	if ( keyMap->getAngleMod() == 1 ) {
-		comp = keyMap->getAngle() < angle;
+	if ( keyMap->getAngleMax() != 0 ) {
+		comp = keyMap->getAngleMax() >= angle;
 	} else
-	if ( keyMap->getAngleMod() == 0 ) {
-		comp = keyMap->getAngle() == angle;
+	if ( keyMap->getAngleMin() != 0 ) {
+		comp = keyMap->getAngleMin() <= angle;
 	}
 
 #ifdef THERAPY_MODULE

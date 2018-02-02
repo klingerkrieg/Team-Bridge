@@ -96,9 +96,9 @@ public:
 			{"divClass","kinectBalance"},
 			{"dev" ,"Tracker0@localhost"},
 			{ "devType" , "kinect" },
-			{"key" ,"KINECT_BALANCE"},
-			{"angleMod" ,">"},
-			{"angle" ,35},
+			{"key" ,"KINECT_BALANCE_LEFT"},
+			{"angleMax" , 40},
+			{"angleMin" ,35},
 			{"msg" ,"Mensagem"},
 			{"toKeyDown" ,"ALERT"},
 			{"toKeyUp" ,"ALERT"}
@@ -111,8 +111,7 @@ public:
 			{ "dev" ,"Tracker0@localhost" },
 			{ "devType" , "kinect" },
 			{ "key" ,"KINECT_LEFT_WRIST_DOWN" },
-			{ "angleMod" , ">" },
-			{ "angle" , 35 },
+			{ "angleMin" , 35 },
 			{ "toKeyDown" ,"A" },
 			{ "toKeyUp" ,"A" }
 		};

@@ -34,8 +34,7 @@
       "devType": "leapMotion",
       "dev": "LeapMotion0@localhost",
       "key": "LEAP_WRIST_UP",
-      "angleMod": "<",
-      "angle": 130,
+      "angleMax": 130,
       "toKeyDown": "C",
       "toKeyUp": "C"
     },
@@ -44,8 +43,7 @@
       "devType": "leapMotion",
       "dev": "LeapMotion1@localhost",
       "key": "LEAP_WRIST_DOWN",
-      "angleMod": "<",
-      "angle": 130,
+      "angleMax": 130,
       "toKeyDown": "D",
       "toKeyUp": "D"
     }

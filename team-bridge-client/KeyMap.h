@@ -52,14 +52,15 @@ const int KINECT_RIGHT_WRIST_DOWN	= 5016;
 const int KINECT_LEFT_WRIST_UP		= 5017;
 const int KINECT_LEFT_WRIST_DOWN	= 5018;
 
-const int KINECT_BALANCE			= 5019;
-const int KINECT_SET_CENTER_POS		= 5020;
+const int KINECT_BALANCE_LEFT		= 5019;
+const int KINECT_BALANCE_RIGHT		= 5020;
+const int KINECT_SET_CENTER_POS		= 5021;
 
 //kinect v2
-const int KINECT_LEFT_HAND_CLOSED	= 5021;
-const int KINECT_RIGHT_HAND_CLOSED	= 5022;
-const int KINECT_LEFT_HAND_LASSO	= 5023;
-const int KINECT_RIGHT_HAND_LASSO	= 5024;
+const int KINECT_LEFT_HAND_CLOSED	= 5031;
+const int KINECT_RIGHT_HAND_CLOSED	= 5032;
+const int KINECT_LEFT_HAND_LASSO	= 5033;
+const int KINECT_RIGHT_HAND_LASSO	= 5034;
 
 
 const int LEAP_CLOSED				= 7001;
@@ -149,13 +150,9 @@ private:
 
 	//Medida em Metros por segundo para identificar um movimento brusco
 	//Valor padrao, pode ser alterado nas configurações
-	double maxVelociyMs = 4;
+	double maxVelocityMs = 4;
 
 	//NEDGlove e LeapMotion
-	//Angulo da propriedade
-	int angle = -1;
-	//Como o angulo será comparado
-	int angleMod = 0;// 0 =, 1 >, -1 <
 	//strength é pra NEDGLOVE
 	int strengthMin = 0;
 	int strengthMax = 0;
@@ -313,20 +310,14 @@ private:
 	}
 
 	double getMaxVelocityMs() {
-		return maxVelociyMs;
+		return maxVelocityMs;
 	}
 
 	std::string getMsg() {
 		return msg;
 	}
 
-	int getAngleMod() {
-		return angleMod;
-	}
-
-	int getAngle() {
-		return angle;
-	}
+	
 
 	int getStrengthMax() {
 		return strengthMax;
@@ -496,7 +487,8 @@ private:
 		m["KINECT_LEFT_WRIST_UP"]		= KINECT_LEFT_WRIST_UP;
 		m["KINECT_LEFT_WRIST_DOWN"]		= KINECT_LEFT_WRIST_DOWN;
 
-		m["KINECT_BALANCE"]				= KINECT_BALANCE;
+		m["KINECT_BALANCE_LEFT"]		= KINECT_BALANCE_LEFT;
+		m["KINECT_BALANCE_RIGHT"]		= KINECT_BALANCE_RIGHT;
 		m["KINECT_SET_CENTER_POS"]		= KINECT_SET_CENTER_POS;
 
 		m["KINECT_LEFT_HAND_CLOSED"]	= KINECT_LEFT_HAND_CLOSED;

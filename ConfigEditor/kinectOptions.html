@@ -86,14 +86,14 @@
     <br/>
 
     Equilíbrio: 
-    Ângulo
-    <input type="hidden" class="form-control toJSON" id="key" value="KINECT_BALANCE">
-    <select id="angleMod" class="form-control toJSON">
-        <option>></option>
-        <option>=</option>
-        <option><</option>
+    Ângulo para a
+	<select id="key" class="form-control toJSON">
+        <option value="KINECT_BALANCE_LEFT">Esquerda</option>
+        <option value="KINECT_BALANCE_RIGHT">Direita</option>
     </select>
-    <input type="number" id="angle" value="35" class="form-control toJSON">°
+	
+    <input type="number" id="angleMin" value="35" class="form-control toJSON">°
+	<input type="number" id="angleMax" value="0" class="form-control toJSON">°
 
     <label><input type="checkbox" id="saveData" value="bodyBalanceAngle" > Salvar dados </label>
 </div>
@@ -133,12 +133,8 @@
         <option value="KINECT_RIGHT_WRIST_UP">Direito para cima</option>
     </select>
     Ângulo
-    <select id="angleMod" class="form-control toJSON">
-        <option>></option>
-        <option>=</option>
-        <option><</option>
-    </select>
-    <input type="number" id="angle" value="35" class="form-control toJSON">°
+    <input type="number" id="angleMin" value="35" class="form-control toJSON">°
+	<input type="number" id="angleMax" value="0" class="form-control toJSON">°
 
     <label><input type="checkbox" id="saveData" value="wristFlexAngle" > Salvar dados </label>
 </div>
@@ -157,7 +153,7 @@
         <option value="KINECT_TURN_LEFT">Esquerda</option>
         <option value="KINECT_TURN_RIGHT">Direita</option>
     </select>
-    <input type="number" id="angle" value="40" class="form-control toJSON">°
+    <input type="number" id="angleMin" value="40" class="form-control toJSON">°
     
     <label><input type="checkbox" id="saveData" value="turnBody" > Salvar dados </label>
 </div>
@@ -178,7 +174,7 @@
         <option value="KINECT_BODY_BACK">Trás</option>
         <option value="KINECT_BODY_LEFT">Esquerda</option>
     </select>
-    <input type="number" id="angle" value="20" class="form-control toJSON">°
+    <input type="number" id="angleMin" value="20" class="form-control toJSON">°
 
     <label><input type="checkbox" id="saveData" value="bodyAngle" > Salvar dados </label>
 </div>

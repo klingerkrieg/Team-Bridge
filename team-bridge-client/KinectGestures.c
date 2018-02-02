@@ -41,8 +41,11 @@ bool KinectGestures::assignChecker( CheckerSubject *checker, KeyMap *keyMap) {
 			case KINECT_TURN_RIGHT:
 				checker->attach(SKELETON_SHOULDER_CENTER, (TrackerCheckerMethod)&KinectGestures::detectTurnRight, keyMap, this);
 				break;
-			case KINECT_BALANCE:
-				checker->attach(SKELETON_HIP_CENTER, (TrackerCheckerMethod)&KinectGestures::bodyBalance, keyMap, this);
+			case KINECT_BALANCE_LEFT:
+				checker->attach(SKELETON_HIP_CENTER, (TrackerCheckerMethod)&KinectGestures::bodyBalanceLeft, keyMap, this);
+				break;
+			case KINECT_BALANCE_RIGHT:
+				checker->attach(SKELETON_HIP_CENTER, (TrackerCheckerMethod)&KinectGestures::bodyBalanceRight, keyMap, this);
 				break;
 			case KINECT_LEFT_WRIST_UP:
 				checker->attach(SKELETON_HAND_L, (TrackerCheckerMethod)&KinectGestures::leftWristFlexedUp, keyMap, this);
@@ -476,9 +479,28 @@ int KinectGestures::detectBodyBack(SkeletonPart skelPart, KeyMap * keyMap) {
 Desequilíbrio
 */
 
+int  KinectGestures::bodyBalanceLeft(SkeletonPart skelPart, KeyMap * keyMap) {
+	return bodyBalance(skelPart, keyMap, KINECT_LEFT);
+}
 
-int  KinectGestures::bodyBalance(SkeletonPart skelPart, KeyMap * keyMap) {
+int  KinectGestures::bodyBalanceRight(SkeletonPart skelPart, KeyMap * keyMap) {
+	return bodyBalance(skelPart, keyMap, KINECT_RIGHT); 
+}
+
+int  KinectGestures::bodyBalance(SkeletonPart skelPart, KeyMap * keyMap, int direction) {
 	
+	if ( direction == KINECT_RIGHT ) {
+		if ( skeleton[skelPart.skeletonName].hipCenter.x > skeleton[skelPart.skeletonName].shoulderCenter.x ) {
+			return false;
+		}
+	} else
+	if ( direction == KINECT_LEFT ) {
+		if ( skeleton[skelPart.skeletonName].hipCenter.x < skeleton[skelPart.skeletonName].shoulderCenter.x ) {
+			return false;
+		}
+	}
+
+
 	std::map<int, std::vector<double>> points = getPoints(skeleton[skelPart.skeletonName].spine, skeleton[skelPart.skeletonName].hipCenter, skeleton[skelPart.skeletonName].shoulderCenter);
 	if ( points.size() == 0 ) {
 		return -1;
@@ -588,7 +610,7 @@ int KinectGestures::detectTurnBody(SkeletonPart skelPart, KeyMap * keyMap, int d
 	double oldYaw = yaw(x, y, z, w);
 
 	if ( direction == KINECT_LEFT ) {
-		if ( newYaw < oldYaw - keyMap->getAngle() ) {
+		if ( newYaw < oldYaw - keyMap->getAngleMin() ) {
 
 	#ifdef THERAPY_MODULE
 			if ( keyMap->getSaveData().compare("") ) {
@@ -601,7 +623,7 @@ int KinectGestures::detectTurnBody(SkeletonPart skelPart, KeyMap * keyMap, int d
 	} else 
 	if ( direction == KINECT_RIGHT ) {
 		//Por algum motivo o giro pra direita é menos sensível com o KinectV1
-		if ( newYaw > oldYaw + keyMap->getAngle()) {
+		if ( newYaw > oldYaw + keyMap->getAngleMin()) {
 
 	#ifdef THERAPY_MODULE
 			if ( keyMap->getSaveData().compare("") ) {

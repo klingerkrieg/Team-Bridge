@@ -50,20 +50,21 @@ public:
 		Assert::AreEqual(0.1, m1.getSensivity());
 		Assert::AreEqual((int)'A', (int)m1.getToKey());
 
+
 		js = {
 			{ "divClass","kinectBalance" },
 			{ "dev" ,"Tracker0@localhost" },
 			{ "devType" ,"kinect" },
-			{ "key" ,"KINECT_BALANCE" },
-			{ "angleMod" ,">" },
-			{ "angle" ,35 },
+			{ "key" ,"KINECT_BALANCE_LEFT" },
+			{ "angleMax" ,40 },
+			{ "angleMin" ,35 },
 			{ "msg" ,"Mensagem" },
 			{ "toKeyDown" ,"ALERT" },
 			{ "toKeyUp" ,"ALERT" }
 		};
 		m1 = KeyMap(js);
-		Assert::AreEqual(1, m1.getAngleMod());
-		Assert::AreEqual(35, m1.getAngle());
+		Assert::AreEqual(40.0f, m1.getAngleMax());
+		Assert::AreEqual(35.0f, m1.getAngleMin());
 		Assert::AreEqual((std::string)"Mensagem", m1.getMsg());
 		Assert::AreEqual(ALERT, m1.getToKey());
 

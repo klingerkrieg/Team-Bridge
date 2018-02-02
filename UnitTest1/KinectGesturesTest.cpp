@@ -262,7 +262,7 @@ public:
 			{ "divClass", "kinectBody" },
 			{ "dev" , "Tracker0@localhost" },
 			{ "key" , "KINECT_BODY_FRONT" },
-			{ "angle" , 15 },
+			{ "angleMin" , 15 },
 			{ "toKeyDown" , "A" },
 			{ "toKeyUp" , "A" }
 		};
@@ -370,7 +370,7 @@ public:
 
 		//Esse método requer pelo menos o angulo de flexão
 		json js = {
-			{ "angle" , 35 }
+			{ "angleMin" , 35 }
 		};
 		KeyMap *m1 = new KeyMap(js);
 

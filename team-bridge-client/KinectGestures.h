@@ -60,6 +60,9 @@ private:
 	int detectTopChange(SkeletonPart skelPart, KeyMap * keyMap, int direction);
 	int detectHandXPos(SkeletonPart skelPart, KeyMap * keyMap);
 
+
+	int bodyBalance(SkeletonPart skelPart, KeyMap * keyMap, int direction);
+
 	//Flexao
 	static std::map<int, std::vector<double>> lastPositions[20];
 
@@ -118,7 +121,8 @@ public:
 	int detectLeftHandTop(SkeletonPart skelPart, KeyMap * keyMap);
 	int detectRightHandTop(SkeletonPart skelPart, KeyMap * keyMap);
 	
-	int bodyBalance(SkeletonPart skelPart, KeyMap * keyMap);
+	int bodyBalanceLeft(SkeletonPart skelPart, KeyMap * keyMap);
+	int bodyBalanceRight(SkeletonPart skelPart, KeyMap * keyMap);
 
 	int closedHand(int code, KeyMap * keyMap);
 	int leftHandClosed(vrpn_ANALOGCB a, KeyMap * keyMap);

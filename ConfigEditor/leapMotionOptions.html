@@ -44,12 +44,10 @@
             <option value="LEAP_WRIST_UP">Para cima</option>
             <option value="LEAP_WRIST_DOWN">Para baixo</option>
         </select>
-        <select id="angleMod" class="form-control toJSON">
-            <option><</option>
-            <option>=</option>
-            <option>></option>
-        </select>
-        <input type="number" id="angle" value="130" class="form-control toJSON">°
+        
+        <input type="number" id="angleMin" value="130" class="form-control toJSON">°
+		<input type="number" id="angleMax" value="0" class="form-control toJSON">°
+		
         <button onclick="openLeapMotionModal(this, 'wrist')" type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="Requer que o LeapMotion esteja conectado.">
             Testar ângulo</button>
 

@@ -2,61 +2,89 @@
   "common": {
     "patientName": "",
     "saveDir": "./SAVES/",
-    "appName": "",
+    "KINECT_X_INTERVAL": 0.35,
     "host": "",
     "database": "",
     "user": "",
-    "passwd": "",
-    "KINECT_X_INTERVAL": 0.35
+    "passwd": ""
   },
   "keys": [
     {
       "divClass": "kinectStep",
+      "devType": "kinect",
       "dev": "Tracker0@localhost",
-      "key": "KINECT_STEP_DOWN",
-      "sensivity": 0.1,
+      "key": "KINECT_STEP_UP",
+      "sensivity": 0.03,
       "toKeyDown": "VK_SPACE",
       "toKeyUp": "VK_SPACE"
     },
     {
+      "divClass": "kinectStep",
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_STEP_DOWN",
+      "sensivity": 0.03,
+      "toKeyDown": "S",
+      "toKeyUp": "S"
+    },
+    {
       "divClass": "handTop",
+      "devType": "kinect",
       "dev": "Tracker0@localhost",
       "key": "KINECT_LEFT_HAND_TOP",
       "x": -1,
-      "coordinateMod": ">=",
-      "y": 2,
+      "coordinateMod": null,
+      "y": 3,
+      "handWidthInterval": null,
       "toKeyDown": "Q",
       "toKeyUp": "Q"
     },
     {
       "divClass": "handTop",
+      "devType": "kinect",
       "dev": "Tracker0@localhost",
       "key": "KINECT_LEFT_HAND_TOP",
       "x": -1,
       "coordinateMod": "=",
       "y": 1,
+      "handWidthInterval": null,
       "toKeyDown": "W",
       "toKeyUp": "W"
     },
     {
       "divClass": "handTop",
+      "devType": "kinect",
       "dev": "Tracker0@localhost",
       "key": "KINECT_RIGHT_HAND_TOP",
       "x": 1,
-      "coordinateMod": ">=",
-      "y": 2,
+      "coordinateMod": null,
+      "y": 3,
+      "handWidthInterval": null,
       "toKeyDown": "R",
       "toKeyUp": "R"
     },
     {
       "divClass": "handTop",
+      "devType": "kinect",
       "dev": "Tracker0@localhost",
       "key": "KINECT_RIGHT_HAND_TOP",
       "x": 1,
       "coordinateMod": "=",
       "y": 1,
+      "handWidthInterval": null,
       "toKeyDown": "E",
       "toKeyUp": "E"
+    },
+    {
+      "divClass": "kinectBalance",
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_BALANCE_LEFT",
+      "angleMax": 40,
+      "angleMin": 35,
+      "msg": "35",
+      "toKeyDown": "ALERT",
+      "toKeyUp": "ALERT"
     }
   ]
 }

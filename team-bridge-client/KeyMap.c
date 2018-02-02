@@ -27,12 +27,14 @@ std::string KeyMap::toString() {
 	} else {
 		ret << "[" + getDev() + "] " + getKeyRepr();
 		
-		if ( getStrengthMax() != 0 ) {
-			ret << " Max:" + std::to_string(getStrengthMax());
-		}
+		
 		if ( getStrengthMin() != 0 ) {
-			ret << " Min:" + std::to_string(getStrengthMin());
+			ret << " Min Str:" + std::to_string(getStrengthMin());
 		}
+		if ( getStrengthMax() != 0 ) {
+			ret << " Max Str:" + std::to_string(getStrengthMax());
+		}
+
 		if ( getThumb() != -1 ) {
 			ret << " Thumb:" + std::to_string(getThumb());
 		}
@@ -40,20 +42,13 @@ std::string KeyMap::toString() {
 			ret << " Index:" + std::to_string(getIndex());
 		}
 
-
-		if ( getAngle() != -1 ) {
-			ret << "[";
-			if ( getAngleMod() == 1 ) {
-				ret << ">";
-			} else
-			if ( getAngleMod() == -1 ) {
-				ret << "<";
-			} else
-			if ( getAngleMod() == 0 ) {
-				ret << "=";
-			}
-			ret << std::to_string(getAngle()) + "]";
+		if ( getAngleMin() != 0 ) {
+			ret << " Min angle:" + std::to_string(getAngleMin());
 		}
+		if ( getAngleMax() != 0 ) {
+			ret << " Max angle:" + std::to_string(getAngleMax());
+		}
+
 			
 		ret << " -> " + getToKeyRepr();
 	}
@@ -200,27 +195,11 @@ KeyMap::KeyMap(json js) {
 		this->saveData = js["saveData"].get<std::string>();
 	}
 
-	if ( !js["maxVelociyMs"].is_null() ) {
-		this->maxVelociyMs = js["maxVelociyMs"].get<double>();
+	if ( !js["maxVelocityMs"].is_null() ) {
+		this->maxVelocityMs = js["maxVelocityMs"].get<double>();
 	}
 
-	if ( !js["angle"].is_null() ) {
-		this->angle = js["angle"].get<int>();
-		this->angleMod = 1;//padrão
-	}
 
-	if ( !js["angleMod"].is_null() ) {
-		std::string angleModStr = js["angleMod"].get<std::string>();
-		if ( !angleModStr.compare("<") ) {
-			this->angleMod = -1;
-		} else
-		if ( !angleModStr.compare(">") ) {
-			this->angleMod = 1;
-		} else
-		if ( !angleModStr.compare("=") ) {
-			this->angleMod = 0;
-		}
-	}
 
 	if ( !js["delay"].is_null() ) {
 		this->delay = js["delay"].get<int>();

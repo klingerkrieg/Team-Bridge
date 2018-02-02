@@ -55,8 +55,7 @@
       "devType": "kinect",
       "dev": "Tracker0@localhost",
       "key": "KINECT_BALANCE",
-      "angleMod": ">",
-      "angle": 35,
+      "angleMin": 35,
       "toKeyDown": "5",
       "toKeyUp": "5"
     },
@@ -74,8 +73,7 @@
       "devType": "kinect",
       "dev": "Tracker0@localhost",
       "key": "KINECT_RIGHT_WRIST_DOWN",
-      "angleMod": ">",
-      "angle": 35,
+      "angleMin": 35,
       "toKeyDown": "7",
       "toKeyUp": "7"
     },
@@ -84,7 +82,7 @@
       "devType": "kinect",
       "dev": "Tracker0@localhost",
       "key": "KINECT_TURN_RIGHT",
-      "angle": 40,
+      "angleMin": 40,
       "toKeyDown": "8",
       "toKeyUp": "8"
     },

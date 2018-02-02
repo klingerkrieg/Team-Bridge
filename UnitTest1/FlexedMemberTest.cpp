@@ -44,8 +44,8 @@ TEST_CLASS(FlexedMemberTest) {
 			{ "devType" , "leapMotion" },
 			{ "dev" , "LeapMotion0@localhost" },
 			{ "key" , "LEAP_WRIST_UP" },
-			{ "angleMod" , "<" },
-			{ "angle" , 115 },
+			{ "angleMin" , 0 },
+			{ "angleMax" , 115 },
 			{ "toKeyDown" , "C" },
 			{ "toKeyUp" , "C" }
 		};
@@ -67,6 +67,41 @@ TEST_CLASS(FlexedMemberTest) {
 		
 		Assert::AreEqual(1, flex.flexed3d(positionsWithValues, km, UP));//maior que 110
 		Assert::AreEqual(1, flex.flexed3d(positionsWithValues, km, UP));//menor que 115
+
+	}
+
+
+	TEST_METHOD(FlexedMember_flexed3dMinMax) {
+
+		json js = {
+			{ "divClass", "kinectBalance" },
+			{ "devType" , "kinect" },
+			{ "dev" , "Tracker0@localhost" },
+			{ "key" , "KINECT_BALANCE_LEFT" },
+			{ "angleMax" , 115 },
+			{ "angleMin" , 110 },
+			{ "toKeyDown" , "C" },
+			{ "toKeyUp" , "C" }
+		};
+		KeyMap * km = new KeyMap(js);
+
+		std::map<int, std::vector<double>> positionsWithValues;
+
+		std::vector<double> p1 = { 0,0,0 };
+		std::vector<double> p2 = { 10,0,0 };
+		std::vector<double> p3 = { 12,5,0 };
+
+		Assert::AreEqual(-1, flex.flexed3d(positionsWithValues, km, UP));//maior que 110
+
+		positionsWithValues.insert_or_assign(0, p1);
+		positionsWithValues.insert_or_assign(1, p2);
+		positionsWithValues.insert_or_assign(2, p3);
+
+
+
+		Assert::AreEqual(1, flex.flexed3d(positionsWithValues, km, UP));//maior que 110
+		Assert::AreEqual(1, flex.flexed3d(positionsWithValues, km, UP));//menor que 115
+
 
 	}
 };
