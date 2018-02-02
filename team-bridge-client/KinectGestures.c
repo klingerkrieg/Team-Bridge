@@ -512,7 +512,7 @@ int  KinectGestures::bodyBalance(SkeletonPart skelPart, KeyMap * keyMap, int dir
 	points.insert_or_assign(0, points.at(1));
 	points.at(0)[1] = y;
 
-	return flexed3d(points, keyMap, 1);
+	return flexed2d(points, keyMap);
 }
 
 

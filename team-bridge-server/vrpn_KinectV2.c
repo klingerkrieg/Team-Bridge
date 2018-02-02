@@ -128,7 +128,9 @@ void vrpn_KinectV2::reportPose(int sensor, CameraSpacePoint position, int quat) 
 
 	timeval t;
 	vrpn_gettimeofday(&t, NULL);
-
+	if ( sensor == 0 ) {
+		printf("%.2f\n",position.Y);
+	}
 	char msgbuf[512];
 	int len = vrpn_Tracker::encode_to(msgbuf);
 	if ( d_connection->pack_message(len, t, position_m_id, d_sender_id, msgbuf,

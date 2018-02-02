@@ -16,7 +16,7 @@ class FlexedMember : public AbstractGestureRecognizer {
 	bool assignChecker(CheckerSubject *checker, KeyMap *keyMap);
 
 	public:
-	int flexed2d(std::map<int, std::vector<double>> points, int angle);
+	int flexed2d(std::map<int, std::vector<double>> points, KeyMap * keyMap);
 
 	int flexed3d(std::map<int, std::vector<double>> points, KeyMap * keyMap);
 	int flexed3d(std::map<int, std::vector<double>> points, KeyMap * keyMap, int direction);
