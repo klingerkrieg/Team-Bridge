@@ -38,9 +38,9 @@ int FlexedMember::flexed3d(std::map<int, std::vector<double>> points, KeyMap * k
 	double angle = acos(res) * 180.0 / 3.14159265;
 
 
-	//printf("%.2f\n", angle);
+	
 	bool comp = false;
-	//Se ambos os angulos forem diferenets do int padrao
+	//Se ambos os angulos forem diferentes de zero
 	if ( keyMap->getAngleMax() != 0 && keyMap->getAngleMin() != 0 ) {
 		comp = keyMap->getAngleMax() >= angle && keyMap->getAngleMin() <= angle;
 	} else
@@ -50,7 +50,9 @@ int FlexedMember::flexed3d(std::map<int, std::vector<double>> points, KeyMap * k
 	if ( keyMap->getAngleMin() != 0 ) {
 		comp = keyMap->getAngleMin() <= angle;
 	}
-
+	
+	//printf("%.2f %d\n", angle, comp);
+	
 #ifdef THERAPY_MODULE
 	if ( comp ) {
 		if ( keyMap->getSaveData().compare("") ) {

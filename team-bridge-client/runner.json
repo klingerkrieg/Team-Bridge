@@ -9,6 +9,7 @@
     "passwd": ""
   },
   "keys": [
+
     {
       "divClass": "kinectStep",
       "devType": "kinect",
@@ -75,16 +76,52 @@
       "toKeyDown": "E",
       "toKeyUp": "E"
     },
+
     {
       "divClass": "kinectBalance",
       "devType": "kinect",
       "dev": "Tracker0@localhost",
       "key": "KINECT_BALANCE_LEFT",
+      "angleMin": 30,
       "angleMax": 40,
-      "angleMin": 35,
-      "msg": "35",
+      "msg": "30",
       "toKeyDown": "ALERT",
       "toKeyUp": "ALERT"
+    },
+    {
+      "divClass": "kinectBalance",
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_BALANCE_LEFT",
+      "angleMin": 40,
+      "angleMax": 50,
+      "msg": "40",
+      "toKeyDown": "ALERT",
+      "toKeyUp": "ALERT"
+    },
+
+    {
+      "divClass": "kinectBalance",
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_BALANCE_RIGHT",
+      "angleMin": 30,
+      "angleMax": 40,
+      "msg": "30",
+      "toKeyDown": "MESSAGE",
+      "toKeyUp": "MESSAGE"
+    },
+    {
+      "divClass": "kinectBalance",
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_BALANCE_RIGHT",
+      "angleMin": 40,
+      "angleMax": 50,
+      "msg": "40",
+      "toKeyDown": "MESSAGE",
+      "toKeyUp": "MESSAGE"
     }
+
   ]
 }

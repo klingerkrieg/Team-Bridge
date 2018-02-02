@@ -18,10 +18,12 @@ void InputConverter::interpretKeyMap(KeyMap *keyMap) {
 			view->showMsg("Posição definida.");
 	} else
 	if ( keyMap->getToKey() == ALERT ) {
+		printf("ALERT: %s\n", keyMap->getMsg().c_str());
 		if ( viewOn )
 			view->showAlert(keyMap->getMsg());
 	} else
 	if ( keyMap->getToKey() == MESSAGE ) {
+		printf("MESSAGE: %s\n", keyMap->getMsg().c_str());
 		if ( viewOn )
 			view->showMsg(keyMap->getMsg());
 	} else {
@@ -119,6 +121,7 @@ bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKE
 
 	//Quando uma pessoa for reconhecida pelo Kinect ou LeapMotion ele ira avisar
 	if ( lastTimeTrack == 0 || actualTime - lastTimeTrack > 1 ) {
+		printf("Capturando.\n");
 		if ( viewOn )
 			view->showMsg("Capturando");
 	}

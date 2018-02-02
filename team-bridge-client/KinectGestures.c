@@ -488,6 +488,7 @@ int  KinectGestures::bodyBalanceRight(SkeletonPart skelPart, KeyMap * keyMap) {
 }
 
 int  KinectGestures::bodyBalance(SkeletonPart skelPart, KeyMap * keyMap, int direction) {
+
 	
 	if ( direction == KINECT_RIGHT ) {
 		if ( skeleton[skelPart.skeletonName].hipCenter.x > skeleton[skelPart.skeletonName].shoulderCenter.x ) {

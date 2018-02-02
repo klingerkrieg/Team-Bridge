@@ -94,6 +94,7 @@ public:
 #endif
 
 		this->view = &view;
+		this->viewOn = true;
 	}
 
 	

@@ -220,6 +220,7 @@ KeyMap::KeyMap(json js) {
 
 	if ( !js["msg"].is_null() ) {
 		this->msg = js["msg"].get<std::string>();
+		this->toKeyDown = true;
 		
 		if ( !js["toKeyDown"].is_null() ) {
 			this->toKeyRepr = js["toKeyDown"].get<std::string>();

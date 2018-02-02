@@ -28,6 +28,9 @@ bool CheckerSubject::changeState(SkeletonPart skelPart, InputConverter *conv) {
 
 		if ( active != -1 ) {
 			pressed = conv->interpretOnLeave(active, obs.keyMap);
+			if ( pressed ) {
+				printf("");
+			}
 			ret = ret || pressed;
 		}
 	}

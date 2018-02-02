@@ -20,6 +20,7 @@ HRESULT vrpn_KinectV1::hr;
 bool vrpn_KinectV1::connected = false;
 bool vrpn_KinectV1::status = false;
 bool vrpn_KinectV1::skeletonArr[NUI_SKELETON_COUNT];
+int  vrpn_KinectV1::skeletonIds[6] = { -1,-1,-1,-1,-1,-1 };
 
 vrpn_KinectV1::vrpn_KinectV1(const char *name, int skeleton, vrpn_Connection *c) : vrpn_Tracker(name, c) {
 	vrpn_Tracker::num_sensors = 20;
@@ -139,6 +140,39 @@ void vrpn_KinectV1::reportPose(int skeleton,int sensor, Vector4 position, Vector
 	}
 }
 
+
+bool vrpn_KinectV1::setKinectSkeletonId(NUI_SKELETON_DATA ppBodies[]) {
+	bool inUse = false;
+	NUI_SKELETON_DATA pBody;
+
+	//Encontra os skeletons na ordem em que aparecem, o primeiro sempre sera 0
+	for ( int y = 0; y < NUI_SKELETON_COUNT; y++ ) {
+
+		for ( int x = 0; x < NUI_SKELETON_COUNT; x++ ) {
+			if ( skeletonIds[x] == y ) {
+				inUse = true;
+				break;
+			}
+		}
+		if ( inUse ) {
+			continue;
+		}
+		
+		pBody = ppBodies[y];
+		if ( pBody.eTrackingState == NUI_SKELETON_TRACKED ) {
+			//Encontra o primeiro skeletonId livre
+			for ( int x = 0; x < NUI_SKELETON_COUNT; x++ ) {
+				if ( skeletonIds[x] == -1 ) {
+					skeletonIds[x] = y;//insere o kinectId correto
+					return true;
+				}
+			}
+		}
+	}
+	return false;
+}
+
+
 bool vrpn_KinectV1::onFrame() {
 
 	//Verifica conexao
@@ -153,10 +187,10 @@ bool vrpn_KinectV1::onFrame() {
 	HRESULT hr = m_pNuiSensor->NuiSkeletonGetNextFrame(0, &skeletonFrame);
 	if ( FAILED(hr) ) {
 		//printf("Falha ao capturar frame.\n");
+		//printf("2\n");
 		return true;//Mesmo tendo essa falha ainda pode estar conectado
 	}
 
-	
 
 	// smooth out the skeleton data
 	m_pNuiSensor->NuiTransformSmooth(&skeletonFrame, NULL);
@@ -170,48 +204,66 @@ bool vrpn_KinectV1::onFrame() {
 		return true;
 	}
 		
+	/*printf("%d %d %d %d\n", skeletonFrame.SkeletonData[0].eTrackingState,
+							skeletonFrame.SkeletonData[1].eTrackingState,
+							skeletonFrame.SkeletonData[2].eTrackingState,
+							skeletonFrame.SkeletonData[3].eTrackingState);*/
 
-
-	NUI_SKELETON_TRACKING_STATE trackingState = skeletonFrame.SkeletonData[skeleton].eTrackingState;
-	NuiSkeletonCalculateBoneOrientations(&skeletonFrame.SkeletonData[skeleton], boneOrientations);
-		
-	int countSkeletons = 0;
-	int sensor = 0;
-	if ( NUI_SKELETON_TRACKED == trackingState ) {
-		countSkeletons++;
-		for ( int h = 0; h < 20; h++ ) {
-			//Essa adaptação é necessária para enviar os mesmos pontos do FAAST
-			switch ( h ) {
-				case 3:
-					sensor = 0;
-					break;
-				case 2:
-					sensor = 1;
-					break;
-				case 1:
-					sensor = 2;
-					break;
-				case 0:
-					sensor = 3;
-					break;
-				default:
-					sensor = h;
-				break;
-			}
-
-			NUI_SKELETON_BONE_ORIENTATION & orientation = boneOrientations[h];
-
-			reportPose(countSkeletons, sensor, skeletonFrame.SkeletonData[skeleton].SkeletonPositions[h],
-						orientation.absoluteRotation.rotationQuaternion);
-		}
+	int id = skeletonIds[skeleton];
+	//Caso não tenha sido encontrado, verifica se há algum sendo exibido em outra id
+	if ( id == -1 ) {
+		//ja atualiza o skeletonIds automaticamente
+		setKinectSkeletonId(skeletonFrame.SkeletonData);
 	}
 
-	
-	if ( countSkeletons > 0) {
-		skeletonArr[skeleton] = true;
-	} else
-	if ( countSkeletons == 0 ) {
-		skeletonArr[skeleton] = false;
+	id = skeletonIds[skeleton];
+
+	//verifica se encontrou algo
+	if ( id != -1 ) {
+
+		NUI_SKELETON_TRACKING_STATE trackingState = skeletonFrame.SkeletonData[id].eTrackingState;
+		NuiSkeletonCalculateBoneOrientations(&skeletonFrame.SkeletonData[id], boneOrientations);
+
+		int countSkeletons = 0;
+		int sensor = 0;
+		if ( NUI_SKELETON_TRACKED == trackingState ) {
+
+			countSkeletons++;
+			for ( int h = 0; h < 20; h++ ) {
+				//Essa adaptação é necessária para enviar os mesmos pontos do FAAST
+				switch ( h ) {
+					case 3:
+						sensor = 0;
+						break;
+					case 2:
+						sensor = 1;
+						break;
+					case 1:
+						sensor = 2;
+						break;
+					case 0:
+						sensor = 3;
+						break;
+					default:
+						sensor = h;
+						break;
+				}
+
+				NUI_SKELETON_BONE_ORIENTATION & orientation = boneOrientations[h];
+
+				reportPose(countSkeletons, sensor, skeletonFrame.SkeletonData[id].SkeletonPositions[h],
+						   orientation.absoluteRotation.rotationQuaternion);
+			}
+		}
+
+
+
+		if ( countSkeletons > 0 ) {
+			skeletonArr[id] = true;
+		} else
+		if ( countSkeletons == 0 ) {
+			skeletonArr[id] = false;
+		}
 	}
 
 	int has = 0;
