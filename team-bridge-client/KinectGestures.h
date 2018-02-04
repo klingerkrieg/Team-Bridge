@@ -71,6 +71,10 @@ protected:
 
 public:
 
+	void clearNormalStepHeight() {
+		normalStepHeight = -100;
+	}
+
 	static std::map<std::string, Skeleton> skeleton;
 
 	std::map<std::string, KinectDetection> getKinectDetection() {

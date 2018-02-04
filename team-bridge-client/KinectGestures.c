@@ -357,12 +357,13 @@ int KinectGestures::detectTopChange(SkeletonPart skelPart, KeyMap * keyMap, int 
 	int ret = -1;
 
 	if ( skelPart.skelConstant == SKELETON_HEAD ) {
-		if ( normalStepHeight == -100 ) {
+		if ( normalStepHeight == -100 && skelPart.z >= 1.85f && skelPart.z <= 2.55f) {
+			printf("Altura calibrada.\n");
 			normalStepHeight = skelPart.y;
 			return -1;
 		}
 
-		
+		//printf("%.2f \t %.2f\n", skelPart.y - normalStepHeight, keyMap->getSensivity());
 
 		//Subiu
 		//pos  - last

@@ -15,18 +15,9 @@
       "devType": "kinect",
       "dev": "Tracker0@localhost",
       "key": "KINECT_STEP_UP",
-      "sensivity": 0.03,
+      "sensivity": 0.08,
       "toKeyDown": "VK_SPACE",
       "toKeyUp": "VK_SPACE"
-    },
-    {
-      "divClass": "kinectStep",
-      "devType": "kinect",
-      "dev": "Tracker0@localhost",
-      "key": "KINECT_STEP_DOWN",
-      "sensivity": 0.03,
-      "toKeyDown": "S",
-      "toKeyUp": "S"
     },
     {
       "divClass": "handTop",

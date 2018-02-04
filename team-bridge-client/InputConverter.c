@@ -124,6 +124,8 @@ bool InputConverter::checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKE
 		printf("Capturando.\n");
 		if ( viewOn )
 			view->showMsg("Capturando");
+
+		gr->clearNormalStepHeight();
 	}
 	lastTimeTrack = actualTime;
 
