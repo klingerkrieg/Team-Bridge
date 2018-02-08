@@ -7,6 +7,8 @@
 */
 #pragma once
 
+#ifdef KINECTV2
+
 #include "vrpn_BaseClass.h" // for ::vrpn_TEXT_NORMAL, etc
 #include "vrpn_Analog.h"
 #include "vrpn_Tracker.h"               // for vrpn_Tracker
@@ -53,3 +55,4 @@ class VRPN_API vrpn_KinectV2 : public  vrpn_Tracker, public vrpn_Analog {
 	void setKinectSkeletonId(IBody* ppBodies[BODY_COUNT]);
 };
 
+#endif

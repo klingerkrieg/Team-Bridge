@@ -5,6 +5,7 @@
 @author Alan Klinger klingerkrieg@gmail.com
 @license Standard VRPN license.
 */
+#ifdef KINECTV2
 
 #include "vrpn_KinectV2.h"
 
@@ -314,3 +315,5 @@ bool vrpn_KinectV2::onFrame() {
 	
 	return true;
 }
+
+#endif

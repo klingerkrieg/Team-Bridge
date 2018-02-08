@@ -1,2 +1,2 @@
-SerialPortToString.exe -p 3 -b 155200
+SerialPortToString.exe -p 4 -b 9600
 pause

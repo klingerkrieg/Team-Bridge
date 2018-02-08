@@ -62,6 +62,10 @@ int LeapMotionGestures::closed(vrpn_ANALOGCB a, KeyMap * keyMap) {
 		return -1;
 	}
 
+	if ( keyMap->getPrint() ) {
+		printf("Closed:%.2f\n", angle);
+	}
+
 	float angleMax = keyMap->getAngleMax() == 0 ? handAngleMax : keyMap->getAngleMax();
 	float angleMin = keyMap->getAngleMin() == 0 ? 0 : keyMap->getAngleMin();
 	
@@ -84,6 +88,10 @@ int LeapMotionGestures::pinch(vrpn_ANALOGCB a, KeyMap * keyMap) {
 	float dist = (float)a.channel[1];
 	if ( dist == -1 ) {
 		return -1;
+	}
+
+	if ( keyMap->getPrint() ) {
+		printf("Pinch:%.2f\n", dist);
 	}
 
 	float maxDist = keyMap->getDistanceMax() == 0 ? pinchDistanceMax : keyMap->getDistanceMax();

@@ -56,10 +56,10 @@ string ReadByte(int port, int bauds) {
 
 int main(int argc, char **argv ) {
 
-	if ( argc < 5 ) {
+	/*if ( argc < 5 ) {
 		cout << "Usage:\n -p - Port: 3\n -b - Bauds: 115200\n -d - Debug\n";
 		return 0;
-	}
+	}*/
 	
 	int port;
 	int bauds;
@@ -75,7 +75,7 @@ int main(int argc, char **argv ) {
 		}
 	}
 
-	cout << ReadByte(port,bauds);
+	cout << ReadByte(6,9600);
 	if ( debug ) {
 		Sleep(5000);
 	}

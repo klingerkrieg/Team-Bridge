@@ -4,6 +4,8 @@
 #include <locale>                   // To enable setting parsing for .cfg file
 #include <string>
 
+
+
 #include "server_src/timecode_generator_server/vrpn_timecode_generator.h"
 #include "vrpn_3DConnexion.h" // for vrpn_3DConnexion_Navigator, etc
 #include "vrpn_3DMicroscribe.h"
@@ -54,7 +56,9 @@
 #include "vrpn_NEDGlove.h"
 #include "vrpn_LeapMotion.h"
 #include "vrpn_KinectV1.h"
+#ifdef KINECTV2
 #include "vrpn_KinectV2.h"
+#endif
 //
 #include "vrpn_LUDL.h"                    // for vrpn_LUDL_USBMAC6000
 #include "vrpn_Logitech_Controller_Raw.h" // for vrpn_Logitech_Extreme_3D_Pro, etc.
@@ -5017,6 +5021,7 @@ int vrpn_Generic_Server_Object::setup_KinectV1(char *&pch, char *line, FILE *) {
 	return 0; // successful completion
 }
 
+#ifdef KINECTV2
 int vrpn_Generic_Server_Object::setup_KinectV2(char *&pch, char *line, FILE *) {
 	char name[LINESIZE];
 	int skeleton;
@@ -5038,7 +5043,7 @@ int vrpn_Generic_Server_Object::setup_KinectV2(char *&pch, char *line, FILE *) {
 
 	return 0; // successful completion
 }
-
+#endif
 
 #undef VRPN_CONFIG_NEXT
 
@@ -5488,9 +5493,13 @@ vrpn_Generic_Server_Object::vrpn_Generic_Server_Object(
 					VRPN_CHECK(setup_LeapMotion);
 				} else if ( VRPN_ISIT("vrpn_KinectV1") ) {
 					VRPN_CHECK(setup_KinectV1);
-				} else if ( VRPN_ISIT("vrpn_KinectV2") ) {
+				}
+				#ifdef KINECTV2
+				else if ( VRPN_ISIT("vrpn_KinectV2") ) {
 					VRPN_CHECK(setup_KinectV2);
-				} else {                         // Never heard of it
+				}
+				#endif
+				else {                         // Never heard of it
 					sscanf(line, "%511s", s1); // Find out the class name
 					fprintf(stderr, "vrpn_server: Unknown Device: %s\n", s1);
 					if ( d_bail_on_open_error ) {
