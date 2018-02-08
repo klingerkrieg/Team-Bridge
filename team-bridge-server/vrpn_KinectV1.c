@@ -20,7 +20,7 @@ HRESULT vrpn_KinectV1::hr;
 bool vrpn_KinectV1::connected = false;
 bool vrpn_KinectV1::status = false;
 bool vrpn_KinectV1::skeletonArr[NUI_SKELETON_COUNT];
-int  vrpn_KinectV1::skeletonIds[6] = { -1,-1,-1,-1,-1,-1 };
+int  vrpn_KinectV1::skeletonIds[NUI_SKELETON_COUNT] = { -1,-1,-1,-1,-1,-1 };
 
 vrpn_KinectV1::vrpn_KinectV1(const char *name, int skeleton, vrpn_Connection *c) : vrpn_Tracker(name, c) {
 	vrpn_Tracker::num_sensors = 20;
@@ -31,7 +31,7 @@ vrpn_KinectV1::vrpn_KinectV1(const char *name, int skeleton, vrpn_Connection *c)
 void vrpn_KinectV1::mainloop() {
 	if ( connected ) {
 		if ( !onFrame() ) {
-			printf("Perda de conexao com o Kinect.\n");
+			printf("Perda de conexao com o KinectV1.\n");
 			connected = false;
 			connect();
 		}
@@ -54,7 +54,7 @@ bool vrpn_KinectV1::connect() {
 	
 	while (connected == false) {
 
-		printf("Conectando-se ao Kinect...\n");
+		printf("Conectando-se ao KinectV1...\n");
 
 		iSensorCount = 0;
 		hr = NuiGetSensorCount(&iSensorCount);
@@ -102,14 +102,14 @@ bool vrpn_KinectV1::connect() {
 		}
 
 		if ( NULL == m_pNuiSensor || FAILED(hr) ) {
-			printf("Falha ao se conectar ao Kinect.\n");
+			printf("Falha ao se conectar ao KinectV1.\n");
 			Sleep(3000);
 			continue;
 		}
 
 		
 		connected = true;
-		printf("Kinect conectado.\n");
+		printf("KinectV1 conectado.\n");
 	}
 	
 	return true;
@@ -136,16 +136,17 @@ void vrpn_KinectV1::reportPose(int skeleton,int sensor, Vector4 position, Vector
 	//	printf("sensor: %d %.2f %.2f %.2f \n", sensor, position.x, position.y, position.z);
 	if ( d_connection->pack_message(len, t, position_m_id, d_sender_id, msgbuf,
 		vrpn_CONNECTION_LOW_LATENCY) ) {
-		fprintf(stderr, "vrpn_LeapMotion: cannot write message: tossing\n");
+		fprintf(stderr, "vrpn_KinectV1: cannot write message: tossing\n");
 	}
 }
 
 
-bool vrpn_KinectV1::setKinectSkeletonId(NUI_SKELETON_DATA ppBodies[]) {
+void vrpn_KinectV1::setKinectSkeletonId(NUI_SKELETON_DATA ppBodies[]) {
 	bool inUse = false;
 	NUI_SKELETON_DATA pBody;
 
 	//Encontra os skeletons na ordem em que aparecem, o primeiro sempre sera 0
+	//Talvez trocar esse for externo do y pelo int skeleton
 	for ( int y = 0; y < NUI_SKELETON_COUNT; y++ ) {
 
 		for ( int x = 0; x < NUI_SKELETON_COUNT; x++ ) {
@@ -164,12 +165,12 @@ bool vrpn_KinectV1::setKinectSkeletonId(NUI_SKELETON_DATA ppBodies[]) {
 			for ( int x = 0; x < NUI_SKELETON_COUNT; x++ ) {
 				if ( skeletonIds[x] == -1 ) {
 					skeletonIds[x] = y;//insere o kinectId correto
-					return true;
+					return;
 				}
 			}
 		}
 	}
-	return false;
+	return;
 }
 
 
@@ -204,10 +205,7 @@ bool vrpn_KinectV1::onFrame() {
 		return true;
 	}
 		
-	/*printf("%d %d %d %d\n", skeletonFrame.SkeletonData[0].eTrackingState,
-							skeletonFrame.SkeletonData[1].eTrackingState,
-							skeletonFrame.SkeletonData[2].eTrackingState,
-							skeletonFrame.SkeletonData[3].eTrackingState);*/
+	
 
 	int id = skeletonIds[skeleton];
 	//Caso não tenha sido encontrado, verifica se há algum sendo exibido em outra id
@@ -226,7 +224,10 @@ bool vrpn_KinectV1::onFrame() {
 
 		int countSkeletons = 0;
 		int sensor = 0;
-		if ( NUI_SKELETON_TRACKED == trackingState ) {
+		if ( NUI_SKELETON_TRACKED != trackingState ) {
+			//Se não estiver ativo, libera a posição no array
+			skeletonIds[skeleton] = -1;
+		} else {
 
 			countSkeletons++;
 			for ( int h = 0; h < 20; h++ ) {
@@ -272,11 +273,11 @@ bool vrpn_KinectV1::onFrame() {
 	}
 
 	if ( has == 0 && status == true) {
-		printf("Kinect parado.\n");
+		printf("KinectV1 parado.\n");
 		status = false;
 	} else 
 	if ( has > 0 && status == false){
-		printf("Kinect capturando.\n");
+		printf("KinectV1 capturando.\n");
 		status = true;
 	}
 

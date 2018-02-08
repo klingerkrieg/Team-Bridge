@@ -17,7 +17,8 @@
       "key": "KINECT_STEP_UP",
       "sensivity": 0.08,
       "toKeyDown": "VK_SPACE",
-      "toKeyUp": "VK_SPACE"
+      "toKeyUp": "VK_SPACE",
+      "print": true
     },
     {
       "divClass": "handTop",

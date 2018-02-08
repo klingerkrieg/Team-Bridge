@@ -27,7 +27,7 @@ class VRPN_API vrpn_KinectV1 : public  vrpn_Tracker {
 	static bool connected;
 	static bool skeletonArr[NUI_SKELETON_COUNT];
 	static bool status;
-	static int skeletonIds[6];
+	static int skeletonIds[NUI_SKELETON_COUNT];
 
 	int skeleton;
 	
@@ -45,7 +45,7 @@ class VRPN_API vrpn_KinectV1 : public  vrpn_Tracker {
 	bool onFrame();
 	void reportPose(int skeleton, int sensor, Vector4 position, Vector4 quat);
 
-	bool setKinectSkeletonId(NUI_SKELETON_DATA ppBodies[]);
+	void setKinectSkeletonId(NUI_SKELETON_DATA ppBodies[]);
 
 };
 

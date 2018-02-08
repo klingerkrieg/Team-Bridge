@@ -50,6 +50,6 @@ class VRPN_API vrpn_KinectV2 : public  vrpn_Tracker, public vrpn_Analog {
 		}
 	}
 
-	bool setKinectSkeletonId(IBody* ppBodies[BODY_COUNT]);
+	void setKinectSkeletonId(IBody* ppBodies[BODY_COUNT]);
 };
 

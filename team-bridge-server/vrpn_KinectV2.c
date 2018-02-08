@@ -32,7 +32,7 @@ void vrpn_KinectV2::mainloop() {
 
 	if ( connected ) {
 		if ( !onFrame() ) {
-			printf("Perda de conexao com o Kinect.\n");
+			printf("Perda de conexao com o KinectV2.\n");
 			connected = false;
 			connect();
 		}
@@ -93,7 +93,7 @@ bool vrpn_KinectV2::connect() {
 		}
 
 		if ( !m_pKinectSensor || FAILED(hr) ) {
-			printf("Falha ao se conectar ao Kinect.\n");
+			printf("Falha ao se conectar ao KinectV2.\n");
 			Sleep(3000);
 			continue;
 		}
@@ -101,13 +101,13 @@ bool vrpn_KinectV2::connect() {
 		BOOLEAN available = false;
 		m_pKinectSensor->get_IsAvailable(&available);
 		if ( available == false ) {
-			printf("Kinect indisponivel.\n");
+			printf("KinectV2 indisponivel.\n");
 			Sleep(3000);
 			continue;
 		}
 
 		connected = true;
-		printf("Kinect conectado.\n");
+		printf("KinectV2 conectado.\n");
 	}
 
 	return true;
@@ -135,17 +135,17 @@ void vrpn_KinectV2::reportPose(int sensor, CameraSpacePoint position, int quat) 
 	int len = vrpn_Tracker::encode_to(msgbuf);
 	if ( d_connection->pack_message(len, t, position_m_id, d_sender_id, msgbuf,
 		vrpn_CONNECTION_LOW_LATENCY) ) {
-		fprintf(stderr, "vrpn_LeapMotion: cannot write message: tossing\n");
+		fprintf(stderr, "vrpn_KinectV2: cannot write message: tossing\n");
 	}
 }
 
 
-bool vrpn_KinectV2::setKinectSkeletonId(IBody* ppBodies[BODY_COUNT]) {
+void vrpn_KinectV2::setKinectSkeletonId(IBody* ppBodies[BODY_COUNT]) {
 	bool inUse = false;
 	IBody* pBody;
 	//Encontra os skeletons na ordem em que aparecem, o primeiro sempre sera 0
 	for ( int y = 0; y < BODY_COUNT; y++ ) {
-
+	
 		for ( int x = 0; x < BODY_COUNT; x++ ) {
 			if ( skeletonIds[x] == y ) {
 				inUse = true;
@@ -165,12 +165,12 @@ bool vrpn_KinectV2::setKinectSkeletonId(IBody* ppBodies[BODY_COUNT]) {
 			for ( int x = 0; x < BODY_COUNT; x++ ) {
 				if ( skeletonIds[x] == -1 ) {
 					skeletonIds[x] = y;//insere o kinectId correto
-					return true;
+					return;
 				}
 			}
 		}
 	}
-	return false;
+	return;
 }
 
 bool vrpn_KinectV2::onFrame() {
@@ -296,11 +296,11 @@ bool vrpn_KinectV2::onFrame() {
 		}
 	
 		if ( has == 0 && status == true ) {
-			printf("Kinect parado.\n");
+			printf("KinectV2 parado.\n");
 			status = false;
 		} else
 		if ( has > 0 && status == false ) {
-			printf("Kinect capturando.\n");
+			printf("KinectV2 capturando.\n");
 			status = true;
 		}
 

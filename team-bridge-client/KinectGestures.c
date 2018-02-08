@@ -103,19 +103,11 @@ bool KinectGestures::assignChecker( CheckerSubject *checker, KeyMap *keyMap) {
 */
 
 int KinectGestures::detectLeftHandFast(SkeletonPart skelPart, KeyMap * keyMap) {
-
-	if ( skelPart.skelConstant == SKELETON_HAND_L ) {
-		return detectMemberFast(skelPart, keyMap);
-	}
-	return -1;
+	return detectMemberFast(skelPart, keyMap);
 }
 
 int KinectGestures::detectRightHandFast(SkeletonPart skelPart, KeyMap * keyMap) {
-
-	if ( skelPart.skelConstant == SKELETON_HAND_R ) {
-		return detectMemberFast(skelPart, keyMap);
-	}
-	return -1;
+	return detectMemberFast(skelPart, keyMap);
 }
 
 std::vector<double> KinectGestures::getLastMemberPos(SkeletonPart skelPart) {
@@ -260,22 +252,14 @@ int KinectGestures::detectHandTop(SkeletonPart skelPart, KeyMap * keyMap) {
 * Esse metodo depende do detectHandTop, ele deve ser chamado primeiro para captura da posicao central
 */
 int KinectGestures::detectLeftHandTop(SkeletonPart skelPart, KeyMap * keyMap) {
-
-	if ( skelPart.skelConstant == SKELETON_HAND_L ) {
-		return detectHandXPos(skelPart, keyMap);
-	}
-	return -1;
+	return detectHandXPos(skelPart, keyMap);
 }
 
 /**
 * Esse metodo depende do detectHandTop, ele deve ser chamado primeiro para captura da posicao central
 */
 int KinectGestures::detectRightHandTop(SkeletonPart skelPart, KeyMap * keyMap) {
-
-	if ( skelPart.skelConstant == SKELETON_HAND_R ) {
-		return detectHandXPos(skelPart, keyMap);
-	}
-	return -1;
+	return detectHandXPos(skelPart, keyMap);
 }
 
 /**
@@ -355,44 +339,50 @@ int KinectGestures::detectTopChangeNormal(SkeletonPart skelPart, KeyMap * keyMap
 int KinectGestures::detectTopChange(SkeletonPart skelPart, KeyMap * keyMap, int direction) {
 	
 	int ret = -1;
+	
 
-	if ( skelPart.skelConstant == SKELETON_HEAD ) {
-		if ( normalStepHeight == -100 && skelPart.z >= 1.85f && skelPart.z <= 2.55f) {
-			printf("Altura calibrada.\n");
-			normalStepHeight = skelPart.y;
-			return -1;
+	//A pessoa deverá entrar nessa região para calibrar, é a região com pouca interferência
+	if ( normalStepHeight == -100 && skelPart.z >= 1.85f && skelPart.z <= 2.55f) {
+		printf("Altura calibrada.\n");
+		normalStepHeight = skelPart.y;
+		return -1;
+	}
+
+
+	if ( keyMap->getPrint() ) {
+		printf("Y:%.2f \tSens:%.2f\n",skelPart.y, keyMap->getSensivity());
+	}
+
+	//printf("%.2f \t %.2f\n", skelPart.y - normalStepHeight, keyMap->getSensivity());
+
+	//Subiu
+	//pos  - last
+	//0.59 - 0.57 = 0.02 >= 0.02
+	if ( direction == KINECT_UP ) {
+		if ( skelPart.y - normalStepHeight >= keyMap->getSensivity() ) {
+			ret = 1;
+		} else {
+			ret = 0;
 		}
-
-		//printf("%.2f \t %.2f\n", skelPart.y - normalStepHeight, keyMap->getSensivity());
-
-		//Subiu
-		//pos  - last
-		//0.59 - 0.57 = 0.02 >= 0.02
-		if ( direction == KINECT_UP ) {
-			if ( skelPart.y - normalStepHeight >= keyMap->getSensivity() ) {
-				ret = 1;
-			} else {
-				ret = 0;
-			}
-		} else
-		if ( direction == KINECT_DOWN ) {
-			//Desceu
-			//last - pos
-			//0.57 - 0.55 = 0.02 >= 0.02
-			//printf("%.2f >= %.2f\n", lastHeight - t.pos[1], heightSens);
-			if ( normalStepHeight - skelPart.y >= keyMap->getSensivity() ) {
-				ret = 1;
-			} else {
-				ret = 0;
-			}
-		} else 
-		if ( direction == KINECT_NORMAL ) {
-			if ( normalStepHeight - skelPart.y < keyMap->getSensivity() && skelPart.y - normalStepHeight < keyMap->getSensivity() ) {
-				ret = 1;
-			} else {
-				ret = 0;
-			}
+	} else
+	if ( direction == KINECT_DOWN ) {
+		//Desceu
+		//last - pos
+		//0.57 - 0.55 = 0.02 >= 0.02
+		//printf("%.2f >= %.2f\n", lastHeight - t.pos[1], heightSens);
+		if ( normalStepHeight - skelPart.y >= keyMap->getSensivity() ) {
+			ret = 1;
+		} else {
+			ret = 0;
 		}
+	} else 
+	if ( direction == KINECT_NORMAL ) {
+		if ( normalStepHeight - skelPart.y < keyMap->getSensivity() && skelPart.y - normalStepHeight < keyMap->getSensivity() ) {
+			ret = 1;
+		} else {
+			ret = 0;
+		}
+	}
 
 	#ifdef THERAPY_MODULE
 		if ( ret == 1 ) {
@@ -401,10 +391,7 @@ int KinectGestures::detectTopChange(SkeletonPart skelPart, KeyMap * keyMap, int 
 			}
 		}
 	#endif
-	}
-
-
-
+	
 	return ret;
 }
 
@@ -648,17 +635,11 @@ int KinectGestures::detectTurnBody(SkeletonPart skelPart, KeyMap * keyMap, int d
 
 //Z Axis
 int KinectGestures::detectTurnLeft(SkeletonPart skelPart, KeyMap * keyMap) {
-	if ( skelPart.skelConstant == SKELETON_SHOULDER_CENTER ) {
-		return detectTurnBody(skelPart, keyMap, KINECT_LEFT);
-	}
-	return -1;
+	return detectTurnBody(skelPart, keyMap, KINECT_LEFT);
 }
 
 int KinectGestures::detectTurnRight(SkeletonPart skelPart, KeyMap * keyMap) {
-	if ( skelPart.skelConstant == SKELETON_SHOULDER_CENTER ) {
-		return detectTurnBody(skelPart, keyMap, KINECT_RIGHT);
-	}
-	return -1;
+	return detectTurnBody(skelPart, keyMap, KINECT_RIGHT);
 }
 
 

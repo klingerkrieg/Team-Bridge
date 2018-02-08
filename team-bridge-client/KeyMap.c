@@ -92,6 +92,10 @@ std::string KeyMap::toString() {
 		}
 	}
 
+	if ( getPrint() ) {
+		ret << "[PRINT]";
+	}
+
 	if ( getToKeyUp() ) {
 		ret << "\nAo sair:" + getOnLeave()->toString() + " ";
 	}
@@ -130,6 +134,9 @@ KeyMap::KeyMap(json js) {
 		this->dev = js["dev"].get<std::string>();
 	}
 
+	if ( !js["print"].is_null() ) {
+		this->print = js["print"].get<bool>();
+	}
 
 	if ( !js["devType"].is_null() ) {
 		setDevType(js["devType"].get<std::string>());

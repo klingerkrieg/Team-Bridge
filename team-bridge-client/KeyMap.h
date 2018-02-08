@@ -111,10 +111,8 @@ private:
 	//Caso o comando que será chamado seja uma constante
 	bool toKeyIsConstant = false;
 
-
-	//Automaticamente os botões serão acionados e desacionados imediatamente
-	/*bool btnDown = true;
-	bool btnUp = true;*/
+	//Caso seja para imprimir alguma informação no console
+	bool print = false;
 
 	bool isBtn = false;
 
@@ -350,6 +348,10 @@ private:
 
 	int getIndex() {
 		return index;
+	}
+
+	bool getPrint() {
+		return print;
 	}
 
 
