@@ -150,11 +150,12 @@ int main() {
 
 
 	if ( i - 3 == repMax ) {
+		double media = (med / count);
 		printf("Mediana: %.4f\n", MEDIANA(medianaVec, repMax));
-		desvioP = DESVIOP(medianaVec, repMax, med);
+		desvioP = DESVIOP(medianaVec, repMax, media);
 		printf("Desvio padrao: %.4f\n", desvioP);
 		for ( i = 0; i < repMax; i++ ) {
-			if ( medianaVec[i] > med - desvioP && medianaVec[i] < med + desvioP ) {
+			if ( medianaVec[i] > media - desvioP && medianaVec[i] < media + desvioP ) {
 				countDentroDesvioP++;
 			}
 		}
