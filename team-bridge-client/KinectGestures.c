@@ -66,13 +66,13 @@ bool KinectGestures::assignChecker( CheckerSubject *checker, KeyMap *keyMap) {
 				checker->attach(SKELETON_HAND_L, (TrackerCheckerMethod)&KinectGestures::detectLeftHandTop, keyMap, this);
 				break;
 			case KINECT_STEP_UP:
-				checker->attach(SKELETON_HEAD, (TrackerCheckerMethod)&KinectGestures::detectTopChangeUp, keyMap, this);
+				checker->attach(SKELETON_SHOULDER_CENTER, (TrackerCheckerMethod)&KinectGestures::detectTopChangeUp, keyMap, this);
 				break;
 			case KINECT_STEP_DOWN:
-				checker->attach(SKELETON_HEAD, (TrackerCheckerMethod)&KinectGestures::detectTopChangeDown, keyMap, this);
+				checker->attach(SKELETON_SHOULDER_CENTER, (TrackerCheckerMethod)&KinectGestures::detectTopChangeDown, keyMap, this);
 				break;
 			case KINECT_STEP_NORMAL:
-				checker->attach(SKELETON_HEAD, (TrackerCheckerMethod)&KinectGestures::detectTopChangeNormal, keyMap, this);
+				checker->attach(SKELETON_SHOULDER_CENTER, (TrackerCheckerMethod)&KinectGestures::detectTopChangeNormal, keyMap, this);
 				break;
 			case KINECT_LEFT_HAND_CLOSED:
 				checker->attach((AnalogCheckerMethod)&KinectGestures::leftHandClosed, keyMap, this);
