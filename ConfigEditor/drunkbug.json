@@ -1,93 +1,80 @@
 {
   "common": {
-    "devs": {
-      "nedglove": [
-        "Analog0@localhost"
-      ],
-      "leapMotion": [
-        "LeapMotion0@localhost"
-      ],
-      "kinect": [
-        "Tracker0@localhost"
-      ],
-      "keyboard": [
-        "Keyboard0@localhost"
-      ],
-      "mouse": [
-        "Mouse0@localhost"
-      ]
-    },
     "patientName": "Alan",
     "saveDir": "./SAVES/",
-    "host": "localhost:3306",
-    "database": "vrpn2",
-    "user": "root",
-    "passwd": "",
-    "KINECT_X_INTERVAL": 0.35
+    "KINECT_X_INTERVAL": 0.35,
+    "host": "",
+    "database": "",
+    "user": "",
+    "passwd": ""
   },
   "keys": [
     {
       "divClass": "kinectStep",
+      "devType": "kinect",
       "dev": "Tracker0@localhost",
       "key": "KINECT_STEP_DOWN",
-      "sensivity": 0.10,
+      "sensivity": 0.1,
       "toKeyDown": "VK_SPACE",
-      "toKeyUp": "VK_SPACE",
-      "saveData": "stepHeight"
+      "toKeyUp": "VK_SPACE"
     },
     {
       "divClass": "handTop",
+      "devType": "kinect",
       "dev": "Tracker0@localhost",
       "key": "KINECT_RIGHT_HAND_TOP",
       "x": 0,
       "coordinateMod": ">=",
       "y": 4,
+      "handWidthInterval": 0.4,
       "toKeyDown": "VK_LSHIFT",
-      "toKeyUp": "VK_LSHIFT",
-      "saveData": "handPos"
+      "toKeyUp": "VK_LSHIFT"
     },
     {
       "divClass": "handTop",
+      "devType": "kinect",
       "dev": "Tracker0@localhost",
       "key": "KINECT_LEFT_HAND_TOP",
       "x": 0,
       "coordinateMod": ">=",
       "y": 4,
+      "handWidthInterval": 0.4,
       "toKeyDown": "VK_LSHIFT",
-      "toKeyUp": "VK_LSHIFT",
-      "saveData": "handPos"
+      "toKeyUp": "VK_LSHIFT"
     },
     {
       "divClass": "kinectWalking",
+      "devType": "kinect",
       "dev": "Tracker0@localhost",
       "key": "KINECT_WALK",
       "delay": 1000,
-      "sensivity": 0.10,
+      "sensivity": 0.1,
       "toKeyDown": "W",
-      "toKeyUp": "W",
-      "saveData": "kneeHeight"
+      "toKeyUp": "W"
     },
     {
       "divClass": "handTop",
+      "devType": "kinect",
       "dev": "Tracker0@localhost",
       "key": "KINECT_RIGHT_HAND_TOP",
       "x": 1,
       "coordinateMod": ">=",
       "y": 2,
+      "handWidthInterval": 0.4,
       "toKeyDown": "D",
-      "toKeyUp": "D",
-      "saveData": "handPos"
+      "toKeyUp": "D"
     },
     {
       "divClass": "handTop",
+      "devType": "kinect",
       "dev": "Tracker0@localhost",
       "key": "KINECT_LEFT_HAND_TOP",
       "x": -1,
       "coordinateMod": ">=",
       "y": 2,
+      "handWidthInterval": 0.4,
       "toKeyDown": "A",
-      "toKeyUp": "A",
-      "saveData": "handPos"
+      "toKeyUp": "A"
     }
   ]
 }
