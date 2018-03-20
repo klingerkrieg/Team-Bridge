@@ -121,9 +121,10 @@ namespace InputConverterTest {
 public:
 
 	TEST_METHOD(InputConverter_checkTrack) {
-	
-			t.sensor = 0;
+			
+			t.sensor = SKELETON_HEAD;
 			t.pos[1] = 1.0;
+
 			//Inicia
 			Assert::IsTrue(iC.checkTrack(tc1, t));
 			

@@ -342,7 +342,7 @@ int KinectGestures::detectTopChange(SkeletonPart skelPart, KeyMap * keyMap, int 
 	
 
 	//A pessoa deverá entrar nessa região para calibrar, é a região com pouca interferência
-	if ( normalStepHeight == -100 && skelPart.z >= 1.85f && skelPart.z <= 2.55f) {
+	if ( normalStepHeight == KINECT_EMPTY_VALUE && skelPart.z >= KINECT_MIN_CALIB_Z && skelPart.z <= KINECT_MAX_CALIB_Z) {
 		printf("Altura calibrada.\n");
 		normalStepHeight = skelPart.y;
 		return -1;

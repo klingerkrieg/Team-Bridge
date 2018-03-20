@@ -16,6 +16,9 @@ const int KINECT_RIGHT = 2;
 const int KINECT_FRONT = 3;
 const int KINECT_BACK = 4;
 
+const float KINECT_MIN_CALIB_Z = 1.85f;
+const float KINECT_MAX_CALIB_Z = 2.55f;
+const int KINECT_EMPTY_VALUE = -100;
 
 struct KinectDetection {
 	bool centerPosDefined = false;
@@ -72,7 +75,7 @@ protected:
 public:
 
 	void clearNormalStepHeight() {
-		normalStepHeight = -100;
+		normalStepHeight = KINECT_EMPTY_VALUE;
 	}
 
 	static std::map<std::string, Skeleton> skeleton;

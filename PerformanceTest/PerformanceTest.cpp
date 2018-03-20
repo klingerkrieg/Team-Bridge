@@ -11,14 +11,14 @@
 using namespace std;
 
 
-
+//Quantidade de repetições
 const int repMax = 300;
 
 
 // fonte: https://www.vivaolinux.com.br/script/Estatistica-Moda-e-mediana-de-um-vetor
 /* Sub-rotina para ordenar elementos de um
 vetor de forma crescente */
-void ORDENA_CRES(double vet[], int faixa) {
+void ordenaCrescente(double vet[], int faixa) {
 	register int i, j; // indexadores.
 	double aux;  // variavel auxiliar.
 
@@ -31,15 +31,15 @@ void ORDENA_CRES(double vet[], int faixa) {
 			}
 }
 
+
+//fonte: https://www.vivaolinux.com.br/script/Estatistica-Moda-e-mediana-de-um-vetor
 /* Funcao que retorna o valor da mediana de um
 vetor de numeros de ponto flutuante */
 
-double MEDIANA(double vet[], int faixa) {
+double mediana(double vet[], int faixa) {
 	double m1, m2;
 
-	ORDENA_CRES(vet, faixa); // Ordenando conjunto numerico.
-
-	puts("");
+	ordenaCrescente(vet, faixa); // Ordenando conjunto numerico.
 
 	switch ( faixa % 2 ) // Seletor para calculo da mediana.
 	{
@@ -55,7 +55,7 @@ double MEDIANA(double vet[], int faixa) {
 	}
 }
 
-double DESVIOP(double vet[], int faixa, double media) {
+double desvioPadrao(double vet[], int faixa, double media) {
 	double variancia = 0;
 
 	for ( int i = 0; i < repMax; i++ ) {
@@ -67,7 +67,7 @@ double DESVIOP(double vet[], int faixa, double media) {
 }
 
 
-
+//fonte: https://stackoverflow.com/questions/10905892/equivalent-of-gettimeday-for-windows
 int gettimeofday(struct timeval * tp, struct timezone * tzp) {
 	// Note: some broken versions only have 8 trailing zero's, the correct epoch has 9 trailing zero's
 	// This magic number is the number of 100 nanosecond intervals since January 1, 1601 (UTC)
@@ -104,21 +104,6 @@ int main() {
 	double desvioP;
 	int countDentroDesvioP = 0;
 
-	/*double arr[] = { 10, 8, 10, 8, 8, 4 };
-	for ( i = 0; i < repMax; i++ ) {
-		med += arr[i];
-	}
-	med /= repMax;
-	desvioP = DESVIOP(arr, 6, med);
-	cout << desvioP << "\n";
-	for ( i = 0; i < repMax; i++ ) {
-		if ( arr[i] > med - desvioP && arr[i] < med + desvioP ) {
-			countDentroDesvioP++;
-		}
-	}
-	cout << countDentroDesvioP * 100 / repMax << "% das amostras dentro do desvio padrao.\n";*/
-
-
 
 	cout << ("Inicie o teste:\n");
 	while ( i-3 < repMax ) {
@@ -151,8 +136,8 @@ int main() {
 
 	if ( i - 3 == repMax ) {
 		double media = (med / count);
-		printf("Mediana: %.4f\n", MEDIANA(medianaVec, repMax));
-		desvioP = DESVIOP(medianaVec, repMax, media);
+		printf("Mediana: %.4f\n", mediana(medianaVec, repMax));
+		desvioP = desvioPadrao(medianaVec, repMax, media);
 		printf("Desvio padrao: %.4f\n", desvioP);
 		for ( i = 0; i < repMax; i++ ) {
 			if ( medianaVec[i] > media - desvioP && medianaVec[i] < media + desvioP ) {

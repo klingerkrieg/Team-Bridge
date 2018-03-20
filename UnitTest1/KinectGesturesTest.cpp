@@ -51,6 +51,8 @@ public:
 		};
 		KeyMap *mNormal = new KeyMap(js);
 
+		t.z = KINECT_MIN_CALIB_Z;
+
 		//primeira altura = 1.0 ira definir o STEP_NORMAL
 		Assert::AreEqual(-1, gr.detectTopChangeUp(t, mUp));
 
@@ -296,18 +298,18 @@ public:
 
 	TEST_METHOD(KinectRecognizer_detectTurn) {
 
+		
 		KinectGestures gr = KinectGestures();
 		SkeletonPart t = getSkeletonPart();
-		t.skelConstant = SKELETON_SPINE;
 
 		vrpn_TRACKERCB trackData = getTrackerCB();
-		SkeletonPart skelPart;
 		trackData.quat[0] = -0.01;
 		trackData.quat[1] = 1.00;
 		trackData.quat[2] = 0.03;
 		trackData.quat[3] = 0.04;
+		trackData.sensor = 2;//spine sensor
 		//Essa etapa é necessária para o centerPos
-		vrpnToSkeleton(gr.skeleton[t.skeletonName], gr.skeletonMap1, trackData, skelPart, t.skeletonName);
+		vrpnToSkeleton(gr.skeleton[t.skeletonName], gr.skeletonMap1, trackData, t, t.skeletonName);
 
 		//Esses métodos não requerem nenhuma informação do KeyMap
 		json js = {};
@@ -316,16 +318,22 @@ public:
 		gr.setCenterPos(t, m1);
 
 		//girou para direita
-		t.quat_y = 0.93;
-		t.quat_z = 0.00;
-		t.quat_w = 0.38;
+		trackData.quat[1] = 0.93;
+		trackData.quat[2] = 0.00;
+		trackData.quat[3] = 0.38;
+		// esse metodo trabalha com o que esta armazenado no esqueleto, então toda hora terá que chamar o vrpnToSkeleton
+		vrpnToSkeleton(gr.skeleton[t.skeletonName], gr.skeletonMap1, trackData, t, t.skeletonName);
 		Assert::IsTrue(gr.detectTurnRight(t, m1));
 
 		//girou para esquerda
-		t.quat_x = 0.01;
-		t.quat_y = 0.95;
-		t.quat_z = 0.01;
-		t.quat_w = 0.30;
+		/*trackData.quat[0] = 0.01; //antigos valores
+		trackData.quat[1] = 0.95;
+		trackData.quat[2] = 0.01;
+		trackData.quat[3] = 0.30;*/
+		trackData.quat[1] = -0.93;
+		trackData.quat[2] = 0.00;
+		trackData.quat[3] = 0.38;
+		vrpnToSkeleton(gr.skeleton[t.skeletonName], gr.skeletonMap1, trackData, t, t.skeletonName);
 		Assert::IsTrue(gr.detectTurnLeft(t, m1));
 
 	}

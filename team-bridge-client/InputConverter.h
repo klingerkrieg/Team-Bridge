@@ -47,7 +47,7 @@ private:
 	static int lastTimeTrack;
 	bool viewOn = false;
 	View *view;
-	
+
 
  #ifdef THERAPY_MODULE
 	 Storage *storage;
@@ -97,7 +97,6 @@ public:
 		this->viewOn = true;
 	}
 
-	
 
 	 bool checkTrack(TrackerUserCallback *userdata, const vrpn_TRACKERCB t);
 
