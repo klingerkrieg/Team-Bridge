@@ -11,8 +11,11 @@
 const int UP = 1;
 const int DOWN = 2;
 
+
 class FlexedMember : public AbstractGestureRecognizer {
 	private:
+
+
 	bool assignChecker(CheckerSubject *checker, KeyMap *keyMap);
 
 	public:

@@ -1,5 +1,6 @@
 #include "FlexedMember.h"
 
+
 bool FlexedMember::assignChecker(CheckerSubject *checker, KeyMap *keyMap) {
 	return false;
 }
@@ -26,6 +27,10 @@ int FlexedMember::flexed2d(std::map<int, std::vector<double>> points, KeyMap * k
 	double res = v1norm[0] * v2norm[0] + v1norm[1] * v2norm[1];
 
 	double angle = acos(res) * 180.0 / 3.14159265;
+
+	if ( keyMap->getPrint() && angle != 0 ) {
+		printf("Angulo de inclinacao:%.2f\n", angle);
+	}
 	
 
 	bool comp = false;
