@@ -2,6 +2,11 @@
 
 #include <windows.h>
 #include "resource.h"
+#include <tchar.h>  
+#include <string>
+
+
+const int MAIN_VIEW_KINECT_V1 = 1;
 
 
 class MainView {
@@ -34,7 +39,18 @@ class MainView {
 	/// <returns>result of message processing</returns>
 	LRESULT HandleMessages(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
+
+	static void write(std::string text);
+	static void writeln(std::string text);
+	static std::string getOutput();
+	static void startDeviceView(int device);
+	bool MainView::getDeviceView(int device);
+
 	private:
+
+	static bool							kinectV1View;
+
+	static std::string					output;
 
 	HINSTANCE                           m_hInst;
 	HWND                                m_hWnd;

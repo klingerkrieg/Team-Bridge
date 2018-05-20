@@ -36,14 +36,7 @@ class KinectView {
 	public:
 
 	KinectView();
-	/// <summary>
-	/// Constructor
-	/// </summary>
 	KinectView(HINSTANCE hInstance, int nCmdShow);
-
-	/// <summary>
-	/// Destructor
-	/// </summary>
 	~KinectView();
 
 
@@ -51,38 +44,10 @@ class KinectView {
 
 	static bool getSensorStarted();
 
-	/// <summary>
-	/// Register class and create window
-	/// </summary>
-	/// <returns>S_OK for success, or failure code</returns>
 	HRESULT                             InitWindow(HINSTANCE hInstance, int nCmdShow);
-
-	/// <summary>
-	/// Create Direct3D device and swap chain
-	/// </summary>
-	/// <returns>S_OK for success, or failure code</returns>
 	HRESULT                             InitDevice();
-
-	/// <summary>
-	/// Create the first connected Kinect found 
-	/// </summary>
-	/// <returns>S_OK on success, otherwise failure code</returns>
 	HRESULT                             CreateFirstConnected();
-
-	/// <summary>
-	/// Renders a frame
-	/// </summary>
-	/// <returns>S_OK for success, or failure code</returns>
 	HRESULT                             Render();
-
-	/// <summary>
-	/// Handles window messages, used to process input
-	/// </summary>
-	/// <param name="hWnd">window message is for</param>
-	/// <param name="uMsg">message</param>
-	/// <param name="wParam">message data</param>
-	/// <param name="lParam">additional message data</param>
-	/// <returns>result of message processing</returns>
 	LRESULT HandleMessages(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 	private:
@@ -133,22 +98,7 @@ class KinectView {
 	// if the application is paused, for example in the minimized case
 	bool                                m_bPaused;
 
-	/// <summary>
-	/// Toggles between near and default mode
-	/// Does nothing on a non-Kinect for Windows device
-	/// </summary>
-	/// <returns>S_OK for success, or failure code</returns>
-	HRESULT                             ToggleNearMode();
 
-	/// <summary>
-	/// Process depth data received from Kinect
-	/// </summary>
-	/// <returns>S_OK for success, or failure code</returns>
 	HRESULT                             ProcessDepth();
-
-	/// <summary>
-	/// Compile and set layout for shaders
-	/// </summary>
-	/// <returns>S_OK for success, or failure code</returns>
 	HRESULT                             LoadShaders();
 };

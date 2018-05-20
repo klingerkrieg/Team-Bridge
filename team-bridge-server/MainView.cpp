@@ -5,7 +5,9 @@
 #include <thread>
 
 MainView g_Application;  // Application class
-
+TeamBridgeServer tbServer = TeamBridgeServer();
+std::string	MainView::output = "";
+bool MainView::kinectV1View	 = false;
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
@@ -54,13 +56,17 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	if ( FAILED(g_Application.InitWindow(hInstance, nCmdShow)) ) {
 		return 0;
 	}
-
-	TeamBridgeServer tbServer = TeamBridgeServer();
+	
+	//Inicia o servidor VRPN
 	tbServer.start();
+	//Inicia o mainloop em uma thread separada
 	std::thread servThread(&TeamBridgeServer::mainloop, &tbServer);
 
 	KinectView kView = KinectView(hInstance, nCmdShow);
-	kView.startView();
+	//So inicia o KView se estiver configurado pra usar Kinect
+	if ( g_Application.getDeviceView(MAIN_VIEW_KINECT_V1) ) {
+		kView.startView();
+	}
 
 
 	// Main message loop
@@ -71,7 +77,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 			TranslateMessage(&msg);
 			DispatchMessageW(&msg);
 		} else {
-			
+			//Caso o kView tenha sido iniciado
 			if ( KinectView::getSensorStarted() ) {
 				kView.Render();
 			}
@@ -79,9 +85,10 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	}
 
+	//Para o mainloop do VRPN
 	tbServer.stop();
 	servThread.join();
-	//Encerra a thread
+	//Encerra a thread, caso nao espere esse tempo ele lança uma excessão
 	Sleep(3000);
 
 	return (int)msg.wParam;
@@ -100,9 +107,24 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
 
 	g_Application.HandleMessages(hWnd, message, wParam, lParam);
 
+	HDC hdc;
+
+	std::string text = g_Application.getOutput();
+	TCHAR *param = new TCHAR[text.size() + 1];
+	param[text.size()] = 0;
+	//As much as we'd love to, we can't use memcpy() because
+	//sizeof(TCHAR)==sizeof(char) may not be true:
+	std::copy(text.begin(), text.end(), param);
+	
 	switch ( message ) {
 		case WM_PAINT:
-			BeginPaint(hWnd, &ps);
+			hdc = BeginPaint(hWnd, &ps);
+
+			RECT rc;
+			SetRect(&rc, 0, 0, 300, 300);
+			DrawText(hdc, param, text.length() , &rc, DT_LEFT | DT_EXTERNALLEADING | DT_WORDBREAK);
+			ReleaseDC(hWnd, hdc);
+
 			EndPaint(hWnd, &ps);
 			break;
 
@@ -159,7 +181,30 @@ HRESULT MainView::InitWindow(HINSTANCE hInstance, int nCmdShow) {
 	return S_OK;
 }
 
+std::string MainView::getOutput() {
+	return output;
+}
 
+void MainView::write(std::string text) {
+	output += text;
+}
+
+void MainView::writeln(std::string text) {
+	output += "\r\n" + text;
+}
+
+void MainView::startDeviceView(int device) {
+	if ( device == MAIN_VIEW_KINECT_V1 ) {
+		kinectV1View = true;
+	}
+}
+
+bool MainView::getDeviceView(int device) {
+	if ( device == MAIN_VIEW_KINECT_V1 ) {
+		return kinectV1View;
+	}
+	return false;
+}
 
 /// <summary>
 /// Handles window messages, used to process input

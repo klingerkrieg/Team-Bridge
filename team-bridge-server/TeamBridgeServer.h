@@ -6,6 +6,7 @@
 #include <string.h> // for strcmp
 #include <string>
 #include <sstream>
+#include "MainView.h"
 
 #include "vrpn_BaseClass.h"             // for ::vrpn_TEXT_NORMAL, etc
 #include "vrpn_Configure.h"             // for VRPN_CALLBACK, etc

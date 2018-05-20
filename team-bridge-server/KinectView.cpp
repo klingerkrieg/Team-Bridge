@@ -17,59 +17,10 @@ bool KinectView::getSensorStarted() {
 
 
 
-LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
+LRESULT CALLBACK WndProcKinectView(HWND, UINT, WPARAM, LPARAM);
 
-/// <summary>
-/// Entry point for the application
-/// </summary>
-/// <param name="hInstance">handle to the application instance</param>
-/// <param name="hPrevInstance">always 0</param>
-/// <param name="lpCmdLine">command line arguments</param>
-/// <param name="nCmdShow">whether to display minimized, maximized, or normally</param>
-/// <returns>status</returns>
-/*int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow) {
-	UNREFERENCED_PARAMETER(hPrevInstance);
-	UNREFERENCED_PARAMETER(lpCmdLine);
-
-	if ( FAILED(g_Application.InitWindow(hInstance, nCmdShow)) ) {
-		return 0;
-	}
-
-	if ( FAILED(g_Application.InitDevice()) ) {
-		return 0;
-	}
-
-	if ( FAILED(g_Application.CreateFirstConnected()) ) {
-		MessageBox(NULL, L"No ready Kinect found!", L"Error", MB_ICONHAND | MB_OK);
-		return 0;
-	}
-
-	// Main message loop
-	MSG msg = { 0 };
-	while ( WM_QUIT != msg.message ) {
-		if ( PeekMessageW(&msg, NULL, 0, 0, PM_REMOVE) ) {
-			TranslateMessage(&msg);
-			DispatchMessageW(&msg);
-		} else {
-			g_Application.Render();
-		}
-	}
-
-	return (int)msg.wParam;
-}*/
-
-/// <summary>
-/// Handles window messages, passes most to the class instance to handle
-/// </summary>
-/// <param name="hWnd">window message is for</param>
-/// <param name="uMsg">message</param>
-/// <param name="wParam">message data</param>
-/// <param name="lParam">additional message data</param>
-/// <returns>result of message processing</returns>
-/*LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
+LRESULT CALLBACK WndProcKinectView(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 	PAINTSTRUCT ps;
-
-	g_Application.HandleMessages(hWnd, message, wParam, lParam);
 
 	switch ( message ) {
 		case WM_PAINT:
@@ -86,15 +37,12 @@ LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 	}
 
 	return 0;
-}*/
+}
 
 KinectView::KinectView() {
 
 }
 
-/// <summary>
-/// Constructor
-/// </summary>
 KinectView::KinectView(HINSTANCE hInstance, int nCmdShow) {
 	m_hInst = hInstance;
 	m_cmdShow = nCmdShow;
@@ -146,11 +94,6 @@ KinectView::KinectView(HINSTANCE hInstance, int nCmdShow) {
 	}
 
 
-
-	//Init
-	//UNREFERENCED_PARAMETER(hPrevInstance);
-	//UNREFERENCED_PARAMETER(lpCmdLine);
-
 }
 
 
@@ -158,17 +101,17 @@ void KinectView::startView() {
 
 	if ( FAILED(InitWindow(m_hInst, m_cmdShow)) ) {
 		MessageBox(NULL, L"Falha ao iniciar Janela", L"Error", MB_ICONHAND | MB_OK);
-		//return 0;
+		return;
 	}
 
 	if ( FAILED(InitDevice()) ) {
 		MessageBox(NULL, L"Falha ao iniciar Kinect", L"Error", MB_ICONHAND | MB_OK);
-		//return 0;
+		return;
 	}
 
 	if ( FAILED(CreateFirstConnected()) ) {
 		MessageBox(NULL, L"Nenhum Kinect conectado!", L"Error", MB_ICONHAND | MB_OK);
-		//return 0;
+		return;
 	}
 
 	sensorStarted = true;
@@ -205,16 +148,13 @@ KinectView::~KinectView() {
 	CloseHandle(m_hNextDepthFrameEvent);
 }
 
-/// <summary>
-/// Register class and create window
-/// </summary>
-/// <returns>S_OK for success, or failure code</returns>
+
 HRESULT KinectView::InitWindow(HINSTANCE hInstance, int nCmdShow) {
 	// Register class
 	WNDCLASSEX wcex;
 	wcex.cbSize = sizeof(WNDCLASSEX);
 	wcex.style = CS_HREDRAW | CS_VREDRAW;
-	wcex.lpfnWndProc = WndProc;
+	wcex.lpfnWndProc = WndProcKinectView;
 	wcex.cbClsExtra = 0;
 	wcex.cbWndExtra = 0;
 	wcex.hInstance = hInstance;
@@ -222,7 +162,7 @@ HRESULT KinectView::InitWindow(HINSTANCE hInstance, int nCmdShow) {
 	wcex.hCursor = LoadCursorW(NULL, IDC_ARROW);
 	wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
 	wcex.lpszMenuName = NULL;
-	wcex.lpszClassName = L"DepthD3DWindowClass";
+	wcex.lpszClassName = L"KinectWindowClass";
 	wcex.hIconSm = LoadIconW(wcex.hInstance, (LPCTSTR)IDI_APP);
 
 	if ( !RegisterClassEx(&wcex) ) {
@@ -233,7 +173,7 @@ HRESULT KinectView::InitWindow(HINSTANCE hInstance, int nCmdShow) {
 	m_hInst = hInstance;
 	RECT rc = { 0, 0, m_windowResX, m_windowResY };
 	AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
-	m_hWnd = CreateWindow(L"DepthD3DWindowClass", L"Depth-D3D", WS_OVERLAPPEDWINDOW,
+	m_hWnd = CreateWindow(L"KinectWindowClass", L"KinectView", WS_OVERLAPPEDWINDOW,
 						  CW_USEDEFAULT, CW_USEDEFAULT, rc.right - rc.left, rc.bottom - rc.top, NULL, NULL, hInstance,
 						  NULL);
 	if ( NULL == m_hWnd ) {
@@ -245,14 +185,7 @@ HRESULT KinectView::InitWindow(HINSTANCE hInstance, int nCmdShow) {
 	return S_OK;
 }
 
-/// <summary>
-/// Handles window messages, used to process input
-/// </summary>
-/// <param name="hWnd">window message is for</param>
-/// <param name="uMsg">message</param>
-/// <param name="wParam">message data</param>
-/// <param name="lParam">additional message data</param>
-/// <returns>result of message processing</returns>
+
 LRESULT KinectView::HandleMessages(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	
 
@@ -271,11 +204,7 @@ LRESULT KinectView::HandleMessages(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 
 		case WM_KEYDOWN:
 			{
-				int nKey = static_cast<int>(wParam);
-
-				if ( nKey == 'N' ) {
-					ToggleNearMode();
-				}
+				
 				break;
 			}
 	}
@@ -285,10 +214,6 @@ LRESULT KinectView::HandleMessages(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 
 
 
-/// <summary>
-/// Create the first connected Kinect found 
-/// </summary>
-/// <returns>indicates success or failure</returns>
 HRESULT KinectView::CreateFirstConnected() {
 	HRESULT hr;
 
@@ -341,35 +266,12 @@ HRESULT KinectView::CreateFirstConnected() {
 		return hr;
 	}
 
-	// Start with near mode on
-	ToggleNearMode();
 
 	return hr;
 }
 
-/// <summary>
-/// Toggles between near and default mode
-/// Does nothing on a non-Kinect for Windows device
-/// </summary>
-/// <returns>S_OK for success, or failure code</returns>
-HRESULT KinectView::ToggleNearMode() {
-	HRESULT hr = E_FAIL;
 
-	if ( m_pNuiSensor ) {
-		hr = m_pNuiSensor->NuiImageStreamSetImageFrameFlags(m_pDepthStreamHandle, m_bNearMode ? 0 : NUI_IMAGE_STREAM_FLAG_ENABLE_NEAR_MODE);
 
-		if ( SUCCEEDED(hr) ) {
-			m_bNearMode = !m_bNearMode;
-		}
-	}
-
-	return hr;
-}
-
-/// <summary>
-/// Compile and set layout for shaders
-/// </summary>
-/// <returns>S_OK for success, or failure code</returns>
 HRESULT KinectView::LoadShaders() {
 	// Compile the geometry shader
 	ID3D10Blob* pBlob = NULL;
@@ -612,10 +514,7 @@ HRESULT KinectView::InitDevice() {
 	return S_OK;
 }
 
-/// <summary>
-/// Process depth data received from Kinect
-/// </summary>
-/// <returns>S_OK for success, or failure code</returns>
+
 HRESULT KinectView::ProcessDepth() {
 	NUI_IMAGE_FRAME imageFrame;
 
@@ -690,10 +589,7 @@ HRESULT KinectView::ProcessDepth() {
 	return hr;
 }
 
-/// <summary>
-/// Renders a frame
-/// </summary>
-/// <returns>S_OK for success, or failure code</returns>
+
 HRESULT KinectView::Render() {
 	if ( m_bPaused ) {
 		return S_OK;

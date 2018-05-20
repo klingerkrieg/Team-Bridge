@@ -19,6 +19,9 @@ void TeamBridgeServer::start() {
 
 	tbServer = this;
 	const char *config_file_name = "vrpn.cfg";
+
+	MainView::write("Lendo arquivo:");
+	MainView::write(config_file_name);
 	
 
 	bool bail_on_error = true;
@@ -55,7 +58,7 @@ void TeamBridgeServer::start() {
 	generic_server = new vrpn_Generic_Server_Object(
 		connection, config_file_name, verbose, bail_on_error);
 	if ( (generic_server == NULL) || !generic_server->doing_okay() ) {
-		fprintf(stderr, "Could not start generic server, exiting\n");
+		MessageBox(NULL, L"VRPN não pôde ser inicializado", L"Error", MB_ICONHAND | MB_OK);
 		shutDown();
 	}
 
@@ -71,7 +74,7 @@ void TeamBridgeServer::start() {
 		connection->register_handler(dlc_m_id, handle_dlc, NULL);
 	}
 
-
+	MainView::writeln("VRPN Iniciado.");
 }
 
 
@@ -120,32 +123,21 @@ void TeamBridgeServer::mainloop() {
 
 void TeamBridgeServer::stop() {
 	done = 1;
+	MainView::writeln("Desligando VRPN...");
 }
 
 void TeamBridgeServer::shutDown(void) {
-	if ( verbose ) {
-		fprintf(stderr, "Deleting forwarder server\n");
-	}
 	if ( forwarderServer ) {
 		delete forwarderServer;
 		forwarderServer = NULL;
-	}
-	if ( verbose ) {
-		fprintf(stderr, "Deleting generic server object...");
 	}
 	if ( generic_server ) {
 		delete generic_server;
 		generic_server = NULL;
 	}
-	if ( verbose ) {
-		fprintf(stderr, "Deleting connection\n");
-	}
 	if ( connection ) {
 		connection->removeReference();
 		connection = NULL;
-	}
-	if ( verbose ) {
-		fprintf(stderr, "Deleted server and connection, Exiting.\n");
 	}
 	
 }

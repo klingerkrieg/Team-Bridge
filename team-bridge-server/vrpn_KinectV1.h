@@ -14,6 +14,7 @@
 #include "vrpn_Tracker.h"               // for vrpn_Tracker
 #include "NuiApi.h"
 #include <string>
+#include "MainView.h"
 
 const int TENTATIVAS_MAX = 3;
 

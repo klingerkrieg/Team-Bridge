@@ -27,12 +27,13 @@ vrpn_KinectV1::vrpn_KinectV1(const char *name, int skeleton, vrpn_Connection *c)
 	vrpn_Tracker::num_sensors = 20;
 	this->skeleton = skeleton;
 	connect();
+	MainView::startDeviceView(MAIN_VIEW_KINECT_V1);
 }
 
 void vrpn_KinectV1::mainloop() {
 	if ( connected ) {
 		if ( !onFrame() ) {
-			printf("Perda de conexao com o KinectV1.\n");
+			MainView::writeln("Perda de conexao com o KinectV1.");
 			connected = false;
 			connect();
 		}
@@ -56,12 +57,12 @@ bool vrpn_KinectV1::connect() {
 	while (connected == false && tentativas < TENTATIVAS_MAX) {
 		tentativas++;
 
-		printf("Conectando-se ao KinectV1...\n");
+		MainView::writeln("Conectando-se ao KinectV1...");
 
 		iSensorCount = 0;
 		hr = NuiGetSensorCount(&iSensorCount);
 		if ( FAILED(hr) || iSensorCount == 0 ) {
-			printf("Nenhum KinectV1 encontrado.\n");
+			MainView::writeln("Nenhum KinectV1 encontrado.\n");
 			Sleep(3000);
 			continue;
 		}
@@ -104,14 +105,14 @@ bool vrpn_KinectV1::connect() {
 		}
 
 		if ( NULL == m_pNuiSensor || FAILED(hr) ) {
-			printf("Falha ao se conectar ao KinectV1.\n");
+			MainView::writeln("Falha ao se conectar ao KinectV1.\n");
 			Sleep(3000);
 			continue;
 		}
 
 		
 		connected = true;
-		printf("KinectV1 conectado.\n");
+		MainView::writeln("KinectV1 conectado.\n");
 		tentativas = 0;
 
 		return true;
@@ -141,7 +142,7 @@ void vrpn_KinectV1::reportPose(int skeleton,int sensor, Vector4 position, Vector
 	//	printf("sensor: %d %.2f %.2f %.2f \n", sensor, position.x, position.y, position.z);
 	if ( d_connection->pack_message(len, t, position_m_id, d_sender_id, msgbuf,
 		vrpn_CONNECTION_LOW_LATENCY) ) {
-		fprintf(stderr, "vrpn_KinectV1: cannot write message: tossing\n");
+		MainView::writeln("vrpn_KinectV1: cannot write message: tossing");
 	}
 }
 
@@ -206,7 +207,8 @@ bool vrpn_KinectV1::onFrame() {
 
 
 	if ( skeleton > NUI_SKELETON_COUNT ) {
-		printf("Skeleton id maior do que o permitido: %d\n", skeleton);
+		MainView::writeln("Skeleton id maior do que o permitido:");
+		MainView::write(std::to_string(skeleton));
 		return true;
 	}
 		
@@ -278,11 +280,11 @@ bool vrpn_KinectV1::onFrame() {
 	}
 
 	if ( has == 0 && status == true) {
-		printf("KinectV1 parado.\n");
+		MainView::writeln("KinectV1 parado.");
 		status = false;
 	} else 
 	if ( has > 0 && status == false){
-		printf("KinectV1 capturando.\n");
+		MainView::writeln("KinectV1 capturando.");
 		status = true;
 	}
 
