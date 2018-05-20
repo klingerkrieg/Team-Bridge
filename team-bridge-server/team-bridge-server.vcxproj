@@ -35,7 +35,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -67,8 +67,9 @@
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Win7Release|Win32'">false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(KINECTSDK10_DIR)\inc;$(KINECTSDK20_DIR)\inc;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(VRPN);$(VRPN)\quat;$(LEAP_SDK)\include;</IncludePath>
-    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;$(LEAP_SDK)\lib\x86;</LibraryPath>
+    <IncludePath>$(IncludePath);$(DXSDK_DIR)Include;$(KINECTSDK10_DIR)\inc;$(KINECTSDK20_DIR)\inc;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(VRPN);$(VRPN)\quat;$(LEAP_SDK)\include;</IncludePath>
+    <LibraryPath>$(LibraryPath);$(DXSDK_DIR)Lib\x86;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;$(LEAP_SDK)\lib\x86;</LibraryPath>
+    <ExecutablePath>$(DXSDK_DIR)Utilities\bin\x86;$(VC_ExecutablePath_x86);$(WindowsSDK_ExecutablePath);$(VS_ExecutablePath);$(MSBuild_ExecutablePath);$(SystemRoot)\SysWow64;$(FxCopDir);$(PATH);</ExecutablePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>$(KINECTSDK10_DIR)\inc;$(KINECTSDK20_DIR)\inc;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(VRPN);$(VRPN)\quat;$(LEAP_SDK)\include;</IncludePath>
@@ -87,7 +88,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(SYSTEMDRIVE)\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Include;..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>KINECTV2;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;DEBUG;PROFILE;_WINDOWS;D3DXFX_LARGEADDRESS_HANDLE;KINECTV2;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -111,12 +112,12 @@
       <AdditionalLibraryDirectories>$(KINECTSDK10_DIR)Lib\x86\;$(KINECTSDK20_DIR)Lib\x86\;$(VRPN)\$(Configuration);$(VRPN)\pc_win32\$(Configuration)\;$(VRPN)\quat\pc_win32\$(Configuration);$(SYSTEMDRIVE)\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib;%(AdditionalLibraryDirectories);$(LEAP_SDK)\lib\x86</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\build_files\$(ProjectName).pdb</ProgramDatabaseFile>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalDependencies>Kinect10.lib;kinect20.lib;gpsnmealib.lib;quat.lib;vrpn.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);Leap.lib;</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;d3dx11d.lib;d3dx9d.lib;dxerr.lib;dxguid.lib;winmm.lib;comctl32.lib;Kinect10.lib;kinect20.lib;gpsnmealib.lib;quat.lib;vrpn.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);Leap.lib;</AdditionalDependencies>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -125,6 +126,10 @@
     <PreBuildEvent>
       <Command>copy "*.cfg" "$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\" &amp; copy "*.dll" "$(SolutionDir)\pc_win32\$(ProjectName)\$(Configuration)\"</Command>
     </PreBuildEvent>
+    <FxCompile>
+      <ShaderType>
+      </ShaderType>
+    </FxCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Midl>
@@ -231,7 +236,11 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DX11Utils.cpp" />
+    <ClCompile Include="KinectView.cpp" />
+    <ClCompile Include="MainView.cpp" />
     <ClCompile Include="server.c" />
+    <ClCompile Include="TeamBridgeServer.cpp" />
     <ClCompile Include="vrpn_Generic_server_object.c" />
     <ClCompile Include="vrpn_KinectV1.c" />
     <ClCompile Include="vrpn_KinectV2.c" />
@@ -239,6 +248,11 @@
     <ClCompile Include="vrpn_NEDGlove.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DX11Utils.h" />
+    <ClInclude Include="KinectView.h" />
+    <ClInclude Include="MainView.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="TeamBridgeServer.h" />
     <ClInclude Include="vrpn_Generic_server_object.h" />
     <ClInclude Include="vrpn_KinectV1.h" />
     <ClInclude Include="vrpn_KinectV2.h" />
@@ -247,6 +261,14 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="vrpn.cfg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Depth-D3D.fx">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Depth-D3D.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

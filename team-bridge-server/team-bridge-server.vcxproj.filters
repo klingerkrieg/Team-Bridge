@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\viewer">
+      <UniqueIdentifier>{b5e1c94c-68be-40ff-a724-35c082953a1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\viewer">
+      <UniqueIdentifier>{d94beae6-55fa-400e-9cac-3a2a6a457a8c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="server.c">
@@ -33,6 +39,18 @@
     <ClCompile Include="vrpn_KinectV2.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="DX11Utils.cpp">
+      <Filter>Source Files\viewer</Filter>
+    </ClCompile>
+    <ClCompile Include="KinectView.cpp">
+      <Filter>Source Files\viewer</Filter>
+    </ClCompile>
+    <ClCompile Include="TeamBridgeServer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MainView.cpp">
+      <Filter>Source Files\viewer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="vrpn_Generic_server_object.h">
@@ -50,8 +68,31 @@
     <ClInclude Include="vrpn_KinectV2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DX11Utils.h">
+      <Filter>Header Files\viewer</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files\viewer</Filter>
+    </ClInclude>
+    <ClInclude Include="KinectView.h">
+      <Filter>Header Files\viewer</Filter>
+    </ClInclude>
+    <ClInclude Include="MainView.h">
+      <Filter>Header Files\viewer</Filter>
+    </ClInclude>
+    <ClInclude Include="TeamBridgeServer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="vrpn.cfg" />
+    <None Include="Depth-D3D.fx">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Depth-D3D.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

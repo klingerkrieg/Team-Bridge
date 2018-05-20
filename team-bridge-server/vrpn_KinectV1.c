@@ -7,6 +7,7 @@
 */
 
 #include "vrpn_KinectV1.h"
+#include "KinectView.h"
 
 
 VRPN_SUPPRESS_EMPTY_OBJECT_WARNING()
@@ -52,7 +53,8 @@ vrpn_KinectV1::~vrpn_KinectV1() {
 
 bool vrpn_KinectV1::connect() {
 	
-	while (connected == false) {
+	while (connected == false && tentativas < TENTATIVAS_MAX) {
+		tentativas++;
 
 		printf("Conectando-se ao KinectV1...\n");
 
@@ -110,9 +112,12 @@ bool vrpn_KinectV1::connect() {
 		
 		connected = true;
 		printf("KinectV1 conectado.\n");
+		tentativas = 0;
+
+		return true;
 	}
 	
-	return true;
+	return false;
 }
 
 void vrpn_KinectV1::reportPose(int skeleton,int sensor, Vector4 position, Vector4 quat) {

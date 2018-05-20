@@ -1,4 +1,4 @@
-
+/*
 
 
 #include <stdio.h>  // for fprintf, stderr, NULL, etc
@@ -97,8 +97,8 @@ void shutDown(void) {
 	exit(0);
 }
 
-int VRPN_CALLBACK handle_dlc(void *, vrpn_HANDLERPARAM /*p*/) {
-	shutDown();
+int VRPN_CALLBACK handle_dlc(void *, vrpn_HANDLERPARAM /*p*/ //) {
+/*  shutDown();
 	return 0;
 }
 
@@ -111,6 +111,7 @@ int VRPN_CALLBACK handle_dlc(void *, vrpn_HANDLERPARAM /*p*/) {
 /**
 * Handle exiting cleanly when we get ^C or other signals.
 */
+/*
 BOOL WINAPI handleConsoleSignalsWin(DWORD signaltype) {
 	switch ( signaltype ) {
 	case CTRL_C_EVENT:
@@ -132,7 +133,8 @@ BOOL WINAPI handleConsoleSignalsWin(DWORD signaltype) {
 void sighandler(int) { done = 1; }
 #endif
 
-int main(int argc, char *argv[]) {
+//int main(int argc, char *argv[]) {
+int start(){
 	const char *config_file_name = "vrpn.cfg";
 	bool bail_on_error = true;
 	bool auto_quit = false;
@@ -178,7 +180,7 @@ int main(int argc, char *argv[]) {
 #endif // not WIN32
 
 	// Parse the command line
-	i = 1;
+	/*i = 1;
 	while ( i < argc ) {
 		if ( !strcmp(argv[i], "-f") ) { // Specify config-file name
 			if ( ++i > argc ) {
@@ -237,14 +239,14 @@ int main(int argc, char *argv[]) {
 				Usage(argv[0]);
 			}
 		i++;
-	}
+	}*/
 
 	// Need to have a global pointer to the connection so we can shut it down
 	// in the signal handler (so we can close any open logfiles.)
 	// Form the name based on the type of connection requested.  For a standard
 	// VRPN UDP/TCP port, we give it the name "NIC:port" if there is a NIC name,
 	// otherwise just ":port" for the default NIC.
-	std::stringstream con_name;
+	/*std::stringstream con_name;
 	if ( g_NICname ) {
 		con_name << g_NICname;
 	}
@@ -318,3 +320,4 @@ int main(int argc, char *argv[]) {
 	shutDown();
 	return 0;
 	}
+	*/

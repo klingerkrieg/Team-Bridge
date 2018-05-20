@@ -15,6 +15,8 @@
 #include "NuiApi.h"
 #include <string>
 
+const int TENTATIVAS_MAX = 3;
+
 class VRPN_API vrpn_KinectV1 : public  vrpn_Tracker {
 	
 	private:
@@ -28,6 +30,7 @@ class VRPN_API vrpn_KinectV1 : public  vrpn_Tracker {
 	static bool skeletonArr[NUI_SKELETON_COUNT];
 	static bool status;
 	static int skeletonIds[NUI_SKELETON_COUNT];
+	int tentativas = 0;
 
 	int skeleton;
 	
