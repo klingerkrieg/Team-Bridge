@@ -9,6 +9,6 @@
   "author": "",
   "description": "",
   "window": {
-    "toolbar": true
+    "toolbar": false
   }
 }

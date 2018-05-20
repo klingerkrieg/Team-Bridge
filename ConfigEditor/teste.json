@@ -10,11 +10,12 @@
   },
   "keys": [
     {
-      "divClass": "kinectWrist",
-      "devType": "kinect",
-      "dev": "Tracker0@localhost",
-      "key": "KINECT_LEFT_WRIST_DOWN",
-      "angleMin": 35,
+      "divClass": "nedGloveGrab",
+      "devType": "nedGlove",
+      "dev": "Analog0@localhost",
+      "key": "NEDGLOVE_GRAB",
+      "strengthMin": 40,
+      "strengthMax": 0,
       "toKeyDown": "A",
       "toKeyUp": "A"
     }

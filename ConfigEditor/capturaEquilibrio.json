@@ -1,0 +1,32 @@
+{
+  "common": {
+    "patientName": "",
+    "saveDir": "./SAVES/",
+    "host": "",
+    "database": "",
+    "user": "",
+    "passwd": ""
+  },
+  "keys": [
+    {
+      "divClass": "kinectBalance",
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_BALANCE_LEFT",
+      "angleMin": 10,
+      "angleMax": 0,
+      "toKeyDown": "A",
+      "toKeyUp": "A"
+    },
+    {
+      "divClass": "kinectBalance",
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_BALANCE_RIGHT",
+      "angleMin": 10,
+      "angleMax": 0,
+      "toKeyDown": "B",
+      "toKeyUp": "B"
+    }
+  ]
+}
