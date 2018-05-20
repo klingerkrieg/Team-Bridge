@@ -1,0 +1,123 @@
+{
+  "common": {
+    "patientName": "",
+    "saveDir": "./SAVES/",
+    "host": "",
+    "database": "",
+    "user": "",
+    "passwd": ""
+  },
+  "keys": [
+    {
+      "divClass": "kinectStep",
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_STEP_UP",
+      "sensivity": 0.08,
+      "toKeyDown": "VK_SPACE",
+      "toKeyUp": "VK_SPACE"
+    },
+    {
+      "divClass": "handTop",
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_LEFT_HAND_TOP",
+      "x": -1,
+      "coordinateMod": null,
+      "y": 3,
+      "handWidthInterval": null,
+      "toKeyDown": "Q",
+      "toKeyUp": "Q"
+    },
+    {
+      "divClass": "handTop",
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_LEFT_HAND_TOP",
+      "x": -1,
+      "coordinateMod": "=",
+      "y": 1,
+      "handWidthInterval": null,
+      "toKeyDown": "W",
+      "toKeyUp": "W"
+    },
+    {
+      "divClass": "handTop",
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_RIGHT_HAND_TOP",
+      "x": 1,
+      "coordinateMod": null,
+      "y": 3,
+      "handWidthInterval": null,
+      "toKeyDown": "R",
+      "toKeyUp": "R"
+    },
+    {
+      "divClass": "handTop",
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_RIGHT_HAND_TOP",
+      "x": 1,
+      "coordinateMod": "=",
+      "y": 1,
+      "handWidthInterval": null,
+      "toKeyDown": "E",
+      "toKeyUp": "E"
+    },
+    {
+      "divClass": "kinectBalance",
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_BALANCE_LEFT",
+      "angleMin": 30,
+      "angleMax": 40,
+      "msg": "30",
+      "toKeyDown": "ALERT",
+      "toKeyUp": "ALERT"
+    },
+    {
+      "divClass": "kinectBalance",
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_BALANCE_LEFT",
+      "angleMin": 40,
+      "angleMax": 50,
+      "msg": "40",
+      "toKeyDown": "ALERT",
+      "toKeyUp": "ALERT"
+    },
+    {
+      "divClass": "kinectBalance",
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_BALANCE_RIGHT",
+      "angleMin": 30,
+      "angleMax": 40,
+      "msg": "30",
+      "toKeyDown": "MESSAGE",
+      "toKeyUp": "MESSAGE"
+    },
+    {
+      "divClass": "kinectBalance",
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_BALANCE_RIGHT",
+      "angleMin": 40,
+      "angleMax": 50,
+      "msg": "40",
+      "toKeyDown": "MESSAGE",
+      "toKeyUp": "MESSAGE"
+    },
+    {
+      "divClass": "kinectWalking",
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_WALK",
+      "delay": 1000,
+      "sensivity": 0.1,
+      "toKeyDown": "O",
+      "toKeyUp": "O"
+    }
+  ]
+}
