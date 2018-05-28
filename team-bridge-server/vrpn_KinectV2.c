@@ -8,7 +8,7 @@
 #ifdef KINECTV2
 
 #include "vrpn_KinectV2.h"
-
+#include "MainView.h"
 
 IKinectSensor*          vrpn_KinectV2::m_pKinectSensor;
 ICoordinateMapper*      vrpn_KinectV2::m_pCoordinateMapper;
@@ -27,6 +27,7 @@ vrpn_KinectV2::vrpn_KinectV2(const char *name, int skeleton , vrpn_Connection *c
 	vrpn_Tracker::num_sensors = 25;
 	this->skeleton = skeleton;
 	connect();
+	MainView::startDeviceView(MAIN_VIEW_KINECT_V2);
 }
 
 void vrpn_KinectV2::mainloop() {
@@ -62,11 +63,12 @@ vrpn_KinectV2::~vrpn_KinectV2() {
 
 bool vrpn_KinectV2::connect() {
 
-	while ( connected == false ) {
+	while ( connected == false && tentativas < TENTATIVAS_MAX ) {
+		tentativas++;
 		hr = GetDefaultKinectSensor(&m_pKinectSensor);
 		
 		if ( FAILED(hr) ) {
-			printf("Nenhum KinectV2 encontrado.\n");
+			MainView::writeln("Nenhum KinectV2 encontrado.\n");
 			Sleep(3000);
 			continue;
 		}
@@ -94,7 +96,7 @@ bool vrpn_KinectV2::connect() {
 		}
 
 		if ( !m_pKinectSensor || FAILED(hr) ) {
-			printf("Falha ao se conectar ao KinectV2.\n");
+			MainView::writeln("Falha ao se conectar ao KinectV2.\n");
 			Sleep(3000);
 			continue;
 		}
@@ -102,13 +104,13 @@ bool vrpn_KinectV2::connect() {
 		BOOLEAN available = false;
 		m_pKinectSensor->get_IsAvailable(&available);
 		if ( available == false ) {
-			printf("KinectV2 indisponivel.\n");
+			MainView::writeln("KinectV2 indisponivel.\n");
 			Sleep(3000);
 			continue;
 		}
 
 		connected = true;
-		printf("KinectV2 conectado.\n");
+		MainView::writeln("KinectV2 conectado.\n");
 	}
 
 	return true;
@@ -297,11 +299,11 @@ bool vrpn_KinectV2::onFrame() {
 		}
 	
 		if ( has == 0 && status == true ) {
-			printf("KinectV2 parado.\n");
+			MainView::writeln("KinectV2 parado.\n");
 			status = false;
 		} else
 		if ( has > 0 && status == false ) {
-			printf("KinectV2 capturando.\n");
+			MainView::writeln("KinectV2 capturando.\n");
 			status = true;
 		}
 

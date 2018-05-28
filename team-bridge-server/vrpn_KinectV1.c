@@ -7,7 +7,6 @@
 */
 
 #include "vrpn_KinectV1.h"
-#include "KinectView.h"
 
 
 VRPN_SUPPRESS_EMPTY_OBJECT_WARNING()

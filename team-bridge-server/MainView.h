@@ -7,6 +7,7 @@
 
 
 const int MAIN_VIEW_KINECT_V1 = 1;
+const int MAIN_VIEW_KINECT_V2 = 2;
 
 
 class MainView {
@@ -49,6 +50,7 @@ class MainView {
 	private:
 
 	static bool							kinectV1View;
+	static bool							kinectV2View;
 
 	static std::string					output;
 

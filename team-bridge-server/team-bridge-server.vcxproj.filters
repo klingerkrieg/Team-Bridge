@@ -39,16 +39,22 @@
     <ClCompile Include="vrpn_KinectV2.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DX11Utils.cpp">
-      <Filter>Source Files\viewer</Filter>
-    </ClCompile>
-    <ClCompile Include="KinectView.cpp">
-      <Filter>Source Files\viewer</Filter>
-    </ClCompile>
     <ClCompile Include="TeamBridgeServer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MainView.cpp">
+      <Filter>Source Files\viewer</Filter>
+    </ClCompile>
+    <ClCompile Include="KinectDepthView.cpp">
+      <Filter>Source Files\viewer</Filter>
+    </ClCompile>
+    <ClCompile Include="GLView.cpp">
+      <Filter>Source Files\viewer</Filter>
+    </ClCompile>
+    <ClCompile Include="KinectV1View.cpp">
+      <Filter>Source Files\viewer</Filter>
+    </ClCompile>
+    <ClCompile Include="KinectV2View.cpp">
       <Filter>Source Files\viewer</Filter>
     </ClCompile>
   </ItemGroup>
@@ -68,13 +74,7 @@
     <ClInclude Include="vrpn_KinectV2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DX11Utils.h">
-      <Filter>Header Files\viewer</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h">
-      <Filter>Header Files\viewer</Filter>
-    </ClInclude>
-    <ClInclude Include="KinectView.h">
       <Filter>Header Files\viewer</Filter>
     </ClInclude>
     <ClInclude Include="MainView.h">
@@ -83,16 +83,20 @@
     <ClInclude Include="TeamBridgeServer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GLView.h">
+      <Filter>Header Files\viewer</Filter>
+    </ClInclude>
+    <ClInclude Include="KinectV1View.h">
+      <Filter>Header Files\viewer</Filter>
+    </ClInclude>
+    <ClInclude Include="KinectV2View.h">
+      <Filter>Header Files\viewer</Filter>
+    </ClInclude>
+    <ClInclude Include="configs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="vrpn.cfg" />
-    <None Include="Depth-D3D.fx">
-      <Filter>Resource Files</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="Depth-D3D.rc">
-      <Filter>Resource Files</Filter>
-    </ResourceCompile>
   </ItemGroup>
 </Project>

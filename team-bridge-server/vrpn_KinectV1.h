@@ -15,8 +15,8 @@
 #include "NuiApi.h"
 #include <string>
 #include "MainView.h"
+#include "configs.h"
 
-const int TENTATIVAS_MAX = 3;
 
 class VRPN_API vrpn_KinectV1 : public  vrpn_Tracker {
 	

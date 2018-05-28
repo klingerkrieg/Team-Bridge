@@ -1,13 +1,15 @@
 
 #include "MainView.h"
-#include "KinectView.h"
+#include "KinectV1View.h"
+#include "KinectV2View.h"
 #include "TeamBridgeServer.h"
 #include <thread>
 
 MainView g_Application;  // Application class
 TeamBridgeServer tbServer = TeamBridgeServer();
 std::string	MainView::output = "";
-bool MainView::kinectV1View	 = false;
+bool MainView::kinectV1View = false;
+bool MainView::kinectV2View = false;
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
@@ -62,12 +64,23 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	//Inicia o mainloop em uma thread separada
 	std::thread servThread(&TeamBridgeServer::mainloop, &tbServer);
 
-	KinectView kView = KinectView(hInstance, nCmdShow);
+	
+	
 	//So inicia o KView se estiver configurado pra usar Kinect
 	if ( g_Application.getDeviceView(MAIN_VIEW_KINECT_V1) ) {
-		kView.startView();
+		KinectV1View kView = KinectV1View();
+		if ( kView.start() ) {
+			MainView::writeln("Falha na visualização do Kinect V1.");
+		}
 	}
-
+#ifdef KINECTV2
+	if ( g_Application.getDeviceView(MAIN_VIEW_KINECT_V2) ) {
+		KinectV2View kView = KinectV2View();
+		if ( kView.start() ) {
+			MainView::writeln("Falha na visualização do Kinect V2.");
+		}
+	}
+#endif
 
 	// Main message loop
 	MSG msg = { 0 };
@@ -76,11 +89,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 			
 			TranslateMessage(&msg);
 			DispatchMessageW(&msg);
-		} else {
-			//Caso o kView tenha sido iniciado
-			if ( KinectView::getSensorStarted() ) {
-				kView.Render();
-			}
 		}
 
 	}
@@ -196,12 +204,18 @@ void MainView::writeln(std::string text) {
 void MainView::startDeviceView(int device) {
 	if ( device == MAIN_VIEW_KINECT_V1 ) {
 		kinectV1View = true;
+	} else
+	if ( device == MAIN_VIEW_KINECT_V2 ) {
+		kinectV2View = true;
 	}
 }
 
 bool MainView::getDeviceView(int device) {
 	if ( device == MAIN_VIEW_KINECT_V1 ) {
 		return kinectV1View;
+	} else
+	if ( device == MAIN_VIEW_KINECT_V2 ) {
+		return kinectV2View;
 	}
 	return false;
 }

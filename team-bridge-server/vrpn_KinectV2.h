@@ -13,6 +13,7 @@
 #include "vrpn_Analog.h"
 #include "vrpn_Tracker.h"               // for vrpn_Tracker
 #include "Kinect.h"
+#include "configs.h"
 
 
 class VRPN_API vrpn_KinectV2 : public  vrpn_Tracker, public vrpn_Analog {
@@ -26,7 +27,7 @@ class VRPN_API vrpn_KinectV2 : public  vrpn_Tracker, public vrpn_Analog {
 	static bool skeletonArr[BODY_COUNT];
 	static bool status;
 	static int skeletonIds[BODY_COUNT];
-
+	int tentativas = 0;
 
 	int skeleton;
 	
