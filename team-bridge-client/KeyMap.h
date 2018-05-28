@@ -108,6 +108,11 @@ private:
 	//Mensagem que será exibida
 	std::string msg;
 
+#ifdef ARDUINO_MODULE
+	int COM;
+	int bauds;
+#endif
+
 	//Caso o comando que será chamado seja uma constante
 	bool toKeyIsConstant = false;
 
@@ -246,6 +251,15 @@ private:
 	bool getIsBtn() {
 		return isBtn;
 	}
+
+#ifdef ARDUINO_MODULE
+	int getCOM() {
+		return COM;
+	}
+	int getBauds() {
+		return bauds;
+	}
+#endif
 
 	/*bool getBtnDown() {
 		return btnDown;

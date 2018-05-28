@@ -24,13 +24,18 @@
 #include "ConfigFileReader.h"
 #include "KeyMap.h"
 #include "InputConverter.h"
-#include "KeyPressAction.h"
 #include "View.h"
 
 #include "VariabilitiesConfig.h"
 
 #ifdef THERAPY_MODULE
 #include "Storage.h"
+#endif
+
+#ifdef ARDUINO_MODULE
+#include "ArduinoAction.h"
+#else
+#include "KeyPressAction.h"
 #endif
 
 //GUI

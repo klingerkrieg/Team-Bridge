@@ -35,10 +35,12 @@ bool Client::setup(bool test = false) {
 			return false;
 		}
 
-
+		#ifdef ARDUINO_MODULE
+		ArduinoAction *tbAction = new ArduinoAction();
+		#else
 		//Cria acionador de eventos, para essa aplicação será eventos de teclado e mouse
-		KeyPressAction *keyPresser = new KeyPressAction();
-
+		KeyPressAction *tbAction = new KeyPressAction();
+		#endif
 
 		
 		
@@ -54,10 +56,10 @@ bool Client::setup(bool test = false) {
 		}
 
 		//Setando InputConverter
-		inputConverter = InputConverter(map, devs, storage, keyPresser, view);
+		inputConverter = InputConverter(map, devs, storage, tbAction, view);
 	#else
 		//Setando InputConverter
-		inputConverter = InputConverter(map, devs, keyPresser, view);
+		inputConverter = InputConverter(map, devs, tbAction, view);
 	#endif
 
 		

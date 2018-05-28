@@ -32,6 +32,8 @@ void Config::readConfigJSON(json js) {
 			patient = utf8to16(it.value().get<std::string>());
 		else if ( it.key().compare("saveDir") == 0 )
 			saveDir = utf8to16(it.value().get<std::string>());
+		else if ( it.key().compare("csv") == 0 )
+			csvMode = it.value().get<bool>();
 	}
 }
 
@@ -57,4 +59,8 @@ std::string& Config::getPatient() {
 
 std::string& Config::getSaveDir() {
 	return saveDir;
+}
+
+bool Config::getCSVMode() {
+	return csvMode;
 }

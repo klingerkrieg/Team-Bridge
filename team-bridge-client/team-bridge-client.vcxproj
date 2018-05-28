@@ -161,6 +161,7 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ArduinoAction.c" />
     <ClCompile Include="CheckerSubject.c" />
     <ClCompile Include="AbstractGestureRecognizer.c" />
     <ClCompile Include="ButtonChecker.c" />
@@ -184,6 +185,7 @@
   <ItemGroup>
     <ClInclude Include="AbstractAction.h" />
     <ClInclude Include="AbstractGestureRecognizer.h" />
+    <ClInclude Include="ArduinoAction.h" />
     <ClInclude Include="CheckerSubject.h" />
     <ClInclude Include="ButtonChecker.h" />
     <ClInclude Include="Client.h" />

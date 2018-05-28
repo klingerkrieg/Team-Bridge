@@ -141,6 +141,17 @@ KeyMap::KeyMap(json js) {
 	if ( !js["devType"].is_null() ) {
 		setDevType(js["devType"].get<std::string>());
 	}
+
+
+	#ifdef ARDUINO_MODULE
+	if ( !js["COM"].is_null() ) {
+		this->COM = js["COM"].get<int>();
+	}
+
+	if ( !js["bauds"].is_null() ) {
+		this->bauds = js["bauds"].get<int>();
+	}
+	#endif
 	
 	if ( !js["x"].is_null() ) {
 		this->x = js["x"].get<int>();
@@ -264,6 +275,12 @@ KeyMap::KeyMap(json js) {
 			if ( !js["toKeyUp"].is_null() ) {
 				onLeave = new KeyMap(this->dev, js["toKeyUp"].get<std::string>());
 				this->toKeyUp = true;
+
+			#ifdef ARDUINO_MODULE
+				this->onLeave->bauds	= this->bauds;
+				this->onLeave->COM		= this->COM;
+			#endif
+
 				finalKey = js["toKeyUp"].get<std::string>();
 			}
 

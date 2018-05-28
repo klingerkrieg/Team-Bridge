@@ -17,9 +17,19 @@ bool Storage::startFile(const char * name) {
 	if ( isOpenOut == false ) {
 		if ( fileName == "" ) {
 			dateStr = currentDateTime("%Y-%m-%d %H:%M:%S");
-			fileName = Storage::saveDir + "/" + currentDateTime("%Y-%m-%d_%H-%M-%S") + ".txt";
+			fileName = Storage::saveDir + "/" + currentDateTime("%Y-%m-%d_%H-%M-%S");
+			if ( csvMode ) {
+				fileName += ".csv";
+			} else {
+				fileName += ".txt";
+			}
 		} else {
-			fileName = Storage::saveDir + "/" + fileName + ".txt";
+			fileName = Storage::saveDir + "/" + fileName;
+			if ( csvMode ) {
+				fileName += ".csv";
+			} else {
+				fileName += ".txt";
+			}
 		}
 
 		if ( !openOut(fileName) ) {
@@ -27,9 +37,16 @@ bool Storage::startFile(const char * name) {
 			return false;
 		} else {
 			if ( infoData ) {
-				fileOutput << "DEV\t" << name << "\n";
-				fileOutput << "DATE\t" << dateStr << "\n";
-				fileOutput << "PATIENT\t" << patient << "\n";
+				if ( csvMode ) {
+					fileOutput << "DEV;" << name << ";\n";
+					fileOutput << "DATE;" << dateStr << ";\n";
+					fileOutput << "PATIENT;" << patient << ";\n";
+					fileOutput << "DEV;Sensor;PosX;posY;posZ;\n";
+				} else {
+					fileOutput << "DEV\t" << name << "\n";
+					fileOutput << "DATE\t" << dateStr << "\n";
+					fileOutput << "PATIENT\t" << patient << "\n";
+				}
 			}
 			std::cout << fileName << " Criado.\n";
 
@@ -43,7 +60,14 @@ bool Storage::saveToFile(const char * dev, std::string actionName, double value)
 	//Cria cabeçalho no arquivo
 	startFile(dev);
 	if ( fileOutput.is_open() ) {
-		fileOutput << dev << "\tACTION\t" << actionName << "\tVALUE\t" << value << "\n";
+		if ( csvMode ) {
+			//fileOutput << dev << ";" << actionName << ";" << value << ";\n";
+			if ( value ) {
+				fileOutput << "---------------------- " << actionName << " " << value << " ----------------------------\n";
+			}
+		} else {
+			fileOutput << dev << "\tACTION\t" << actionName << "\tVALUE\t" << value << "\n";
+		}
 		return true;
 	} else {
 		return false;
@@ -55,11 +79,19 @@ bool Storage::saveToFile(const char * name, const vrpn_ANALOGCB a) {
 	startFile(name);
 	if ( fileOutput.is_open() ) {
 
-		fileOutput << name << "\tTIMESTAMP\t" << a.msg_time.tv_usec << "\tCHANNEL_COUNT\t" << a.num_channel << "\tCHANNELS";
-		for ( int i = 0; i < a.num_channel; i++ ) {
-			fileOutput << "\t" << a.channel[i];
+		if ( csvMode ) {
+			fileOutput << name;
+			for ( int i = 0; i < a.num_channel; i++ ) {
+				fileOutput << ";" << a.channel[i];
+			}
+			fileOutput << ";\n";
+		} else {
+			fileOutput << name << "\tTIMESTAMP\t" << a.msg_time.tv_usec << "\tCHANNEL_COUNT\t" << a.num_channel << "\tCHANNELS";
+			for ( int i = 0; i < a.num_channel; i++ ) {
+				fileOutput << "\t" << a.channel[i];
+			}
+			fileOutput << "\n";
 		}
-		fileOutput  << "\n";
 		return true;
 	} else {
 		return false;
@@ -71,7 +103,11 @@ bool Storage::saveToFile(const char * name, const vrpn_BUTTONCB b) {
 	startFile(name);
 	if ( fileOutput.is_open() ) {
 
-		fileOutput << name << "\tTIMESTAMP\t" << b.msg_time.tv_usec << "\tBUTTON\t" << b.button << "\tSTATE\t" << b.state << "\n";
+		if ( csvMode ) {
+			fileOutput << name << ";" << b.button << ";" << b.state << ";\n";
+		} else {
+			fileOutput << name << "\tTIMESTAMP\t" << b.msg_time.tv_usec << "\tBUTTON\t" << b.button << "\tSTATE\t" << b.state << "\n";
+		}
 
 		return true;
 	} else {
@@ -83,15 +119,29 @@ bool Storage::saveToFile(TrackerUserCallback *userdata, const vrpn_TRACKERCB t) 
 	//Cria cabeçalho no arquivo
 	startFile(userdata->name);
 
-	//Tracker0	sensor	0	pos	-0.16	 0.51	 1.02	quat	-0.19	 0.21	 0.12	 0.85
-	if ( fileOutput.is_open() ) {
-		fileOutput << userdata->name << "\tSENSOR\t" << t.sensor << "\tTIMESTAMP\t" << t.msg_time.tv_usec
-			<< "\tPOS\t" << t.pos[0] << "\t" << t.pos[1] << "\t" << t.pos[2]
-			<< "\tQUAT\t" << t.quat[0] << "\t" << t.quat[1] << "\t" << t.quat[2] << "\t" << t.quat[3] << "\n";
-		return true;
+	if ( csvMode ) {
+		//Tracker0	sensor	0	pos	-0.16	 0.51	 1.02	quat	-0.19	 0.21	 0.12	 0.85
+		if ( fileOutput.is_open() ) {
+			fileOutput << userdata->name << ";" << t.sensor
+				<< ";" << t.pos[0] << ";" << t.pos[1] << ";" << t.pos[2] << ";\n";
+				//<< "\tQUAT\t" << t.quat[0] << "\t" << t.quat[1] << "\t" << t.quat[2] << "\t" << t.quat[3] << "\n";
+			return true;
+		} else {
+			return false;
+		}
 	} else {
-		return false;
+		//Tracker0	sensor	0	pos	-0.16	 0.51	 1.02	quat	-0.19	 0.21	 0.12	 0.85
+		if ( fileOutput.is_open() ) {
+			fileOutput << userdata->name << "\tSENSOR\t" << t.sensor << "\tTIMESTAMP\t" << t.msg_time.tv_usec
+				<< "\tPOS\t" << t.pos[0] << "\t" << t.pos[1] << "\t" << t.pos[2]
+				<< "\tQUAT\t" << t.quat[0] << "\t" << t.quat[1] << "\t" << t.quat[2] << "\t" << t.quat[3] << "\n";
+			return true;
+		} else {
+			return false;
+		}
 	}
+
+	
 
 }
 

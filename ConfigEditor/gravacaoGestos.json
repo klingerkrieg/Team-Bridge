@@ -1,0 +1,24 @@
+{
+  "common": {
+    "patientName": "",
+    "saveDir": "./SAVES/",
+    "host": "",
+    "database": "",
+    "user": "",
+    "passwd": ""
+  },
+  "keys": [
+    {
+      "divClass": "handTop",
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_LEFT_HAND_TOP",
+      "x": -1,
+      "coordinateMod": "<=",
+      "y": 2,
+      "handWidthInterval": 0.4,
+      "toKeyDown": "A",
+      "saveData": "handPos"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "common": {
+    "patientName": "",
+    "saveDir": "./SAVES/",
+    "host": "",
+    "database": "",
+    "user": "",
+    "passwd": ""
+  },
+  "keys": [
+    {
+      "divClass": "mouse",
+      "devType": "mouse",
+      "dev": "Mouse0@localhost",
+      "key": "VK_LBUTTON",
+      "toKeyDown": "A",
+      "toKeyUp": "A"
+    },
+    {
+      "divClass": "mouse",
+      "devType": "mouse",
+      "dev": "Mouse0@localhost",
+      "key": "VK_RBUTTON",
+      "toKeyDown": "B",
+      "toKeyUp": "B"
+    }
+  ]
+}

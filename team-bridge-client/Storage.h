@@ -29,6 +29,7 @@ private:
 	 std::string saveDir;
 	 std::string fileName;
 	 std::string dateStr;
+	 bool csvMode  = false;
 	 bool infoData = true; 
 	 Db db;
 	 bool exportDb;
@@ -53,6 +54,10 @@ public:
 
 	void setSaveDir(std::string saveDir) {
 		this->saveDir = saveDir;
+	}
+
+	void setCSVMode(bool mode) {
+		csvMode = mode;
 	}
 
 	std::string getExpDev() {
@@ -101,6 +106,7 @@ public:
 		}
 		saveDir = config.getSaveDir();
 		patient = config.getPatient();
+		csvMode = config.getCSVMode();
 	}
 
 	void close() {

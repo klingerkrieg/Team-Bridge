@@ -102,6 +102,9 @@
     <ClCompile Include="CheckerSubject.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ArduinoAction.c">
+      <Filter>Source Files\Actions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="KeyMap.h">
@@ -187,6 +190,9 @@
     </ClInclude>
     <ClInclude Include="CheckerSubject.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ArduinoAction.h">
+      <Filter>Header Files\Actions</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

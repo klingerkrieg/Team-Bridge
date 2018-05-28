@@ -10,12 +10,13 @@ using json = nlohmann::json;
 class Config {
 
 private:
-	std::string host = "";
-	std::string user = "";
-	std::string passwd = "";
-	std::string db = "";
+	std::string host	= "";
+	std::string user	= "";
+	std::string passwd	= "";
+	std::string db		= "";
 	std::string patient = "";
 	std::string saveDir = "";
+	bool csvMode		= false;
 
 	std::map<std::string, std::string> config;
 
@@ -43,6 +44,8 @@ public:
 	std::string& getPatient();
 
 	std::string& getSaveDir();
+
+	bool getCSVMode();
 
 };
 

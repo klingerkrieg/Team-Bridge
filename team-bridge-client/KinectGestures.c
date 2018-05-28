@@ -230,13 +230,7 @@ int KinectGestures::detectHandTop(SkeletonPart skelPart, KeyMap * keyMap) {
 		ret = true;
 	}
 
-#ifdef THERAPY_MODULE
-	if ( ret ) {
-		if ( keyMap->getSaveData().compare("") ) {
-			storage->saveToFile(keyMap->getDev().c_str(), keyMap->getSaveData() + "-Y", skelPart.y);
-		}
-	}
-#endif
+
 
 	return ret;
 }
@@ -308,8 +302,10 @@ int KinectGestures::detectHandXPos(SkeletonPart skelPart, KeyMap * keyMap) {
 	if ( ret ) {
 		if ( keyMap->getSaveData().compare("") ) {
 			storage->saveToFile(keyMap->getDev().c_str(), keyMap->getSaveData() + "-X", skelPart.x);
+			storage->saveToFile(keyMap->getDev().c_str(), keyMap->getSaveData() + "-Y", skelPart.y);
 		}
 	}
+
 #endif
 
 	return ret;
