@@ -289,7 +289,7 @@ public class VRPN : MonoBehaviour {
 		Material newMat = Resources.Load("esfera", typeof(Material)) as Material;
 		guideMat = Resources.Load("guide", typeof(Material)) as Material;
 
-		cameraAuto = true;
+
 		trackerName = trackerNameField.text;
 
 		//Create bones

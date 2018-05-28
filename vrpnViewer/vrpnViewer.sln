@@ -1,7 +1,7 @@
+﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2008
-
-Project("{F9A343AA-EF2B-EF97-3D18-380D40D7946E}") = "vrpnViewer", "Assembly-CSharp.csproj", "{A1B99D89-7D2E-F547-4245-4D71E5FE2F1B}"
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "vrpnViewer", "Assembly-CSharp.csproj", "{A1B99D89-7D2E-F547-4245-4D71E5FE2F1B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
