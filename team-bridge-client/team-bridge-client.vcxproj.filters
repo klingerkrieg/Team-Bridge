@@ -247,5 +247,8 @@
     <None Include="kinectCloseHand.json">
       <Filter>jsons</Filter>
     </None>
+    <None Include="kinectToArduino.json">
+      <Filter>jsons</Filter>
+    </None>
   </ItemGroup>
 </Project>

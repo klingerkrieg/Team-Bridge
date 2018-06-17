@@ -76,3 +76,5 @@ struct Skeleton {
 SkeletonPart assignSkeletonPart(SkeletonPart &skelPart, const vrpn_TRACKERCB t, int skelConstant, std::string skeletonName);
 
 bool vrpnToSkeleton(Skeleton &skeleton, std::map<int, int> &skeletonMap, const vrpn_TRACKERCB t, SkeletonPart &skelPart, std::string skeletonName);
+
+SkeletonPart getSkeletonPartByName(Skeleton &skeleton, std::string name);

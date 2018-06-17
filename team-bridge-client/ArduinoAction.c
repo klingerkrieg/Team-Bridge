@@ -4,6 +4,7 @@
 
 #include "ArduinoAction.h"
 
+bool ArduinoAction::liga = true;
 
 /*
 Para melhor performance utilize leitura de bytes no arduino
@@ -17,6 +18,7 @@ ArduinoAction::ArduinoAction() {
 COMDevice ArduinoAction::connect(KeyMap key) {
 	
 	COMDevice comDev;
+	comDev.COM = key.getCOM();
 
 	char portName[14];
 	sprintf(portName, "\\\\.\\COM%d", key.getCOM());
@@ -71,6 +73,7 @@ ArduinoAction::~ArduinoAction() {
 	}
 }
 
+
 void ArduinoAction::run(KeyMap key) {
 
 	COMDevice conn;
@@ -86,22 +89,51 @@ void ArduinoAction::run(KeyMap key) {
 		conn = connect(key);
 	}
 
+	int actualTime = (int)time(0);
+
+	//Realiza um delay para não sobrecarregar o arduino
+	if ( actualTime - conn.lastMessage < ARDUINO_DELAY_TO_MSG ) {
+		return;
+	}
 
 	//Se tiver sido um pressionamento de tecla
 	if ( key.isKeyUpEvent() == false ) {
 
 		DWORD bytesSend;
-		unsigned int buf_size = MAX_DATA_LENGTH;
+		//Um valor muito alto aqui pode causar falha.
+		unsigned int buf_size = 10;//MAX_DATA_LENGTH;
 
-		char toKey = (char)key.getToKey();
+		char writing[10] = "";
 
-		std::cout << "Writing:" << (char)key.getToKey() << " code:" << key.getToKey() << "\n";
+		if ( key.getKey() == JOINT_ANGLE ) {
+			
+			char tmpStr[10];
+			sprintf(tmpStr, "%d=%d;", key.getEngine(), key.getAngle());
+			strcpy(writing, tmpStr);
+			/*if ( liga ) {
+				sprintf(tmpStr, "%d=%d;", 1, 10);
+				strcpy(toKey, tmpStr);
+				liga = false;
+			} else {
+				sprintf(tmpStr, "%d=%d;", 1, 100);
+				strcpy(toKey, tmpStr);
+				liga = true;
+			}*/
+			
+		} else {
+			strcpy(writing, (char*)key.getToKey());
+		}
+		
+		std::cout << "Writing to Arduino" << conn.COM << ":" << writing << "\n";
 
-
-		if ( !WriteFile(conn.handler, (void*)&toKey, buf_size, &bytesSend, 0) ) {
+		if ( !WriteFile(conn.handler, (void*)writing, buf_size, &bytesSend, 0) ) {
 			ClearCommError(conn.handler, &conn.errors, &conn.status);
 		}
 
+		conn.lastMessage = actualTime;
+		connections.insert_or_assign(conn.COM,conn);
+
+		
 	}
 
 }

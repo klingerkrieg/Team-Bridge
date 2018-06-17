@@ -16,6 +16,57 @@ SkeletonPart assignSkeletonPart(SkeletonPart &skelPart, const vrpn_TRACKERCB t, 
 }
 
 
+SkeletonPart getSkeletonPartByName(Skeleton &skeleton, std::string name) {
+	
+	if ( name == "head" ) {
+		return skeleton.head;
+	} else if ( name == "shoulderCenter" ) {
+		return skeleton.shoulderCenter;
+	} else if ( name == "shoulderR" ) {
+		return skeleton.shoulderR;
+	} else if ( name == "shoulderL" ) {
+		return skeleton.shoulderL;
+	} else if ( name == "elbowR" ) {
+		return skeleton.elbowR;
+	} else if ( name == "elbowL" ) {
+		return skeleton.elbowL;
+	} else if ( name == "wristR" ) {
+		return skeleton.wristR;
+	} else if ( name == "wristL" ) {
+		return skeleton.wristL;
+	} else if ( name == "handR" ) {
+		return skeleton.handR;
+	} else if ( name == "handL" ) {
+		return skeleton.handL;
+	} else if ( name == "thumbR" ) {
+		return skeleton.thumbR;
+	} else if ( name == "thumbL" ) {
+		return skeleton.thumbL;
+	} else if ( name == "spine" ) {
+		return skeleton.spine;
+	} else if ( name == "hipCenter" ) {
+		return skeleton.hipCenter;
+	} else if ( name == "legR" ) {
+		return skeleton.legR;
+	} else if ( name == "legL" ) {
+		return skeleton.legL;
+	} else if ( name == "kneeR" ) {
+		return skeleton.kneeR;
+	} else if ( name == "kneeL" ) {
+		return skeleton.kneeL;
+	} else if ( name == "ankleR" ) {
+		return skeleton.ankleR;
+	} else if ( name == "ankleL" ) {
+		return skeleton.ankleL;
+	} else if ( name == "footR" ) {
+		return skeleton.footR;
+	} else if ( name == "footL" ) {
+		return skeleton.footL;
+	}
+	SkeletonPart s;
+	return s;
+}
+
 bool vrpnToSkeleton(Skeleton &skeleton, std::map<int, int> &skeletonMap, const vrpn_TRACKERCB t, SkeletonPart &skelPart, std::string skeletonName) {
 
 	int partConst;

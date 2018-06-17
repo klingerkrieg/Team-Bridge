@@ -545,5 +545,47 @@ public:
 
 	}
 
+	
+
+
+	TEST_METHOD(KinectRecognizer_GetAngle) {
+
+		std::string skeletonName = "Tracker0@localhost";
+		KinectGestures gr = KinectGestures();
+		vrpn_TRACKERCB trackData = getTrackerCB();
+		SkeletonPart skelPart;
+
+		//Esse método requer pelo menos o angulo de flexão
+		json js = {
+			{ "axis" , "y" },
+			{"sensors", {"shoulderR", "shoulderR", "elbowR"}}
+		};
+		KeyMap *m1 = new KeyMap(js);
+
+		//ombro direito
+		trackData.sensor = 8;//shoulderR
+		vrpnToSkeleton(gr.skeleton[skeletonName], gr.skeletonMap1, trackData, skelPart, skeletonName);
+		trackData.sensor = 9;//elbowR
+		trackData.pos[0] += 10;
+		vrpnToSkeleton(gr.skeleton[skeletonName], gr.skeletonMap1, trackData, skelPart, skeletonName);
+
+		Assert::AreEqual(1, gr.getAngle(skelPart, m1));
+		Assert::AreEqual(90, m1->getAngle());
+
+		js = {
+			{ "axis" , "x" },
+			{ "sensors",{ "shoulderR", "shoulderR", "elbowR" } }
+		};
+
+		m1 = new KeyMap(js);
+
+		trackData.sensor = 1;//shoulderCenter requisito para esse eixo
+		trackData.pos[0] -= 20;
+		vrpnToSkeleton(gr.skeleton[skeletonName], gr.skeletonMap1, trackData, skelPart, skeletonName);
+
+		Assert::AreEqual(1, gr.getAngle(skelPart, m1));
+		Assert::AreEqual(180, m1->getAngle());
+	}
+
 	};
 }

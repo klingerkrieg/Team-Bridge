@@ -1,0 +1,73 @@
+{
+  "common": {
+    "patientName": "",
+    "saveDir": "./SAVES/",
+    "host": "",
+    "database": "",
+    "user": "",
+    "passwd": ""
+  },
+  "keys": [
+    {
+      "divClass": "handTop",
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_RIGHT_HAND_TOP",
+      "x": 1,
+      "coordinateMod": ">=",
+      "y": 3,
+      "handWidthInterval": 0.4,
+      "toKeyDown": "F",
+	  "COM":4,
+	  "bauds":9600
+    },
+    {
+      "divClass": "handTop",
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_RIGHT_HAND_TOP",
+      "x": 1,
+      "coordinateMod": "=",
+      "y": 2,
+      "handWidthInterval": 0.4,
+      "toKeyDown": "E",
+	  "COM":4,
+	  "bauds":9600
+    },
+    {
+      "divClass": "handTop",
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_RIGHT_HAND_TOP",
+      "x": 1,
+      "coordinateMod": "<=",
+      "y": 1,
+      "handWidthInterval": 0.4,
+      "toKeyDown": "D",
+	  "COM":4,
+	  "bauds":9600
+    },
+    {
+      "divClass": "kinectWrist",
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_RIGHT_WRIST_DOWN",
+      "angleMin": 35,
+      "angleMax": 0,
+      "toKeyDown": "A",
+	  "COM":4,
+	  "bauds":9600
+    },
+    {
+      "divClass": "kinectWrist",
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+      "key": "KINECT_RIGHT_WRIST_UP",
+      "angleMin": 35,
+      "angleMax": 0,
+      "toKeyDown": "C",
+	  "COM":4,
+	  "bauds":9600
+    }
+  ]
+}

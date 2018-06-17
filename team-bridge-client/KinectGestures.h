@@ -8,17 +8,17 @@
 #include "util.h"
 #include "CheckerSubject.h"
 
-const int KINECT_UP = 1;
-const int KINECT_DOWN = 2;
-const int KINECT_NORMAL = 3;
-const int KINECT_LEFT = 1;
-const int KINECT_RIGHT = 2;
-const int KINECT_FRONT = 3;
-const int KINECT_BACK = 4;
+const int KINECT_UP			= 1;
+const int KINECT_DOWN		= 2;
+const int KINECT_NORMAL		= 3;
+const int KINECT_LEFT		= 1;
+const int KINECT_RIGHT		= 2;
+const int KINECT_FRONT		= 3;
+const int KINECT_BACK		= 4;
 
-const float KINECT_MIN_CALIB_Z = 1.85f;
-const float KINECT_MAX_CALIB_Z = 2.55f;
-const int KINECT_EMPTY_VALUE = -100;
+const float KINECT_MIN_CALIB_Z	= 1.85f;
+const float KINECT_MAX_CALIB_Z	= 2.55f;
+const int KINECT_EMPTY_VALUE	= -100;
 
 struct KinectDetection {
 	bool centerPosDefined = false;
@@ -84,6 +84,8 @@ public:
 		return kinectDetection;
 	}
 
+	int getAngle(SkeletonPart skelPart, KeyMap * keyMap);
+
 	//step
 	int detectTopChangeUp(SkeletonPart skelPart, KeyMap * keyMap);
 	int detectTopChangeDown(SkeletonPart skelPart, KeyMap * keyMap);
@@ -139,6 +141,7 @@ public:
 	int leftHandLasso(vrpn_ANALOGCB a, KeyMap * keyMap);
 	int rightHandLasso(vrpn_ANALOGCB a, KeyMap * keyMap);
 
+	
 
 	static std::map<int, int> skeletonMap1;
 	static std::map<int, int> create_SkeletonMap1() {

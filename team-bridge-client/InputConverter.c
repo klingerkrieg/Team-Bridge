@@ -35,6 +35,10 @@ void InputConverter::interpretKeyMap(KeyMap *keyMap) {
 
 bool InputConverter::interpretOnLeave(bool active, KeyMap *keyMap) {
 
+	if ( keyMap->getKey() == JOINT_ANGLE ) {
+		act->run((*keyMap));
+	}
+
 	//Se esta esperando para soltar a tecla e a tecla foi solta
 	if ( keyMap->getActive() && active == false ) {
 		

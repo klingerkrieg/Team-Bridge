@@ -26,7 +26,29 @@ std::string KeyMap::toString() {
 		ret << getToKeyRepr();
 	} else {
 		ret << "[" + getDev() + "] " + getKeyRepr();
-		
+
+	#ifdef ARDUINO_MODULE
+		if ( sensors->size() != 0 ) {
+			ret << "\n sensors:[";
+			//Caso não tenha sido setado 3 sensores ocorrerá erro
+			for ( int i = 0; i < 3; i++ ) {
+				ret << " "+sensors[i];
+			}
+			ret << "]";
+		}
+
+		if ( getEngine() != 0 ) {
+			ret << " engine:" + std::to_string(getEngine());
+		}
+
+		if ( getCOM() != 0 ) {
+			ret << " COM:" + std::to_string(getCOM());
+		}
+
+		if ( getBauds() != 0 ) {
+			ret << " bauds:" + std::to_string(getBauds());
+		}
+	#endif
 		
 		if ( getStrengthMin() != 0 ) {
 			ret << " Min Str:" + std::to_string(getStrengthMin());
@@ -144,6 +166,19 @@ KeyMap::KeyMap(json js) {
 
 
 	#ifdef ARDUINO_MODULE
+
+	if ( !js["engine"].is_null() ) {
+		this->engine = js["engine"].get<int>();
+	}
+
+	if ( !js["sensors"].is_null() ) {
+		int i = 0;
+		for ( json::iterator it = js["sensors"].begin(); it != js["sensors"].end(); ++it ) {
+			sensors[i++] = it.value().get<std::string>();
+		}
+	}
+
+
 	if ( !js["COM"].is_null() ) {
 		this->COM = js["COM"].get<int>();
 	}
@@ -152,6 +187,14 @@ KeyMap::KeyMap(json js) {
 		this->bauds = js["bauds"].get<int>();
 	}
 	#endif
+
+	if ( !js["axis"].is_null() ) {
+		if ( js["axis"].get<std::string>() == "y" || js["axis"].get<std::string>() == "Y" ) {
+			this->yAxis = true;
+		} else {
+			this->yAxis = false;
+		}
+	}
 	
 	if ( !js["x"].is_null() ) {
 		this->x = js["x"].get<int>();

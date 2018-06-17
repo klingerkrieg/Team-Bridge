@@ -221,6 +221,7 @@
     <None Include="kayak.json" />
     <None Include="kinectCloseHand.json" />
     <None Include="kinectTest.json" />
+    <None Include="kinectToArduino.json" />
     <None Include="leapmotion.json" />
     <None Include="mountAndBlade.json" />
     <None Include="mouse.json" />

@@ -63,6 +63,13 @@ const int KINECT_LEFT_HAND_LASSO	= 5033;
 const int KINECT_RIGHT_HAND_LASSO	= 5034;
 
 
+const int JOINT_ANGLE				= 5600;
+
+
+const int MESSAGE					= 6000;
+const int ALERT						= 6001;
+
+
 const int LEAP_CLOSED				= 7001;
 const int LEAP_PINCH				= 7002;
 const int LEAP_WRIST_UP				= 7003;
@@ -72,8 +79,7 @@ const int LEAP_WRIST_DOWN			= 7004;
 const int NEDGLOVE_GRAB				= 7500;
 const int NEDGLOVE_PINCH			= 7501;
 
-const int MESSAGE					= 6000;
-const int ALERT						= 6001;
+
 
 
 const int TRACK_TYPE	= 1;
@@ -109,9 +115,15 @@ private:
 	std::string msg;
 
 #ifdef ARDUINO_MODULE
+	std::string sensors[3];
+	int engine;
+
 	int COM;
 	int bauds;
 #endif
+	//Sera usado para enviar informacao de angulo para o arduino
+	int angle;
+	bool yAxis;
 
 	//Caso o comando que será chamado seja uma constante
 	bool toKeyIsConstant = false;
@@ -253,6 +265,14 @@ private:
 	}
 
 #ifdef ARDUINO_MODULE
+	std::string getSensors(int num) {
+		return sensors[num];
+	}
+	int getEngine() {
+		return engine;
+	}
+
+
 	int getCOM() {
 		return COM;
 	}
@@ -260,6 +280,22 @@ private:
 		return bauds;
 	}
 #endif
+
+	int getAngle() {
+		return angle;
+	}
+	int setAngle(int angle) {
+		return this->angle = angle;
+	}
+
+	bool getXaxis() {
+		return !yAxis;
+	}
+
+	bool getYaxis() {
+		return yAxis;
+	}
+
 
 	/*bool getBtnDown() {
 		return btnDown;
@@ -510,7 +546,11 @@ private:
 		m["KINECT_LEFT_HAND_CLOSED"]	= KINECT_LEFT_HAND_CLOSED;
 		m["KINECT_RIGHT_HAND_CLOSED"]	= KINECT_RIGHT_HAND_CLOSED;
 		m["KINECT_LEFT_HAND_LASSO"]		= KINECT_LEFT_HAND_LASSO;
-		m["KINECT_RIGHT_HAND_LASSO"]	= KINECT_RIGHT_HAND_LASSO;
+		m["KINECT_RIGHT_HAND_LASSO"] = KINECT_RIGHT_HAND_LASSO;
+
+
+
+		m["JOINT_ANGLE"]				= JOINT_ANGLE;
 		
 
 		//Leap Motion

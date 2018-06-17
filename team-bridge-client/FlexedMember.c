@@ -5,11 +5,12 @@ bool FlexedMember::assignChecker(CheckerSubject *checker, KeyMap *keyMap) {
 	return false;
 }
 
+/*
+Métodos primitivos para encontrar o ângulo entre 3 pontos
+*/
 
-int FlexedMember::flexed2d(std::map<int, std::vector<double>> points, KeyMap * keyMap) {
-	
-	//double angle = atan2(det(points.at(0), points.at(1)), dot(points.at(0), points.at(1))) * 1000; //2d
 
+double FlexedMember::getAngle2d(std::map<int, std::vector<double>> points) {
 	if ( points.size() < 3 ) {
 		return -1;
 	}
@@ -20,13 +21,48 @@ int FlexedMember::flexed2d(std::map<int, std::vector<double>> points, KeyMap * k
 	double v1mag = sqrt(v1[0] * v1[0] + v1[1] * v1[1]);
 	std::vector<double> v1norm = { v1[0] / v1mag, v1[1] / v1mag, 1 };
 
-	double v2mag = sqrt(v2[0] * v2[0] + v2[1] * v2[1] );
+	double v2mag = sqrt(v2[0] * v2[0] + v2[1] * v2[1]);
 	std::vector<double> v2norm = { v2[0] / v2mag, v2[1] / v2mag, 1 };
 
 
 	double res = v1norm[0] * v2norm[0] + v1norm[1] * v2norm[1];
 
-	double angle = acos(res) * 180.0 / 3.14159265;
+	return acos(res) * 180.0 / 3.14159265;
+}
+
+
+double FlexedMember::getAngle3d(std::map<int, std::vector<double>> points) {
+	if ( points.size() < 3 ) {
+		return -1;
+	}
+
+	std::vector<double> v1 = { points.at(0)[0] - points.at(1)[0], points.at(0)[1] - points.at(1)[1], points.at(0)[2] - points.at(1)[2] };
+	std::vector<double> v2 = { points.at(2)[0] - points.at(1)[0], points.at(2)[1] - points.at(1)[1], points.at(2)[2] - points.at(1)[2] };
+
+	double v1mag = sqrt(v1[0] * v1[0] + v1[1] * v1[1] + v1[2] * v1[2]);
+	std::vector<double> v1norm = { v1[0] / v1mag, v1[1] / v1mag, v1[2] / v1mag };
+
+	double v2mag = sqrt(v2[0] * v2[0] + v2[1] * v2[1] + v2[2] * v2[2]);
+	std::vector<double> v2norm = { v2[0] / v2mag, v2[1] / v2mag, v2[2] / v2mag };
+
+
+	double res = v1norm[0] * v2norm[0] + v1norm[1] * v2norm[1] + v1norm[2] * v2norm[2];
+
+	return acos(res) * 180.0 / 3.14159265;
+}
+
+
+
+/*
+Métodos que identificam se a angulação desejada pelo keyMap foi obtida
+*/
+
+
+int FlexedMember::flexed2d(std::map<int, std::vector<double>> points, KeyMap * keyMap) {
+	
+	//double angle = atan2(det(points.at(0), points.at(1)), dot(points.at(0), points.at(1))) * 1000; //2d
+
+	double angle = getAngle2d(points);
 
 	if ( keyMap->getPrint() && angle != 0 ) {
 		printf("Angulo de inclinacao:%.2f\n", angle);
@@ -57,27 +93,16 @@ int FlexedMember::flexed2d(std::map<int, std::vector<double>> points, KeyMap * k
 }
 
 
+
 int FlexedMember::flexed3d(std::map<int, std::vector<double>> points, KeyMap * keyMap) {
 	
-	if ( points.size() < 3 ) {
+	
+	double angle = getAngle3d(points);
+
+	//nenhum angulo foi calculado
+	if ( angle == -1 ) {
 		return -1;
 	}
-	
-	std::vector<double> v1 = { points.at(0)[0] - points.at(1)[0], points.at(0)[1] - points.at(1)[1], points.at(0)[2] - points.at(1)[2] };
-	std::vector<double> v2 = { points.at(2)[0] - points.at(1)[0], points.at(2)[1] - points.at(1)[1], points.at(2)[2] - points.at(1)[2] };
-
-	double v1mag = sqrt(v1[0] * v1[0] + v1[1] * v1[1] + v1[2] * v1[2]);
-	std::vector<double> v1norm = { v1[0] / v1mag, v1[1] / v1mag, v1[2] / v1mag };
-
-	double v2mag = sqrt(v2[0] * v2[0] + v2[1] * v2[1] + v2[2] * v2[2]);
-	std::vector<double> v2norm = { v2[0] / v2mag, v2[1] / v2mag, v2[2] / v2mag };
-
-
-	double res = v1norm[0] * v2norm[0] + v1norm[1] * v2norm[1] + v1norm[2] * v2norm[2];
-
-	double angle = acos(res) * 180.0 / 3.14159265;
-
-
 	
 	bool comp = false;
 	//Se ambos os angulos forem diferentes de zero

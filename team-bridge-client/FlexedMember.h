@@ -21,6 +21,10 @@ class FlexedMember : public AbstractGestureRecognizer {
 	public:
 	int flexed2d(std::map<int, std::vector<double>> points, KeyMap * keyMap);
 
+
+	double getAngle2d(std::map<int, std::vector<double>> points);
+	double getAngle3d(std::map<int, std::vector<double>> points);
+
 	int flexed3d(std::map<int, std::vector<double>> points, KeyMap * keyMap);
 	int flexed3d(std::map<int, std::vector<double>> points, KeyMap * keyMap, int direction);
 

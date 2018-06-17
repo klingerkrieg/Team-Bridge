@@ -13,6 +13,9 @@ bool KinectGestures::assignChecker( CheckerSubject *checker, KeyMap *keyMap) {
 		//cada metodo que será utilizado é alocado em seus respecitvos keyMaps
 
 		switch ( keyMap->getKey() ) {
+			case JOINT_ANGLE:
+				checker->attach(SKELETON_SHOULDER_R, (TrackerCheckerMethod)&KinectGestures::getAngle, keyMap, this);
+				break;
 			case KINECT_LEFT_HAND_FAST:
 				checker->attach(SKELETON_HAND_L, (TrackerCheckerMethod)&KinectGestures::detectLeftHandFast, keyMap, this);
 				break;
@@ -95,6 +98,58 @@ bool KinectGestures::assignChecker( CheckerSubject *checker, KeyMap *keyMap) {
 	
 }
 
+
+
+int KinectGestures::getAngle(SkeletonPart skelPart, KeyMap * keyMap) {
+	
+
+	
+	std::map<int, std::vector<double>> points 
+		= getPoints(getSkeletonPartByName(skeleton[skelPart.skeletonName], keyMap->getSensors(0)),
+					getSkeletonPartByName(skeleton[skelPart.skeletonName], keyMap->getSensors(1)),
+					getSkeletonPartByName(skeleton[skelPart.skeletonName], keyMap->getSensors(2)));
+
+	if ( points.size() == 0 ) {
+		return -1;
+	}
+
+
+	//Se os dois primeiros ou dois ultimos sensores forem iguais
+	if ( keyMap->getSensors(0) == keyMap->getSensors(1) || keyMap->getSensors(1) == keyMap->getSensors(2) ) {
+		int repeated;
+		if ( keyMap->getSensors(0) == keyMap->getSensors(1) ) {
+			repeated = 0;
+		} else
+		if ( keyMap->getSensors(1) == keyMap->getSensors(2) ) {
+			repeated = 2;
+		}
+
+		//Caso seja para verificar o angulo verticalmente
+		if ( keyMap->getYaxis() ) {
+			//o ponto 0 é um ponto imaginario abaixo do ombro direito
+			points.at(repeated)[1] = -10;
+		} else {
+			//Angulo horizontalmente
+			//depende de existir o shoulderCenter
+			points.at(repeated)[0] = skeleton[skelPart.skeletonName].shoulderCenter.x;
+		}
+	}
+
+	double angle = getAngle3d(points);
+
+	if ( keyMap->getPrint() ) {
+		if ( keyMap->getYaxis() ) {
+			printf("AnguloY:%.2f\n", angle);
+		} else {
+			printf("AnguloX:%.2f\n", angle);
+		}
+	}
+
+	//Seta angulo que foi obtido
+	keyMap->setAngle((int)angle);
+
+	return 1;
+}
 
 
 

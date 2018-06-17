@@ -1,0 +1,26 @@
+{
+  "common": {
+    "patientName": "",
+    "saveDir": "./SAVES/",
+    "host": "",
+    "database": "",
+    "user": "",
+    "passwd": ""
+  },
+  "keys": [
+    {
+      "divClass": "handTop",
+
+
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+
+      "key": "JOINT_ANGLE",
+      "axis": "y",
+      "sensors": [ "shoulderR", "shoulderR", "elbowR" ],
+      "engine": 1,
+      "COM": 4,
+      "bauds": 9600
+    }
+  ]
+}
