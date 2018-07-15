@@ -78,23 +78,40 @@ void ArduinoAction::run(KeyMap key) {
 
 	COMDevice conn;
 
+
 	std::map<int, COMDevice>::iterator it = connections.find(key.getCOM());
-	
 	
 	if ( it != connections.end() ) {
 		//Usa conexao ja existente
 		conn = it->second;
 	} else {
 		//Conecta
+		std::cout << "CONECTOU\n";
 		conn = connect(key);
 	}
 
-	int actualTime = (int)time(0);
+	milliseconds actualTime = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
+
+
+	// Caso a mensagem seja para o mesmo motor da ultima vez
+	if ( conn.lastEngine == key.getEngine() ) {
+		//Verifica se só existe um motor, se existir mais de um cancela a mensagem
+		if ( conn.uniqueEngine == false )
+			return;
+	} else {
+		//Identifica que existe mais de um motor nessa porta
+		conn.uniqueEngine = false;
+	}
+	conn.lastEngine = key.getEngine();
+
 
 	//Realiza um delay para não sobrecarregar o arduino
-	if ( actualTime - conn.lastMessage < ARDUINO_DELAY_TO_MSG ) {
+	if ( actualTime.count() - conn.lastMessage < ARDUINO_DELAY_TO_MSG ) {
 		return;
 	}
+
+	
+	
 
 	//Se tiver sido um pressionamento de tecla
 	if ( key.isKeyUpEvent() == false ) {
@@ -130,7 +147,7 @@ void ArduinoAction::run(KeyMap key) {
 			ClearCommError(conn.handler, &conn.errors, &conn.status);
 		}
 
-		conn.lastMessage = actualTime;
+		conn.lastMessage = actualTime.count();
 		connections.insert_or_assign(conn.COM,conn);
 
 		

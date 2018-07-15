@@ -4,9 +4,12 @@
 
 #include "AbstractAction.h"
 #include <iostream>
+#include <chrono>
 
-//seconds
-#define ARDUINO_DELAY_TO_MSG 2
+using namespace  std::chrono;
+
+//mili
+#define ARDUINO_DELAY_TO_MSG 40
 //milli
 #define ARDUINO_WAIT_TIME 2000
 #define MAX_DATA_LENGTH 8
@@ -18,7 +21,9 @@ struct COMDevice {
 	DWORD errors;
 	int bauds;
 	bool connected = false;
-	int lastMessage = 0;
+	long long lastMessage = 0;
+	int lastEngine = -1;
+	bool uniqueEngine = true;
 };
 
 class ArduinoAction : public AbstractAction {

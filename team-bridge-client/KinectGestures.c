@@ -145,6 +145,7 @@ int KinectGestures::getAngle(SkeletonPart skelPart, KeyMap * keyMap) {
 		}
 	}
 
+
 	//Seta angulo que foi obtido
 	keyMap->setAngle((int)angle);
 

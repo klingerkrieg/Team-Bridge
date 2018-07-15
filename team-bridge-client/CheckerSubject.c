@@ -23,7 +23,7 @@ bool CheckerSubject::changeState(SkeletonPart skelPart, InputConverter *conv) {
 
 	for ( size_t i = 0; i < trackerObservers[skelPart.skelConstant].size(); i++ ) {
 		TrackerObserver obs = trackerObservers[skelPart.skelConstant].at(i);
-
+		
 		active = (obs.context->*obs.method)(skelPart, obs.keyMap);
 
 		if ( active != -1 ) {

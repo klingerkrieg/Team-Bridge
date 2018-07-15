@@ -19,7 +19,23 @@
       "axis": "y",
       "sensors": [ "shoulderR", "shoulderR", "elbowR" ],
       "engine": 1,
-      "COM": 4,
+      "COM": 3,
+      "bauds": 9600
+    },
+
+
+    {
+      "divClass": "handTop",
+
+
+      "devType": "kinect",
+      "dev": "Tracker0@localhost",
+
+      "key": "JOINT_ANGLE",
+      "axis": "y",
+      "sensors": [ "shoulderR", "elbowR", "wristR" ],
+      "engine": 2,
+      "COM": 3,
       "bauds": 9600
     }
   ]
