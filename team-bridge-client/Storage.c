@@ -145,7 +145,7 @@ bool Storage::saveToFile(TrackerUserCallback *userdata, const vrpn_TRACKERCB t) 
 
 }
 
-
+#ifdef THERAPY_MODULE
 int Storage::checkSent() {
 	HANDLE hFind;
 	WIN32_FIND_DATA data;
@@ -169,6 +169,7 @@ int Storage::checkSent() {
 
 	return filesSent;
 }
+
 
 bool Storage::sendFileToDb(char * fileName) {
 
@@ -456,8 +457,8 @@ bool Storage::sendFileToDb(char * fileName) {
 		throw std::exception("Nao pode ler o arquivo a ser enviado.");
 		return false;
 	}
-	 
-
 	
 }
+
+#endif
 

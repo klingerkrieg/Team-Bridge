@@ -31,7 +31,9 @@ private:
 	 std::string dateStr;
 	 bool csvMode  = false;
 	 bool infoData = true; 
+#ifdef THERAPY_MODULE
 	 Db db;
+#endif
 	 bool exportDb;
 
 	 //Variaveis que sao exportadas de arquivo para banco
@@ -100,19 +102,23 @@ public:
 	}
 
 	Storage (Config config, bool exportDb ){
+#ifdef THERAPY_MODULE
 		if (exportDb){
 			db = Db(config.getHost(), config.getDb(), config.getUser(), config.getPasswd());
 			this->exportDb = exportDb;
 		}
+#endif
 		saveDir = config.getSaveDir();
 		patient = config.getPatient();
 		csvMode = config.getCSVMode();
 	}
 
 	void close() {
+#ifdef THERAPY_MODULE
 		if ( exportDb ) {
 			db.close();
 		}
+#endif
 		closeOut();
 		closeIn();
 	}

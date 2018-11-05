@@ -141,7 +141,7 @@ void ArduinoAction::run(KeyMap key) {
 			strcpy(writing, (char*)key.getToKey());
 		}
 		
-		std::cout << "Writing to Arduino" << conn.COM << ":" << writing << "\n";
+		std::cout << "Writing to Arduino COM" << conn.COM << ":" << writing << "\n";
 
 		if ( !WriteFile(conn.handler, (void*)writing, buf_size, &bytesSend, 0) ) {
 			ClearCommError(conn.handler, &conn.errors, &conn.status);

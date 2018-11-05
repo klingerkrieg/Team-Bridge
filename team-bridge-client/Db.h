@@ -5,8 +5,9 @@
 #include <fstream>
 #include <map>
 
-
+#ifdef THERAPY_MODULE
 #include "mysql_connection.h"
+
 
 #include <cppconn/driver.h>
 #include <cppconn/exception.h>
@@ -78,3 +79,4 @@ public:
 	
 };
 
+#endif

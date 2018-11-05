@@ -4,4 +4,8 @@
     <LocalDebuggerCommandArguments>-p 3 -b 115200 -d</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugNoMYSQL|Win32'">
+    <LocalDebuggerCommandArguments>-p 3 -b 115200 -d</LocalDebuggerCommandArguments>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+  </PropertyGroup>
 </Project>

@@ -1,6 +1,6 @@
 #include "Db.h"
 
-
+#ifdef THERAPY_MODULE
 
 sql::Connection* Db::con;
 bool Db::connected = false;
@@ -101,7 +101,7 @@ void Db::printSqlError(sql::SQLException &e, std::string sql) {
 
 }
 
-
+#endif
 /* teste executado, escrita em arquivo se mostra muito melhor
 500 registros
 17ms em arquivo

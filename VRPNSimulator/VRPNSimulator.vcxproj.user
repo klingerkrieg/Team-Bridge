@@ -4,7 +4,15 @@
     <LocalDebuggerCommandArguments>leapmotionflex.txt 23 LeapMotion0 -p -d 1</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Win7ReleaseNoMYSQL|Win32'">
+    <LocalDebuggerCommandArguments>leapmotionflex.txt 23 LeapMotion0 -p -d 1</LocalDebuggerCommandArguments>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LocalDebuggerCommandArguments>KinectFlex.txt 20 Tracker0 -d 1</LocalDebuggerCommandArguments>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugNoMYSQL|Win32'">
     <LocalDebuggerCommandArguments>KinectFlex.txt 20 Tracker0 -d 1</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
